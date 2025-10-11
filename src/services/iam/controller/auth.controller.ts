@@ -8,6 +8,7 @@ import type {
 import { AuthTokenHandler } from "./auth-token.handler";
 
 export class AuthController {
+    // Working
     public static async signIn(
         request: SignInRequest,
     ): Promise<SignInResponse> {
@@ -21,6 +22,7 @@ export class AuthController {
         return response.data;
     }
 
+    // Working
     public static async signUp(
         request: SignUpRequest,
     ): Promise<SignUpResponse> {
