@@ -1,3 +1,4 @@
+import { ENV } from "@/lib/env";
 import { IAM_HTTP } from "../axios.config";
 import type {
     SignInRequest,
@@ -32,5 +33,15 @@ export class AuthController {
         );
 
         return response.data;
+    }
+
+    // TODO: Validate signInWithGoogle
+    public static async signInWithGoogle() {
+        window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/google`;
+    }
+
+    // TODO: Validate signInWithGoogle
+    public static async signInWithGithub() {
+        window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/github`;
     }
 }
