@@ -12,9 +12,7 @@ import type {
     SignUpResponse,
 } from "../controller/auth.response";
 
-export async function signInAction(
-    request: SignInRequest,
-): Promise<SignInResponse> {
+export async function signInAction(request: SignInRequest) {
     const response = await IAM_HTTP.post<SignInResponse>(
         "/authentication/sign-in",
         request,
@@ -22,7 +20,7 @@ export async function signInAction(
 
     saveAuthToken(response.data.token);
 
-    return response.data;
+    redirect(PATHS.DASHBOARD.ROOT);
 }
 
 export async function signOutAction() {
@@ -39,14 +37,10 @@ export async function saveAuthToken(token: string) {
 export async function signUpAction(request: SignUpRequest) {
     await IAM_HTTP.post<SignUpResponse>("/authentication/sign-up", request);
 
-    const signIn = await signInAction({
+    await signInAction({
         email: request.email,
         password: request.password,
     });
-
-    await saveAuthToken(signIn.token);
-
-    redirect(PATHS.DASHBOARD.ROOT);
 }
 
 export async function validateTokenAction() {
