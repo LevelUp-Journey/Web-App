@@ -18,7 +18,9 @@ export default function SignInPage() {
 
     return (
         <div className="container mx-auto p-4 max-w-md text-center">
-            <h1 className="mb-2">Sign in to Level Up Journey</h1>
+            <h1 className="mb-4 text-2xl font-semibold">
+                Sign in to Level Up Journey
+            </h1>
             <form action={handleSignIn}>
                 <div className="mb-4">
                     <Input
