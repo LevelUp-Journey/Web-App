@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { GithubDark } from "@/components/ui/svgs/githubDark";
 import { GithubLight } from "@/components/ui/svgs/githubLight";
 import { Google } from "@/components/ui/svgs/google";
+import { PATHS } from "@/lib/paths";
 import { signInAction } from "@/services/iam/server/auth.actions";
 
 export default function SignInPage() {
@@ -61,6 +63,10 @@ export default function SignInPage() {
                     </Button>
                 </li>
             </ul>
+            <p className="text-sm mt-4">
+                Don't have an account?{" "}
+                <Link href={PATHS.AUTH.SIGN_UP}>Sign up</Link>
+            </p>
         </div>
     );
 }
