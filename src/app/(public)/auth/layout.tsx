@@ -1,5 +1,7 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PATHS } from "@/lib/paths";
 
@@ -8,6 +10,16 @@ export default function AuthLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
+
+    const buttonMessage =
+        pathname === PATHS.AUTH.SIGN_IN ? "Sign Up" : "Sign In";
+
+    const buttonHref =
+        pathname === PATHS.AUTH.SIGN_IN
+            ? PATHS.AUTH.SIGN_UP
+            : PATHS.AUTH.SIGN_IN;
+
     return (
         <div className="min-h-dvh flex flex-col">
             {/* Header */}
@@ -26,7 +38,7 @@ export default function AuthLayout({
                 </div>
 
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={PATHS.AUTH.SIGN_UP}>Sign Up</Link>
+                    <Link href={buttonHref}>{buttonMessage}</Link>
                 </Button>
             </header>
 

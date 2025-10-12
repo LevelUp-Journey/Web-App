@@ -12,6 +12,7 @@ import type {
     SignInRequest,
     SignInResponse,
     SignUpRequest,
+    SignUpResponse,
 } from "./auth.response";
 
 export class AuthController {
@@ -30,7 +31,13 @@ export class AuthController {
 
     // Working
     public static async signUp(request: SignUpRequest) {
-        await signUpAction(request);
+        const response = await signUpAction(request);
+
+        if (response.status === 200) {
+            AuthController.signIn(request);
+        }
+
+        toast.error(response.data as string);
     }
 
     public static async validateToken(): Promise<boolean> {

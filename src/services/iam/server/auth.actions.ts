@@ -25,10 +25,31 @@ export async function signInAction(
             "/authentication/sign-in",
             request,
         );
+
         return {
             status: response.status,
             data: response.data,
         } as RequestSuccess<SignInResponse>;
+    } catch (e) {
+        const error = e as AxiosError;
+        return {
+            data: error.message,
+            status: error.status,
+        };
+    }
+}
+
+export async function signUpAction(request: SignUpRequest) {
+    try {
+        const response = await IAM_HTTP.post<SignUpResponse>(
+            "/authentication/sign-up",
+            request,
+        );
+
+        return {
+            status: response.status,
+            data: response.data,
+        } as RequestSuccess<SignUpResponse>;
     } catch (e) {
         const error = e as AxiosError;
         return {
@@ -47,15 +68,6 @@ export async function signOutAction() {
 export async function saveAuthToken(token: string) {
     const cookieStore = await cookies();
     cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token);
-}
-
-export async function signUpAction(request: SignUpRequest) {
-    await IAM_HTTP.post<SignUpResponse>("/authentication/sign-up", request);
-
-    await signInAction({
-        email: request.email,
-        password: request.password,
-    });
 }
 
 export async function validateTokenAction() {
