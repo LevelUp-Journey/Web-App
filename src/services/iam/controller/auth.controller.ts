@@ -5,6 +5,7 @@ import { PATHS } from "@/lib/paths";
 import {
     saveAuthToken,
     signInAction,
+    signOutAction,
     signUpAction,
     validateTokenAction,
 } from "../server/auth.actions";
@@ -53,5 +54,9 @@ export class AuthController {
     // TODO: Validate signInWithGoogle
     public static async signInWithGithub() {
         window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/github`;
+    }
+
+    public static async signOut() {
+        signOutAction();
     }
 }

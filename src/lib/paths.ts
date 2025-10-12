@@ -2,6 +2,8 @@ export const PATHS = {
     DASHBOARD: {
         ROOT: "/dashboard",
         PROFILE: "/dashboard/profile",
+        CHALLENGES: "/dashboard/challenges",
+        COMMUNITY: "/dashboard/community",
         SETTINGS: "/dashboard/settings",
     },
     AUTH: {
