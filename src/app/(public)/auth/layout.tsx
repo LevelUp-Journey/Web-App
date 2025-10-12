@@ -25,8 +25,8 @@ export default function AuthLayout({
                     </span>
                 </div>
 
-                <Button variant="outline" size="sm">
-                    Sign Up
+                <Button variant="outline" size="sm" asChild>
+                    <Link href={PATHS.AUTH.SIGN_UP}>Sign Up</Link>
                 </Button>
             </header>
 
