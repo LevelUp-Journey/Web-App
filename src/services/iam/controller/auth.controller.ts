@@ -1,5 +1,9 @@
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import { ENV } from "@/lib/env";
+import { PATHS } from "@/lib/paths";
 import {
+    saveAuthToken,
     signInAction,
     signUpAction,
     validateTokenAction,
@@ -9,7 +13,15 @@ import type { SignInRequest, SignUpRequest } from "./auth.response";
 export class AuthController {
     // Working
     public static async signIn(request: SignInRequest) {
-        await signInAction(request);
+        try {
+            const response = await signInAction(request);
+
+            saveAuthToken(response.data.token);
+
+            redirect(PATHS.DASHBOARD.ROOT);
+        } catch {
+            toast.error("Failed to sign in");
+        }
     }
 
     // Working

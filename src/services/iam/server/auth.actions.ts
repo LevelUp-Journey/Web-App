@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { CONSTS } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import { IAM_HTTP } from "../axios.config";
+import { IAM_HTTP } from "../../axios.config";
 import type {
     SignInRequest,
     SignInResponse,
@@ -17,10 +17,7 @@ export async function signInAction(request: SignInRequest) {
         "/authentication/sign-in",
         request,
     );
-
-    saveAuthToken(response.data.token);
-
-    redirect(PATHS.DASHBOARD.ROOT);
+    return response;
 }
 
 export async function signOutAction() {
