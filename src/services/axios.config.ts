@@ -16,3 +16,13 @@ export const IAM_HTTP = axios.create({
         return config;
     });
 });
+
+export interface RequestFailure {
+    data: string;
+    status?: number;
+}
+
+export interface RequestSuccess<T> {
+    data: T;
+    status?: number;
+}

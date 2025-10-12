@@ -8,20 +8,24 @@ import {
     signUpAction,
     validateTokenAction,
 } from "../server/auth.actions";
-import type { SignInRequest, SignUpRequest } from "./auth.response";
+import type {
+    SignInRequest,
+    SignInResponse,
+    SignUpRequest,
+} from "./auth.response";
 
 export class AuthController {
     // Working
     public static async signIn(request: SignInRequest) {
-        try {
-            const response = await signInAction(request);
+        const response = await signInAction(request);
 
-            saveAuthToken(response.data.token);
-
+        if (response.status === 200) {
+            const data = response.data as SignInResponse;
+            saveAuthToken(data.token);
             redirect(PATHS.DASHBOARD.ROOT);
-        } catch {
-            toast.error("Failed to sign in");
         }
+
+        toast.error(response.data as string);
     }
 
     // Working
