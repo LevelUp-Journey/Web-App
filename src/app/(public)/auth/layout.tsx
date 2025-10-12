@@ -26,7 +26,7 @@ export default function AuthLayout({
                 </div>
 
                 <Button variant="outline" size="sm">
-                    Iniciar sesión
+                    Sign Up
                 </Button>
             </header>
 
@@ -39,10 +39,8 @@ export default function AuthLayout({
 
             {/* Footer */}
             <footer className="flex justify-center gap-4 py-4 border-t text-sm">
-                <Link href={PATHS.LEGAL.TERMS}>Términos</Link>
-                <Link href={PATHS.LEGAL.PRIVACY_POLICY}>
-                    Política de Privacidad
-                </Link>
+                <Link href={PATHS.LEGAL.TERMS}>Terms</Link>
+                <Link href={PATHS.LEGAL.PRIVACY_POLICY}>Privacy Policy</Link>
             </footer>
         </div>
     );
