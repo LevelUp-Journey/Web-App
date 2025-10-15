@@ -7,7 +7,7 @@ import { GithubDark } from "@/components/ui/svgs/githubDark";
 import { GithubLight } from "@/components/ui/svgs/githubLight";
 import { Google } from "@/components/ui/svgs/google";
 import { PATHS } from "@/lib/paths";
-import { AuthController } from "@/services/iam/controller/auth.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignInPage() {
     const handleSignIn = async (formData: FormData) => {

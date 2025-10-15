@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PATHS } from "@/lib/paths";
-import { AuthController } from "@/services/iam/controller/auth.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignUpStep1() {
     const [email, setEmail] = useState("");

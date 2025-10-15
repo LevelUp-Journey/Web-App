@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,7 @@ import {
     DropzoneEmptyState,
 } from "@/components/ui/shadcn-io/dropzone";
 import { Spinner } from "@/components/ui/spinner";
-import { AuthController } from "@/services/iam/controller/auth.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignUpStep2() {
     const router = useRouter();
@@ -28,15 +29,7 @@ export default function SignUpStep2() {
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        const email = localStorage.getItem("signup_email");
-        const password = localStorage.getItem("signup_password");
-        if (!email || !password) {
-            alert("Missing email or password");
-            setLoading(false);
-            return;
-        }
-        await AuthController.signUp({ email, password });
-        // TODO: Update profile with name and photo if API supports
+
         setLoading(false);
     };
 
@@ -61,7 +54,7 @@ export default function SignUpStep2() {
                     maxFiles={1}
                     maxSize={1024 * 1024 * 10}
                     onDrop={handleDrop}
-                    onError={console.error}
+                    onError={() => toast.error("Error uploading photo")}
                 >
                     <DropzoneEmptyState />
                     <DropzoneContent />

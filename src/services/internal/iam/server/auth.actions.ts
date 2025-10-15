@@ -9,7 +9,7 @@ import {
     IAM_HTTP,
     type RequestFailure,
     type RequestSuccess,
-} from "../../axios.config";
+} from "../../../axios.config";
 import type {
     SignInRequest,
     SignInResponse,
