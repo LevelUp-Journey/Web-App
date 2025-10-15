@@ -1,65 +1,66 @@
-import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { ENV } from "@/lib/env";
-import { PATHS } from "@/lib/paths";
 import {
-    saveAuthToken,
-    signInAction,
-    signOutAction,
-    signUpAction,
-    validateTokenAction,
+  saveAuthTokenAction,
+  signInAction,
+  signOutAction,
+  signUpAction,
+  validateTokenAction,
 } from "../server/auth.actions";
 import type {
-    SignInRequest,
-    SignInResponse,
-    SignUpRequest,
+  SignInRequest,
+  SignInResponse,
+  SignUpRequest,
 } from "./auth.response";
 
 export class AuthController {
-    // Working
-    public static async signIn(request: SignInRequest) {
-        const response = await signInAction(request);
-        console.log("Sign in response", response)
-        if (response.status === 200) {
-            const data = response.data as SignInResponse;
-            saveAuthToken(data.token);
-            redirect(PATHS.DASHBOARD.ROOT);
-        }
+  // Working
+  public static async signIn(request: SignInRequest) {
+    const response = await signInAction(request);
 
-        console.log(response);
-        toast.error("Error signing in");
+    if (response.status === 200) {
+      const data = response.data as SignInResponse;
+      saveAuthTokenAction(data.token);
+      return data;
     }
 
-    // Working
-    public static async signUp(request: SignUpRequest) {
-        const response = await signUpAction(request);
+    toast.error("Error signing in");
+    throw new Error("Error signing in");
+  }
 
-        console.log("Sign up response", response)
+  // Working
+  public static async signUp(request: SignUpRequest) {
+    const response = await signUpAction(request);
 
-        if (response.status === 201) {
-            AuthController.signIn(request);
-        }
+    console.log("Sign up response", response);
 
-        console.log(response);
-        toast.error("Error signing up");
+    if (response.status === 201) {
+      const user = await AuthController.signIn(request);
+      saveAuthTokenAction(user?.token);
+      return user;
     }
 
-    public static async validateToken(): Promise<boolean> {
-        const isValid = await validateTokenAction();
-        return isValid;
-    }
+    console.log(response);
+    toast.error("Error signing up");
+    throw new Error("Error signing up");
+  }
 
-    // TODO: Validate signInWithGoogle
-    public static async signInWithGoogle() {
-        window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/google`;
-    }
+  public static async validateToken(): Promise<boolean> {
+    const isValid = await validateTokenAction();
+    return isValid;
+  }
 
-    // TODO: Validate signInWithGoogle
-    public static async signInWithGithub() {
-        window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/github`;
-    }
+  // TODO: Validate signInWithGoogle
+  public static async signInWithGoogle() {
+    window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/google`;
+  }
 
-    public static async signOut() {
-        signOutAction();
-    }
+  // TODO: Validate signInWithGoogle
+  public static async signInWithGithub() {
+    window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/github`;
+  }
+
+  public static async signOut() {
+    signOutAction();
+  }
 }

@@ -1,3 +1,3 @@
 export const CONSTS = {
-    AUTH_TOKEN_KEY: "token",
+  AUTH_TOKEN_KEY: "token",
 };
