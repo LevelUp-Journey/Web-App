@@ -11,7 +11,7 @@ export async function getProfileAction(
     profileId: string,
 ): Promise<RequestSuccess<ProfileResponse> | RequestFailure> {
     const response = await PROFILE_HTTP.get<ProfileResponse>(
-        `/profiles/${profileId}`,
+        `/profiles/user/${profileId}`,
     );
     return { data: response.data, status: response.status };
 }

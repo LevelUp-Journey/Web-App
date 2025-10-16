@@ -60,6 +60,8 @@ export class AuthController {
     }
 
     public static async signOut() {
+        // Delete user data from local storage
+        localStorage.clear();
         signOutAction();
     }
 }
