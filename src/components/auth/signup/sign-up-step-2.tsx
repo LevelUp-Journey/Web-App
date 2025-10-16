@@ -15,12 +15,11 @@ import { Spinner } from "@/components/ui/spinner";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 
 export default function SignUpStep2() {
-    const profile = use(ProfileController.getCurrentUserProfile())
+    const profile = use(ProfileController.getCurrentUserProfile());
     const [name, setName] = useState("");
 
     const [photoFile, setPhotoFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
-
 
     const handleDrop = (files: File[]) => {
         if (files.length > 0) {

@@ -25,7 +25,7 @@ export class ProfileController {
 
     public static async getCurrentUserProfile() {
         const token = await AuthController.getAuthToken();
-        const jwtPayload = jwtDecode<{userId: string}>(token);
+        const jwtPayload = jwtDecode<{ userId: string }>(token);
 
         const response = await getProfileAction(jwtPayload.userId);
         return response.data as ProfileResponse;
