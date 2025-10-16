@@ -1,7 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { UserCircle2 } from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,13 +13,17 @@ import {
     DropzoneEmptyState,
 } from "@/components/ui/shadcn-io/dropzone";
 import { Spinner } from "@/components/ui/spinner";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { useUser } from "@/hooks/user-user";
+import { PATHS } from "@/lib/paths";
+import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 
 export default function SignUpStep2() {
     const router = useRouter();
     const [name, setName] = useState("");
     const [photoFile, setPhotoFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const { userId } = useUser();
 
     const handleDrop = (files: File[]) => {
         if (files.length > 0) {
@@ -33,33 +38,46 @@ export default function SignUpStep2() {
         setLoading(false);
     };
 
+    useEffect(() => {
+        if (userId) {
+            ProfileController.getProfileByUserId(userId).then((profile) => {
+                console.log("PROFILE", profile);
+            });
+            return;
+        }
+        toast.error("Error to get auto created user profile");
+        redirect(PATHS.AUTH.SIGN_UP.ROOT);
+    }, [userId]);
+
     return (
         <form onSubmit={handleSignUp} className="flex flex-col gap-4">
-            <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-                required
-            />
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-row items-center gap-4">
                 <Avatar className="size-20">
                     {photoFile ? (
                         <AvatarImage src={URL.createObjectURL(photoFile)} />
                     ) : (
-                        <AvatarFallback>?</AvatarFallback>
+                        <AvatarFallback>
+                            <UserCircle2 size={48} />
+                        </AvatarFallback>
                     )}
                 </Avatar>
-                <Dropzone
-                    accept={{ "image/*": [] }}
-                    maxFiles={1}
-                    maxSize={1024 * 1024 * 10}
-                    onDrop={handleDrop}
-                    onError={() => toast.error("Error uploading photo")}
-                >
-                    <DropzoneEmptyState />
-                    <DropzoneContent />
-                </Dropzone>
+                <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name"
+                    required
+                />
             </div>
+            <Dropzone
+                accept={{ "image/*": [] }}
+                maxFiles={1}
+                maxSize={1024 * 1024 * 10}
+                onDrop={handleDrop}
+                onError={() => toast.error("Error uploading photo")}
+            >
+                <DropzoneEmptyState />
+                <DropzoneContent />
+            </Dropzone>
             <div className="flex gap-2">
                 <Button
                     type="button"

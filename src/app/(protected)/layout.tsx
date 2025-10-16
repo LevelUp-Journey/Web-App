@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { PATHS } from "@/lib/paths";
-import { AuthController } from "@/services/iam/controller/auth.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default async function ProtectedLayout({
     children,

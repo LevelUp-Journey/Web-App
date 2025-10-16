@@ -36,7 +36,6 @@ export class AuthController {
 
         if (response.status === 201) {
             const user = await AuthController.signIn(request);
-            saveAuthTokenAction(user?.token);
             return user;
         }
 

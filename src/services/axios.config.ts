@@ -7,6 +7,10 @@ export const IAM_HTTP = axios.create({
     baseURL: ENV.SERVICES.IAM.BASE_URL,
 });
 
+export const PROFILE_HTTP = axios.create({
+    baseURL: ENV.SERVICES.PROFILE.BASE_URL,
+});
+
 [IAM_HTTP].forEach((httpClient) => {
     httpClient.interceptors.request.use(async (config) => {
         const token = await getAuthTokenAction();
