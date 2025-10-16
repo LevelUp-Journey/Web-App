@@ -1,22 +1,26 @@
-"use client";
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import SignUpStep1 from "@/components/auth/signup/sign-up-step-1";
 import SignUpStep2 from "@/components/auth/signup/sign-up-step-2";
 
-export default function SignUpPage() {
-    const searchParams = useSearchParams();
-    const param = searchParams.get("step");
-
-    const step = parseInt(param || "1", 10);
+export default async function SignUpPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
+    const params = await searchParams;
+    const value = params.step || "1";
+    const step = parseInt(value, 10);
 
     return (
         <div className="container mx-auto p-4 max-w-md text-center">
             {step === 1 ? (
                 <SignUpStep1 />
             ) : step === 2 ? (
-                <SignUpStep2 />
+                <Suspense fallback={<div className="text-center py-8">Loading your profile...</div>}>
+                    <SignUpStep2 />
+                </Suspense>
             ) : (
-                <div>Invalid step</div>
+                <div className="text-center py-8">Invalid step</div>
             )}
         </div>
     );
