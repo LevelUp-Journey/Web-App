@@ -5,7 +5,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/hooks/user-user";
 import { PATHS } from "@/lib/paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
@@ -15,7 +14,6 @@ export default function SignUpStep1() {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const router = useRouter();
-    const { setUser } = useUser();
 
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,11 +30,6 @@ export default function SignUpStep1() {
 
             if (response.token) {
                 const redirection = PATHS.AUTH.SIGN_UP.STEP(2);
-
-                setUser({
-                    email: response.email,
-                    userId: response.id,
-                });
 
                 router.push(redirection);
             }

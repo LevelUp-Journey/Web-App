@@ -8,22 +8,15 @@ import { Separator } from "@/components/ui/separator";
 import { GithubDark } from "@/components/ui/svgs/githubDark";
 import { GithubLight } from "@/components/ui/svgs/githubLight";
 import { Google } from "@/components/ui/svgs/google";
-import { useUser } from "@/hooks/user-user";
 import { PATHS } from "@/lib/paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignInPage() {
-    const { setUser } = useUser();
     const handleSignIn = async (formData: FormData) => {
         try {
             const email = formData.get("email") as string;
             const password = formData.get("password") as string;
-            const user = await AuthController.signIn({ email, password });
-
-            setUser({
-                email: user.email,
-                userId: user.id,
-            });
+            await AuthController.signIn({ email, password });
 
             redirect(PATHS.DASHBOARD.ROOT);
         } catch {

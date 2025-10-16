@@ -1,7 +1,7 @@
 "use client";
 
 import { UserCircle2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,15 +12,15 @@ import {
     DropzoneEmptyState,
 } from "@/components/ui/shadcn-io/dropzone";
 import { Spinner } from "@/components/ui/spinner";
-import { useUser } from "@/hooks/user-user";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 
 export default function SignUpStep2() {
+    const profile = use(ProfileController.getCurrentUserProfile())
     const [name, setName] = useState("");
+
     const [photoFile, setPhotoFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const { userId, setUser} = useUser();
 
     const handleDrop = (files: File[]) => {
         if (files.length > 0) {
@@ -34,24 +34,6 @@ export default function SignUpStep2() {
 
         setLoading(false);
     };
-
-
-    useEffect(() => {
-        setUser({userId: userId})
-    }, [userId])
-
-    useEffect(() => {
-        console.log("User ", userId);
-        if (userId) {
-            ProfileController.getProfileByUserId(userId).then((profile) => {
-                console.log("PROFILE", profile);
-                setName(profile.username);
-            });
-            return;
-        }
-        toast.error("Error to get auto created user profile");
-        // redirect(PATHS.AUTH.SIGN_UP.ROOT);
-    }, []);
 
     return (
         <form onSubmit={onProfileUpdate} className="flex flex-col gap-4">

@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import { ENV } from "@/lib/env";
 import {
+    getAuthTokenAction,
     saveAuthTokenAction,
     signInAction,
     signOutAction,
@@ -20,7 +21,8 @@ export class AuthController {
 
         if (response.status === 200) {
             const data = response.data as SignInResponse;
-            saveAuthTokenAction(data.token);
+            console.log("saving auth token")
+            await saveAuthTokenAction(data.token);
             return data;
         }
 
@@ -35,7 +37,10 @@ export class AuthController {
         console.log("Sign up response", response);
 
         if (response.status === 201) {
+            console.log("Sign in after sign up")
             const user = await AuthController.signIn(request);
+
+            console.log("User after sign up", user);
             return user;
         }
 
@@ -47,6 +52,11 @@ export class AuthController {
     public static async validateToken(): Promise<boolean> {
         const isValid = await validateTokenAction();
         return isValid;
+    }
+
+    public static async getAuthToken() : Promise<string> {
+        const token = await getAuthTokenAction();
+        return token;
     }
 
     // TODO: Validate signInWithGoogle

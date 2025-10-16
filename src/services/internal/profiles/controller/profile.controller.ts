@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+import { AuthController } from "../../iam/controller/auth.controller";
 import {
     getProfileAction,
     updateProfileAction,
@@ -19,5 +21,13 @@ export class ProfileController {
             return response.data;
         }
         throw new Error("Failed to update profile");
+    }
+
+    public static async getCurrentUserProfile() {
+        const token = await AuthController.getAuthToken();
+        const jwtPayload = jwtDecode<{userId: string}>(token);
+
+        const response = await getProfileAction(jwtPayload.userId);
+        return response.data as ProfileResponse;
     }
 }
