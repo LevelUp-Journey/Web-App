@@ -1,9 +1,8 @@
-import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { ENV } from "@/lib/env";
-import { PATHS } from "@/lib/paths";
 import {
-    saveAuthToken,
+    getAuthTokenAction,
+    saveAuthTokenAction,
     signInAction,
     signOutAction,
     signUpAction,
@@ -19,34 +18,45 @@ export class AuthController {
     // Working
     public static async signIn(request: SignInRequest) {
         const response = await signInAction(request);
-        console.log("Sign in response", response)
+
         if (response.status === 200) {
             const data = response.data as SignInResponse;
-            saveAuthToken(data.token);
-            redirect(PATHS.DASHBOARD.ROOT);
+            console.log("saving auth token");
+            await saveAuthTokenAction(data.token);
+            return data;
         }
 
-        console.log(response);
         toast.error("Error signing in");
+        throw new Error("Error signing in");
     }
 
     // Working
     public static async signUp(request: SignUpRequest) {
         const response = await signUpAction(request);
 
-        console.log("Sign up response", response)
+        console.log("Sign up response", response);
 
         if (response.status === 201) {
-            AuthController.signIn(request);
+            console.log("Sign in after sign up");
+            const user = await AuthController.signIn(request);
+
+            console.log("User after sign up", user);
+            return user;
         }
 
         console.log(response);
         toast.error("Error signing up");
+        throw new Error("Error signing up");
     }
 
     public static async validateToken(): Promise<boolean> {
         const isValid = await validateTokenAction();
         return isValid;
+    }
+
+    public static async getAuthToken(): Promise<string> {
+        const token = await getAuthTokenAction();
+        return token;
     }
 
     // TODO: Validate signInWithGoogle
@@ -60,6 +70,8 @@ export class AuthController {
     }
 
     public static async signOut() {
+        // Delete user data from local storage
+        localStorage.clear();
         signOutAction();
     }
 }

@@ -17,7 +17,7 @@ export default function AuthLayout({
 
     const buttonHref =
         pathname === PATHS.AUTH.SIGN_IN
-            ? PATHS.AUTH.SIGN_UP
+            ? PATHS.AUTH.SIGN_UP.ROOT
             : PATHS.AUTH.SIGN_IN;
 
     return (

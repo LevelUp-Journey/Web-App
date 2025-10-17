@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -7,13 +9,19 @@ import { GithubDark } from "@/components/ui/svgs/githubDark";
 import { GithubLight } from "@/components/ui/svgs/githubLight";
 import { Google } from "@/components/ui/svgs/google";
 import { PATHS } from "@/lib/paths";
-import { AuthController } from "@/services/iam/controller/auth.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignInPage() {
     const handleSignIn = async (formData: FormData) => {
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        await AuthController.signIn({ email, password });
+        try {
+            const email = formData.get("email") as string;
+            const password = formData.get("password") as string;
+            await AuthController.signIn({ email, password });
+
+            redirect(PATHS.DASHBOARD.ROOT);
+        } catch {
+            toast.error("Something went wrong");
+        }
     };
 
     return (
@@ -67,7 +75,7 @@ export default function SignInPage() {
             </ul>
             <p className="text-sm mt-4">
                 Don't have an account?{" "}
-                <Link href={PATHS.AUTH.SIGN_UP}>Sign up</Link>
+                <Link href={PATHS.AUTH.SIGN_UP.ROOT}>Sign up</Link>
             </p>
         </div>
     );

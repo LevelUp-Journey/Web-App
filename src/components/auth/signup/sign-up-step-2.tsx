@@ -1,76 +1,162 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { AvatarDropzone } from "@/components/auth/signup/avatar-dropzone";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/shadcn-io/dropzone";
 import { Spinner } from "@/components/ui/spinner";
-import { AuthController } from "@/services/iam/controller/auth.controller";
+import { PATHS } from "@/lib/paths";
+import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
 
 export default function SignUpStep2() {
     const router = useRouter();
+
+    const [userProfile, setUserProfile] = useState<ProfileResponse | null>(null);
+    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
     const [name, setName] = useState("");
-    const [photoFile, setPhotoFile] = useState<File | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const handleDrop = (files: File[]) => {
-        if (files.length > 0) {
-            setPhotoFile(files[0]);
-        }
+    // Fetch profile on component mount
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const profile = await ProfileController.getCurrentUserProfile();
+                setUserProfile(profile);
+                setName(profile?.username || "");
+                setImageUrl(profile?.profileUrl || null);
+            } catch (error) {
+                console.error("Failed to load profile:", error);
+                toast.error("Failed to load your profile. Please try again.");
+            } finally {
+                setIsLoadingProfile(false);
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
+    const handleImageUrlChange = (url: string) => {
+        setImageUrl(url);
     };
 
-    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading(true);
-        const email = localStorage.getItem('signup_email');
-        const password = localStorage.getItem('signup_password');
-        if (!email || !password) {
-            alert("Missing email or password");
-            setLoading(false);
+
+        if (!name.trim()) {
+            toast.error("Please enter a name");
             return;
         }
-        await AuthController.signUp({ email, password });
-        // TODO: Update profile with name and photo if API supports
-        setLoading(false);
+
+        if (!userProfile) {
+            toast.error("Profile not loaded. Please try again.");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            // Create FormData with the URL from Cloudinary (or current image)
+            const formData = new FormData();
+            formData.append("username", userProfile.username || "");
+            formData.append("firstName", name);
+            formData.append("lastName", userProfile.lastName || "");
+            formData.append("profileUrl", imageUrl || "");
+
+            await ProfileController.updateProfileByUserId(
+                userProfile.id,
+                formData,
+            );
+
+            toast.success("Profile updated successfully!");
+            router.push(PATHS.DASHBOARD.ROOT);
+        } catch (error) {
+            console.error("Profile update error:", error);
+            toast.error("Failed to update profile. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return <form onSubmit={handleSignUp} className="flex flex-col gap-4">
+    if (isLoadingProfile) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12 gap-4">
+                <Spinner className="size-6" />
+                <p className="text-sm text-muted-foreground">
+                    Loading your profile...
+                </p>
+            </div>
+        );
+    }
 
-        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
-        <div className="flex flex-col items-center gap-4">
-            <Avatar className="size-20">
-                {photoFile ? (
-                    <AvatarImage src={URL.createObjectURL(photoFile)} />
-                ) : (
-                    <AvatarFallback>?</AvatarFallback>
-                )}
-            </Avatar>
-            <Dropzone
-                accept={{ 'image/*': [] }}
-                maxFiles={1}
-                maxSize={1024 * 1024 * 10}
-                onDrop={handleDrop}
-                onError={console.error}
+    if (!userProfile) {
+        return (
+            <div className="flex flex-col items-center justify-center gap-4 py-8">
+                <p className="text-sm text-destructive">
+                    Failed to load your profile
+                </p>
+                <Button onClick={() => router.back()} variant="outline">
+                    Go Back
+                </Button>
+            </div>
+        );
+    }
+
+    return (
+        <form onSubmit={onProfileUpdate} className="flex flex-col gap-6">
+            {/* Header */}
+            <div className="text-center">
+                <h1 className="mb-2 text-2xl font-semibold">
+                    Complete Your Profile
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                    Add a photo and name to get started
+                </p>
+            </div>
+
+            {/* Avatar Dropzone */}
+            <AvatarDropzone
+                onImageUrlChange={handleImageUrlChange}
+                currentImage={imageUrl}
+                disabled={loading}
+            />
+
+            {/* Name Input Section */}
+            <div className="flex flex-col gap-2">
+                <label htmlFor="name" className="text-sm font-medium">
+                    Your Name
+                </label>
+                <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                    required
+                    disabled={loading}
+                />
+                <p className="text-xs text-muted-foreground">
+                    You can change this anytime
+                </p>
+            </div>
+
+            {/* Action Button */}
+            <Button
+                type="submit"
+                disabled={loading || !name.trim()}
+                size="lg"
+                className="w-full"
             >
-                <DropzoneEmptyState />
-                <DropzoneContent />
-            </Dropzone>
-        </div>
-        <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={() => router.push('/auth/sign-up?step=1')} className="flex-1">
-                Back
-            </Button>
-            <Button type="submit" className="flex-1" disabled={loading}>
                 {loading ? (
                     <>
-                        <Spinner /> Creating...
+                        <Spinner /> Creating Profile...
                     </>
                 ) : (
-                    "Sign Up"
+                    "Start Your Adventure"
                 )}
             </Button>
-        </div>
-    </form>
+        </form>
+    );
 }

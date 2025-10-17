@@ -8,7 +8,10 @@ export const PATHS = {
     },
     AUTH: {
         SIGN_IN: "/auth/sign-in",
-        SIGN_UP: "/auth/sign-up",
+        SIGN_UP: {
+            ROOT: "/auth/sign-up",
+            STEP: (step: number) => `/auth/sign-up?step=${step}`,
+        },
     },
     ROOT: "/",
     LEGAL: {

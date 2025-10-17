@@ -1,13 +1,17 @@
 "use server";
 import axios from "axios";
 import { ENV } from "@/lib/env";
-import { getAuthTokenAction } from "./iam/server/auth.actions";
+import { getAuthTokenAction } from "./internal/iam/server/auth.actions";
 
 export const IAM_HTTP = axios.create({
     baseURL: ENV.SERVICES.IAM.BASE_URL,
 });
 
-[IAM_HTTP].forEach((httpClient) => {
+export const PROFILE_HTTP = axios.create({
+    baseURL: ENV.SERVICES.PROFILE.BASE_URL,
+});
+
+[IAM_HTTP, PROFILE_HTTP].forEach((httpClient) => {
     httpClient.interceptors.request.use(async (config) => {
         const token = await getAuthTokenAction();
         if (token) {

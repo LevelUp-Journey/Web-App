@@ -9,7 +9,7 @@ import {
     IAM_HTTP,
     type RequestFailure,
     type RequestSuccess,
-} from "../../axios.config";
+} from "../../../axios.config";
 import type {
     SignInRequest,
     SignInResponse,
@@ -65,7 +65,7 @@ export async function signOutAction() {
     redirect(PATHS.ROOT);
 }
 
-export async function saveAuthToken(token: string) {
+export async function saveAuthTokenAction(token: string) {
     const cookieStore = await cookies();
     cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token);
 }
