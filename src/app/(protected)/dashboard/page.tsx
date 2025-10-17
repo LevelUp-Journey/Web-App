@@ -23,6 +23,7 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
+import { CONSTS } from "@/lib/consts";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import type { ChallengeResponse } from "@/services/internal/challenges/controller/challenge.response";
 
@@ -82,33 +83,33 @@ export default function DashboardPage() {
             {/* Carousel - Full Width */}
             <Carousel
                 opts={{ loop: true }}
-                plugins={[Autoplay({ delay: 3000 })]}
+                plugins={[Autoplay({ delay: CONSTS.DASHBOARD_CAROUSEL_SPEED })]}
                 className="w-full"
             >
                 <CarouselContent>
                     <CarouselItem>
-                        <div className="flex items-center justify-center h-64 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                             <h2 className="text-3xl font-bold text-white">
                                 UPC Announcement
                             </h2>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
-                        <div className="flex items-center justify-center h-64 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                             <h2 className="text-3xl font-bold text-white">
                                 UPC Announcement
                             </h2>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
-                        <div className="flex items-center justify-center h-64 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                             <h2 className="text-3xl font-bold text-white">
                                 UPC Announcement
                             </h2>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
-                        <div className="flex items-center justify-center h-64 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
                             <h2 className="text-3xl font-bold text-white">
                                 UPC Announcement
                             </h2>
