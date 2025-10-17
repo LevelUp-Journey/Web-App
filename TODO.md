@@ -1,0 +1,1 @@
+[] Agregar mensajes de error, si falla el endpoint de un microservicio entonces el mensaje debe ser descriptivo Para ello si hay un error en el microservicio se tiene que mandar un json  {message: string} como mensaje de error

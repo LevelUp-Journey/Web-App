@@ -1,7 +1,7 @@
 "use server";
 import axios from "axios";
 import { ENV } from "@/lib/env";
-import { getAuthTokenAction } from "./server/auth.actions";
+import { getAuthTokenAction } from "./iam/server/auth.actions";
 
 export const IAM_HTTP = axios.create({
     baseURL: ENV.SERVICES.IAM.BASE_URL,
@@ -16,3 +16,13 @@ export const IAM_HTTP = axios.create({
         return config;
     });
 });
+
+export interface RequestFailure {
+    data: string;
+    status?: number;
+}
+
+export interface RequestSuccess<T> {
+    data: T;
+    status?: number;
+}

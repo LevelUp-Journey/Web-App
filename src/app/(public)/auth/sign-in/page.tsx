@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,15 +7,14 @@ import { GithubDark } from "@/components/ui/svgs/githubDark";
 import { GithubLight } from "@/components/ui/svgs/githubLight";
 import { Google } from "@/components/ui/svgs/google";
 import { PATHS } from "@/lib/paths";
-import { signInAction } from "@/services/iam/server/auth.actions";
+import { AuthController } from "@/services/iam/controller/auth.controller";
 
 export default function SignInPage() {
-    async function handleSignIn(formData: FormData) {
-        "use server";
+    const handleSignIn = async (formData: FormData) => {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
-        await signInAction({ email, password });
-    }
+        await AuthController.signIn({ email, password });
+    };
 
     return (
         <div className="container mx-auto p-4 max-w-md text-center">
