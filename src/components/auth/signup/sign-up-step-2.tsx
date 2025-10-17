@@ -9,12 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { PATHS } from "@/lib/paths";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
+import type {
+    ProfileResponse,
+    UpdateProfileRequest,
+} from "@/services/internal/profiles/controller/profile.response";
 
 export default function SignUpStep2() {
     const router = useRouter();
 
-    const [userProfile, setUserProfile] = useState<ProfileResponse | null>(null);
+    const [userProfile, setUserProfile] = useState<ProfileResponse | null>(
+        null,
+    );
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
     const [name, setName] = useState("");
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -25,6 +30,7 @@ export default function SignUpStep2() {
         const fetchProfile = async () => {
             try {
                 const profile = await ProfileController.getCurrentUserProfile();
+                console.log("Fetched profile:", profile);
                 setUserProfile(profile);
                 setName(profile?.username || "");
                 setImageUrl(profile?.profileUrl || null);
@@ -60,16 +66,12 @@ export default function SignUpStep2() {
 
         try {
             // Create FormData with the URL from Cloudinary (or current image)
-            const formData = new FormData();
-            formData.append("username", userProfile.username || "");
-            formData.append("firstName", name);
-            formData.append("lastName", userProfile.lastName || "");
-            formData.append("profileUrl", imageUrl || "");
+            const data: UpdateProfileRequest = {
+                username: name,
+                profileUrl: imageUrl ? imageUrl : undefined,
+            };
 
-            await ProfileController.updateProfileByUserId(
-                userProfile.id,
-                formData,
-            );
+            await ProfileController.updateProfileByUserId(userProfile.id, data);
 
             toast.success("Profile updated successfully!");
             router.push(PATHS.DASHBOARD.ROOT);

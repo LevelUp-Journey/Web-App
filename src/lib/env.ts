@@ -2,12 +2,12 @@ export const ENV = {
     SERVICES: {
         IAM: {
             BASE_URL:
-                process.env.IAM_BASE_URL || "http://192.168.0.119:8081/api/v1",
+                process.env.IAM_BASE_URL || "http://192.168.0.118:8081/api/v1",
         },
         PROFILE: {
             BASE_URL:
                 process.env.PROFILE_BASE_URL ||
-                "http://192.168.0.119:8083/api/v1",
+                "http://192.168.0.118:8083/api/v1",
         },
         EXTERNAL: {
             CLOUDINARY: {

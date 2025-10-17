@@ -5,7 +5,10 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { ProfileResponse } from "../controller/profile.response";
+import type {
+    ProfileResponse,
+    UpdateProfileRequest,
+} from "../controller/profile.response";
 
 export async function getProfileAction(
     profileId: string,
@@ -18,7 +21,7 @@ export async function getProfileAction(
 
 export async function updateProfileAction(
     profileId: string,
-    data: FormData,
+    data: UpdateProfileRequest,
 ): Promise<RequestSuccess<ProfileResponse> | RequestFailure> {
     const response = await PROFILE_HTTP.put<ProfileResponse>(
         `/profiles/${profileId}`,
