@@ -5,6 +5,7 @@ export const PATHS = {
         CHALLENGES: "/dashboard/challenges",
         COMMUNITY: "/dashboard/community",
         SETTINGS: "/dashboard/settings",
+        HELP: "/dashboard/help",
     },
     AUTH: {
         SIGN_IN: "/auth/sign-in",
