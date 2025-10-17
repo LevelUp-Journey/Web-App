@@ -1,4 +1,5 @@
 import { getPublicChallengesAction } from "../server/challenge.actions";
+import { ChallengeAssembler } from "./challenge.assembler";
 import type { ChallengeResponse } from "./challenge.response";
 
 export class ChallengeController {
@@ -7,7 +8,9 @@ export class ChallengeController {
 
         if (challenges.status === 200) {
             // Handle successful response
-            return challenges.data as ChallengeResponse[];
+            return ChallengeAssembler.toEntitiesFromResponse(
+                challenges.data as ChallengeResponse[],
+            );
         }
 
         throw new Error("Failed to fetch public challenges");

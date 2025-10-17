@@ -1,8 +1,9 @@
 "use client";
 
 import Autoplay from "embla-carousel-autoplay";
-import { Search, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import ChallengeCard from "@/components/cards/challenge-card";
 import { Badge } from "@/components/ui/badge";
 import {
     Card,
@@ -16,7 +17,6 @@ import {
     CarouselContent,
     CarouselItem,
 } from "@/components/ui/carousel";
-import { Input } from "@/components/ui/input";
 import {
     InputGroup,
     InputGroupAddon,
@@ -124,39 +124,10 @@ export default function DashboardPage() {
                 <h2 className="text-2xl font-semibold">Challenges</h2>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {filteredChallenges.map((challenge) => (
-                        <Card
+                        <ChallengeCard
                             key={challenge.id}
-                            className="hover:shadow-lg transition-shadow"
-                        >
-                            <CardHeader>
-                                <CardTitle className="flex items-center justify-between">
-                                    {challenge.name}
-                                    <Badge variant="secondary">
-                                        {challenge.experiencePoints} XP
-                                    </Badge>
-                                </CardTitle>
-                                <CardDescription>
-                                    {challenge.description}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex flex-wrap gap-2">
-                                    {challenge.tags.map((tag) => (
-                                        <Badge
-                                            key={tag.id}
-                                            style={{
-                                                backgroundColor: tag.color,
-                                            }}
-                                        >
-                                            {tag.name}
-                                        </Badge>
-                                    ))}
-                                </div>
-                                <p className="text-sm text-muted-foreground mt-2">
-                                    Status: {challenge.status}
-                                </p>
-                            </CardContent>
-                        </Card>
+                            challenge={challenge}
+                        />
                     ))}
                 </div>
             </div>

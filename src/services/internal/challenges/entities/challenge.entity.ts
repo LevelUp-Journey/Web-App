@@ -1,14 +1,14 @@
-export interface ChallengeResponse {
+export interface Challenge {
     id: string;
     teacherId: string;
     name: string;
     description: string; // This is Markdown formatted text
     experiencePoints: number;
     status: string;
-    tags: ChallengeTagResponse[];
+    tags: ChallengeTag[];
 }
 
-export interface ChallengeTagResponse {
+export interface ChallengeTag {
     id: string;
     name: string;
     color: string;

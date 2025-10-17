@@ -3,3 +3,9 @@ export const CONSTS = {
     USER_STORE_KEY: "user_store",
     DASHBOARD_CAROUSEL_SPEED: 5000,
 };
+
+export enum UIVersion {
+    A = "A",
+    B = "B",
+    C = "C",
+}
