@@ -1,5 +1,5 @@
 import AppSidebar from "@/components/dashboard/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function ProtectedLayout({
     children,
@@ -9,10 +9,7 @@ export default function ProtectedLayout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main>
-                <SidebarTrigger />
-                {children}
-            </main>
+            <main>{children}</main>
         </SidebarProvider>
     );
 }
