@@ -9,7 +9,7 @@ export default function ProtectedLayout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main>{children}</main>
+            <main className="w-full px-4">{children}</main>
         </SidebarProvider>
     );
 }
