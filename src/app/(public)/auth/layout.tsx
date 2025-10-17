@@ -11,7 +11,7 @@ export default function AuthLayout({
     return (
         <div className="min-h-dvh flex flex-col">
             {/* Header */}
-            <header className="flex items-center justify-between px-6 py-4 border-b">
+            <header className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-2">
                     <Image
                         src="/pet_smile.png"
@@ -25,8 +25,8 @@ export default function AuthLayout({
                     </span>
                 </div>
 
-                <Button variant="outline" size="sm">
-                    Iniciar sesión
+                <Button variant="outline" size="sm" asChild>
+                    <Link href={PATHS.AUTH.SIGN_UP}>Sign Up</Link>
                 </Button>
             </header>
 
@@ -38,11 +38,9 @@ export default function AuthLayout({
             </main>
 
             {/* Footer */}
-            <footer className="flex justify-center gap-4 py-4 border-t text-sm">
-                <Link href={PATHS.LEGAL.TERMS}>Términos</Link>
-                <Link href={PATHS.LEGAL.PRIVACY_POLICY}>
-                    Política de Privacidad
-                </Link>
+            <footer className="flex justify-center gap-4 py-4 text-sm">
+                <Link href={PATHS.LEGAL.TERMS}>Terms</Link>
+                <Link href={PATHS.LEGAL.PRIVACY_POLICY}>Privacy Policy</Link>
             </footer>
         </div>
     );
