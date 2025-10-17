@@ -9,4 +9,8 @@ export const PATHS = {
         SIGN_UP: "/auth/sign-up",
     },
     ROOT: "/",
+    LEGAL: {
+        PRIVACY_POLICY: "/legal/privacy-policy",
+        TERMS: "/legal/terms",
+    },
 };
