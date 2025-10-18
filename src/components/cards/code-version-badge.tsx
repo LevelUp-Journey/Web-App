@@ -1,5 +1,4 @@
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import { Button } from "../ui/button";
 import { CPlusPlus } from "../ui/svgs/cplusplus";
 import { Java } from "../ui/svgs/java";
 import { Javascript } from "../ui/svgs/javascript";

@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import { UIVersion } from "@/lib/consts";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
@@ -5,13 +6,13 @@ import { Badge } from "../ui/badge";
 import {
     Card,
     CardContent,
-    CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "../ui/card";
 import CodeVersionBadge from "./code-version-badge";
 
-const VERSION = UIVersion.A;
+const VERSION: UIVersion = UIVersion.B;
 
 export default async function ChallengeCard({
     challenge,
@@ -34,7 +35,6 @@ export default async function ChallengeCard({
                             {challenge.experiencePoints} XP
                         </Badge>
                     </CardTitle>
-                    <CardDescription>{challenge.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-wrap gap-2">
@@ -65,11 +65,44 @@ export default async function ChallengeCard({
         );
     } else if (VERSION === UIVersion.B) {
         return (
-            <div className="card">
-                <div className="card-header">
-                    <h5 className="card-title">{challenge.name}</h5>
-                </div>
-            </div>
+            <Card
+                key={challenge.id}
+                className="hover:shadow-lg transition-shadow"
+            >
+                <CardHeader className="flex items-center justify-between flex-row">
+                    <CardTitle className="flex items-center justify-between">
+                        {challenge.name}
+                    </CardTitle>
+                    <div className="flex items-center gap-2 ">
+                        <Star className="text-yellow-400" size={18} />
+                        {challenge.stars.length}
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <div>
+                        {codeVersions.map((version) => (
+                            <CodeVersionBadge
+                                key={version.id}
+                                version={version}
+                            />
+                        ))}
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <div className="flex flex-wrap gap-2">
+                        {challenge.tags.map((tag) => (
+                            <Badge
+                                key={tag.id}
+                                style={{
+                                    backgroundColor: tag.color,
+                                }}
+                            >
+                                {tag.name}
+                            </Badge>
+                        ))}
+                    </div>
+                </CardFooter>
+            </Card>
         );
     }
     return (

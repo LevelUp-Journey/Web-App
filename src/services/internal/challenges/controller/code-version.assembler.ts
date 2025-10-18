@@ -26,6 +26,6 @@ export class CodeVersionAssembler {
     public static toEntitiesFromResponses(
         codeVersions: CodeVersionResponse[],
     ): CodeVersion[] {
-        return codeVersions.map(this.toEntityFromResponse);
+        return codeVersions.map(CodeVersionAssembler.toEntityFromResponse);
     }
 }

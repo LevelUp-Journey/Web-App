@@ -6,6 +6,7 @@ export interface Challenge {
     experiencePoints: number;
     status: string;
     tags: ChallengeTag[];
+    stars: ChallengeStar[];
 }
 
 export interface ChallengeTag {
@@ -13,4 +14,9 @@ export interface ChallengeTag {
     name: string;
     color: string;
     iconUrl: string;
+}
+
+export interface ChallengeStar {
+    userId: string;
+    starredAt: string;
 }

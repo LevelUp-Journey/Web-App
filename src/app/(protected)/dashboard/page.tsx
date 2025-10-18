@@ -7,7 +7,10 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
+import { UIVersion } from "@/lib/consts";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
+
+const CHALLENGE_LIST_UI_VERSIONS = UIVersion.A;
 
 export default async function DashboardPage() {
     // fetch all challenges
@@ -34,17 +37,31 @@ export default async function DashboardPage() {
             <UniversityAnnouncements />
 
             {/* Challenges List */}
-            <div className="container mx-auto p-4 space-y-4">
-                <h2 className="text-2xl font-semibold">Challenges</h2>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {challenges.map((challenge) => (
-                        <ChallengeCard
-                            key={challenge.id}
-                            challenge={challenge}
-                        />
-                    ))}
+            {CHALLENGE_LIST_UI_VERSIONS === UIVersion.A ? (
+                <div className="container mx-auto p-4 space-y-4">
+                    <h2 className="text-2xl font-semibold">Challenges</h2>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {challenges.map((challenge) => (
+                            <ChallengeCard
+                                key={challenge.id}
+                                challenge={challenge}
+                            />
+                        ))}
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="container mx-auto p-4 space-y-4">
+                    <h2 className="text-2xl font-semibold">Challenges</h2>
+                    <div className="flex flex-col space-y-4">
+                        {challenges.map((challenge) => (
+                            <ChallengeCard
+                                key={challenge.id}
+                                challenge={challenge}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -12,7 +12,7 @@ export async function getCodeVersionsByChallengeIdAction(
 ): Promise<RequestSuccess<CodeVersionResponse[]> | RequestFailure> {
     console.log("Fetching code versions for challenge ID:", challengeId);
     const data = await CHALLENGES_HTTP.get<CodeVersionResponse[]>(
-        `/code-versions/challenge/${challengeId}`,
+        `/challenges/${challengeId}/code-versions`,
     );
 
     return {

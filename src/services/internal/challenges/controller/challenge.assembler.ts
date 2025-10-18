@@ -19,6 +19,11 @@ const ChallengeValidator = z.object({
     tags: z.array(ChallengeTagValidator),
 });
 
+const ChallengeStarValidator = z.object({
+    userId: z.uuid(),
+    starredAt: z.string().min(1).max(100),
+});
+
 export class ChallengeAssembler {
     public static toEntityFromResponse(
         challenge: ChallengeResponse,
@@ -38,6 +43,14 @@ export class ChallengeAssembler {
                 color: tag.color,
                 iconUrl: tag.iconUrl,
             })),
+            stars: challenge.stars.map((star) => {
+                ChallengeStarValidator.parse(star);
+
+                return {
+                    userId: star.userId,
+                    starredAt: star.starredAt,
+                };
+            }),
         };
     }
 
