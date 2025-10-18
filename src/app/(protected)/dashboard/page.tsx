@@ -1,67 +1,17 @@
-"use client";
-
-import Autoplay from "embla-carousel-autoplay";
 import { SearchIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import ChallengeCard from "@/components/cards/challenge-card";
-import { Badge } from "@/components/ui/badge";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-} from "@/components/ui/carousel";
+import UniversityAnnouncements from "@/components/dashboard/university-announcements";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { CONSTS } from "@/lib/consts";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
-import type { ChallengeResponse } from "@/services/internal/challenges/controller/challenge.response";
 
-export default function DashboardPage() {
-    const [challenges, setChallenges] = useState<ChallengeResponse[]>([]);
-    const [filteredChallenges, setFilteredChallenges] = useState<
-        ChallengeResponse[]
-    >([]);
-    const [searchQuery, setSearchQuery] = useState("");
-
-    useEffect(() => {
-        const fetchChallenges = async () => {
-            try {
-                const data = await ChallengeController.getPublicChallenges();
-                setChallenges(data);
-                setFilteredChallenges(data);
-            } catch (error) {
-                console.error("Failed to fetch challenges:", error);
-            }
-        };
-        fetchChallenges();
-    }, []);
-
-    useEffect(() => {
-        const filtered = challenges.filter(
-            (challenge) =>
-                challenge.name
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase()) ||
-                challenge.description
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase()) ||
-                challenge.tags.some((tag) =>
-                    tag.name.toLowerCase().includes(searchQuery.toLowerCase()),
-                ),
-        );
-        setFilteredChallenges(filtered);
-    }, [searchQuery, challenges]);
+export default async function DashboardPage() {
+    // fetch all challenges
+    const challenges = await ChallengeController.getPublicChallenges();
 
     return (
         <div className="space-y-4 w-full">
@@ -81,49 +31,13 @@ export default function DashboardPage() {
             </div>
 
             {/* Carousel - Full Width */}
-            <Carousel
-                opts={{ loop: true }}
-                plugins={[Autoplay({ delay: CONSTS.DASHBOARD_CAROUSEL_SPEED })]}
-                className="w-full"
-            >
-                <CarouselContent>
-                    <CarouselItem>
-                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                            <h2 className="text-3xl font-bold text-white">
-                                UPC Announcement
-                            </h2>
-                        </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                            <h2 className="text-3xl font-bold text-white">
-                                UPC Announcement
-                            </h2>
-                        </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                            <h2 className="text-3xl font-bold text-white">
-                                UPC Announcement
-                            </h2>
-                        </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                        <div className="flex items-center justify-center h-40 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                            <h2 className="text-3xl font-bold text-white">
-                                UPC Announcement
-                            </h2>
-                        </div>
-                    </CarouselItem>
-                    {/* Add more items if needed */}
-                </CarouselContent>
-            </Carousel>
+            <UniversityAnnouncements />
 
             {/* Challenges List */}
             <div className="container mx-auto p-4 space-y-4">
                 <h2 className="text-2xl font-semibold">Challenges</h2>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {filteredChallenges.map((challenge) => (
+                    {challenges.map((challenge) => (
                         <ChallengeCard
                             key={challenge.id}
                             challenge={challenge}

@@ -1,4 +1,5 @@
 import { UIVersion } from "@/lib/consts";
+import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import { Badge } from "../ui/badge";
 import {
@@ -8,10 +9,18 @@ import {
     CardHeader,
     CardTitle,
 } from "../ui/card";
+import CodeVersionBadge from "./code-version-badge";
 
 const VERSION = UIVersion.A;
 
-export default function ChallengeCard({ challenge }: { challenge: Challenge }) {
+export default async function ChallengeCard({
+    challenge,
+}: {
+    challenge: Challenge;
+}) {
+    const codeVersions =
+        await CodeVersionController.getCodeVersionsByChallengeId(challenge.id);
+
     if (VERSION === UIVersion.A) {
         return (
             <Card
@@ -38,6 +47,14 @@ export default function ChallengeCard({ challenge }: { challenge: Challenge }) {
                             >
                                 {tag.name}
                             </Badge>
+                        ))}
+                    </div>
+                    <div>
+                        {codeVersions.map((version) => (
+                            <CodeVersionBadge
+                                key={version.id}
+                                version={version}
+                            />
                         ))}
                     </div>
                     <p className="text-sm text-muted-foreground mt-2">
