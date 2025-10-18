@@ -1,5 +1,6 @@
 "use server";
 import axios from "axios";
+import { CONSTS } from "@/lib/consts";
 import { ENV } from "@/lib/env";
 import { getAuthTokenAction } from "./internal/iam/server/auth.actions";
 
@@ -17,9 +18,13 @@ export const CHALLENGES_HTTP = axios.create({
 
 [IAM_HTTP, PROFILE_HTTP, CHALLENGES_HTTP].forEach((httpClient) => {
     httpClient.interceptors.request.use(async (config) => {
-        const token = await getAuthTokenAction();
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        const authTokens = await getAuthTokenAction();
+        if (authTokens && authTokens.token !== "NO_TOKEN_FOUND") {
+            config.headers.Authorization = `Bearer ${authTokens.token}`;
+            config.headers.set(
+                CONSTS.AUTH_REFRESH_TOKEN_KEY,
+                authTokens.refreshToken,
+            );
         }
         return config;
     });

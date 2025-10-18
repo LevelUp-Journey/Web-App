@@ -19,7 +19,8 @@ export default function SignInPage() {
             await AuthController.signIn({ email, password });
 
             redirect(PATHS.DASHBOARD.ROOT);
-        } catch {
+        } catch (e) {
+            console.error(e);
             toast.error("Something went wrong");
         }
     };

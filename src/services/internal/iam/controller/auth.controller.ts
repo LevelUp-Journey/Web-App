@@ -20,11 +20,12 @@ export class AuthController {
     // Working
     public static async signIn(request: SignInRequest) {
         const response = await signInAction(request);
-
+        console.log(" SIGN IN RESPONSE", response);
         if (response.status === 200) {
+            console.log(response.status === 200);
             const data = response.data as SignInResponse;
-            console.log("saving auth token");
-            await saveAuthTokenAction(data.token);
+            await saveAuthTokenAction(data.token, data.refreshToken);
+            console.log("WEBADA DE MRTD");
             return data;
         }
 
@@ -36,17 +37,11 @@ export class AuthController {
     public static async signUp(request: SignUpRequest) {
         const response = await signUpAction(request);
 
-        console.log("Sign up response", response);
-
         if (response.status === 201) {
-            console.log("Sign in after sign up");
             const user = await AuthController.signIn(request);
-
-            console.log("User after sign up", user);
             return user;
         }
 
-        console.log(response);
         toast.error("Error signing up");
         throw new Error("Error signing up");
     }
@@ -57,8 +52,9 @@ export class AuthController {
     }
 
     public static async getAuthToken(): Promise<string> {
-        const token = await getAuthTokenAction();
-        return token;
+        const authTokens = await getAuthTokenAction();
+        console.log("tokens", authTokens);
+        return authTokens.token;
     }
 
     // TODO: Validate signInWithGoogle
@@ -84,10 +80,14 @@ export class AuthController {
 
     public static async refreshToken() {
         const response = await refreshTokenAction();
+
         if (response.status === 200) {
-            await saveAuthTokenAction(response.data.accessToken);
-        } else {
-            AuthController.signOut();
+            return await saveAuthTokenAction(
+                response.data.accessToken,
+                response.data.refreshToken,
+            );
         }
+
+        AuthController.signOut();
     }
 }

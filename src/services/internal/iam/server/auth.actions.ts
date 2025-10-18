@@ -67,9 +67,20 @@ export async function signOutAction() {
     redirect(PATHS.ROOT);
 }
 
-export async function saveAuthTokenAction(token: string) {
+export async function saveAuthTokenAction(token: string, refreshToken: string) {
     const cookieStore = await cookies();
-    cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token);
+    cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+    cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
 }
 
 export async function validateTokenAction() {
@@ -88,14 +99,17 @@ export async function getAuthTokenAction() {
     const cookieStore = await cookies();
     const token =
         cookieStore.get(CONSTS.AUTH_TOKEN_KEY)?.value || "NO_TOKEN_FOUND";
+    const refreshToken =
+        cookieStore.get(CONSTS.AUTH_REFRESH_TOKEN_KEY)?.value ||
+        "NO_REFRESH_TOKEN_FOUND";
 
-    return token;
+    return { token, refreshToken };
 }
 
 export async function getUserRolesFromTokenAction(): Promise<UserRole[]> {
-    const token = await getAuthTokenAction();
+    const authToken = await getAuthTokenAction();
 
-    const decoded = jwtDecode<{ roles: UserRole[] }>(token);
+    const decoded = jwtDecode<{ roles: UserRole[] }>(authToken.token);
     console.log("USER ROLES:", decoded.roles);
     const roles = decoded.roles as UserRole[];
 
@@ -103,11 +117,8 @@ export async function getUserRolesFromTokenAction(): Promise<UserRole[]> {
 }
 
 export async function refreshTokenAction() {
-    const token = await getAuthTokenAction();
-
     const response = await IAM_HTTP.post<RefreshTokenResponse>(
         "/authentication/refresh",
-        { token },
     );
 
     return {
