@@ -1,9 +1,10 @@
 "use server";
 
 import type { AxiosError } from "axios";
+import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { CONSTS } from "@/lib/consts";
+import { CONSTS, type UserRole } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import {
     IAM_HTTP,
@@ -11,6 +12,7 @@ import {
     type RequestSuccess,
 } from "../../../axios.config";
 import type {
+    RefreshTokenResponse,
     SignInRequest,
     SignInResponse,
     SignUpRequest,
@@ -88,4 +90,28 @@ export async function getAuthTokenAction() {
         cookieStore.get(CONSTS.AUTH_TOKEN_KEY)?.value || "NO_TOKEN_FOUND";
 
     return token;
+}
+
+export async function getUserRolesFromTokenAction(): Promise<UserRole[]> {
+    const token = await getAuthTokenAction();
+
+    const decoded = jwtDecode<{ roles: UserRole[] }>(token);
+    console.log("USER ROLES:", decoded.roles);
+    const roles = decoded.roles as UserRole[];
+
+    return roles;
+}
+
+export async function refreshTokenAction() {
+    const token = await getAuthTokenAction();
+
+    const response = await IAM_HTTP.post<RefreshTokenResponse>(
+        "/authentication/refresh",
+        { token },
+    );
+
+    return {
+        status: response.status,
+        data: response.data,
+    };
 }

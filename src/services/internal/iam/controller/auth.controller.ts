@@ -2,6 +2,8 @@ import { toast } from "sonner";
 import { ENV } from "@/lib/env";
 import {
     getAuthTokenAction,
+    getUserRolesFromTokenAction,
+    refreshTokenAction,
     saveAuthTokenAction,
     signInAction,
     signOutAction,
@@ -73,5 +75,19 @@ export class AuthController {
         // Delete user data from local storage
         localStorage.clear();
         signOutAction();
+    }
+
+    public static async getUserRoles() {
+        const roles = await getUserRolesFromTokenAction();
+        return roles;
+    }
+
+    public static async refreshToken() {
+        const response = await refreshTokenAction();
+        if (response.status === 200) {
+            await saveAuthTokenAction(response.data.accessToken);
+        } else {
+            AuthController.signOut();
+        }
     }
 }

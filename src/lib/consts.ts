@@ -9,3 +9,9 @@ export enum UIVersion {
     B = "B",
     C = "C",
 }
+
+export enum UserRole {
+    ADMIN = "ROLE_ADMIN",
+    STUDENT = "ROLE_STUDENT",
+    TEACHER = "ROLE_TEACHER",
+}

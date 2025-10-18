@@ -10,7 +10,6 @@ import type { CodeVersionResponse } from "../controller/code-version.response";
 export async function getCodeVersionsByChallengeIdAction(
     challengeId: string,
 ): Promise<RequestSuccess<CodeVersionResponse[]> | RequestFailure> {
-    console.log("Fetching code versions for challenge ID:", challengeId);
     const data = await CHALLENGES_HTTP.get<CodeVersionResponse[]>(
         `/challenges/${challengeId}/code-versions`,
     );

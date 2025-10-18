@@ -12,7 +12,7 @@ export const ENV = {
         CHALLENGES: {
             BASE_URL:
                 process.env.CHALLENGES_BASE_URL ||
-                "http://192.168.0.118:8082/api/v1",
+                "http://192.168.0.118:8083/api/v1",
         },
         EXTERNAL: {
             CLOUDINARY: {
