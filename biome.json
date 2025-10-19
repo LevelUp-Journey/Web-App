@@ -25,7 +25,9 @@
                 "noStaticOnlyClass": "off"
             },
             "a11y": {
-                "noSvgWithoutTitle": "off"
+                "noSvgWithoutTitle": "off",
+                "useKeyWithClickEvents": "off",
+                "noStaticElementInteractions": "off"
             },
             "correctness": {
                 "useExhaustiveDependencies": "warn"

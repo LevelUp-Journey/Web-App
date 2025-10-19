@@ -2,11 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { EditorProvider } from "@/components/challenges/editor/editor-config";
-import {
-    RichTextEditor,
-    useEditorContent,
-} from "@/components/challenges/editor/rich-text-editor";
+import { ShadcnTemplate } from "@/components/challenges/editor/lexkitEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,9 +17,8 @@ import { ChallengeDifficulty } from "@/lib/consts";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import type { CreateChallengeRequest } from "@/services/internal/challenges/controller/challenge.response";
 
-function CreateChallengeForm() {
+export default function CreateChallengePage() {
     const router = useRouter();
-    const { getHTML } = useEditorContent();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -56,9 +51,6 @@ function CreateChallengeForm() {
             // TODO: Get actual teacherId from auth context
             const teacherId = "00000000-0000-0000-0000-000000000000";
 
-            // Get HTML content from editor
-            const description = getHTML();
-
             // Parse tags (comma separated for now)
             const tagIds = formData.tags
                 .split(",")
@@ -68,7 +60,7 @@ function CreateChallengeForm() {
             const request: CreateChallengeRequest = {
                 teacherId,
                 name: formData.name,
-                description,
+                description: "",
                 experiencePoints: formData.experiencePoints,
                 difficulty: formData.difficulty,
                 tagIds,
@@ -204,18 +196,10 @@ function CreateChallengeForm() {
                     {/* Right Column - Rich Text Editor */}
                     <div className="space-y-2">
                         <Label>Description</Label>
-                        <RichTextEditor placeholder="Start writing your challenge description..." />
+                        <ShadcnTemplate />
                     </div>
                 </div>
             </form>
         </div>
-    );
-}
-
-export default function CreateChallengePage() {
-    return (
-        <EditorProvider>
-            <CreateChallengeForm />
-        </EditorProvider>
     );
 }
