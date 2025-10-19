@@ -20,12 +20,9 @@ export class AuthController {
     // Working
     public static async signIn(request: SignInRequest) {
         const response = await signInAction(request);
-        console.log(" SIGN IN RESPONSE", response);
         if (response.status === 200) {
-            console.log(response.status === 200);
             const data = response.data as SignInResponse;
             await saveAuthTokenAction(data.token, data.refreshToken);
-            console.log("WEBADA DE MRTD");
             return data;
         }
 

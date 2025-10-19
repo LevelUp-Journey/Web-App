@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,15 +12,14 @@ import { PATHS } from "@/lib/paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignInPage() {
+    const router = useRouter();
     const handleSignIn = async (formData: FormData) => {
         try {
             const email = formData.get("email") as string;
             const password = formData.get("password") as string;
             await AuthController.signIn({ email, password });
-
-            redirect(PATHS.DASHBOARD.ROOT);
-        } catch (e) {
-            console.error(e);
+            router.push(PATHS.DASHBOARD.ROOT);
+        } catch {
             toast.error("Something went wrong");
         }
     };

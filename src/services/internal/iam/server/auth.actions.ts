@@ -69,18 +69,8 @@ export async function signOutAction() {
 
 export async function saveAuthTokenAction(token: string, refreshToken: string) {
     const cookieStore = await cookies();
-    cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
-    cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-    });
+    cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token);
+    cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken);
 }
 
 export async function validateTokenAction() {
