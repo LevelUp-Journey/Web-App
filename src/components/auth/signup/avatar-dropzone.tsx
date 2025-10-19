@@ -25,7 +25,9 @@ export function AvatarDropzone({
 }: AvatarDropzoneProps) {
     const [isDragActive, setIsDragActive] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string | null>(currentImage || null);
+    const [imageUrl, setImageUrl] = useState<string | null>(
+        currentImage || null,
+    );
 
     const uploadImageToCloudinary = useCallback(
         async (file: File) => {
@@ -36,7 +38,8 @@ export function AvatarDropzone({
                 reader.onload = async (e) => {
                     try {
                         const base64 = e.target?.result as string;
-                        const uploadedUrl = await CloudinaryController.uploadImage(base64);
+                        const uploadedUrl =
+                            await CloudinaryController.uploadImage(base64);
 
                         setImageUrl(uploadedUrl);
                         onImageUrlChange(uploadedUrl);
@@ -44,7 +47,9 @@ export function AvatarDropzone({
                         setIsUploading(false);
                     } catch (error) {
                         console.error("Cloudinary upload error:", error);
-                        toast.error("Failed to upload image. Please try again.");
+                        toast.error(
+                            "Failed to upload image. Please try again.",
+                        );
                         setIsUploading(false);
                     }
                 };
@@ -86,16 +91,19 @@ export function AvatarDropzone({
         [uploadImageToCloudinary],
     );
 
-    const { getRootProps, getInputProps, isDragActive: isDropzoneActive } =
-        useDropzone({
-            onDrop,
-            accept: { "image/*": [] },
-            maxFiles: 1,
-            maxSize: 1024 * 1024 * 10,
-            disabled: disabled || isUploading,
-            onDragEnter: () => setIsDragActive(true),
-            onDragLeave: () => setIsDragActive(false),
-        });
+    const {
+        getRootProps,
+        getInputProps,
+        isDragActive: isDropzoneActive,
+    } = useDropzone({
+        onDrop,
+        accept: { "image/*": [] },
+        maxFiles: 1,
+        maxSize: 1024 * 1024 * 10,
+        disabled: disabled || isUploading,
+        onDragEnter: () => setIsDragActive(true),
+        onDragLeave: () => setIsDragActive(false),
+    });
 
     return (
         <div className={cn("flex flex-col items-center gap-4", className)}>
@@ -104,11 +112,17 @@ export function AvatarDropzone({
                 className={cn(
                     "flex justify-center items-center relative h-32 w-32 rounded-full overflow-hidden cursor-pointer transition-all",
                     "border-4 border-dashed border-muted-foreground/30 hover:border-primary",
-                    isDropzoneActive || isDragActive ? "ring-2 ring-primary border-primary" : "",
-                    (disabled || isUploading) && "opacity-50 cursor-not-allowed",
+                    isDropzoneActive || isDragActive
+                        ? "ring-2 ring-primary border-primary"
+                        : "",
+                    (disabled || isUploading) &&
+                        "opacity-50 cursor-not-allowed",
                 )}
             >
-                <input {...getInputProps()} disabled={disabled || isUploading} />
+                <input
+                    {...getInputProps()}
+                    disabled={disabled || isUploading}
+                />
 
                 <Avatar className="w-full h-full">
                     {imageUrl ? (

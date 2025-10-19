@@ -1,6 +1,17 @@
-import { Code2, Home, Users } from "lucide-react";
+"use client";
+import {
+    Code2,
+    HelpCircle,
+    Home,
+    Settings,
+    ShieldUser,
+    Users,
+} from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { UserRole } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
     Sidebar,
     SidebarContent,
@@ -16,7 +27,7 @@ import {
 import { NavUser } from "./nav-user";
 
 // Menu items.
-const items = [
+const topItems = [
     {
         title: "Dashboard",
         url: PATHS.DASHBOARD.ROOT,
@@ -34,7 +45,39 @@ const items = [
     },
 ];
 
+const administrativeItems = [
+    {
+        title: "Admin Dashboard",
+        url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
+        icon: ShieldUser,
+    },
+];
+
+const bottomItems = [
+    {
+        title: "Settings",
+        url: PATHS.DASHBOARD.SETTINGS,
+        icon: Settings,
+    },
+    {
+        title: "Help",
+        url: PATHS.DASHBOARD.HELP,
+        icon: HelpCircle,
+    },
+];
+
 export default function AppSidebar() {
+    const [isTeacher, setIsTeacher] = useState(false);
+
+    useEffect(() => {
+        AuthController.getUserRoles().then((roles) => {
+            const hasValidRole =
+                roles.includes(UserRole.TEACHER) ||
+                roles.includes(UserRole.ADMIN);
+            setIsTeacher(hasValidRole);
+        });
+    }, []);
+
     return (
         <Sidebar>
             <SidebarHeader>
@@ -60,7 +103,7 @@ export default function AppSidebar() {
                     <SidebarGroupLabel>Home</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
+                            {topItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
                                         <a href={item.url}>
@@ -73,14 +116,50 @@ export default function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+                {isTeacher && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Administrative</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {administrativeItems.map((item) => (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild>
+                                            <a href={item.url}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
             </SidebarContent>
+
             <SidebarFooter>
-                <NavUser
-                    user={{
-                        avatar: "",
-                        name: "",
-                    }}
-                />
+                <SidebarGroup>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {bottomItems.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <a href={item.url}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </a>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                            <NavUser
+                                user={{
+                                    avatar: "",
+                                    name: "",
+                                }}
+                            />
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarFooter>
         </Sidebar>
     );

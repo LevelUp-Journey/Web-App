@@ -9,6 +9,11 @@ export const ENV = {
                 process.env.PROFILE_BASE_URL ||
                 "http://192.168.0.118:8083/api/v1",
         },
+        CHALLENGES: {
+            BASE_URL:
+                process.env.CHALLENGES_BASE_URL ||
+                "http://192.168.0.118:8083/api/v1",
+        },
         EXTERNAL: {
             CLOUDINARY: {
                 CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,

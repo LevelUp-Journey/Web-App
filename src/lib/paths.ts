@@ -3,8 +3,13 @@ export const PATHS = {
         ROOT: "/dashboard",
         PROFILE: "/dashboard/profile",
         CHALLENGES: "/dashboard/challenges",
+        CHALLENGE: (id: string) => `/dashboard/challenge/${id}`,
         COMMUNITY: "/dashboard/community",
         SETTINGS: "/dashboard/settings",
+        HELP: "/dashboard/help",
+        ADMINISTRATION: {
+            ROOT: "/dashboard/admin",
+        },
     },
     AUTH: {
         SIGN_IN: "/auth/sign-in",
@@ -18,4 +23,5 @@ export const PATHS = {
         PRIVACY_POLICY: "/legal/privacy-policy",
         TERMS: "/legal/terms",
     },
+    UNAUTHORIZED: "/unauthorized",
 };

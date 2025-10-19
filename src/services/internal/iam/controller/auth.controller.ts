@@ -2,6 +2,8 @@ import { toast } from "sonner";
 import { ENV } from "@/lib/env";
 import {
     getAuthTokenAction,
+    getUserRolesFromTokenAction,
+    refreshTokenAction,
     saveAuthTokenAction,
     signInAction,
     signOutAction,
@@ -18,11 +20,9 @@ export class AuthController {
     // Working
     public static async signIn(request: SignInRequest) {
         const response = await signInAction(request);
-
         if (response.status === 200) {
             const data = response.data as SignInResponse;
-            console.log("saving auth token");
-            await saveAuthTokenAction(data.token);
+            await saveAuthTokenAction(data.token, data.refreshToken);
             return data;
         }
 
@@ -34,17 +34,11 @@ export class AuthController {
     public static async signUp(request: SignUpRequest) {
         const response = await signUpAction(request);
 
-        console.log("Sign up response", response);
-
         if (response.status === 201) {
-            console.log("Sign in after sign up");
             const user = await AuthController.signIn(request);
-
-            console.log("User after sign up", user);
             return user;
         }
 
-        console.log(response);
         toast.error("Error signing up");
         throw new Error("Error signing up");
     }
@@ -55,8 +49,9 @@ export class AuthController {
     }
 
     public static async getAuthToken(): Promise<string> {
-        const token = await getAuthTokenAction();
-        return token;
+        const authTokens = await getAuthTokenAction();
+        console.log("tokens", authTokens);
+        return authTokens.token;
     }
 
     // TODO: Validate signInWithGoogle
@@ -73,5 +68,23 @@ export class AuthController {
         // Delete user data from local storage
         localStorage.clear();
         signOutAction();
+    }
+
+    public static async getUserRoles() {
+        const roles = await getUserRolesFromTokenAction();
+        return roles;
+    }
+
+    public static async refreshToken() {
+        const response = await refreshTokenAction();
+
+        if (response.status === 200) {
+            return await saveAuthTokenAction(
+                response.data.accessToken,
+                response.data.refreshToken,
+            );
+        }
+
+        AuthController.signOut();
     }
 }

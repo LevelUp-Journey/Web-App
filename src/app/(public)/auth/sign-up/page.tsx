@@ -16,7 +16,13 @@ export default async function SignUpPage({
             {step === 1 ? (
                 <SignUpStep1 />
             ) : step === 2 ? (
-                <Suspense fallback={<div className="text-center py-8">Loading your profile...</div>}>
+                <Suspense
+                    fallback={
+                        <div className="text-center py-8">
+                            Loading your profile...
+                        </div>
+                    }
+                >
                     <SignUpStep2 />
                 </Suspense>
             ) : (

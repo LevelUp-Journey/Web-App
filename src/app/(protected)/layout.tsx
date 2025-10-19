@@ -11,5 +11,6 @@ export default async function ProtectedLayout({
     if (!isValid) {
         redirect(PATHS.AUTH.SIGN_IN);
     }
-    return children;
+
+    return <>{children}</>;
 }
