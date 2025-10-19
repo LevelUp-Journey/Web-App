@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { PATHS } from "@/lib/paths";
 
 export default function AdministrativeDashboardPage() {
     return (
@@ -15,9 +17,11 @@ export default function AdministrativeDashboardPage() {
             <div className="mb-6">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-semibold">Challenges</h2>
-                    <Button className="font-medium px-4 py-2 rounded-lg transition-colors duration-200">
-                        Create Challenge
-                    </Button>
+                    <Link href={PATHS.DASHBOARD.CHALLENGES.CREATE}>
+                        <Button className="font-medium px-4 py-2 rounded-lg transition-colors duration-200">
+                            Create Challenge
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>

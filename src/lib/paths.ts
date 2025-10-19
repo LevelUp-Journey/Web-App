@@ -2,7 +2,11 @@ export const PATHS = {
     DASHBOARD: {
         ROOT: "/dashboard",
         PROFILE: "/dashboard/profile",
-        CHALLENGES: "/dashboard/challenges",
+        CHALLENGES: {
+            ROOT: "/dashboard/challenges",
+            CREATE: "/dashboard/challenges/create",
+            EDIT: (id: string) => `/dashboard/challenges/${id}/edit`,
+        },
         CHALLENGE: (id: string) => `/dashboard/challenge/${id}`,
         COMMUNITY: "/dashboard/community",
         SETTINGS: "/dashboard/settings",

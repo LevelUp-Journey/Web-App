@@ -16,3 +16,10 @@ export enum UserRole {
     STUDENT = "ROLE_STUDENT",
     TEACHER = "ROLE_TEACHER",
 }
+
+export enum ChallengeDifficulty {
+    EASY = "EASY",
+    MEDIUM = "MEDIUM",
+    HARD = "HARD",
+    EXPERT = "EXPERT",
+}

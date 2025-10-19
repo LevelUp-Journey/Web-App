@@ -9,8 +9,7 @@ export default async function NoStudentsLayout({
     children: React.ReactNode;
 }) {
     const userRoles = await AuthController.getUserRoles();
-    const isUserStudent = userRoles.includes(UserRole.TEACHER);
-
+    const isUserStudent = userRoles.includes(UserRole.STUDENT);
     if (isUserStudent) {
         redirect(PATHS.UNAUTHORIZED);
     }
