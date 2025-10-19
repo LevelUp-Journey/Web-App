@@ -1,6 +1,17 @@
-import { Code2, HelpCircle, Home, Settings, Users } from "lucide-react";
+"use client";
+import {
+    Code2,
+    HelpCircle,
+    Home,
+    Settings,
+    ShieldUser,
+    Users,
+} from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { UserRole } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
     Sidebar,
     SidebarContent,
@@ -34,6 +45,14 @@ const topItems = [
     },
 ];
 
+const administrativeItems = [
+    {
+        title: "Admin Dashboard",
+        url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
+        icon: ShieldUser,
+    },
+];
+
 const bottomItems = [
     {
         title: "Settings",
@@ -48,6 +67,17 @@ const bottomItems = [
 ];
 
 export default function AppSidebar() {
+    const [isTeacher, setIsTeacher] = useState(false);
+
+    useEffect(() => {
+        AuthController.getUserRoles().then((roles) => {
+            const hasValidRole =
+                roles.includes(UserRole.TEACHER) ||
+                roles.includes(UserRole.ADMIN);
+            setIsTeacher(hasValidRole);
+        });
+    }, []);
+
     return (
         <Sidebar>
             <SidebarHeader>
@@ -86,7 +116,27 @@ export default function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+                {isTeacher && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Administrative</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {administrativeItems.map((item) => (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild>
+                                            <a href={item.url}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
             </SidebarContent>
+
             <SidebarFooter>
                 <SidebarGroup>
                     <SidebarGroupContent>

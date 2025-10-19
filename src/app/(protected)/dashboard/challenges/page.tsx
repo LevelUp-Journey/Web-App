@@ -29,12 +29,6 @@ export default async function ChallengesPage() {
         }),
     );
 
-    // Get user roles
-    const userRoles = await AuthController.getUserRoles();
-    const canCreateChallenge =
-        userRoles.includes(UserRole.TEACHER) ||
-        userRoles.includes(UserRole.ADMIN);
-
     return (
         <div className="space-y-4 w-full">
             {/* Search Bar - Centered */}
@@ -51,13 +45,6 @@ export default async function ChallengesPage() {
                     </InputGroup>
                 </div>
             </div>
-
-            {/* Create Challenge Button - Conditional */}
-            {canCreateChallenge && (
-                <div className="flex justify-center">
-                    <Button>Create Challenge</Button>
-                </div>
-            )}
 
             {/* Challenges List */}
             <div className="container mx-auto p-4 space-y-4">
