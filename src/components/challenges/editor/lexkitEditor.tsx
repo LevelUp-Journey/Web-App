@@ -20,10 +20,8 @@ import {
     type ExtractCommands,
     type ExtractStateQueries,
     floatingToolbarExtension,
-    HTMLEmbedExtension,
     historyExtension,
     horizontalRuleExtension,
-    htmlExtension,
     imageExtension,
     italicExtension,
     linkExtension,
@@ -121,7 +119,7 @@ import {
 import { cn } from "@/lib/utils";
 
 // Editor Mode Types
-type EditorMode = "visual" | "html" | "markdown";
+type EditorMode = "visual" | "markdown";
 
 // Table Config Type
 type TableConfig = {
@@ -133,9 +131,7 @@ type TableConfig = {
 // Ref interface for parent control
 export interface ShadcnTemplateRef {
     injectMarkdown: (content: string) => void;
-    injectHTML: (content: string) => void;
     getMarkdown: () => string;
-    getHTML: () => string;
 }
 
 // Custom Shadcn-styled context menu renderer
@@ -242,28 +238,10 @@ export const extensions = [
     historyExtension,
     imageExtension,
     blockFormatExtension,
-    htmlExtension,
     markdownExt,
     codeExtension,
     codeFormatExtension,
-    new HTMLEmbedExtension().configure({
-        toggleRenderer: ({ isPreview, onClick, className, style }) => (
-            <Button variant="outline" size="sm" onClick={onClick} style={style}>
-                {isPreview ? (
-                    <>
-                        <FileCode className="w-4 h-4 mr-2" />
-                        Edit HTML
-                    </>
-                ) : (
-                    <>
-                        <Eye className="w-4 h-4 mr-2" />
-                        Preview
-                    </>
-                )}
-            </Button>
-        ),
-        markdownExtension: markdownExt,
-    }),
+
     floatingToolbarExtension,
     commandPaletteExtension,
     shadcnContextMenuExtension,
@@ -1530,29 +1508,6 @@ function Toolbar({
                             </TooltipContent>
                         </Tooltip>
                     )}
-
-                    {/* HTML Embed */}
-                    {hasExtension("htmlEmbed") && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Toggle
-                                    size="sm"
-                                    variant={
-                                        activeStates.isHTMLEmbedSelected
-                                            ? "outline"
-                                            : "default"
-                                    }
-                                    pressed={activeStates.isHTMLEmbedSelected}
-                                    onPressedChange={() =>
-                                        commands.insertHTMLEmbed()
-                                    }
-                                >
-                                    <FileCode className="h-4 w-4" />
-                                </Toggle>
-                            </TooltipTrigger>
-                            <TooltipContent>HTML Embed</TooltipContent>
-                        </Tooltip>
-                    )}
                 </div>
 
                 <Separator orientation="vertical" className="h-6" />
@@ -1609,20 +1564,13 @@ function ModeTabs({
             value={mode}
             onValueChange={(value: string) => onModeChange(value as EditorMode)}
         >
-            <TabsList className="grid w-full max-w-md grid-cols-3 bg-muted/50">
+            <TabsList className="grid w-full max-w-md grid-cols-2 bg-muted/50">
                 <TabsTrigger
                     value="visual"
                     className="flex items-center gap-2 text-sm"
                 >
                     <Eye className="h-4 w-4" />
                     Visual
-                </TabsTrigger>
-                <TabsTrigger
-                    value="html"
-                    className="flex items-center gap-2 text-sm"
-                >
-                    <FileCode className="h-4 w-4" />
-                    HTML
                 </TabsTrigger>
                 <TabsTrigger
                     value="markdown"
@@ -1633,30 +1581,6 @@ function ModeTabs({
                 </TabsTrigger>
             </TabsList>
         </Tabs>
-    );
-}
-
-// HTML Source View Component
-function HTMLSourceView({
-    htmlContent,
-    onHtmlChange,
-}: {
-    htmlContent: string;
-    onHtmlChange: (html: string) => void;
-}) {
-    return (
-        <Textarea
-            className={
-                shadcnTheme.sourceView?.textarea ||
-                "w-full h-full min-h-[600px] p-4 bg-background border-none rounded-none font-mono text-sm resize-none focus:outline-none focus:ring-0"
-            }
-            value={htmlContent}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                onHtmlChange(e.target.value)
-            }
-            placeholder="Enter HTML content..."
-            spellCheck={false}
-        />
     );
 }
 
@@ -1704,7 +1628,7 @@ function EditorContent({
         lexical: editor,
     } = useEditor();
     const [mode, setMode] = useState<EditorMode>("visual");
-    const [content, setContent] = useState({ html: "", markdown: "" });
+    const [content, setContent] = useState({ markdown: "" });
     const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
     const [linkDialogOpen, setLinkDialogOpen] = useState(false);
     const [imageDialogOpen, setImageDialogOpen] = useState(false);
@@ -1734,15 +1658,7 @@ function EditorContent({
                     });
                 }
             },
-            injectHTML: (content: string) => {
-                if (editor) {
-                    editor.update(() => {
-                        commandsRef.current.importFromHTML(content);
-                    });
-                }
-            },
             getMarkdown: () => commandsRef.current.exportToMarkdown(),
-            getHTML: () => commandsRef.current.exportToHTML(),
         }),
         [], // No dependencies to prevent recreation
     );
@@ -1821,9 +1737,6 @@ function EditorContent({
         ) {
             commands.importFromMarkdown(content.markdown, { immediate: true });
         }
-        if (mode === "html" && newMode !== "html" && hasExtension("html")) {
-            commands.importFromHTML(content.html);
-        }
         if (
             newMode === "markdown" &&
             mode !== "markdown" &&
@@ -1834,17 +1747,11 @@ function EditorContent({
                 markdown: commands.exportToMarkdown(),
             }));
         }
-        if (newMode === "html" && mode !== "html" && hasExtension("html")) {
-            setContent((prev) => ({ ...prev, html: commands.exportToHTML() }));
-        }
         setMode(newMode);
         if (newMode === "visual") {
             setTimeout(() => editor?.focus(), 100);
         }
     };
-
-    const handleHtmlChange = (html: string) =>
-        setContent((prev) => ({ ...prev, html }));
 
     const handleMarkdownChange = (markdown: string) =>
         setContent((prev) => ({ ...prev, markdown }));
@@ -1895,13 +1802,6 @@ function EditorContent({
                     />
                     <FloatingToolbarRenderer openLinkDialog={openLinkDialog} />
                 </div>
-
-                {mode === "html" && (
-                    <HTMLSourceView
-                        htmlContent={content.html}
-                        onHtmlChange={handleHtmlChange}
-                    />
-                )}
 
                 {mode === "markdown" && (
                     <MarkdownSourceView
@@ -1970,9 +1870,7 @@ export const ShadcnTemplate = forwardRef<
         () => ({
             injectMarkdown: (content: string) =>
                 editorMethods?.injectMarkdown(content),
-            injectHTML: (content: string) => editorMethods?.injectHTML(content),
             getMarkdown: () => editorMethods?.getMarkdown() || "",
-            getHTML: () => editorMethods?.getHTML() || "",
         }),
         [editorMethods],
     );

@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { ShadcnTemplate } from "@/components/challenges/editor/lexkitEditor";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,8 +10,21 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { ChallengeDifficulty } from "@/lib/consts";
 
 export default function CreateChallengePage() {
+    const [difficulty, setDifficulty] = useState(ChallengeDifficulty.EASY);
+
+    const handleDifficultyChange = (value: string) => {
+        setDifficulty(value as ChallengeDifficulty);
+    };
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header - Fixed height */}
@@ -51,14 +66,38 @@ export default function CreateChallengePage() {
                         </div>
 
                         {/* Difficulty */}
-                        <div className="flex flex-col gap-2">
+                        <div className="space-y-2">
                             <Label htmlFor="difficulty">Difficulty Level</Label>
-                            <Input
-                                type="text"
-                                id="difficulty"
-                                name="difficulty"
-                                placeholder="e.g., Easy, Medium, Hard, Expert"
-                            />
+                            <Select
+                                value={difficulty}
+                                onValueChange={handleDifficultyChange}
+                            >
+                                <SelectTrigger id="difficulty">
+                                    <SelectValue placeholder="Select difficulty" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem
+                                        value={ChallengeDifficulty.EASY}
+                                    >
+                                        Easy
+                                    </SelectItem>
+                                    <SelectItem
+                                        value={ChallengeDifficulty.MEDIUM}
+                                    >
+                                        Medium
+                                    </SelectItem>
+                                    <SelectItem
+                                        value={ChallengeDifficulty.HARD}
+                                    >
+                                        Hard
+                                    </SelectItem>
+                                    <SelectItem
+                                        value={ChallengeDifficulty.EXPERT}
+                                    >
+                                        Expert
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {/* Experience Points */}
@@ -73,6 +112,9 @@ export default function CreateChallengePage() {
                                 min="0"
                                 placeholder="100"
                             />
+                        </div>
+                        <div className="text-end">
+                            <Button>Create Challenge</Button>
                         </div>
                     </div>
                 </ResizablePanel>
