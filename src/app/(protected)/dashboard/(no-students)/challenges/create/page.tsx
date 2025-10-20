@@ -11,9 +11,9 @@ import {
 
 export default function CreateChallengePage() {
     return (
-        <div className="container mx-auto p-6">
-            {/* Header */}
-            <div className="mb-8">
+        <section className="h-screen flex flex-col p-4 container mx-auto">
+            {/* Header - Fixed height */}
+            <header className="flex-shrink-0 p-6 border-b">
                 <h1 className="text-3xl font-bold mb-2">
                     Create New Challenge
                 </h1>
@@ -21,17 +21,15 @@ export default function CreateChallengePage() {
                     Fill in the details below to create a new challenge for
                     students.
                 </p>
-            </div>
+            </header>
 
-            <ResizablePanelGroup
-                direction="horizontal"
-                className="min-h-[600px]"
-            >
+            {/* Resizable panels - Takes remaining height */}
+            <ResizablePanelGroup direction="horizontal" className="h-full">
                 {/* Left Column - Form Fields */}
                 <ResizablePanel defaultSize={40} minSize={30}>
-                    <div className="space-y-6 p-4">
+                    <div className="h-full overflow-y-auto p-6 flex flex-col gap-4">
                         {/* Title */}
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Challenge Title</Label>
                             <Input
                                 type="text"
@@ -42,7 +40,7 @@ export default function CreateChallengePage() {
                         </div>
 
                         {/* Tags */}
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                             <Label htmlFor="tags">Tags (comma separated)</Label>
                             <Input
                                 type="text"
@@ -53,7 +51,7 @@ export default function CreateChallengePage() {
                         </div>
 
                         {/* Difficulty */}
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                             <Label htmlFor="difficulty">Difficulty Level</Label>
                             <Input
                                 type="text"
@@ -64,7 +62,7 @@ export default function CreateChallengePage() {
                         </div>
 
                         {/* Experience Points */}
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                             <Label htmlFor="experiencePoints">
                                 Experience Points
                             </Label>
@@ -82,13 +80,12 @@ export default function CreateChallengePage() {
                 <ResizableHandle withHandle />
 
                 {/* Right Column - Rich Text Editor */}
-                <ResizablePanel defaultSize={60} maxSize={70} minSize={50}>
-                    <div className="space-y-2 p-4">
-                        <Label>Description</Label>
+                <ResizablePanel defaultSize={60} maxSize={70} minSize={30}>
+                    <div className="h-full overflow-y-auto border-l">
                         <ShadcnTemplate />
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
-        </div>
+        </section>
     );
 }
