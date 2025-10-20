@@ -80,3 +80,31 @@ export async function createChallengeAction(
         };
     }
 }
+
+export async function getChallengesByTeacherIdAction(
+    teacherId: string,
+): Promise<RequestSuccess<ChallengeResponse[]> | RequestFailure> {
+    try {
+        const response = await CHALLENGES_HTTP.get<ChallengeResponse[]>(
+            `/challenges/teachers/${teacherId}`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}

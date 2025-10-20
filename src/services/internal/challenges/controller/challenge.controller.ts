@@ -55,4 +55,19 @@ export class ChallengeController {
         toast.error("Failed to fetch challenge");
         throw new Error("Failed to fetch challenge");
     }
+
+    public static async getChallengesByTeacherId(
+        teacherId: string,
+    ): Promise<Challenge[]> {
+        const response = await getChallengesByTeacherIdAction(teacherId);
+
+        if (response.status === 200) {
+            return ChallengeAssembler.toEntitiesFromResponse(
+                response.data as ChallengeResponse[],
+            );
+        }
+
+        toast.error("Failed to fetch challenges");
+        throw new Error("Failed to fetch challenges");
+    }
 }
