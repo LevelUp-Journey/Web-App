@@ -41,9 +41,7 @@ import {
     ChevronDown,
     CloudUpload,
     Code,
-    Command as CommandIcon,
     Eye,
-    FileCode,
     FileText,
     Globe,
     Hash,
@@ -55,12 +53,10 @@ import {
     ListOrdered,
     Minus,
     Outdent,
-    Pencil,
     Quote,
     Redo,
     Strikethrough,
     Table as TableIcon,
-    Terminal,
     Type,
     Underline,
     Undo,
@@ -70,7 +66,6 @@ import {
 } from "lucide-react";
 import type React from "react";
 import {
-    forwardRef,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -1832,12 +1827,14 @@ function EditorContent({
 interface ShadcnTemplateProps {
     className?: string;
     onReady?: (methods: ShadcnTemplateRef) => void;
+    ref?: React.Ref<ShadcnTemplateRef>;
 }
 
-export const ShadcnTemplate = forwardRef<
-    ShadcnTemplateRef,
-    ShadcnTemplateProps
->(({ className, onReady }, ref) => {
+export const ShadcnTemplate = ({
+    className,
+    onReady,
+    ref,
+}: ShadcnTemplateProps) => {
     const [editorMethods, setEditorMethods] =
         useState<ShadcnTemplateRef | null>(null);
 
@@ -1885,6 +1882,4 @@ export const ShadcnTemplate = forwardRef<
             </Provider>
         </div>
     );
-});
-
-ShadcnTemplate.displayName = "ShadcnTemplate";
+};
