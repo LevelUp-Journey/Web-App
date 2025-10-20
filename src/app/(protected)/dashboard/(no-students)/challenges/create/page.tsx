@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { ShadcnTemplate } from "@/components/challenges/editor/lexkitEditor";
+import { useRef, useState } from "react";
+import {
+    ShadcnTemplate,
+    type ShadcnTemplateRef,
+} from "@/components/challenges/editor/lexkitEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,9 +25,21 @@ import { ChallengeDifficulty } from "@/lib/consts";
 export default function CreateChallengePage() {
     const [difficulty, setDifficulty] = useState(ChallengeDifficulty.EASY);
 
+    const editorRef = useRef<ShadcnTemplateRef>(null);
+
+    const getEditorContent = () => {
+        return editorRef.current?.getMarkdown() || "";
+    };
+
     const handleDifficultyChange = (value: string) => {
         setDifficulty(value as ChallengeDifficulty);
     };
+
+    const handleSubmit = () => {
+        const markdown = getEditorContent();
+        console.log("Content:", { markdown });
+    };
+
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header - Fixed height */}
@@ -113,7 +128,7 @@ export default function CreateChallengePage() {
                                 placeholder="100"
                             />
                         </div>
-                        <div className="text-end">
+                        <div className="text-end" onClick={handleSubmit}>
                             <Button>Create Challenge</Button>
                         </div>
                     </div>
@@ -124,7 +139,7 @@ export default function CreateChallengePage() {
                 {/* Right Column - Rich Text Editor */}
                 <ResizablePanel defaultSize={60} maxSize={70} minSize={30}>
                     <div className="h-full overflow-y-auto border-l">
-                        <ShadcnTemplate />
+                        <ShadcnTemplate ref={editorRef} />
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
