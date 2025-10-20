@@ -4,7 +4,7 @@ import { PATHS } from "@/lib/paths";
 
 export default function AdministrativeDashboardPage() {
     return (
-        <div className="container py-4 mx-auto">
+        <div className="container p-4 mx-auto">
             {/* Welcome Message */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold mb-2">
