@@ -28,7 +28,7 @@ export class ChallengeController {
         request: CreateChallengeRequest,
     ): Promise<Challenge> {
         const response = await createChallengeAction(request);
-
+        console.log("RESPONSE DE CREATION", response);
         if (response.status === 200 || response.status === 201) {
             toast.success("Challenge created successfully");
             return ChallengeAssembler.toEntityFromResponse(

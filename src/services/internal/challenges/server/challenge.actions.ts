@@ -26,10 +26,12 @@ export async function createChallengeAction(
     request: CreateChallengeRequest,
 ): Promise<RequestSuccess<ChallengeResponse> | RequestFailure> {
     try {
+        console.log("Request DE CREATION ACTION", request);
         const response = await CHALLENGES_HTTP.post<ChallengeResponse>(
             "/challenges",
             request,
         );
+        console.log("RESPONSE DE CREATION ACTION", response);
 
         return {
             data: response.data,

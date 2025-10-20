@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { ENV } from "@/lib/env";
 import {
     getAuthTokenAction,
+    getUserIdFromTokenAction,
     getUserRolesFromTokenAction,
     refreshTokenAction,
     saveAuthTokenAction,
@@ -87,4 +88,8 @@ export class AuthController {
 
         AuthController.signOut();
     }
-}
+
+    public static async getUserId() {
+        const userId = await getUserIdFromTokenAction();
+        return userId;
+    }
