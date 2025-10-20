@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+
 import {
     ResizableHandle,
     ResizablePanel,
@@ -26,9 +27,9 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { ChallengeDifficulty } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import type { CreateChallengeRequest } from "@/services/internal/challenges/controller/challenge.response";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 const formSchema = z.object({
     title: z
@@ -84,9 +85,10 @@ export default function CreateChallengePage() {
         };
 
         try {
-            await ChallengeController.createChallenge(request);
+            const challenge =
+                await ChallengeController.createChallenge(request);
             toast.success("Challenge created successfully!");
-            router.push("/dashboard/admin");
+            router.push(PATHS.DASHBOARD.CHALLENGES.EDIT(challenge.id));
         } catch (error) {
             console.error("Error creating challenge:", error);
             toast.error("Failed to create challenge. Please try again.");
