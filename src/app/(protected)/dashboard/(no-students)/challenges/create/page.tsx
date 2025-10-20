@@ -76,7 +76,6 @@ export default function CreateChallengePage() {
             : [];
 
         const request: CreateChallengeRequest = {
-            teacherId: "00000000-0000-0000-0000-000000000000", // TODO: Get from auth context
             name: data.title,
             description: markdown,
             experiencePoints: data.experiencePoints,

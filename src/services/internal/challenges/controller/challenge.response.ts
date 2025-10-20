@@ -22,10 +22,13 @@ export interface ChallengeStarResponse {
 }
 
 export interface CreateChallengeRequest {
-    teacherId: string;
     name: string;
     description: string;
     experiencePoints: number;
     difficulty: string;
     tagIds: string[];
+}
+
+export interface GetChallengesByTeacherIdRequest {
+    teacherId: string;
 }

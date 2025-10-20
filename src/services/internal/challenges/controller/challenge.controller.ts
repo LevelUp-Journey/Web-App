@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import type { Challenge } from "../entities/challenge.entity";
 import {
     createChallengeAction,
+    getChallengeByIdAction,
     getPublicChallengesAction,
 } from "../server/challenge.actions";
 import { ChallengeAssembler } from "./challenge.assembler";
@@ -38,5 +39,20 @@ export class ChallengeController {
 
         toast.error("Failed to create challenge");
         throw new Error("Failed to create challenge");
+    }
+
+    public static async getChallengeById(
+        challengeId: string,
+    ): Promise<Challenge> {
+        const response = await getChallengeByIdAction(challengeId);
+
+        if (response.status === 200) {
+            return ChallengeAssembler.toEntityFromResponse(
+                response.data as ChallengeResponse,
+            );
+        }
+
+        toast.error("Failed to fetch challenge");
+        throw new Error("Failed to fetch challenge");
     }
 }

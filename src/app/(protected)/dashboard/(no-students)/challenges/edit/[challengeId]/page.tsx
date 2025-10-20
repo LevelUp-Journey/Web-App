@@ -27,6 +27,9 @@ import {
 } from "@/components/ui/select";
 import { ChallengeDifficulty } from "@/lib/consts";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
+import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import type { CreateChallengeRequest } from "@/services/internal/challenges/controller/challenge.response";
 
 const formSchema = z.object({
@@ -50,7 +53,8 @@ export default function ChallengeEditPage() {
     const router = useRouter();
     const editorRef = useRef<ShadcnTemplateRef>(null);
 
-    const [challenge, setChallenge] = useState<any>(null); // Mock data
+    const [challenge, setChallenge] = useState<Challenge | null>(null);
+    const [codeVersions, setCodeVersions] = useState<CodeVersion[]>([]);
     const [loading, setLoading] = useState(true);
 
     const form = useForm<FormData>({
@@ -64,27 +68,38 @@ export default function ChallengeEditPage() {
     });
 
     useEffect(() => {
-        // Mock fetch challenge
-        const mockChallenge = {
-            id: challengeId,
-            name: "Sample Challenge",
-            description: "# Sample Description\n\nThis is a sample challenge.",
-            tags: ["JavaScript", "React"],
-            difficulty: ChallengeDifficulty.MEDIUM,
-            experiencePoints: 150,
-            codeVersions: [
-                { id: "1", name: "Version 1", language: "JavaScript" },
-                { id: "2", name: "Version 2", language: "Python" },
-            ],
+        const fetchChallengeData = async () => {
+            try {
+                setLoading(true);
+
+                // Fetch challenge data
+                const challengeData =
+                    await ChallengeController.getChallengeById(challengeId);
+                setChallenge(challengeData);
+
+                // Fetch code versions
+                const versions =
+                    await CodeVersionController.getCodeVersionsByChallengeId(
+                        challengeId,
+                    );
+                setCodeVersions(versions);
+
+                // Reset form with fetched data
+                form.reset({
+                    title: challengeData.name,
+                    tags: challengeData.tags.map((tag) => tag.name).join(", "),
+                    difficulty: ChallengeDifficulty.EASY, // TODO: Get difficulty from backend when available
+                    experiencePoints: challengeData.experiencePoints,
+                });
+            } catch (error) {
+                console.error("Error fetching challenge data:", error);
+                toast.error("Failed to load challenge data");
+            } finally {
+                setLoading(false);
+            }
         };
-        setChallenge(mockChallenge);
-        form.reset({
-            title: mockChallenge.name,
-            tags: mockChallenge.tags.join(", "),
-            difficulty: mockChallenge.difficulty,
-            experiencePoints: mockChallenge.experiencePoints,
-        });
-        setLoading(false);
+
+        fetchChallengeData();
     }, [challengeId, form]);
 
     const getEditorContent = () => {
@@ -102,7 +117,6 @@ export default function ChallengeEditPage() {
             : [];
 
         const request: CreateChallengeRequest = {
-            teacherId: "00000000-0000-0000-0000-000000000000",
             name: data.title,
             description: markdown,
             experiencePoints: data.experiencePoints,
@@ -114,8 +128,7 @@ export default function ChallengeEditPage() {
             // Assume update method exists
             await ChallengeController.createChallenge(request); // Placeholder
             toast.success("Challenge updated successfully!");
-        } catch (error) {
-            console.error("Error updating challenge:", error);
+        } catch {
             toast.error("Failed to update challenge. Please try again.");
         }
     });
@@ -169,28 +182,33 @@ export default function ChallengeEditPage() {
                     <ResizablePanel defaultSize={40} minSize={30}>
                         <div className="h-full overflow-y-auto p-6 space-y-6">
                             {/* Challenge Summary */}
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">
-                                    Challenge Summary
-                                </h2>
-                                <div className="grid grid-cols-2 gap-4 text-sm">
-                                    <div>
-                                        <strong>Title:</strong> {challenge.name}
-                                    </div>
-                                    <div>
-                                        <strong>Difficulty:</strong>{" "}
-                                        {challenge.difficulty}
-                                    </div>
-                                    <div>
-                                        <strong>Experience Points:</strong>{" "}
-                                        {challenge.experiencePoints}
-                                    </div>
-                                    <div>
-                                        <strong>Tags:</strong>{" "}
-                                        {challenge.tags.join(", ")}
+                            {challenge && (
+                                <div className="space-y-4">
+                                    <h2 className="text-xl font-semibold">
+                                        Challenge Summary
+                                    </h2>
+                                    <div className="grid grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <strong>Title:</strong>{" "}
+                                            {challenge.name}
+                                        </div>
+                                        <div>
+                                            <strong>Status:</strong>{" "}
+                                            {challenge.status}
+                                        </div>
+                                        <div>
+                                            <strong>Experience Points:</strong>{" "}
+                                            {challenge.experiencePoints}
+                                        </div>
+                                        <div>
+                                            <strong>Tags:</strong>{" "}
+                                            {challenge.tags
+                                                .map((tag) => tag.name)
+                                                .join(", ")}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Edit Form */}
                             <form onSubmit={onSubmit} className="space-y-4">
@@ -376,26 +394,32 @@ export default function ChallengeEditPage() {
                                     Code Versions
                                 </h2>
                                 <div className="space-y-2">
-                                    {challenge.codeVersions.map(
-                                        (version: any) => (
-                                            <div
-                                                key={version.id}
-                                                className="flex justify-between items-center p-2 border rounded"
-                                            >
-                                                <div>
-                                                    <strong>
-                                                        {version.name}
-                                                    </strong>{" "}
-                                                    - {version.language}
-                                                </div>
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                >
-                                                    Edit
-                                                </Button>
+                                    {codeVersions.map((version) => (
+                                        <div
+                                            key={version.id}
+                                            className="flex justify-between items-center p-2 border rounded"
+                                        >
+                                            <div>
+                                                <strong>
+                                                    {version.language}
+                                                </strong>{" "}
+                                                -{" "}
+                                                {version.initialCode.substring(
+                                                    0,
+                                                    50,
+                                                )}
+                                                ...
                                             </div>
-                                        ),
+                                            <Button size="sm" variant="outline">
+                                                Edit
+                                            </Button>
+                                        </div>
+                                    ))}
+                                    {codeVersions.length === 0 && (
+                                        <p className="text-muted-foreground text-sm">
+                                            No code versions yet. Click "Add
+                                            Code Version" to create one.
+                                        </p>
                                     )}
                                 </div>
                             </div>
