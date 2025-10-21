@@ -28,6 +28,7 @@ import {
 import { ChallengeDifficulty } from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { PATHS } from "@/lib/paths";
 
 const formSchema = z.object({
     title: z
@@ -84,7 +85,7 @@ export default function ChallengeEditing({
     };
 
     const handleAddVersion = () => {
-        router.push(`/dashboard/challenges/edit/${challengeId}/versions/add`);
+        router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.ADD(challengeId));
     };
 
     useEffect(() => {

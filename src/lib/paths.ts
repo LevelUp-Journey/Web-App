@@ -7,6 +7,11 @@ export const PATHS = {
             CREATE: "/dashboard/challenges/create",
             EDIT: (id: string) => `/dashboard/challenges/edit/${id}`,
             WITH_ID: (id: string) => `/dashboard/challenge/${id}`,
+            VERSIONS: {
+                ROOT: "/dashboard/challenges/versions",
+                ADD: (id: string) =>
+                    `/dashboard/challenges/edit/${id}/versions?editing=true`,
+            },
         },
         COMMUNITY: "/dashboard/community",
         SETTINGS: "/dashboard/settings",

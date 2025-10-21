@@ -7,6 +7,11 @@ import {
 } from "@/services/axios.config";
 import type { CodeVersionResponse } from "../controller/code-version.response";
 
+export interface CreateCodeVersionRequest {
+    language: string;
+    initialCode: string;
+}
+
 export async function getCodeVersionsByChallengeIdAction(
     challengeId: string,
 ): Promise<RequestSuccess<CodeVersionResponse[]> | RequestFailure> {
@@ -18,4 +23,34 @@ export async function getCodeVersionsByChallengeIdAction(
         data: data.data,
         status: data.status,
     };
+}
+
+export async function createCodeVersionAction(
+    challengeId: string,
+    request: CreateCodeVersionRequest,
+): Promise<RequestSuccess<CodeVersionResponse> | RequestFailure> {
+    try {
+        const response = await CHALLENGES_HTTP.post<CodeVersionResponse>(
+            `/challenges/${challengeId}/code-versions`,
+            request,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
 }
