@@ -19,7 +19,8 @@
         "rules": {
             "recommended": true,
             "suspicious": {
-                "noUnknownAtRules": "off"
+                "noUnknownAtRules": "off",
+                "noArrayIndexKey": "off"
             },
             "complexity": {
                 "noStaticOnlyClass": "off"
@@ -31,6 +32,9 @@
             },
             "correctness": {
                 "useExhaustiveDependencies": "warn"
+            },
+            "security": {
+                "noDangerouslySetInnerHtml": "off"
             }
         },
         "domains": {

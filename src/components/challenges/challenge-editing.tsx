@@ -28,7 +28,6 @@ import {
 import { ChallengeDifficulty } from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import { deleteChallenge, updateChallenge } from "./actions";
 
 const formSchema = z.object({
     title: z
@@ -60,9 +59,8 @@ export default function ChallengeEditing({
     const editorRef = useRef<ShadcnTemplateRef>(null);
 
     const [challenge, setChallenge] = useState<Challenge>(initialChallenge);
-    const [codeVersions, setCodeVersions] = useState<CodeVersion[]>(
-        initialCodeVersions,
-    );
+    const [codeVersions, setCodeVersions] =
+        useState<CodeVersion[]>(initialCodeVersions);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -78,40 +76,9 @@ export default function ChallengeEditing({
         return editorRef.current?.getMarkdown() || "";
     };
 
-    const onSubmit = form.handleSubmit(async (data: FormData) => {
-        const markdown = getEditorContent();
+    const onSubmit = form.handleSubmit(async (data: FormData) => {});
 
-        const formData = new FormData();
-        formData.append("title", data.title);
-        formData.append("tags", data.tags || "");
-        formData.append("difficulty", data.difficulty);
-        formData.append("experiencePoints", data.experiencePoints.toString());
-        formData.append("description", markdown);
-
-        try {
-            await updateChallenge(challengeId, formData);
-            toast.success("Challenge updated successfully!");
-            setChallenge({
-                ...challenge,
-                name: data.title,
-                description: markdown,
-                experiencePoints: data.experiencePoints,
-            });
-        } catch (error) {
-            toast.error("Failed to update challenge. Please try again.");
-        }
-    });
-
-    const handleDelete = async () => {
-        if (confirm("Are you sure you want to delete this challenge?")) {
-            try {
-                await deleteChallenge(challengeId);
-                toast.success("Challenge deleted successfully!");
-            } catch (error) {
-                toast.error("Failed to delete challenge.");
-            }
-        }
-    };
+    const handleDelete = async () => {};
 
     const handleViewSummary = () => {
         router.push(`?`);
@@ -161,13 +128,9 @@ export default function ChallengeEditing({
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field
-                                            data-invalid={
-                                                fieldState.invalid
-                                            }
+                                            data-invalid={fieldState.invalid}
                                         >
-                                            <FieldLabel
-                                                htmlFor={field.name}
-                                            >
+                                            <FieldLabel htmlFor={field.name}>
                                                 Challenge Title
                                             </FieldLabel>
                                             <Input
@@ -181,9 +144,7 @@ export default function ChallengeEditing({
                                             />
                                             {fieldState.invalid && (
                                                 <FieldError
-                                                    errors={[
-                                                        fieldState.error,
-                                                    ]}
+                                                    errors={[fieldState.error]}
                                                 />
                                             )}
                                         </Field>
@@ -195,13 +156,9 @@ export default function ChallengeEditing({
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field
-                                            data-invalid={
-                                                fieldState.invalid
-                                            }
+                                            data-invalid={fieldState.invalid}
                                         >
-                                            <FieldLabel
-                                                htmlFor={field.name}
-                                            >
+                                            <FieldLabel htmlFor={field.name}>
                                                 Tags (comma separated)
                                             </FieldLabel>
                                             <Input
@@ -215,9 +172,7 @@ export default function ChallengeEditing({
                                             />
                                             {fieldState.invalid && (
                                                 <FieldError
-                                                    errors={[
-                                                        fieldState.error,
-                                                    ]}
+                                                    errors={[fieldState.error]}
                                                 />
                                             )}
                                         </Field>
@@ -229,21 +184,15 @@ export default function ChallengeEditing({
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field
-                                            data-invalid={
-                                                fieldState.invalid
-                                            }
+                                            data-invalid={fieldState.invalid}
                                         >
-                                            <FieldLabel
-                                                htmlFor={field.name}
-                                            >
+                                            <FieldLabel htmlFor={field.name}>
                                                 Difficulty Level
                                             </FieldLabel>
                                             <Select
                                                 name={field.name}
                                                 value={field.value}
-                                                onValueChange={
-                                                    field.onChange
-                                                }
+                                                onValueChange={field.onChange}
                                             >
                                                 <SelectTrigger
                                                     id={field.name}
@@ -286,9 +235,7 @@ export default function ChallengeEditing({
                                             </Select>
                                             {fieldState.invalid && (
                                                 <FieldError
-                                                    errors={[
-                                                        fieldState.error,
-                                                    ]}
+                                                    errors={[fieldState.error]}
                                                 />
                                             )}
                                         </Field>
@@ -300,13 +247,9 @@ export default function ChallengeEditing({
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field
-                                            data-invalid={
-                                                fieldState.invalid
-                                            }
+                                            data-invalid={fieldState.invalid}
                                         >
-                                            <FieldLabel
-                                                htmlFor={field.name}
-                                            >
+                                            <FieldLabel htmlFor={field.name}>
                                                 Experience Points
                                             </FieldLabel>
                                             <Input
@@ -320,17 +263,13 @@ export default function ChallengeEditing({
                                                 placeholder="100"
                                                 onChange={(e) =>
                                                     field.onChange(
-                                                        Number(
-                                                            e.target.value,
-                                                        ),
+                                                        Number(e.target.value),
                                                     )
                                                 }
                                             />
                                             {fieldState.invalid && (
                                                 <FieldError
-                                                    errors={[
-                                                        fieldState.error,
-                                                    ]}
+                                                    errors={[fieldState.error]}
                                                 />
                                             )}
                                         </Field>
@@ -340,9 +279,7 @@ export default function ChallengeEditing({
                                 <div className="flex gap-4">
                                     <Button
                                         type="submit"
-                                        disabled={
-                                            form.formState.isSubmitting
-                                        }
+                                        disabled={form.formState.isSubmitting}
                                     >
                                         {form.formState.isSubmitting
                                             ? "Saving..."
@@ -365,17 +302,14 @@ export default function ChallengeEditing({
                                 </h2>
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
-                                        <strong>Title:</strong>{" "}
-                                        {challenge.name}
+                                        <strong>Title:</strong> {challenge.name}
                                     </div>
                                     <div>
                                         <strong>Status:</strong>{" "}
                                         {challenge.status}
                                     </div>
                                     <div>
-                                        <strong>
-                                            Experience Points:
-                                        </strong>{" "}
+                                        <strong>Experience Points:</strong>{" "}
                                         {challenge.experiencePoints}
                                     </div>
                                     <div>

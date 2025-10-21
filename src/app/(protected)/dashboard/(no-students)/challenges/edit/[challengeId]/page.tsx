@@ -1,10 +1,10 @@
-import { MDXRemote } from "next-mdx-remote-client/rsc";
+import ChallengeEditing from "@/components/challenges/challenge-editing";
+import ChallengeSummary from "@/components/challenges/challenge-summary";
+import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import ChallengeEditing from "./ChallengeEditing";
-import ChallengeSummaryClient from "./ChallengeSummaryClient";
 
 interface PageProps {
     params: Promise<{ challengeId: string }>;
@@ -24,8 +24,7 @@ export default async function ChallengeEditPage({
     const codeVersions: CodeVersion[] =
         await CodeVersionController.getCodeVersionsByChallengeId(challengeId);
 
-    // Render MDX for viewing mode
-    const renderedMdx = <MDXRemote source={challenge.description || ""} />;
+    console.log("CHALLENGE", challenge);
 
     const isEditing = editing === "true";
 
@@ -40,10 +39,10 @@ export default async function ChallengeEditPage({
     }
 
     return (
-        <ChallengeSummaryClient
+        <ChallengeSummary
             challenge={challenge}
             codeVersions={codeVersions}
-            renderedMdx={renderedMdx}
+            renderedMdx={<MdxRenderer source={challenge.description || ""} />}
         />
     );
 }
