@@ -3,6 +3,7 @@ import type { Challenge } from "../entities/challenge.entity";
 import {
     createChallengeAction,
     getChallengeByIdAction,
+    getChallengesByTeacherIdAction,
     getPublicChallengesAction,
 } from "../server/challenge.actions";
 import { ChallengeAssembler } from "./challenge.assembler";

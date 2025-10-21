@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PATHS } from "@/lib/paths";
+import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
-export default function AdministrativeDashboardPage() {
+export default async function AdministrativeDashboardPage() {
+    const userId = await AuthController.getUserId();
+    const challenges =
+        await ChallengeController.getChallengesByTeacherId(userId);
     return (
         <div className="container p-4 mx-auto">
             {/* Welcome Message */}
@@ -23,6 +28,21 @@ export default function AdministrativeDashboardPage() {
                         </Button>
                     </Link>
                 </div>
+                <ul>
+                    {challenges.map((challenge) => (
+                        <li key={challenge.id}>
+                            <Link
+                                href={PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                    challenge.id,
+                                )}
+                            >
+                                <Button className="font-medium px-4 py-2 rounded-lg transition-colors duration-200">
+                                    {challenge.name}
+                                </Button>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );
