@@ -93,3 +93,4 @@ export class AuthController {
         const userId = await getUserIdFromTokenAction();
         return userId;
     }
+}
