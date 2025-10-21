@@ -58,7 +58,6 @@ export default function ChallengeEditing({
     const router = useRouter();
     const editorRef = useRef<ShadcnTemplateRef>(null);
 
-    const [challenge, setChallenge] = useState<Challenge>(initialChallenge);
     const [codeVersions, setCodeVersions] =
         useState<CodeVersion[]>(initialCodeVersions);
 
@@ -294,32 +293,6 @@ export default function ChallengeEditing({
                                     </Button>
                                 </div>
                             </form>
-
-                            {/* Challenge Summary */}
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">
-                                    Current Summary
-                                </h2>
-                                <div className="grid grid-cols-2 gap-4 text-sm">
-                                    <div>
-                                        <strong>Title:</strong> {challenge.name}
-                                    </div>
-                                    <div>
-                                        <strong>Status:</strong>{" "}
-                                        {challenge.status}
-                                    </div>
-                                    <div>
-                                        <strong>Experience Points:</strong>{" "}
-                                        {challenge.experiencePoints}
-                                    </div>
-                                    <div>
-                                        <strong>Tags:</strong>{" "}
-                                        {challenge.tags
-                                            .map((tag) => tag.name)
-                                            .join(", ")}
-                                    </div>
-                                </div>
-                            </div>
 
                             {/* Code Versions Shortcuts */}
                             <div className="space-y-4">

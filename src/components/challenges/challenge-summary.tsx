@@ -34,13 +34,6 @@ export default function ChallengeSummary({
                 </div>
                 <div className="flex gap-4">
                     <Button asChild>
-                        <Link
-                            href={`/dashboard/challenges/edit/${challenge.id}/versions/add`}
-                        >
-                            Add Code Version
-                        </Link>
-                    </Button>
-                    <Button asChild>
                         <Link href={`?editing=true`}>Edit Challenge</Link>
                     </Button>
                 </div>

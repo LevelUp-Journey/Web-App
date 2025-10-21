@@ -1056,7 +1056,7 @@ function Toolbar({
 
     return (
         <TooltipProvider>
-            <div className="flex flex-wrap items-center gap-2 p-2 bg-transparent">
+            <div className="flex flex-wrap items-center gap-2 bg-transparent">
                 {/* Text Formatting Section */}
                 <div className="flex items-center gap-1">
                     <Tooltip>

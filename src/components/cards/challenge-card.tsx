@@ -74,7 +74,9 @@ export default function ChallengeCard({
                         size="sm"
                         onClick={() => {
                             router.push(
-                                PATHS.DASHBOARD.CHALLENGE(challenge.id),
+                                PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                    challenge.id,
+                                ),
                             );
                         }}
                     >
@@ -127,7 +129,9 @@ export default function ChallengeCard({
                         size="sm"
                         onClick={() => {
                             router.push(
-                                PATHS.DASHBOARD.CHALLENGE(challenge.id),
+                                PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                    challenge.id,
+                                ),
                             );
                         }}
                     >
@@ -174,7 +178,9 @@ export default function ChallengeCard({
                 <Button
                     size="sm"
                     onClick={() => {
-                        router.push(PATHS.DASHBOARD.CHALLENGE(challenge.id));
+                        router.push(
+                            PATHS.DASHBOARD.CHALLENGES.WITH_ID(challenge.id),
+                        );
                     }}
                 >
                     start coding
