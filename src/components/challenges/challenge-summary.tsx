@@ -1,7 +1,5 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import type React from "react";
+import Link from "next/link";
+import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Button } from "@/components/ui/button";
 import {
     ResizableHandle,
@@ -14,24 +12,14 @@ import type { CodeVersion } from "@/services/internal/challenges/entities/code-v
 interface ChallengeSummaryProps {
     challenge: Challenge;
     codeVersions: CodeVersion[];
-    renderedMdx: React.ReactNode;
+    markdownSource: string;
 }
 
 export default function ChallengeSummary({
     challenge,
     codeVersions,
-    renderedMdx,
+    markdownSource,
 }: ChallengeSummaryProps) {
-    const router = useRouter();
-
-    const handleEdit = () => {
-        router.push(`?editing=true`);
-    };
-
-    const handleAddVersion = () => {
-        router.push(`/dashboard/challenges/edit/${challenge.id}/versions/add`);
-    };
-
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header */}
@@ -45,8 +33,16 @@ export default function ChallengeSummary({
                     </p>
                 </div>
                 <div className="flex gap-4">
-                    <Button onClick={handleAddVersion}>Add Code Version</Button>
-                    <Button onClick={handleEdit}>Edit Challenge</Button>
+                    <Button asChild>
+                        <Link
+                            href={`/dashboard/challenges/edit/${challenge.id}/versions/add`}
+                        >
+                            Add Code Version
+                        </Link>
+                    </Button>
+                    <Button asChild>
+                        <Link href={`?editing=true`}>Edit Challenge</Link>
+                    </Button>
                 </div>
             </header>
 
@@ -98,8 +94,16 @@ export default function ChallengeSummary({
                                                 )}
                                                 ...
                                             </div>
-                                            <Button size="sm" variant="outline">
-                                                View
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={`/dashboard/challenges/edit/${challenge.id}/versions/${version.id}`}
+                                                >
+                                                    View
+                                                </Link>
                                             </Button>
                                         </div>
                                     ))}
@@ -122,9 +126,7 @@ export default function ChallengeSummary({
                             <h2 className="text-xl font-semibold mb-4">
                                 Description
                             </h2>
-                            <div className="prose prose-sm max-w-none dark:prose-invert">
-                                {renderedMdx}
-                            </div>
+                            <MdxRenderer source={markdownSource} />
                         </div>
                     </ResizablePanel>
                 </ResizablePanelGroup>

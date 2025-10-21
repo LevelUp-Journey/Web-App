@@ -1,6 +1,5 @@
 import ChallengeEditing from "@/components/challenges/challenge-editing";
 import ChallengeSummary from "@/components/challenges/challenge-summary";
-import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
@@ -42,7 +41,7 @@ export default async function ChallengeEditPage({
         <ChallengeSummary
             challenge={challenge}
             codeVersions={codeVersions}
-            renderedMdx={<MdxRenderer source={challenge.description || ""} />}
+            markdownSource={challenge.description || ""}
         />
     );
 }
