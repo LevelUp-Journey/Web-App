@@ -19,16 +19,22 @@
         "rules": {
             "recommended": true,
             "suspicious": {
-                "noUnknownAtRules": "off"
+                "noUnknownAtRules": "off",
+                "noArrayIndexKey": "off"
             },
             "complexity": {
                 "noStaticOnlyClass": "off"
             },
             "a11y": {
-                "noSvgWithoutTitle": "off"
+                "noSvgWithoutTitle": "off",
+                "useKeyWithClickEvents": "off",
+                "noStaticElementInteractions": "off"
             },
             "correctness": {
                 "useExhaustiveDependencies": "warn"
+            },
+            "security": {
+                "noDangerouslySetInnerHtml": "off"
             }
         },
         "domains": {

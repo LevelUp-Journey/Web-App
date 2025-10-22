@@ -20,3 +20,15 @@ export interface ChallengeStarResponse {
     userId: string;
     starredAt: string;
 }
+
+export interface CreateChallengeRequest {
+    name: string;
+    description: string;
+    experiencePoints: number;
+    difficulty: string;
+    tagIds: string[];
+}
+
+export interface GetChallengesByTeacherIdRequest {
+    teacherId: string;
+}

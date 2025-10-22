@@ -25,3 +25,12 @@ export interface RefreshTokenResponse {
     refreshToken: string;
     message: string;
 }
+
+export interface JWTPayload {
+    sub: string;
+    userId: string;
+    email: string;
+    roles: string[];
+    iat: number;
+    exp: number;
+}

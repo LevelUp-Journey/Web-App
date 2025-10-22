@@ -12,6 +12,7 @@ import {
     type RequestSuccess,
 } from "../../../axios.config";
 import type {
+    JWTPayload,
     RefreshTokenResponse,
     SignInRequest,
     SignInResponse,
@@ -115,4 +116,16 @@ export async function refreshTokenAction() {
         status: response.status,
         data: response.data,
     };
+}
+
+export async function getUserIdFromTokenAction(): Promise<string> {
+    const decoded = await decodeJWT();
+
+    return decoded.userId;
+}
+
+export async function decodeJWT() {
+    const authToken = await getAuthTokenAction();
+    const decoded = jwtDecode<JWTPayload>(authToken.token);
+    return decoded;
 }

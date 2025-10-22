@@ -13,7 +13,7 @@ const ChallengeValidator = z.object({
     id: z.uuid(),
     teacherId: z.uuid(),
     name: z.string().min(1).max(100),
-    description: z.string().min(1).max(1000),
+    description: z.string().max(1000),
     experiencePoints: z.number().min(0).max(10000),
     status: z.string().min(1).max(100),
     tags: z.array(ChallengeTagValidator),

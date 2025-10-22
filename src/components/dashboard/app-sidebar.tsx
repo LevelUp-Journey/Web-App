@@ -35,7 +35,7 @@ const topItems = [
     },
     {
         title: "Challenges",
-        url: PATHS.DASHBOARD.CHALLENGES,
+        url: PATHS.DASHBOARD.CHALLENGES.ROOT,
         icon: Code2,
     },
     {
