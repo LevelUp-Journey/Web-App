@@ -55,14 +55,12 @@ export class AuthController {
         return authTokens.token;
     }
 
-    // TODO: Validate signInWithGoogle
     public static async signInWithGoogle() {
-        window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/google`;
+        window.location.href = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL!;
     }
 
-    // TODO: Validate signInWithGoogle
     public static async signInWithGithub() {
-        window.location.href = `${ENV.SERVICES.IAM.BASE_URL}/login/oauth2/authorization/github`;
+        window.location.href = process.env.NEXT_PUBLIC_GITHUB_AUTH_URL!;
     }
 
     public static async signOut() {
