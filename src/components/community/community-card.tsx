@@ -58,7 +58,7 @@ export function CommunityCard({ community, username, adminMode = false }: Commun
                 {/* Footer con creador y fecha */}
                 <div className="pt-4 border-t flex items-center justify-between text-xs text-muted-foreground mt-auto">
                     <span className="font-medium">
-                        By <span className="text-foreground">{username || "Unknown User"}</span>
+                        <span className="text-foreground">{username || "Unknown User"}</span>
                     </span>
                     <span>
                         {new Date(community.createdAt).toLocaleDateString('es-ES', {
