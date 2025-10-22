@@ -10,7 +10,7 @@ export const ENV = {
             BASE_URL: process.env.CHALLENGES_BASE_URL!,
         },
         COMMUNITY: {
-            BASE_URL: process.env.COMMUNITY_BASE_URL!,
+            BASE_URL: process.env.COMMUNITIES_BASE_URL!,
         },
         EXTERNAL: {
             CLOUDINARY: {

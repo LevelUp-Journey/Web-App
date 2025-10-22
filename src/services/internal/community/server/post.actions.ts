@@ -5,9 +5,10 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
+import type { PostResponse } from "../controller/post.response";
 
 export async function getAllPostsAction(): Promise<
-    RequestSuccess<any[]> | RequestFailure
+    RequestSuccess<PostResponse[]> | RequestFailure
 > {
     try {
         const response = await COMMUNITY_HTTP.get("/posts");
@@ -36,7 +37,7 @@ export async function getUserFeedPostsAction(
     userId: string,
     limit: number = 20,
     offset: number = 0,
-): Promise<RequestSuccess<any[]> | RequestFailure> {
+): Promise<RequestSuccess<PostResponse[]> | RequestFailure> {
     try {
         const response = await COMMUNITY_HTTP.get(
             `/posts/feed/${userId}?limit=${limit}&offset=${offset}`,
