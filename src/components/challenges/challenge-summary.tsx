@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CodeVersionsList from "./code-versions-list";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,13 +9,6 @@ import {
 } from "@/components/ui/resizable";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import {
-    Item,
-    ItemActions,
-    ItemContent,
-    ItemDescription,
-    ItemTitle,
-} from "../ui/item";
 
 interface ChallengeSummaryProps {
     challenge: Challenge;
@@ -72,46 +66,10 @@ export default function ChallengeSummary({
                                 </div>
                             </div>
 
-                            {/* Code Versions */}
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">
-                                    Code Versions
-                                </h2>
-                                <div className="space-y-2">
-                                    {codeVersions.map((version) => (
-                                        <Item
-                                            key={version.id}
-                                            variant={"outline"}
-                                            size={"sm"}
-                                        >
-                                            <ItemContent>
-                                                <ItemTitle>
-                                                    {version.language}
-                                                </ItemTitle>
-                                            </ItemContent>
-                                            <ItemActions>
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    asChild
-                                                >
-                                                    <Link
-                                                        href={`/dashboard/challenges/edit/${challenge.id}/versions/${version.id}`}
-                                                    >
-                                                        View
-                                                    </Link>
-                                                </Button>
-                                            </ItemActions>
-                                        </Item>
-                                    ))}
-                                    {codeVersions.length === 0 && (
-                                        <p className="text-muted-foreground text-sm">
-                                            No code versions yet. Click "Add
-                                            Code Version" to create one.
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
+                            <CodeVersionsList
+                                challengeId={challenge.id}
+                                codeVersions={codeVersions}
+                            />
                         </div>
                     </ResizablePanel>
 
