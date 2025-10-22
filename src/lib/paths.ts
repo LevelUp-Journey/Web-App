@@ -11,6 +11,8 @@ export const PATHS = {
                 ROOT: "/dashboard/challenges/versions",
                 ADD: (id: string) =>
                     `/dashboard/challenges/edit/${id}/versions?editing=true`,
+                EDIT: (challengeId: string, codeVersionId: string) =>
+                    `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}`,
             },
             TESTS: {
                 ROOT: "/dashboard/challenges/tests",

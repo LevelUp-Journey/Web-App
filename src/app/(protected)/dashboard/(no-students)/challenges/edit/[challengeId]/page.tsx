@@ -23,8 +23,6 @@ export default async function ChallengeEditPage({
     const codeVersions: CodeVersion[] =
         await CodeVersionController.getCodeVersionsByChallengeId(challengeId);
 
-    console.log("CHALLENGE", challenge);
-
     const isEditing = editing === "true";
 
     if (isEditing) {

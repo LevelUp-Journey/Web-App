@@ -25,10 +25,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChallengeDifficulty } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import { PATHS } from "@/lib/paths";
+import CodeVersionsList from "./code-versions-list";
 
 const formSchema = z.object({
     title: z
@@ -36,7 +38,7 @@ const formSchema = z.object({
         .min(5, "Challenge title must be at least 5 characters.")
         .max(32, "Challenge title must be at most 32 characters."),
     tags: z.string().optional(),
-    difficulty: z.nativeEnum(ChallengeDifficulty),
+    difficulty: z.enum(ChallengeDifficulty),
     experiencePoints: z
         .number()
         .min(0, "Experience points must be at least 0.")
@@ -118,218 +120,241 @@ export default function ChallengeEditing({
             {/* Resizable panels */}
             <div className="flex-1 overflow-hidden">
                 <ResizablePanelGroup direction="horizontal" className="h-full">
-                    {/* Left Column - Edit Form and Summary */}
+                    {/* Left Column - Tabs for Basic Info and Languages */}
                     <ResizablePanel defaultSize={40} minSize={30}>
-                        <div className="h-full overflow-y-auto p-6 space-y-6">
-                            {/* Edit Form */}
-                            <form onSubmit={onSubmit} className="space-y-4">
-                                <Controller
-                                    name="title"
-                                    control={form.control}
-                                    render={({ field, fieldState }) => (
-                                        <Field
-                                            data-invalid={fieldState.invalid}
-                                        >
-                                            <FieldLabel htmlFor={field.name}>
-                                                Challenge Title
-                                            </FieldLabel>
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                aria-invalid={
-                                                    fieldState.invalid
-                                                }
-                                                placeholder="Enter challenge title"
-                                                autoComplete="off"
-                                            />
-                                            {fieldState.invalid && (
-                                                <FieldError
-                                                    errors={[fieldState.error]}
-                                                />
-                                            )}
-                                        </Field>
-                                    )}
-                                />
-
-                                <Controller
-                                    name="tags"
-                                    control={form.control}
-                                    render={({ field, fieldState }) => (
-                                        <Field
-                                            data-invalid={fieldState.invalid}
-                                        >
-                                            <FieldLabel htmlFor={field.name}>
-                                                Tags (comma separated)
-                                            </FieldLabel>
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                aria-invalid={
-                                                    fieldState.invalid
-                                                }
-                                                placeholder="e.g., JavaScript, React, Node.js"
-                                                autoComplete="off"
-                                            />
-                                            {fieldState.invalid && (
-                                                <FieldError
-                                                    errors={[fieldState.error]}
-                                                />
-                                            )}
-                                        </Field>
-                                    )}
-                                />
-
-                                <Controller
-                                    name="difficulty"
-                                    control={form.control}
-                                    render={({ field, fieldState }) => (
-                                        <Field
-                                            data-invalid={fieldState.invalid}
-                                        >
-                                            <FieldLabel htmlFor={field.name}>
-                                                Difficulty Level
-                                            </FieldLabel>
-                                            <Select
-                                                name={field.name}
-                                                value={field.value}
-                                                onValueChange={field.onChange}
-                                            >
-                                                <SelectTrigger
-                                                    id={field.name}
-                                                    aria-invalid={
+                        <div className="h-full overflow-y-auto p-6">
+                            <Tabs defaultValue="basic" className="h-full">
+                                <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="basic">
+                                        Basic Information
+                                    </TabsTrigger>
+                                    <TabsTrigger value="languages">
+                                        Available Languages
+                                    </TabsTrigger>
+                                </TabsList>
+                                <TabsContent
+                                    value="basic"
+                                    className="space-y-6 mt-6"
+                                >
+                                    {/* Edit Form */}
+                                    <form
+                                        onSubmit={onSubmit}
+                                        className="space-y-4"
+                                    >
+                                        <Controller
+                                            name="title"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
                                                         fieldState.invalid
                                                     }
                                                 >
-                                                    <SelectValue placeholder="Select difficulty" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem
-                                                        value={
-                                                            ChallengeDifficulty.EASY
-                                                        }
+                                                    <FieldLabel
+                                                        htmlFor={field.name}
                                                     >
-                                                        Easy
-                                                    </SelectItem>
-                                                    <SelectItem
-                                                        value={
-                                                            ChallengeDifficulty.MEDIUM
+                                                        Challenge Title
+                                                    </FieldLabel>
+                                                    <Input
+                                                        {...field}
+                                                        id={field.name}
+                                                        aria-invalid={
+                                                            fieldState.invalid
                                                         }
-                                                    >
-                                                        Medium
-                                                    </SelectItem>
-                                                    <SelectItem
-                                                        value={
-                                                            ChallengeDifficulty.HARD
-                                                        }
-                                                    >
-                                                        Hard
-                                                    </SelectItem>
-                                                    <SelectItem
-                                                        value={
-                                                            ChallengeDifficulty.EXPERT
-                                                        }
-                                                    >
-                                                        Expert
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            {fieldState.invalid && (
-                                                <FieldError
-                                                    errors={[fieldState.error]}
-                                                />
+                                                        placeholder="Enter challenge title"
+                                                        autoComplete="off"
+                                                    />
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
                                             )}
-                                        </Field>
-                                    )}
-                                />
+                                        />
 
-                                <Controller
-                                    name="experiencePoints"
-                                    control={form.control}
-                                    render={({ field, fieldState }) => (
-                                        <Field
-                                            data-invalid={fieldState.invalid}
-                                        >
-                                            <FieldLabel htmlFor={field.name}>
-                                                Experience Points
-                                            </FieldLabel>
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                type="number"
-                                                aria-invalid={
-                                                    fieldState.invalid
-                                                }
-                                                min="0"
-                                                placeholder="100"
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        Number(e.target.value),
-                                                    )
-                                                }
-                                            />
-                                            {fieldState.invalid && (
-                                                <FieldError
-                                                    errors={[fieldState.error]}
-                                                />
+                                        <Controller
+                                            name="tags"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                >
+                                                    <FieldLabel
+                                                        htmlFor={field.name}
+                                                    >
+                                                        Tags (comma separated)
+                                                    </FieldLabel>
+                                                    <Input
+                                                        {...field}
+                                                        id={field.name}
+                                                        aria-invalid={
+                                                            fieldState.invalid
+                                                        }
+                                                        placeholder="e.g., JavaScript, React, Node.js"
+                                                        autoComplete="off"
+                                                    />
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
                                             )}
-                                        </Field>
-                                    )}
-                                />
+                                        />
 
-                                <div className="flex gap-4">
-                                    <Button
-                                        type="submit"
-                                        disabled={form.formState.isSubmitting}
-                                    >
-                                        {form.formState.isSubmitting
-                                            ? "Saving..."
-                                            : "Save Changes"}
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="destructive"
-                                        onClick={handleDelete}
-                                    >
-                                        Delete Challenge
-                                    </Button>
-                                </div>
-                            </form>
+                                        <Controller
+                                            name="difficulty"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                >
+                                                    <FieldLabel
+                                                        htmlFor={field.name}
+                                                    >
+                                                        Difficulty Level
+                                                    </FieldLabel>
+                                                    <Select
+                                                        name={field.name}
+                                                        value={field.value}
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                    >
+                                                        <SelectTrigger
+                                                            id={field.name}
+                                                            aria-invalid={
+                                                                fieldState.invalid
+                                                            }
+                                                        >
+                                                            <SelectValue placeholder="Select difficulty" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem
+                                                                value={
+                                                                    ChallengeDifficulty.EASY
+                                                                }
+                                                            >
+                                                                Easy
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value={
+                                                                    ChallengeDifficulty.MEDIUM
+                                                                }
+                                                            >
+                                                                Medium
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value={
+                                                                    ChallengeDifficulty.HARD
+                                                                }
+                                                            >
+                                                                Hard
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value={
+                                                                    ChallengeDifficulty.EXPERT
+                                                                }
+                                                            >
+                                                                Expert
+                                                            </SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            )}
+                                        />
 
-                            {/* Code Versions Shortcuts */}
-                            <div className="space-y-4">
-                                <h2 className="text-xl font-semibold">
-                                    Code Versions
-                                </h2>
-                                <div className="space-y-2">
-                                    {codeVersions.map((version) => (
-                                        <div
-                                            key={version.id}
-                                            className="flex justify-between items-center p-2 border rounded"
-                                        >
-                                            <div>
-                                                <strong>
-                                                    {version.language}
-                                                </strong>{" "}
-                                                -{" "}
-                                                {version.initialCode.substring(
-                                                    0,
-                                                    50,
-                                                )}
-                                                ...
-                                            </div>
-                                            <Button size="sm" variant="outline">
-                                                Edit
+                                        <Controller
+                                            name="experiencePoints"
+                                            control={form.control}
+                                            render={({ field, fieldState }) => (
+                                                <Field
+                                                    data-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                >
+                                                    <FieldLabel
+                                                        htmlFor={field.name}
+                                                    >
+                                                        Experience Points
+                                                    </FieldLabel>
+                                                    <Input
+                                                        {...field}
+                                                        id={field.name}
+                                                        type="number"
+                                                        aria-invalid={
+                                                            fieldState.invalid
+                                                        }
+                                                        min="0"
+                                                        placeholder="100"
+                                                        onChange={(e) =>
+                                                            field.onChange(
+                                                                Number(
+                                                                    e.target
+                                                                        .value,
+                                                                ),
+                                                            )
+                                                        }
+                                                    />
+                                                    {fieldState.invalid && (
+                                                        <FieldError
+                                                            errors={[
+                                                                fieldState.error,
+                                                            ]}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            )}
+                                        />
+
+                                        <div className="flex gap-4">
+                                            <Button
+                                                type="submit"
+                                                disabled={
+                                                    form.formState.isSubmitting
+                                                }
+                                            >
+                                                {form.formState.isSubmitting
+                                                    ? "Saving..."
+                                                    : "Save Changes"}
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="destructive"
+                                                onClick={handleDelete}
+                                            >
+                                                Delete Challenge
                                             </Button>
                                         </div>
-                                    ))}
-                                    {codeVersions.length === 0 && (
-                                        <p className="text-muted-foreground text-sm">
-                                            No code versions yet. Click "Add
-                                            Code Version" to create one.
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
+                                    </form>
+                                </TabsContent>
+                                <TabsContent
+                                    value="languages"
+                                    className="space-y-6 mt-6"
+                                >
+                                    <CodeVersionsList
+                                        challengeId={challengeId}
+                                        codeVersions={codeVersions}
+                                        variant="editing"
+                                    />
+                                </TabsContent>
+                            </Tabs>
                         </div>
                     </ResizablePanel>
 

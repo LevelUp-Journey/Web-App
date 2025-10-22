@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,11 +25,13 @@ import { Item, ItemActions, ItemContent, ItemTitle } from "../ui/item";
 interface CodeVersionsListProps {
     challengeId: string;
     codeVersions: CodeVersion[];
+    variant?: "summary" | "editing";
 }
 
 export default function CodeVersionsList({
     challengeId,
     codeVersions,
+    variant = "editing",
 }: CodeVersionsListProps) {
     const router = useRouter();
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -61,51 +63,70 @@ export default function CodeVersionsList({
                             <ItemTitle>{version.language}</ItemTitle>
                         </ItemContent>
                         <ItemActions>
-                            <Button size="sm" variant="outline" asChild>
-                                <Link
-                                    href={PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(
-                                        challengeId,
-                                        version.id,
-                                    )}
-                                >
-                                    <Edit className="h-4 w-4" />
-                                </Link>
-                            </Button>
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        disabled={deletingId === version.id}
+                            {variant === "summary" ? (
+                                <Button size="sm" variant="outline" asChild>
+                                    <Link
+                                        href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                                            challengeId,
+                                            version.id,
+                                        )}
                                     >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            Delete Code Version
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            Are you sure you want to delete the{" "}
-                                            {version.language} code version?
-                                            This action cannot be undone.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            Cancel
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={() =>
-                                                handleDelete(version.id)
-                                            }
+                                        <Eye className="h-4 w-4" />
+                                    </Link>
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button size="sm" variant="outline" asChild>
+                                        <Link
+                                            href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                                                challengeId,
+                                                version.id,
+                                            )}
                                         >
-                                            Delete
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
+                                            <Edit className="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                disabled={
+                                                    deletingId === version.id
+                                                }
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    Delete Code Version
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Are you sure you want to
+                                                    delete the{" "}
+                                                    {version.language} code
+                                                    version? This action cannot
+                                                    be undone.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    Cancel
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    onClick={() =>
+                                                        handleDelete(version.id)
+                                                    }
+                                                >
+                                                    Delete
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </>
+                            )}
                         </ItemActions>
                     </Item>
                 ))}

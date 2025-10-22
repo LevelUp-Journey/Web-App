@@ -30,6 +30,7 @@ interface VersionTestsManagerProps {
     challengeId: string;
     codeVersionId: string;
     language: ProgrammingLanguage;
+    defaultTestId?: string;
 }
 
 const getCustomValidationTemplate = (
@@ -97,6 +98,7 @@ export default function VersionTestsManager({
     challengeId,
     codeVersionId,
     language,
+    defaultTestId,
 }: VersionTestsManagerProps) {
     const router = useRouter();
     const [tests, setTests] = useState<VersionTest[]>([]);
@@ -113,6 +115,15 @@ export default function VersionTestsManager({
     useEffect(() => {
         loadTests();
     }, []);
+
+    useEffect(() => {
+        if (defaultTestId && tests.length > 0) {
+            const test = tests.find((t) => t.id === defaultTestId);
+            if (test) {
+                handleSelectTest(test);
+            }
+        }
+    }, [tests, defaultTestId]);
 
     const loadTests = async () => {
         try {

@@ -1,6 +1,4 @@
-import Link from "next/link";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
-import { Button } from "@/components/ui/button";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import CodeVersionsList from "./code-versions-list";
@@ -27,11 +25,6 @@ export default function ChallengeSummary({
                     <p className="text-muted-foreground">
                         View the challenge details and description.
                     </p>
-                </div>
-                <div className="flex gap-4">
-                    <Button asChild>
-                        <Link href={`?editing=true`}>Edit Challenge</Link>
-                    </Button>
                 </div>
             </header>
 
@@ -63,6 +56,7 @@ export default function ChallengeSummary({
                     <CodeVersionsList
                         challengeId={challenge.id}
                         codeVersions={codeVersions}
+                        variant="summary"
                     />
                 </div>
 
