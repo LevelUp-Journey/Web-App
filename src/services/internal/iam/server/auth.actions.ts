@@ -74,6 +74,14 @@ export async function saveAuthTokenAction(token: string, refreshToken: string) {
     cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken);
 }
 
+export async function saveOAuthTokenAction(token: string, refreshToken?: string) {
+    const cookieStore = await cookies();
+    cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token);
+    if (refreshToken) {
+        cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken);
+    }
+}
+
 export async function validateTokenAction() {
     try {
         // auth token already applied in @/src/services/axios.config.ts
