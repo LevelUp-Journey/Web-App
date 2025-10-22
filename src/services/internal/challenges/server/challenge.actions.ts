@@ -108,3 +108,33 @@ export async function getChallengesByTeacherIdAction(
         };
     }
 }
+
+export async function deleteChallengeAction(
+    challengeId: string,
+): Promise<RequestSuccess<true> | RequestFailure> {
+    try {
+        const response = await CHALLENGES_HTTP.delete(
+            `/challenges/${challengeId}`,
+        );
+
+        console.log("DELETE CHALLENGE RESPONSE", response);
+
+        return {
+            data: true,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}

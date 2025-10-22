@@ -67,7 +67,11 @@ export default function CodeVersionsList({
                         </ItemContent>
                         <ItemActions>
                             {variant === "summary" ? (
-                                <Button size="sm" variant="outline" asChild>
+                                <Button
+                                    size="default"
+                                    variant="outline"
+                                    asChild
+                                >
                                     <Link
                                         href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
                                             challengeId,
@@ -79,7 +83,11 @@ export default function CodeVersionsList({
                                 </Button>
                             ) : (
                                 <>
-                                    <Button size="sm" variant="outline" asChild>
+                                    <Button
+                                        size="default"
+                                        variant="outline"
+                                        asChild
+                                    >
                                         <Link
                                             href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
                                                 challengeId,
@@ -92,7 +100,7 @@ export default function CodeVersionsList({
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
                                             <Button
-                                                size="sm"
+                                                size="default"
                                                 variant="outline"
                                                 disabled={
                                                     deletingId === version.id

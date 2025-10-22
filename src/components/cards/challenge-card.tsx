@@ -76,7 +76,7 @@ export default function ChallengeCard({
                 <CardFooter>
                     {adminMode ? (
                         <Button
-                            size="sm"
+                            size="default"
                             onClick={() => {
                                 router.push(
                                     PATHS.DASHBOARD.CHALLENGES.EDIT(
@@ -89,7 +89,7 @@ export default function ChallengeCard({
                         </Button>
                     ) : (
                         <Button
-                            size="sm"
+                            size="default"
                             onClick={() => {
                                 router.push(
                                     PATHS.DASHBOARD.CHALLENGES.VIEW(
@@ -115,7 +115,7 @@ export default function ChallengeCard({
                         {challenge.name}
                     </CardTitle>
                     <div className="flex items-center gap-2 ">
-                        <Button size={"icon-sm"} variant={"ghost"}>
+                        <Button size={"icon"} variant={"ghost"}>
                             <Star className="text-yellow-400" size={18} />
                         </Button>
                         {challenge.stars.length}
@@ -148,7 +148,7 @@ export default function ChallengeCard({
                 <CardFooter>
                     {adminMode ? (
                         <Button
-                            size="sm"
+                            size="default"
                             onClick={() => {
                                 router.push(
                                     PATHS.DASHBOARD.CHALLENGES.EDIT(
@@ -161,7 +161,7 @@ export default function ChallengeCard({
                         </Button>
                     ) : (
                         <Button
-                            size="sm"
+                            size="default"
                             onClick={() => {
                                 router.push(
                                     PATHS.DASHBOARD.CHALLENGES.VIEW(
@@ -213,7 +213,7 @@ export default function ChallengeCard({
             <CardFooter>
                 {adminMode ? (
                     <Button
-                        size="sm"
+                        size="default"
                         onClick={() => {
                             router.push(
                                 PATHS.DASHBOARD.CHALLENGES.EDIT(challenge.id),
@@ -224,7 +224,7 @@ export default function ChallengeCard({
                     </Button>
                 ) : (
                     <Button
-                        size="sm"
+                        size="default"
                         onClick={() => {
                             router.push(
                                 PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id),

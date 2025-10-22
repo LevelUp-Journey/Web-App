@@ -31,6 +31,7 @@ import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import CodeVersionsList from "./code-versions-list";
+import DeleteChallengeButton from "./delete-challenge-button";
 
 const formSchema = z.object({
     title: z
@@ -112,6 +113,7 @@ export default function ChallengeEditing({
                     </p>
                 </div>
                 <div className="flex gap-4">
+                    <DeleteChallengeButton challengeId={challengeId} />
                     <Button onClick={handleAddVersion}>Add Code Version</Button>
                     <Button variant="outline" onClick={handleViewSummary}>
                         View Summary
@@ -335,13 +337,6 @@ export default function ChallengeEditing({
                                                 {form.formState.isSubmitting
                                                     ? "Saving..."
                                                     : "Save Changes"}
-                                            </Button>
-                                            <Button
-                                                type="button"
-                                                variant="destructive"
-                                                onClick={handleDelete}
-                                            >
-                                                Delete Challenge
                                             </Button>
                                         </div>
                                     </form>

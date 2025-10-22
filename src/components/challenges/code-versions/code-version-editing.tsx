@@ -172,7 +172,7 @@ export default function CodeVersionEditing({
                                             </ItemDescription>
                                         </ItemContent>
                                         <Button
-                                            size="sm"
+                                            size="default"
                                             variant="outline"
                                             asChild
                                         >

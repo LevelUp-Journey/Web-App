@@ -123,7 +123,7 @@ export default function CodeVersionSummary({
                                             </ItemDescription>
                                         </ItemContent>
                                         <Button
-                                            size="sm"
+                                            size="default"
                                             variant="outline"
                                             asChild
                                         >

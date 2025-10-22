@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import type { Challenge } from "../entities/challenge.entity";
 import {
     createChallengeAction,
+    deleteChallengeAction,
     getChallengeByIdAction,
     getChallengesByTeacherIdAction,
     getPublicChallengesAction,
@@ -16,7 +17,7 @@ export class ChallengeController {
     public static async getPublicChallenges(): Promise<Challenge[]> {
         const challenges = await getPublicChallengesAction();
 
-        if (challenges.status === 200) {
+        if (challenges.status === 204) {
             // Handle successful response
             return ChallengeAssembler.toEntitiesFromResponse(
                 challenges.data as ChallengeResponse[],
@@ -70,5 +71,15 @@ export class ChallengeController {
 
         toast.error("Failed to fetch challenges");
         throw new Error("Failed to fetch challenges");
+    }
+
+    public static async deleteChallenge(challengeId: string): Promise<boolean> {
+        const response = await deleteChallengeAction(challengeId);
+
+        if (response.status === 200) {
+            return true;
+        }
+
+        throw new Error("Failed to delete challenge");
     }
 }
