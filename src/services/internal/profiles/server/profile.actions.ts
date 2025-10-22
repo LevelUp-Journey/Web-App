@@ -29,3 +29,27 @@ export async function updateProfileAction(
     );
     return { data: response.data, status: response.status };
 }
+
+export async function getProfileByIdAction(
+    profileId: string,
+): Promise<RequestSuccess<ProfileResponse> | RequestFailure> {
+    try {
+        const response = await PROFILE_HTTP.get<ProfileResponse>(
+            `/profiles/${profileId}`,
+        );
+        return { data: response.data, status: response.status };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
