@@ -25,6 +25,7 @@ import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import MonacoEditor from "../monaco/monaco-editor";
 
 interface CodeVersionEditingProps {
     challengeId: string;
@@ -138,18 +139,6 @@ export default function CodeVersionEditing({
                 {/* Left Panel - Language and Tests List */}
                 <ResizablePanel defaultSize={30} minSize={25}>
                     <div className="h-full overflow-y-auto p-6 space-y-6">
-                        {/* Language Display */}
-                        <div className="space-y-4">
-                            <h2 className="text-xl font-semibold">Language</h2>
-                            <div className="text-sm">
-                                <strong>
-                                    {getReadableLanguageName(
-                                        initialCodeVersion.language as ProgrammingLanguage,
-                                    )}
-                                </strong>
-                            </div>
-                        </div>
-
                         {/* Tests List */}
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold">
@@ -213,9 +202,8 @@ export default function CodeVersionEditing({
                                 )
                             </h2>
                         </div>
-                        <div className="flex-1">
-                            <Editor
-                                height="100%"
+                        <div className="flex-1 p-4">
+                            <MonacoEditor
                                 language={getMonacoLanguage(
                                     initialCodeVersion.language as ProgrammingLanguage,
                                 )}
@@ -223,15 +211,6 @@ export default function CodeVersionEditing({
                                 onChange={(value) =>
                                     setInitialCode(value || "")
                                 }
-                                theme="vs-dark"
-                                options={{
-                                    minimap: { enabled: false },
-                                    fontSize: 14,
-                                    lineNumbers: "on",
-                                    roundedSelection: false,
-                                    scrollBeyondLastLine: false,
-                                    automaticLayout: true,
-                                }}
                             />
                         </div>
                     </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import Editor from "@monaco-editor/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,6 +23,7 @@ import { Python } from "@/components/ui/svgs/python";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
+import MonacoEditor from "../monaco/monaco-editor";
 
 interface VersionEditingProps {
     challengeId: string;
@@ -186,8 +186,7 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                         </div>
                         <div className="flex-1">
                             {selectedLanguage ? (
-                                <Editor
-                                    height="100%"
+                                <MonacoEditor
                                     language={getMonacoLanguage(
                                         selectedLanguage,
                                     )}
@@ -195,15 +194,6 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                                     onChange={(value) =>
                                         setInitialCode(value || "")
                                     }
-                                    theme="vs-dark"
-                                    options={{
-                                        minimap: { enabled: false },
-                                        fontSize: 14,
-                                        lineNumbers: "on",
-                                        roundedSelection: false,
-                                        scrollBeyondLastLine: false,
-                                        automaticLayout: true,
-                                    }}
                                 />
                             ) : (
                                 <div className="h-full flex items-center justify-center text-muted-foreground">
