@@ -31,7 +31,7 @@ export default function DeleteChallengeButton({
         try {
             await ChallengeController.deleteChallenge(challengeId);
             toast.success("Challenge deleted successfully");
-            router.push(PATHS.DASHBOARD.CHALLENGES.ROOT);
+            router.push(PATHS.DASHBOARD.ADMINISTRATION.ROOT);
         } catch (error) {
             toast.error("Failed to delete challenge");
         }

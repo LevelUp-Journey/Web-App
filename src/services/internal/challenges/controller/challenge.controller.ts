@@ -16,7 +16,7 @@ export class ChallengeController {
     public static async getPublicChallenges(): Promise<Challenge[]> {
         const challenges = await getPublicChallengesAction();
 
-        if (challenges.status === 204) {
+        if (challenges.status === 200) {
             // Handle successful response
             return ChallengeAssembler.toEntitiesFromResponse(
                 challenges.data as ChallengeResponse[],
@@ -68,7 +68,7 @@ export class ChallengeController {
     public static async deleteChallenge(challengeId: string): Promise<boolean> {
         const response = await deleteChallengeAction(challengeId);
 
-        if (response.status === 200) {
+        if (response.status === 204) {
             return true;
         }
 
