@@ -40,7 +40,7 @@ const topItems = [
     },
     {
         title: "Community",
-        url: PATHS.DASHBOARD.COMMUNITY,
+        url: PATHS.DASHBOARD.COMMUNITY.ROOT,
         icon: Users,
     },
 ];
