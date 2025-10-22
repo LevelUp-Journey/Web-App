@@ -69,7 +69,7 @@ export function CommunitySelector({ communities, usernames, onSelectCommunity }:
                         {/* Footer con creador */}
                         <div className="pt-4 border-t flex items-center justify-between text-xs text-muted-foreground mt-auto">
                             <span className="font-medium">
-                                By <span className="text-foreground">{usernames[community.ownerId] || "Usuario"}</span>
+                                By <span className="text-foreground">{usernames[community.ownerId] || "Unknown User"}</span>
                             </span>
                             <span>
                                 {new Date(community.createdAt).toLocaleDateString('es-ES', {

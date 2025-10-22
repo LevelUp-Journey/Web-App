@@ -51,6 +51,11 @@ const administrativeItems = [
         url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
         icon: ShieldUser,
     },
+    {
+        title: "Admin Community",
+        url: PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
+        icon: Users,
+    },
 ];
 
 const bottomItems = [

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -80,17 +80,13 @@ export default function CommunityFeedPage() {
             {/* Feed Content */}
             <div className="container mx-auto px-6 py-4 space-y-4">
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center">
                     <div>
                         <h2 className="text-2xl font-semibold">Feed</h2>
                         <p className="text-muted-foreground">
                             Discover posts from all communities
                         </p>
                     </div>
-                    <Button onClick={() => router.push("/dashboard/community/posts/create")}>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Create Post
-                    </Button>
                 </div>
 
                 {/* Posts Feed */}
@@ -107,7 +103,7 @@ export default function CommunityFeedPage() {
                                 </Button>
                             </div>
                         ) : filteredPosts.length === 0 ? (
-                            <EmptyFeed onCreatePost={() => router.push("/dashboard/community/posts/create")} />
+                            <EmptyFeed />
                         ) : (
                             filteredPosts.map((post) => (
                                 <FeedPostCard key={post.id} post={post} />

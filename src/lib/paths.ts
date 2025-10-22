@@ -21,6 +21,11 @@ export const PATHS = {
         HELP: "/dashboard/help",
         ADMINISTRATION: {
             ROOT: "/dashboard/admin",
+            COMMUNITY: {
+                ROOT: "/dashboard/admin/community",
+                CREATE: "/dashboard/admin/community/create",
+                EDIT: (id: string) => `/dashboard/admin/community/edit?id=${id}`,
+            },
         },
     },
     AUTH: {
