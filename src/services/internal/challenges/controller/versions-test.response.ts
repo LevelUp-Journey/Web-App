@@ -13,10 +13,8 @@ export interface VersionTestResponse {
 }
 
 export interface CreateVersionTestRequest {
-    challengeId: string;
-    codeVersionId: string;
     input: string;
     expectedOutput: string;
-    customValidationCode: string;
-    failureMessage: string;
+    customValidationCode?: string;
+    failureMessage?: string;
 }

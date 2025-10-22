@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import Editor from "@monaco-editor/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import {
     Item,
     ItemContent,
@@ -17,13 +12,18 @@ import {
     ItemMedia,
     ItemTitle,
 } from "@/components/ui/item";
-import { PATHS } from "@/lib/paths";
-import { ProgrammingLanguage } from "@/lib/consts";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
 import { Java } from "@/components/ui/svgs/java";
 import { Javascript } from "@/components/ui/svgs/javascript";
 import { Python } from "@/components/ui/svgs/python";
+import { ProgrammingLanguage } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
+import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 
 interface VersionEditingProps {
     challengeId: string;
@@ -87,13 +87,21 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
 
         setIsSubmitting(true);
         try {
-            await CodeVersionController.createCodeVersion(challengeId, {
-                language: selectedLanguage,
-                initialCode,
-            });
+            const codeVersion = await CodeVersionController.createCodeVersion(
+                challengeId,
+                {
+                    language: selectedLanguage,
+                    initialCode,
+                },
+            );
             toast.success("Code version added successfully");
-            // Redirect to tests page (placeholder for now)
-            router.push(PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(challengeId));
+            // Redirect to tests page with both challengeId and codeVersionId
+            router.push(
+                PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(
+                    challengeId,
+                    codeVersion.id,
+                ),
+            );
         } catch (error) {
             console.error("Error adding code version:", error);
             toast.error("Failed to add code version");
