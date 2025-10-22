@@ -4,12 +4,12 @@ import { CodeVersionController } from "@/services/internal/challenges/controller
 
 interface PageProps {
     params: Promise<{ challengeId: string; codeVersionId: string }>;
-    searchParams: Promise<{ testId?: string }>;
+    searchParams: Promise<{ testId?: string; editing?: string }>;
 }
 
 export default async function TestsPage({ params, searchParams }: PageProps) {
     const { challengeId, codeVersionId } = await params;
-    const { testId } = await searchParams;
+    const { testId, editing } = await searchParams;
 
     // Fetch the code version to get the language
     const codeVersion = await CodeVersionController.getCodeVersionById(
@@ -17,12 +17,15 @@ export default async function TestsPage({ params, searchParams }: PageProps) {
         codeVersionId,
     );
 
+    const isEditing = editing === "true";
+
     return (
         <VersionTestsManager
             challengeId={challengeId}
             codeVersionId={codeVersionId}
             language={codeVersion.language as ProgrammingLanguage}
             defaultTestId={testId}
+            isEditing={isEditing}
         />
     );
 }

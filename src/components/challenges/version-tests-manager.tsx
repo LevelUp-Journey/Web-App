@@ -23,6 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ProgrammingLanguage } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
 import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
 import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
 
@@ -31,6 +32,7 @@ interface VersionTestsManagerProps {
     codeVersionId: string;
     language: ProgrammingLanguage;
     defaultTestId?: string;
+    isEditing?: boolean;
 }
 
 const getCustomValidationTemplate = (
@@ -99,6 +101,7 @@ export default function VersionTestsManager({
     codeVersionId,
     language,
     defaultTestId,
+    isEditing = false,
 }: VersionTestsManagerProps) {
     const router = useRouter();
     const [tests, setTests] = useState<VersionTest[]>([]);
@@ -240,7 +243,33 @@ export default function VersionTestsManager({
                         Manage test cases for this code version
                     </p>
                 </div>
-                <Button onClick={() => router.back()}>Back to Versions</Button>
+                <div className="flex gap-4">
+                    {isEditing && (
+                        <Button
+                            onClick={() =>
+                                router.push(
+                                    PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                        challengeId,
+                                    ),
+                                )
+                            }
+                        >
+                            Finish
+                        </Button>
+                    )}
+                    <Button
+                        onClick={() =>
+                            router.push(
+                                PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                                    challengeId,
+                                    codeVersionId,
+                                ),
+                            )
+                        }
+                    >
+                        Back to Version
+                    </Button>
+                </div>
             </header>
 
             {/* Resizable panels */}

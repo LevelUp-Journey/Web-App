@@ -87,7 +87,7 @@ export default function ChallengeEditing({
     };
 
     const handleAddVersion = () => {
-        router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.ADD(challengeId));
+        router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challengeId));
     };
 
     useEffect(() => {
@@ -113,7 +113,9 @@ export default function ChallengeEditing({
                 </div>
                 <div className="flex gap-4">
                     <Button onClick={handleAddVersion}>Add Code Version</Button>
-                    <Button onClick={handleViewSummary}>View Summary</Button>
+                    <Button variant="outline" onClick={handleViewSummary}>
+                        View Summary
+                    </Button>
                 </div>
             </header>
 

@@ -97,7 +97,7 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
             toast.success("Code version added successfully");
             // Redirect to tests page with both challengeId and codeVersionId
             router.push(
-                PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(
+                PATHS.DASHBOARD.CHALLENGES.TESTS.NEW(
                     challengeId,
                     codeVersion.id,
                 ),

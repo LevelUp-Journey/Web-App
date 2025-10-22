@@ -2,7 +2,7 @@
 
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ProgrammingLanguage, UIVersion } from "@/lib/consts";
+import { type ProgrammingLanguage, UIVersion } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
@@ -92,7 +92,7 @@ export default function ChallengeCard({
                             size="sm"
                             onClick={() => {
                                 router.push(
-                                    PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                    PATHS.DASHBOARD.CHALLENGES.VIEW(
                                         challenge.id,
                                     ),
                                 );
@@ -164,7 +164,7 @@ export default function ChallengeCard({
                             size="sm"
                             onClick={() => {
                                 router.push(
-                                    PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                    PATHS.DASHBOARD.CHALLENGES.VIEW(
                                         challenge.id,
                                     ),
                                 );
@@ -227,9 +227,7 @@ export default function ChallengeCard({
                         size="sm"
                         onClick={() => {
                             router.push(
-                                PATHS.DASHBOARD.CHALLENGES.WITH_ID(
-                                    challenge.id,
-                                ),
+                                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id),
                             );
                         }}
                     >

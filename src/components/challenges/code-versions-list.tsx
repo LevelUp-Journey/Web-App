@@ -17,6 +17,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { getReadableLanguageName } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
@@ -60,13 +61,15 @@ export default function CodeVersionsList({
                 {codeVersions.map((version) => (
                     <Item key={version.id} variant="muted" size="sm">
                         <ItemContent>
-                            <ItemTitle>{version.language}</ItemTitle>
+                            <ItemTitle>
+                                {getReadableLanguageName(version.language)}
+                            </ItemTitle>
                         </ItemContent>
                         <ItemActions>
                             {variant === "summary" ? (
                                 <Button size="sm" variant="outline" asChild>
                                     <Link
-                                        href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                                        href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
                                             challengeId,
                                             version.id,
                                         )}
@@ -78,7 +81,7 @@ export default function CodeVersionsList({
                                 <>
                                     <Button size="sm" variant="outline" asChild>
                                         <Link
-                                            href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                                            href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
                                                 challengeId,
                                                 version.id,
                                             )}
@@ -106,9 +109,11 @@ export default function CodeVersionsList({
                                                 <AlertDialogDescription>
                                                     Are you sure you want to
                                                     delete the{" "}
-                                                    {version.language} code
-                                                    version? This action cannot
-                                                    be undone.
+                                                    {getReadableLanguageName(
+                                                        version.language,
+                                                    )}{" "}
+                                                    code version? This action
+                                                    cannot be undone.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>

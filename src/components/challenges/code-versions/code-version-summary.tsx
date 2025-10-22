@@ -16,7 +16,7 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { ProgrammingLanguage } from "@/lib/consts";
+import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
@@ -61,7 +61,24 @@ export default function CodeVersionSummary({
                 </div>
                 <div className="flex gap-4">
                     <Button asChild>
-                        <Link href={`?editing=true`}>Edit Code Version</Link>
+                        <Link
+                            href={PATHS.DASHBOARD.CHALLENGES.TESTS.LIST(
+                                challengeId,
+                                codeVersion.id,
+                            )}
+                        >
+                            Manage Tests
+                        </Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                        <Link
+                            href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                                challengeId,
+                                codeVersion.id,
+                            )}
+                        >
+                            Edit Code Version
+                        </Link>
                     </Button>
                 </div>
             </header>
@@ -75,7 +92,11 @@ export default function CodeVersionSummary({
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold">Language</h2>
                             <div className="text-sm">
-                                <strong>{codeVersion.language}</strong>
+                                <strong>
+                                    {getReadableLanguageName(
+                                        codeVersion.language as ProgrammingLanguage,
+                                    )}
+                                </strong>
                             </div>
                         </div>
 
@@ -101,12 +122,17 @@ export default function CodeVersionSummary({
                                                     : test.input}
                                             </ItemDescription>
                                         </ItemContent>
-                                        <Button size="sm" variant="outline" asChild>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            asChild
+                                        >
                                             <Link
-                                                href={PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(
+                                                href={PATHS.DASHBOARD.CHALLENGES.TESTS.VIEW(
                                                     challengeId,
                                                     codeVersion.id,
-                                                ) + `?testId=${test.id}`}
+                                                    test.id,
+                                                )}
                                             >
                                                 View
                                             </Link>

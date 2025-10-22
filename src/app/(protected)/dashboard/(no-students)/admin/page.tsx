@@ -1,10 +1,11 @@
+import Link from "next/link";
 import ChallengeCard from "@/components/cards/challenge-card";
 import { Button } from "@/components/ui/button";
+import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import Link from "next/link";
 
 export default async function AdminPage() {
     const teacherId = await AuthController.getUserId();
@@ -30,7 +31,7 @@ export default async function AdminPage() {
                     Admin Dashboard - My Challenges
                 </h1>
                 <Button asChild>
-                    <Link href="/dashboard/challenges/create">
+                    <Link href={PATHS.DASHBOARD.CHALLENGES.CREATE}>
                         Create New Challenge
                     </Link>
                 </Button>

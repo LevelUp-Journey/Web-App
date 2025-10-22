@@ -19,11 +19,8 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
-import { Java } from "@/components/ui/svgs/java";
-import { Javascript } from "@/components/ui/svgs/javascript";
-import { Python } from "@/components/ui/svgs/python";
-import { ProgrammingLanguage } from "@/lib/consts";
+
+import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
@@ -34,17 +31,6 @@ interface CodeVersionEditingProps {
     initialCodeVersion: CodeVersion;
     tests: VersionTest[];
 }
-
-const languages = [
-    {
-        key: ProgrammingLanguage.JAVASCRIPT,
-        name: "JavaScript",
-        icon: Javascript,
-    },
-    { key: ProgrammingLanguage.PYTHON, name: "Python", icon: Python },
-    { key: ProgrammingLanguage.JAVA, name: "Java", icon: Java },
-    { key: ProgrammingLanguage.C_PLUS_PLUS, name: "C++", icon: CPlusPlus },
-];
 
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
     switch (language) {
@@ -67,17 +53,12 @@ export default function CodeVersionEditing({
     tests,
 }: CodeVersionEditingProps) {
     const router = useRouter();
-    const [selectedLanguage, setSelectedLanguage] =
-        useState<ProgrammingLanguage>(
-            initialCodeVersion.language as ProgrammingLanguage,
-        );
     const [initialCode, setInitialCode] = useState<string>(
         initialCodeVersion.initialCode,
     );
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        setSelectedLanguage(initialCodeVersion.language as ProgrammingLanguage);
         setInitialCode(initialCodeVersion.initialCode);
     }, [initialCodeVersion]);
 
@@ -88,17 +69,19 @@ export default function CodeVersionEditing({
                 challengeId,
                 initialCodeVersion.id,
                 {
-                    language: selectedLanguage,
                     initialCode,
                 },
             );
-            toast.success("Code version updated successfully");
+            toast.success("Initial code updated successfully");
             router.push(
-                `/dashboard/challenges/edit/${challengeId}/versions/${initialCodeVersion.id}`,
+                PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                    challengeId,
+                    initialCodeVersion.id,
+                ),
             );
         } catch (error) {
-            console.error("Error updating code version:", error);
-            toast.error("Failed to update code version");
+            console.error("Error updating initial code:", error);
+            toast.error("Failed to update initial code");
         } finally {
             setIsSubmitting(false);
         }
@@ -110,58 +93,59 @@ export default function CodeVersionEditing({
             <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">
-                        Edit Code Version
+                        Edit Initial Code
                     </h1>
                     <p className="text-muted-foreground">
-                        Modify the programming language and initial code for
-                        this challenge.
+                        Modify the initial code for this code version.
                     </p>
                 </div>
-                <Button
-                    onClick={handleUpdateCodeVersion}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? "Updating..." : "Update Code Version"}
-                </Button>
+                <div className="flex gap-4">
+                    <Button asChild>
+                        <Link
+                            href={PATHS.DASHBOARD.CHALLENGES.TESTS.LIST(
+                                challengeId,
+                                initialCodeVersion.id,
+                            )}
+                        >
+                            Manage Tests
+                        </Link>
+                    </Button>
+                    <Button
+                        onClick={handleUpdateCodeVersion}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? "Updating..." : "Save Changes"}
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() =>
+                            router.push(
+                                PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                                    challengeId,
+                                    initialCodeVersion.id,
+                                ),
+                            )
+                        }
+                    >
+                        Back to Summary
+                    </Button>
+                </div>
             </header>
 
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
-                {/* Left Panel - Language Selection and Tests List */}
+                {/* Left Panel - Language and Tests List */}
                 <ResizablePanel defaultSize={30} minSize={25}>
                     <div className="h-full overflow-y-auto p-6 space-y-6">
-                        {/* Language Selection */}
+                        {/* Language Display */}
                         <div className="space-y-4">
-                            <h2 className="text-xl font-semibold">
-                                Select Language
-                            </h2>
-                            <div className="space-y-2">
-                                {languages.map((lang) => (
-                                    <Item
-                                        key={lang.key}
-                                        variant={
-                                            selectedLanguage === lang.key
-                                                ? "muted"
-                                                : "default"
-                                        }
-                                        className="cursor-pointer"
-                                        onClick={() =>
-                                            setSelectedLanguage(lang.key)
-                                        }
-                                    >
-                                        <ItemMedia variant="icon">
-                                            <lang.icon className="w-5 h-5" />
-                                        </ItemMedia>
-                                        <ItemContent>
-                                            <ItemTitle>{lang.name}</ItemTitle>
-                                            <ItemDescription>
-                                                {selectedLanguage === lang.key
-                                                    ? "Currently selected"
-                                                    : "Click to select this programming language"}
-                                            </ItemDescription>
-                                        </ItemContent>
-                                    </Item>
-                                ))}
+                            <h2 className="text-xl font-semibold">Language</h2>
+                            <div className="text-sm">
+                                <strong>
+                                    {getReadableLanguageName(
+                                        initialCodeVersion.language as ProgrammingLanguage,
+                                    )}
+                                </strong>
                             </div>
                         </div>
 
@@ -187,12 +171,17 @@ export default function CodeVersionEditing({
                                                     : test.input}
                                             </ItemDescription>
                                         </ItemContent>
-                                        <Button size="sm" variant="outline" asChild>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            asChild
+                                        >
                                             <Link
-                                                href={PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(
+                                                href={PATHS.DASHBOARD.CHALLENGES.TESTS.VIEW(
                                                     challengeId,
                                                     initialCodeVersion.id,
-                                                ) + `?testId=${test.id}`}
+                                                    test.id,
+                                                )}
                                             >
                                                 View
                                             </Link>
@@ -216,15 +205,19 @@ export default function CodeVersionEditing({
                     <div className="h-full flex flex-col">
                         <div className="p-4 border-b">
                             <h2 className="text-xl font-semibold">
-                                Initial Code{" "}
-                                {selectedLanguage &&
-                                    `(${languages.find((l) => l.key === selectedLanguage)?.name})`}
+                                Initial Code (
+                                {getReadableLanguageName(
+                                    initialCodeVersion.language as ProgrammingLanguage,
+                                )}
+                                )
                             </h2>
                         </div>
                         <div className="flex-1">
                             <Editor
                                 height="100%"
-                                language={getMonacoLanguage(selectedLanguage)}
+                                language={getMonacoLanguage(
+                                    initialCodeVersion.language as ProgrammingLanguage,
+                                )}
                                 value={initialCode}
                                 onChange={(value) =>
                                     setInitialCode(value || "")

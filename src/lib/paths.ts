@@ -5,19 +5,44 @@ export const PATHS = {
         CHALLENGES: {
             ROOT: "/dashboard/challenges",
             CREATE: "/dashboard/challenges/create",
+            // View challenge summary (read-only)
+            VIEW: (id: string) => `/dashboard/challenges/${id}`,
+            // Edit challenge (editable)
             EDIT: (id: string) => `/dashboard/challenges/edit/${id}`,
-            WITH_ID: (id: string) => `/dashboard/challenge/${id}`,
+            // Code Versions
             VERSIONS: {
-                ROOT: "/dashboard/challenges/versions",
-                ADD: (id: string) =>
-                    `/dashboard/challenges/edit/${id}/versions?editing=true`,
-                EDIT: (challengeId: string, codeVersionId: string) =>
+                // Create new code version
+                NEW: (challengeId: string) =>
+                    `/dashboard/challenges/edit/${challengeId}/versions/new`,
+                // View code version summary (read-only)
+                VIEW: (challengeId: string, codeVersionId: string) =>
                     `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}`,
+                // Edit code version (editable)
+                EDIT: (challengeId: string, codeVersionId: string) =>
+                    `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}?editing=true`,
             },
+            // Tests
             TESTS: {
-                ROOT: "/dashboard/challenges/tests",
-                ADD: (challengeId: string, codeVersionId: string) =>
+                // View all tests for a code version
+                LIST: (challengeId: string, codeVersionId: string) =>
                     `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}/tests`,
+                // Create new test
+                NEW: (challengeId: string, codeVersionId: string) =>
+                    `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}/tests?editing=true`,
+                // Edit specific test
+                EDIT: (
+                    challengeId: string,
+                    codeVersionId: string,
+                    testId: string,
+                ) =>
+                    `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}/tests?editing=true&testId=${testId}`,
+                // View specific test
+                VIEW: (
+                    challengeId: string,
+                    codeVersionId: string,
+                    testId: string,
+                ) =>
+                    `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}/tests?testId=${testId}`,
             },
         },
         COMMUNITY: "/dashboard/community",
