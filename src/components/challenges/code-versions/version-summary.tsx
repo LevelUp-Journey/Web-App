@@ -38,13 +38,6 @@ export default function VersionSummary({
                                         <h3 className="font-medium">
                                             {version.language}
                                         </h3>
-                                        <p className="text-sm text-muted-foreground">
-                                            {version.initialCode.substring(
-                                                0,
-                                                100,
-                                            )}
-                                            ...
-                                        </p>
                                     </div>
                                 ))}
                             </div>

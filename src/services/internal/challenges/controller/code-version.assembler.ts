@@ -6,7 +6,7 @@ const CodeVersionValidator = z.object({
     id: z.uuid(),
     challengeId: z.uuid(),
     language: z.string().min(1).max(100),
-    initialCode: z.string().min(1).max(10000),
+    initialCode: z.string().max(10000),
 });
 
 export class CodeVersionAssembler {

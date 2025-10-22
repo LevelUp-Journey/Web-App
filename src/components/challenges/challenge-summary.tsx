@@ -72,20 +72,11 @@ export default function ChallengeSummary({
                                 </h2>
                                 <div className="space-y-2">
                                     {codeVersions.map((version) => (
-                                        <div
-                                            key={version.id}
-                                            className="flex justify-between items-center p-2 border rounded"
-                                        >
+                                        <div key={version.id}>
                                             <div>
                                                 <strong>
                                                     {version.language}
                                                 </strong>{" "}
-                                                -{" "}
-                                                {version.initialCode.substring(
-                                                    0,
-                                                    50,
-                                                )}
-                                                ...
                                             </div>
                                             <Button
                                                 size="sm"
