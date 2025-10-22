@@ -3,7 +3,9 @@ import {
     createCommunityAction,
     getCommunitiesAction,
     getCommunityByIdAction,
+    updateCommunityAction,
     type CreateCommunityRequest,
+    type UpdateCommunityRequest,
     type CommunityResponse
 } from "../server/community.actions";
 import type { Community } from "../entities/community.entity";
@@ -34,6 +36,16 @@ export class CommunityController {
 
         if (response.status !== 200) {
             throw new Error(`Failed to fetch community: ${response.data}`);
+        }
+
+        return CommunityAssembler.toEntityFromResponse(response.data as CommunityResponse);
+    }
+
+    static async updateCommunity(communityId: string, request: UpdateCommunityRequest): Promise<Community> {
+        const response = await updateCommunityAction(communityId, request);
+
+        if (response.status !== 200) {
+            throw new Error(`Failed to update community: ${response.data}`);
         }
 
         return CommunityAssembler.toEntityFromResponse(response.data as CommunityResponse);

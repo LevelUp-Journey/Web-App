@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Users } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -12,45 +12,75 @@ import ImageUpload from "@/components/ui/image-upload";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import type { CreateCommunityRequest } from "@/services/internal/community/server/community.actions";
+import type { CreateCommunityRequest, UpdateCommunityRequest } from "@/services/internal/community/server/community.actions";
+import type { Community } from "@/services/internal/community/entities/community.entity";
 
 interface CommunityFormProps {
+    communityId?: string;
+    initialData?: Community;
+    mode?: "create" | "edit";
     onSuccess?: () => void;
     onCancel?: () => void;
 }
 
-export function CommunityForm({ onSuccess, onCancel }: CommunityFormProps) {
+export function CommunityForm({ 
+    communityId, 
+    initialData, 
+    mode = "create", 
+    onSuccess, 
+    onCancel 
+}: CommunityFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState<Omit<CreateCommunityRequest, 'ownerId' | 'ownerProfileId'>>({
-        name: "",
-        description: "",
-        imageUrl: "",
+        name: initialData?.name || "",
+        description: initialData?.description || "",
+        imageUrl: initialData?.imageUrl || "",
     });
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                name: initialData.name,
+                description: initialData.description,
+                imageUrl: initialData.imageUrl || "",
+            });
+        }
+    }, [initialData]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
 
         try {
-            const [currentProfile, userId] = await Promise.all([
-                ProfileController.getCurrentUserProfile(),
-                AuthController.getUserId(),
-            ]);
+            if (mode === "edit" && communityId) {
+                await CommunityController.updateCommunity(communityId, {
+                    name: formData.name,
+                    description: formData.description,
+                    imageUrl: formData.imageUrl || undefined,
+                });
+                toast.success("Community updated successfully!");
+            } else {
+                const [currentProfile, userId] = await Promise.all([
+                    ProfileController.getCurrentUserProfile(),
+                    AuthController.getUserId(),
+                ]);
 
-            await CommunityController.createCommunity({
-                ownerId: userId,
-                ownerProfileId: currentProfile.id,
-                name: formData.name,
-                description: formData.description,
-                imageUrl: formData.imageUrl || undefined,
-            });
+                await CommunityController.createCommunity({
+                    ownerId: userId,
+                    ownerProfileId: currentProfile.id,
+                    name: formData.name,
+                    description: formData.description,
+                    imageUrl: formData.imageUrl || undefined,
+                });
 
-            setFormData({ name: "", description: "", imageUrl: "" });
-            toast.success("Community created successfully!");
+                setFormData({ name: "", description: "", imageUrl: "" });
+                toast.success("Community created successfully!");
+            }
+            
             onSuccess?.();
         } catch (error) {
-            console.error("Error creating community:", error);
-            toast.error("Failed to create community");
+            console.error(`Error ${mode === "edit" ? "updating" : "creating"} community:`, error);
+            toast.error(`Failed to ${mode === "edit" ? "update" : "create"} community`);
         } finally {
             setIsSubmitting(false);
         }
@@ -61,7 +91,7 @@ export function CommunityForm({ onSuccess, onCancel }: CommunityFormProps) {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5" />
-                    Create Community
+                    {mode === "edit" ? "Edit Community" : "Create Community"}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -100,7 +130,10 @@ export function CommunityForm({ onSuccess, onCancel }: CommunityFormProps) {
 
                     <div className="flex gap-2">
                         <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "Creating..." : "Create"}
+                            {isSubmitting 
+                                ? (mode === "edit" ? "Updating..." : "Creating...") 
+                                : (mode === "edit" ? "Update" : "Create")
+                            }
                         </Button>
                         {onCancel && (
                             <Button

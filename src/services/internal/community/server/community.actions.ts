@@ -14,6 +14,12 @@ export interface CreateCommunityRequest {
     imageUrl?: string;
 }
 
+export interface UpdateCommunityRequest {
+    name: string;
+    description: string;
+    imageUrl?: string;
+}
+
 export interface CommunityResponse {
     id: string;
     ownerId: string;
@@ -81,6 +87,33 @@ export async function getCommunityByIdAction(
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
         const response = await COMMUNITY_HTTP.get(`/communities/${communityId}`);
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function updateCommunityAction(
+    communityId: string,
+    request: UpdateCommunityRequest,
+): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
+    try {
+        const response = await COMMUNITY_HTTP.put(`/communities/${communityId}`, request);
 
         return {
             data: response.data,
