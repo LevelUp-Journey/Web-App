@@ -9,6 +9,7 @@ const VersionTestValidator = z.object({
     expectedOutput: z.string(),
     customValidationCode: z.string(),
     failureMessage: z.string(),
+    isSecret: z.boolean(),
 });
 
 export class VersionTestAssembler {
@@ -24,6 +25,7 @@ export class VersionTestAssembler {
             expectedOutput: versionTest.expectedOutput,
             customValidationCode: versionTest.customValidationCode,
             failureMessage: versionTest.failureMessage,
+            isSecret: versionTest.isSecret,
         };
     }
 

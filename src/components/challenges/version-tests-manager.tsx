@@ -20,8 +20,8 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
@@ -114,6 +114,7 @@ export default function VersionTestsManager({
     const [expectedOutput, setExpectedOutput] = useState("");
     const [failureMessage, setFailureMessage] = useState("");
     const [customValidationCode, setCustomValidationCode] = useState("");
+    const [isSecret, setIsSecret] = useState(true);
 
     useEffect(() => {
         loadTests();
@@ -151,6 +152,7 @@ export default function VersionTestsManager({
         setCustomValidationCode(
             getCustomValidationTemplate(language, `test_${Date.now()}`),
         );
+        setIsSecret(true);
     };
 
     const handleSelectTest = (test: VersionTest) => {
@@ -160,6 +162,7 @@ export default function VersionTestsManager({
         setExpectedOutput(test.expectedOutput);
         setFailureMessage(test.failureMessage);
         setCustomValidationCode(test.customValidationCode);
+        setIsSecret(test.isSecret);
     };
 
     const handleSubmit = async () => {
@@ -175,10 +178,12 @@ export default function VersionTestsManager({
                     challengeId,
                     codeVersionId,
                     {
+                        codeVersionId,
                         input: input.trim(),
                         expectedOutput: expectedOutput.trim(),
                         customValidationCode: customValidationCode.trim(),
                         failureMessage: failureMessage.trim(),
+                        isSecret,
                     },
                 );
                 toast.success("Test created successfully");
@@ -192,6 +197,7 @@ export default function VersionTestsManager({
                         expectedOutput: expectedOutput.trim(),
                         customValidationCode: customValidationCode.trim(),
                         failureMessage: failureMessage.trim(),
+                        isSecret,
                     },
                 );
                 toast.success("Test updated successfully");
@@ -226,6 +232,7 @@ export default function VersionTestsManager({
                 setExpectedOutput("");
                 setFailureMessage("");
                 setCustomValidationCode("");
+                setIsSecret(true);
             }
         } catch (error) {
             console.error("Error deleting test:", error);
@@ -421,6 +428,26 @@ export default function VersionTestsManager({
                                                     )
                                                 }
                                             />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div className="flex items-center space-x-2">
+                                                <Switch
+                                                    id="isSecret"
+                                                    checked={isSecret}
+                                                    onCheckedChange={
+                                                        setIsSecret
+                                                    }
+                                                />
+                                                <Label htmlFor="isSecret">
+                                                    Secret Test
+                                                </Label>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Secret tests are not visible to
+                                                students and are used for
+                                                additional validation.
+                                            </p>
                                         </div>
 
                                         <div className="pt-4">

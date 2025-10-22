@@ -8,10 +8,12 @@ import {
 import type { VersionTestResponse } from "../controller/versions-test.response";
 
 export interface CreateVersionTestRequest {
+    codeVersionId: string;
     input: string;
     expectedOutput: string;
-    customValidationCode?: string;
-    failureMessage?: string;
+    customValidationCode: string;
+    failureMessage: string;
+    isSecret: boolean;
 }
 
 export interface UpdateVersionTestRequest {
