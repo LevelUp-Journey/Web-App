@@ -60,13 +60,21 @@ export default function SignInPage() {
 
             <ul className="flex flex-col gap-2">
                 <li>
-                    <Button variant={"outline"} className="w-full">
+                    <Button
+                        variant={"outline"}
+                        className="w-full"
+                        onClick={() => AuthController.signInWithGoogle()}
+                    >
                         <Google /> Continue with Google
                     </Button>
                 </li>
 
                 <li>
-                    <Button variant={"outline"} className="w-full">
+                    <Button
+                        variant={"outline"}
+                        className="w-full"
+                        onClick={() => AuthController.signInWithGithub()}
+                    >
                         <GithubDark />
                         <GithubLight />
                         Continue with Github
