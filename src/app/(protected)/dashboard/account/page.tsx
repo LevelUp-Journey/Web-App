@@ -65,16 +65,16 @@ export default function AccountPage() {
                                         <div className="flex items-center gap-3">
                                             <Users className="h-5 w-5 text-muted-foreground" />
                                             <div>
-                                                <h3 className="font-semibold">Create Community</h3>
+                                                <h3 className="font-semibold">My Communities</h3>
                                                 <p className="text-sm text-muted-foreground">
-                                                    Start a new community
+                                                    View and manage your communities
                                                 </p>
                                             </div>
                                         </div>
-                                        <Link href="/dashboard/community/create">
+                                        <Link href="/dashboard/communities">
                                             <Button variant="outline" size="sm">
-                                                <Plus className="h-4 w-4 mr-2" />
-                                                Create
+                                                <Users className="h-4 w-4 mr-2" />
+                                                View Communities
                                             </Button>
                                         </Link>
                                     </div>

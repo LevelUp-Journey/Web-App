@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { CommunityForm } from "@/components/community/community-form";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
@@ -29,7 +31,16 @@ export default function CreateCommunityPage() {
     if (loading) {
         return (
             <div className="container mx-auto p-4">
-                <div className="max-w-2xl mx-auto">
+                <div className="max-w-2xl mx-auto space-y-6">
+                    <Button
+                        variant="ghost"
+                        onClick={() => router.back()}
+                        className="mb-4"
+                    >
+                        <ArrowLeft className="h-4 w-4 mr-2" />
+                        Back
+                    </Button>
+
                     <div className="animate-pulse space-y-4">
                         <div className="h-8 bg-gray-200 rounded w-64"></div>
                         <div className="h-64 bg-gray-200 rounded"></div>
@@ -42,17 +53,22 @@ export default function CreateCommunityPage() {
     if (!userRole) {
         return (
             <div className="container mx-auto p-4">
-                <div className="max-w-2xl mx-auto text-center space-y-4">
-                    <h1 className="text-2xl font-semibold">Access Denied</h1>
-                    <p className="text-muted-foreground">
-                        You don't have permission to create communities.
-                    </p>
-                    <button
+                <div className="max-w-2xl mx-auto space-y-6">
+                    <Button
+                        variant="ghost"
                         onClick={() => router.back()}
-                        className="text-primary hover:underline"
+                        className="mb-4"
                     >
-                        Go back
-                    </button>
+                        <ArrowLeft className="h-4 w-4 mr-2" />
+                        Back
+                    </Button>
+
+                    <div className="text-center space-y-4">
+                        <h1 className="text-2xl font-semibold">Access Denied</h1>
+                        <p className="text-muted-foreground">
+                            You don't have permission to create communities.
+                        </p>
+                    </div>
                 </div>
             </div>
         );
@@ -61,6 +77,15 @@ export default function CreateCommunityPage() {
     return (
         <div className="container mx-auto p-4">
             <div className="max-w-2xl mx-auto space-y-6">
+                <Button
+                    variant="ghost"
+                    onClick={() => router.back()}
+                    className="mb-4"
+                >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back
+                </Button>
+
                 <div>
                     <h1 className="text-2xl font-semibold">Create Community</h1>
                     <p className="text-muted-foreground">
