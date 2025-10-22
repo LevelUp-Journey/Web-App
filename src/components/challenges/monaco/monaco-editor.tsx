@@ -6,12 +6,14 @@ interface MonacoEditorProps {
     value: string;
     onChange?: (value?: string) => void;
     language: string;
+    readOnly?: boolean;
 }
 
 export default function MonacoEditor({
     value,
     onChange,
     language,
+    readOnly = false,
 }: MonacoEditorProps) {
     return (
         <Editor
@@ -28,6 +30,7 @@ export default function MonacoEditor({
                 roundedSelection: false,
                 scrollBeyondLastLine: false,
                 automaticLayout: true,
+                readOnly,
             }}
         />
     );

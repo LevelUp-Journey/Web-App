@@ -1,5 +1,4 @@
-import CodeVersionEditing from "@/components/challenges/code-versions/code-version-editing";
-import CodeVersionSummary from "@/components/challenges/code-versions/code-version-summary";
+import CodeVersionDetail from "@/components/challenges/code-versions/code-version-detail";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
@@ -31,21 +30,12 @@ export default async function CodeVersionPage({
 
     const isEditing = editing === "true";
 
-    if (isEditing) {
-        return (
-            <CodeVersionEditing
-                challengeId={challengeId}
-                initialCodeVersion={codeVersion}
-                initialTests={tests}
-            />
-        );
-    }
-
     return (
-        <CodeVersionSummary
+        <CodeVersionDetail
             challengeId={challengeId}
             codeVersion={codeVersion}
             tests={tests}
+            isEditing={isEditing}
         />
     );
 }
