@@ -28,10 +28,14 @@ export default function VersionEditingForm({
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await CodeVersionController.updateCodeVersion(challengeId, codeVersion.id, {
-                language,
-                initialCode,
-            });
+            await CodeVersionController.updateCodeVersion(
+                challengeId,
+                codeVersion.id,
+                {
+                    language,
+                    initialCode,
+                },
+            );
             toast.success("Code version updated successfully");
             router.push(`/dashboard/challenges/${challengeId}`);
         } catch (error) {
@@ -74,7 +78,9 @@ export default function VersionEditingForm({
                     </div>
                     <div className="flex gap-4">
                         <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "Updating..." : "Update Code Version"}
+                            {isSubmitting
+                                ? "Updating..."
+                                : "Update Code Version"}
                         </Button>
                         <Button
                             type="button"
