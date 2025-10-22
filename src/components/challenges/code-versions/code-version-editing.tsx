@@ -1,7 +1,6 @@
 "use client";
 
-import Editor from "@monaco-editor/react";
-import { TestTube } from "lucide-react";
+import { Plus, TestTube } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -184,6 +183,22 @@ export default function CodeVersionEditing({
                                     </p>
                                 )}
                             </div>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                className="w-full flex items-center justify-center gap-2 text-xs"
+                                asChild
+                            >
+                                <Link
+                                    href={PATHS.DASHBOARD.CHALLENGES.TESTS.NEW(
+                                        challengeId,
+                                        initialCodeVersion.id,
+                                    )}
+                                >
+                                    <Plus className="w-3 h-3" />
+                                    Add Test
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </ResizablePanel>

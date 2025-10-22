@@ -277,18 +277,10 @@ export default function VersionTestsManager({
                 {/* Left Panel - Tests List */}
                 <ResizablePanel defaultSize={30} minSize={25}>
                     <div className="h-full overflow-y-auto p-6">
-                        <div className="flex justify-between items-center mb-4">
+                        <div className="mb-4">
                             <h2 className="text-xl font-semibold">
                                 Test Cases ({tests.length})
                             </h2>
-                            <Button
-                                onClick={handleCreateTest}
-                                size="sm"
-                                className="flex items-center gap-2"
-                            >
-                                <Plus className="w-4 h-4" />
-                                Add Test
-                            </Button>
                         </div>
 
                         <div className="space-y-2">
@@ -341,6 +333,17 @@ export default function VersionTestsManager({
                                     </Item>
                                 ))
                             )}
+                        </div>
+                        <div className="mt-4">
+                            <Button
+                                onClick={handleCreateTest}
+                                size="sm"
+                                variant="outline"
+                                className="w-full flex items-center justify-center gap-2 text-xs"
+                            >
+                                <Plus className="w-3 h-3" />
+                                Add Test
+                            </Button>
                         </div>
                     </div>
                 </ResizablePanel>

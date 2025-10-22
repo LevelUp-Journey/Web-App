@@ -20,6 +20,7 @@ import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import MonacoEditor from "../monaco/monaco-editor";
 
 interface CodeVersionSummaryProps {
     challengeId: string;
@@ -88,18 +89,6 @@ export default function CodeVersionSummary({
                 {/* Left Panel - Language and Tests List */}
                 <ResizablePanel defaultSize={30} minSize={25}>
                     <div className="h-full overflow-y-auto p-6 space-y-6">
-                        {/* Language */}
-                        <div className="space-y-4">
-                            <h2 className="text-xl font-semibold">Language</h2>
-                            <div className="text-sm">
-                                <strong>
-                                    {getReadableLanguageName(
-                                        codeVersion.language as ProgrammingLanguage,
-                                    )}
-                                </strong>
-                            </div>
-                        </div>
-
                         {/* Tests List */}
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold">
@@ -160,22 +149,11 @@ export default function CodeVersionSummary({
                             </h2>
                         </div>
                         <div className="flex-1">
-                            <Editor
-                                height="100%"
+                            <MonacoEditor
                                 language={getMonacoLanguage(
                                     codeVersion.language as ProgrammingLanguage,
                                 )}
                                 value={codeVersion.initialCode}
-                                theme="vs-dark"
-                                options={{
-                                    minimap: { enabled: false },
-                                    fontSize: 14,
-                                    lineNumbers: "on",
-                                    roundedSelection: false,
-                                    scrollBeyondLastLine: false,
-                                    automaticLayout: true,
-                                    readOnly: true,
-                                }}
                             />
                         </div>
                     </div>
