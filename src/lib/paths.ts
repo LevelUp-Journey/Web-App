@@ -13,7 +13,10 @@ export const PATHS = {
                     `/dashboard/challenges/edit/${id}/versions?editing=true`,
             },
         },
-        COMMUNITY: "/dashboard/community",
+        COMMUNITY: {
+            ROOT: "/dashboard/community",
+            POST: (id: string) => `/dashboard/community/${id}`,
+        },
         SETTINGS: "/dashboard/settings",
         HELP: "/dashboard/help",
         ADMINISTRATION: {

@@ -9,6 +9,9 @@ export const ENV = {
         CHALLENGES: {
             BASE_URL: process.env.CHALLENGES_BASE_URL!,
         },
+        COMMUNITY: {
+            BASE_URL: process.env.COMMUNITIES_BASE_URL!,
+        },
         EXTERNAL: {
             CLOUDINARY: {
                 CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,

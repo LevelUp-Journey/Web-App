@@ -16,7 +16,11 @@ export const CHALLENGES_HTTP = axios.create({
     baseURL: ENV.SERVICES.CHALLENGES.BASE_URL,
 });
 
-[IAM_HTTP, PROFILE_HTTP, CHALLENGES_HTTP].forEach((httpClient) => {
+export const COMMUNITY_HTTP = axios.create({
+    baseURL: ENV.SERVICES.COMMUNITY.BASE_URL,
+});
+
+[IAM_HTTP, PROFILE_HTTP, CHALLENGES_HTTP, COMMUNITY_HTTP].forEach((httpClient) => {
     httpClient.interceptors.request.use(async (config) => {
         const authTokens = await getAuthTokenAction();
         if (authTokens && authTokens.token !== "NO_TOKEN_FOUND") {
