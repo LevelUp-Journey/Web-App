@@ -62,3 +62,37 @@ export async function getUserFeedPostsAction(
         };
     }
 }
+
+export interface CreatePostRequest {
+    communityId: string;
+    authorId: string;
+    title: string;
+    content: string;
+    imageUrl?: string;
+}
+
+export async function createPostAction(
+    request: CreatePostRequest,
+): Promise<RequestSuccess<PostResponse> | RequestFailure> {
+    try {
+        const response = await COMMUNITY_HTTP.post("/posts", request);
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}

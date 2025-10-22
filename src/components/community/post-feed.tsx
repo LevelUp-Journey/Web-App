@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, PlusIcon } from "lucide-react";
 import PostCard from "./post-card";
 import {
     InputGroup,
@@ -10,6 +10,8 @@ import {
 } from "../ui/input-group";
 import { UIVersion } from "@/lib/consts";
 import type { Post } from "@/services/internal/community/entities/post.entity";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 const POST_FEED_UI_VERSION = UIVersion.B;
 
@@ -17,12 +19,14 @@ interface PostFeedProps {
     posts: Post[];
     title?: string;
     showSearch?: boolean;
+    canCreatePost?: boolean;
 }
 
 export default function PostFeed({
     posts,
     title = "Community Posts",
     showSearch = true,
+    canCreatePost = false,
 }: PostFeedProps) {
     if (POST_FEED_UI_VERSION === UIVersion.B) {
         return (
@@ -44,7 +48,17 @@ export default function PostFeed({
                 )}
 
                 <div className="container mx-auto p-4 space-y-4">
-                    <h2 className="text-2xl font-semibold">{title}</h2>
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-2xl font-semibold">{title}</h2>
+                        {canCreatePost && (
+                            <Link href="/dashboard/community/posts/create">
+                                <Button>
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    Create Post
+                                </Button>
+                            </Link>
+                        )}
+                    </div>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {posts.map((post) => (
                             <PostCard key={post.id} post={post} />
@@ -73,7 +87,17 @@ export default function PostFeed({
                 )}
 
                 <div className="container mx-auto p-4 space-y-4">
-                    <h2 className="text-2xl font-semibold">{title}</h2>
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-2xl font-semibold">{title}</h2>
+                        {canCreatePost && (
+                            <Link href="/dashboard/community/posts/create">
+                                <Button>
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    Create Post
+                                </Button>
+                            </Link>
+                        )}
+                    </div>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {posts.map((post) => (
                             <PostCard key={post.id} post={post} />
