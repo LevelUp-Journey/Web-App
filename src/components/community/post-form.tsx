@@ -36,18 +36,21 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                     ...formData,
                     communityId,
                     authorId,
-                    imageUrl: formData.imageUrl || undefined,
+                    imageUrl: formData.imageUrl || null,
                 }),
             });
 
-            if (!response.ok) throw new Error("Failed to create post");
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+                throw new Error(errorData.error || `Failed to create post (${response.status})`);
+            }
 
             setFormData({ title: "", content: "", imageUrl: "" });
             toast.success("Post created successfully!");
             onSuccess?.();
         } catch (error) {
             console.error("Error creating post:", error);
-            toast.error("Failed to create post");
+            toast.error(error instanceof Error ? error.message : "Failed to create post");
         } finally {
             setIsSubmitting(false);
         }

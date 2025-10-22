@@ -66,6 +66,7 @@ export async function getUserFeedPostsAction(
 export interface CreatePostRequest {
     communityId: string;
     authorId: string;
+    authorProfileId: string;
     title: string;
     content: string;
     imageUrl?: string;
