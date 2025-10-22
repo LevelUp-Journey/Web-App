@@ -12,6 +12,10 @@ export const PATHS = {
                 ADD: (id: string) =>
                     `/dashboard/challenges/edit/${id}/versions?editing=true`,
             },
+            TESTS: {
+                ROOT: "/dashboard/challenges/tests",
+                ADD: (id: string) => `/dashboard/challenges/edit/${id}/tests`,
+            },
         },
         COMMUNITY: "/dashboard/community",
         SETTINGS: "/dashboard/settings",

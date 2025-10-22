@@ -23,3 +23,10 @@ export enum ChallengeDifficulty {
     HARD = "HARD",
     EXPERT = "EXPERT",
 }
+
+export enum ProgrammingLanguage {
+    JAVASCRIPT = "JAVASCRIPT",
+    PYTHON = "PYTHON",
+    JAVA = "JAVA",
+    C_PLUS_PLUS = "C_PLUS_PLUS",
+}

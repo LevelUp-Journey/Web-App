@@ -2,7 +2,7 @@
 
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { UIVersion } from "@/lib/consts";
+import { ProgrammingLanguage, UIVersion } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
@@ -63,7 +63,9 @@ export default function ChallengeCard({
                         {codeVersions.map((version) => (
                             <FullLanguageBadge
                                 key={version.id}
-                                language={version.language}
+                                language={
+                                    version.language as ProgrammingLanguage
+                                }
                             />
                         ))}
                     </div>
@@ -136,7 +138,9 @@ export default function ChallengeCard({
                         {codeVersions.map((version) => (
                             <FullLanguageBadge
                                 key={version.id}
-                                language={version.language}
+                                language={
+                                    version.language as ProgrammingLanguage
+                                }
                             />
                         ))}
                     </div>
@@ -201,7 +205,7 @@ export default function ChallengeCard({
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
                             key={version.id}
-                            language={version.language}
+                            language={version.language as ProgrammingLanguage}
                         />
                     ))}
                 </div>
