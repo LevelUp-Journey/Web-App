@@ -3,4 +3,5 @@ export interface CodeVersion {
     challengeId: string;
     language: string;
     initialCode: string;
+    functionName: string | null;
 }

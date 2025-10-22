@@ -87,7 +87,9 @@ export default function CreateChallengePage() {
             const challenge =
                 await ChallengeController.createChallenge(request);
             toast.success("Challenge created successfully!");
-            router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challenge.id));
+            router.push(
+                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id) + "?editing=true",
+            );
         } catch (error) {
             console.error("Error creating challenge:", error);
             toast.error("Failed to create challenge. Please try again.");

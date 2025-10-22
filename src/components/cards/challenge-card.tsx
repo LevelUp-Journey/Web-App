@@ -69,6 +69,22 @@ export default function ChallengeCard({
                             />
                         ))}
                     </div>
+                    {adminMode && (
+                        <div className="mt-2">
+                            <p className="text-sm font-medium">
+                                Code Versions:
+                            </p>
+                            <ul className="text-sm text-muted-foreground">
+                                {codeVersions.map((version) => (
+                                    <li key={version.id}>
+                                        {version.language}:{" "}
+                                        {version.functionName ||
+                                            "No function name"}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     <p className="text-sm text-muted-foreground mt-2">
                         Status: {challenge.status}
                     </p>
@@ -79,13 +95,13 @@ export default function ChallengeCard({
                             size="default"
                             onClick={() => {
                                 router.push(
-                                    PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                    PATHS.DASHBOARD.CHALLENGES.VIEW(
                                         challenge.id,
-                                    ),
+                                    ) + "?editing=true",
                                 );
                             }}
                         >
-                            View Summary
+                            Edit Challenge
                         </Button>
                     ) : (
                         <Button
@@ -144,6 +160,22 @@ export default function ChallengeCard({
                             />
                         ))}
                     </div>
+                    {adminMode && (
+                        <div className="mt-2">
+                            <p className="text-sm font-medium">
+                                Code Versions:
+                            </p>
+                            <ul className="text-sm text-muted-foreground">
+                                {codeVersions.map((version) => (
+                                    <li key={version.id}>
+                                        {version.language}:{" "}
+                                        {version.functionName ||
+                                            "No function name"}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </CardContent>
                 <CardFooter>
                     {adminMode ? (
@@ -151,13 +183,13 @@ export default function ChallengeCard({
                             size="default"
                             onClick={() => {
                                 router.push(
-                                    PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                    PATHS.DASHBOARD.CHALLENGES.VIEW(
                                         challenge.id,
-                                    ),
+                                    ) + "?editing=true",
                                 );
                             }}
                         >
-                            View Summary
+                            Edit Challenge
                         </Button>
                     ) : (
                         <Button
@@ -209,6 +241,19 @@ export default function ChallengeCard({
                         />
                     ))}
                 </div>
+                {adminMode && (
+                    <div className="mt-2">
+                        <p className="text-sm font-medium">Code Versions:</p>
+                        <ul className="text-sm text-muted-foreground">
+                            {codeVersions.map((version) => (
+                                <li key={version.id}>
+                                    {version.language}:{" "}
+                                    {version.functionName || "No function name"}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </CardContent>
             <CardFooter>
                 {adminMode ? (
@@ -216,11 +261,12 @@ export default function ChallengeCard({
                         size="default"
                         onClick={() => {
                             router.push(
-                                PATHS.DASHBOARD.CHALLENGES.EDIT(challenge.id),
+                                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id) +
+                                    "?editing=true",
                             );
                         }}
                     >
-                        View Summary
+                        Edit Challenge
                     </Button>
                 ) : (
                     <Button

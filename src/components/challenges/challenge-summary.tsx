@@ -10,12 +10,14 @@ interface ChallengeSummaryProps {
     challenge: Challenge;
     codeVersions: CodeVersion[];
     markdownSource: string;
+    isTeacher: boolean;
 }
 
 export default function ChallengeSummary({
     challenge,
     codeVersions,
     markdownSource,
+    isTeacher,
 }: ChallengeSummaryProps) {
     return (
         <section className="h-screen flex flex-col p-4 w-full max-w-4xl mx-auto">
@@ -30,9 +32,11 @@ export default function ChallengeSummary({
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Link href="?editing=true">
-                        <Button variant="outline">Edit</Button>
-                    </Link>
+                    {isTeacher && (
+                        <Link href="?editing=true">
+                            <Button variant="outline">Edit</Button>
+                        </Link>
+                    )}
                 </div>
             </header>
 

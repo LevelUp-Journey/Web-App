@@ -3,7 +3,7 @@ export interface CodeVersionResponse {
     challengeId: string;
     language: string;
     initialCode: string;
-    functionName: string;
+    functionName: string | null;
 }
 export interface CreateCodeVersionRequest {
     challengeId: string;
@@ -14,5 +14,5 @@ export interface CreateCodeVersionRequest {
 
 export interface UpdateCodeVersionRequest {
     code: string;
-    functionName: string;
+    functionName: string | null;
 }

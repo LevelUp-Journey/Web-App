@@ -10,11 +10,25 @@ export interface VersionTestResponse {
     expectedOutput: string;
     customValidationCode: string;
     failureMessage: string;
+    isSecret: boolean;
 }
-
 export interface CreateVersionTestRequest {
+    codeVersionId: string;
     input: string;
     expectedOutput: string;
-    customValidationCode?: string;
-    failureMessage?: string;
+    customValidationCode: string;
+    failureMessage: string;
+    isSecret: boolean;
+}
+
+export interface UpdateVersionTestRequest {
+    input: string;
+    expectedOutput: string;
+    customValidationCode: string;
+    failureMessage: string;
+    isSecret: boolean;
+}
+
+export interface DeleteVersionTestRequest {
+    id: string;
 }

@@ -248,9 +248,9 @@ export default function VersionTestsManager({
                         <Button
                             onClick={() =>
                                 router.push(
-                                    PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                    PATHS.DASHBOARD.CHALLENGES.VIEW(
                                         challengeId,
-                                    ),
+                                    ) + "?editing=true",
                                 )
                             }
                         >
