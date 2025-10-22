@@ -8,6 +8,7 @@ import {
 
 export interface CreateCommunityRequest {
     ownerId: string;
+    ownerProfileId: string;
     name: string;
     description: string;
     imageUrl?: string;
@@ -16,6 +17,7 @@ export interface CreateCommunityRequest {
 export interface CommunityResponse {
     id: string;
     ownerId: string;
+    ownerProfileId: string;
     name: string;
     description: string;
     imageUrl?: string;

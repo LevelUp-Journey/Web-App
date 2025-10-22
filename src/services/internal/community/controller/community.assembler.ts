@@ -6,6 +6,7 @@ export class CommunityAssembler {
         return {
             id: response.id,
             ownerId: response.ownerId,
+            ownerProfileId: response.ownerProfileId,
             name: response.name,
             description: response.description,
             imageUrl: response.imageUrl,

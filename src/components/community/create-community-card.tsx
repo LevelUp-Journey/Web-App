@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { CreateCommunityRequest } from "@/services/internal/community/server/community.actions";
 import ImageUpload from "@/components/ui/image-upload";
 
@@ -19,7 +20,7 @@ interface CreateCommunityCardProps {
 export default function CreateCommunityCard({ userRole }: CreateCommunityCardProps) {
     const [isCreating, setIsCreating] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const [formData, setFormData] = useState<Omit<CreateCommunityRequest, 'ownerId'>>({
+    const [formData, setFormData] = useState<Omit<CreateCommunityRequest, 'ownerId' | 'ownerProfileId'>>({
         name: "",
         description: "",
         imageUrl: "",
@@ -36,11 +37,15 @@ export default function CreateCommunityCard({ userRole }: CreateCommunityCardPro
         try {
             setIsCreating(true);
 
-            // Get current user profile to get the ownerId
-            const currentProfile = await ProfileController.getCurrentUserProfile();
+            // Get current user profile and user ID
+            const [currentProfile, userId] = await Promise.all([
+                ProfileController.getCurrentUserProfile(),
+                AuthController.getUserId(),
+            ]);
 
             const request: CreateCommunityRequest = {
-                ownerId: currentProfile.id,
+                ownerId: userId,
+                ownerProfileId: currentProfile.id,
                 name: formData.name,
                 description: formData.description,
                 imageUrl: formData.imageUrl || undefined,
