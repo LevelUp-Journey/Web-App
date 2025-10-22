@@ -60,12 +60,8 @@ export default function CreatePostPage() {
     }, []);
 
     const handlePostCreated = () => {
-        // Redirect to the community page where the post was created
-        if (selectedCommunity) {
-            router.push(`/dashboard/community/${selectedCommunity.id}`);
-        } else {
-            router.push("/dashboard/community");
-        }
+        // Redirect to the community feed
+        router.push("/dashboard/community");
     };
 
     if (loading) {
