@@ -1,6 +1,7 @@
 "use client";
 
 import { EllipsisVertical, LogOut, UserCircle2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
@@ -28,10 +29,15 @@ export function NavUser({
     };
 }) {
     const { isMobile } = useSidebar();
+    const router = useRouter();
 
     const handleLogout = () => {
         // Implement logout logic here
         AuthController.signOut();
+    };
+
+    const handleAccountClick = () => {
+        router.push("/dashboard/account");
     };
 
     return (
@@ -86,7 +92,7 @@ export function NavUser({
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleAccountClick}>
                                 <UserCircle2Icon />
                                 Account
                             </DropdownMenuItem>

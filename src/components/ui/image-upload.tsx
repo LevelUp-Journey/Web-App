@@ -15,12 +15,14 @@ interface ImageUploadProps {
     value?: string;
     onChange: (url: string | undefined) => void;
     disabled?: boolean;
+    label?: string;
 }
 
 export default function ImageUpload({
     value,
     onChange,
     disabled = false,
+    label = "Post Image (Optional)",
 }: ImageUploadProps) {
     const [isUploading, setIsUploading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(value || null);
@@ -67,7 +69,7 @@ export default function ImageUpload({
     if (previewUrl) {
         return (
             <div className="space-y-2">
-                <Label>Post Image</Label>
+                <Label>{label.replace(" (Optional)", "")}</Label>
                 <div className="relative">
                     <img
                         src={previewUrl}
