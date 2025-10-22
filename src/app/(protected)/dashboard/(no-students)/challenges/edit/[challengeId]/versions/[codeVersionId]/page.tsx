@@ -1,3 +1,4 @@
+import CodeVersionEditing from "@/components/challenges/code-versions/code-version-editing";
 import CodeVersionSummary from "@/components/challenges/code-versions/code-version-summary";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
@@ -9,8 +10,12 @@ interface PageProps {
     searchParams: Promise<{ editing?: string }>;
 }
 
-export default async function CodeVersionPage({ params }: PageProps) {
+export default async function CodeVersionPage({
+    params,
+    searchParams,
+}: PageProps) {
     const { challengeId, codeVersionId } = await params;
+    const { editing } = await searchParams;
 
     // Fetch data on the server
     const codeVersion: CodeVersion =
@@ -23,6 +28,18 @@ export default async function CodeVersionPage({ params }: PageProps) {
             challengeId,
             codeVersionId,
         );
+
+    const isEditing = editing === "true";
+
+    if (isEditing) {
+        return (
+            <CodeVersionEditing
+                challengeId={challengeId}
+                initialCodeVersion={codeVersion}
+                tests={tests}
+            />
+        );
+    }
 
     return (
         <CodeVersionSummary
