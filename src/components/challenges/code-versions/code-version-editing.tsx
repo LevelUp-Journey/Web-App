@@ -29,7 +29,7 @@ import type { VersionTest } from "@/services/internal/challenges/entities/versio
 interface CodeVersionEditingProps {
     challengeId: string;
     initialCodeVersion: CodeVersion;
-    tests: VersionTest[];
+    initialTests: VersionTest[];
 }
 
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
@@ -50,7 +50,7 @@ const getMonacoLanguage = (language: ProgrammingLanguage): string => {
 export default function CodeVersionEditing({
     challengeId,
     initialCodeVersion,
-    tests,
+    initialTests,
 }: CodeVersionEditingProps) {
     const router = useRouter();
     const [initialCode, setInitialCode] = useState<string>(
@@ -69,7 +69,8 @@ export default function CodeVersionEditing({
                 challengeId,
                 initialCodeVersion.id,
                 {
-                    initialCode,
+                    code: initialCode,
+                    functionName: initialCodeVersion.functionName,
                 },
             );
             toast.success("Initial code updated successfully");
@@ -152,10 +153,10 @@ export default function CodeVersionEditing({
                         {/* Tests List */}
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold">
-                                Tests ({tests.length})
+                                Tests ({initialTests.length})
                             </h2>
                             <div className="space-y-2">
-                                {tests.map((test) => (
+                                {initialTests.map((test) => (
                                     <Item key={test.id} variant="default">
                                         <ItemMedia variant="icon">
                                             <TestTube className="w-5 h-5" />
@@ -188,7 +189,7 @@ export default function CodeVersionEditing({
                                         </Button>
                                     </Item>
                                 ))}
-                                {tests.length === 0 && (
+                                {initialTests.length === 0 && (
                                     <p className="text-muted-foreground text-sm">
                                         No tests yet.
                                     </p>

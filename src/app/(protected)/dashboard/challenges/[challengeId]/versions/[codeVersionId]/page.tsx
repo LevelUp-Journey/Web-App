@@ -35,7 +35,6 @@ export default async function CodeVersionPage({
         return (
             <CodeVersionEditing
                 challengeId={challengeId}
-                codeVersionId={codeVersionId}
                 initialCodeVersion={codeVersion}
                 initialTests={tests}
             />
@@ -45,7 +44,6 @@ export default async function CodeVersionPage({
     return (
         <CodeVersionSummary
             challengeId={challengeId}
-            codeVersionId={codeVersionId}
             codeVersion={codeVersion}
             tests={tests}
         />

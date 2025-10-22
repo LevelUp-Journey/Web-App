@@ -90,8 +90,10 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
             const codeVersion = await CodeVersionController.createCodeVersion(
                 challengeId,
                 {
+                    challengeId,
                     language: selectedLanguage,
-                    initialCode,
+                    defaultCode: initialCode,
+                    functionName: "",
                 },
             );
             toast.success("Code version added successfully");

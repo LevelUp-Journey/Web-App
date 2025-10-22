@@ -2,18 +2,11 @@
 
 import Editor from "@monaco-editor/react";
 import type { SVGProps } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-    Field,
-    FieldContent,
-    FieldDescription,
-    FieldError,
-    FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 
 import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
 import { Java } from "@/components/ui/svgs/java";
@@ -36,6 +29,31 @@ const getCodeTemplate = (language: ProgrammingLanguage): string => {
         default:
             return `// Your code here`;
     }
+};
+
+const getFunctionNameFromCode = (
+    language: ProgrammingLanguage,
+    code: string,
+): string => {
+    let regex: RegExp;
+    switch (language) {
+        case ProgrammingLanguage.JAVASCRIPT:
+            regex = /function\s+(\w+)\s*\(/;
+            break;
+        case ProgrammingLanguage.PYTHON:
+            regex = /def\s+(\w+)\s*\(/;
+            break;
+        case ProgrammingLanguage.JAVA:
+            regex = /public static \w+ (\w+)\s*\(/;
+            break;
+        case ProgrammingLanguage.C_PLUS_PLUS:
+            regex = /(?:int|void)\s+(\w+)\s*\(/;
+            break;
+        default:
+            return "";
+    }
+    const match = code.match(regex);
+    return match ? match[1] : "";
 };
 
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
@@ -80,9 +98,22 @@ export default function CreateCodeVersionForm({
 
     const handleLanguageSelect = (language: ProgrammingLanguage) => {
         setSelectedLanguage(language);
-        setCode(getCodeTemplate(language));
+        const template = getCodeTemplate(language);
+        setCode(template);
+        const detectedName = getFunctionNameFromCode(language, template);
+        setFunctionName(detectedName);
         setStep("edit");
     };
+
+    useEffect(() => {
+        if (selectedLanguage && code) {
+            const detectedName = getFunctionNameFromCode(
+                selectedLanguage,
+                code,
+            );
+            setFunctionName(detectedName);
+        }
+    }, [code, selectedLanguage]);
 
     const handleBack = () => {
         setStep("select");
@@ -170,7 +201,8 @@ export default function CreateCodeVersionForm({
                             autoComplete="off"
                         />
                         <FieldDescription>
-                            The name of the function to implement.
+                            The name of the function to implement (automatically
+                            detected from code).
                         </FieldDescription>
                     </Field>
                     <Button onClick={handleSubmit} className="w-full">
