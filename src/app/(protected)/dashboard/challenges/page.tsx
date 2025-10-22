@@ -1,17 +1,14 @@
 import { SearchIcon } from "lucide-react";
 import ChallengeCard from "@/components/cards/challenge-card";
-import { Button } from "@/components/ui/button";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { UserRole } from "@/lib/consts";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default async function ChallengesPage() {
     // Fetch challenges

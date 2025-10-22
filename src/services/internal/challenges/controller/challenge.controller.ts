@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import type { Challenge } from "../entities/challenge.entity";
 import {
     createChallengeAction,
@@ -33,13 +32,10 @@ export class ChallengeController {
         const response = await createChallengeAction(request);
         console.log("RESPONSE DE CREATION", response);
         if (response.status === 200 || response.status === 201) {
-            toast.success("Challenge created successfully");
             return ChallengeAssembler.toEntityFromResponse(
                 response.data as ChallengeResponse,
             );
         }
-
-        toast.error("Failed to create challenge");
         throw new Error("Failed to create challenge");
     }
 
@@ -53,8 +49,6 @@ export class ChallengeController {
                 response.data as ChallengeResponse,
             );
         }
-
-        toast.error("Failed to fetch challenge");
         throw new Error("Failed to fetch challenge");
     }
 
@@ -68,8 +62,6 @@ export class ChallengeController {
                 response.data as ChallengeResponse[],
             );
         }
-
-        toast.error("Failed to fetch challenges");
         throw new Error("Failed to fetch challenges");
     }
 
