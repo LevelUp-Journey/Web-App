@@ -3,12 +3,14 @@ import {
     deleteCodeVersionAction,
     getCodeVersionByIdAction,
     getCodeVersionsByChallengeIdAction,
-    type UpdateCodeVersionRequest,
     updateCodeVersionAction,
 } from "../server/code-version.actions";
 import { CodeVersionAssembler } from "./code-version.assembler";
-import type { CodeVersionResponse } from "./code-version.response";
-import type { CreateCodeVersionRequest } from "../server/code-version.actions";
+import type {
+    CodeVersionResponse,
+    CreateCodeVersionRequest,
+    UpdateCodeVersionRequest,
+} from "./code-version.response";
 
 export class CodeVersionController {
     public static async getCodeVersionsByChallengeId(challengeId: string) {

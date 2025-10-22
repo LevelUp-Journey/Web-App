@@ -363,7 +363,7 @@ export default function VersionTestsManager({
                         {(isCreating || selectedTest) && (
                             <div className="flex-1 overflow-y-auto">
                                 <Tabs defaultValue="basic" className="h-full">
-                                    <TabsList className="grid w-full grid-cols-2 m-4">
+                                    <TabsList className="grid grid-cols-2 m-4">
                                         <TabsTrigger value="basic">
                                             Basic Test
                                         </TabsTrigger>
@@ -378,14 +378,13 @@ export default function VersionTestsManager({
                                     >
                                         <div className="space-y-2">
                                             <Label htmlFor="input">Input</Label>
-                                            <Textarea
+                                            <Input
                                                 id="input"
                                                 placeholder="Enter test input..."
                                                 value={input}
                                                 onChange={(e) =>
                                                     setInput(e.target.value)
                                                 }
-                                                rows={3}
                                             />
                                         </div>
 
@@ -393,7 +392,7 @@ export default function VersionTestsManager({
                                             <Label htmlFor="expectedOutput">
                                                 Expected Output
                                             </Label>
-                                            <Textarea
+                                            <Input
                                                 id="expectedOutput"
                                                 placeholder="Enter expected output..."
                                                 value={expectedOutput}
@@ -402,7 +401,6 @@ export default function VersionTestsManager({
                                                         e.target.value,
                                                     )
                                                 }
-                                                rows={3}
                                             />
                                         </div>
 

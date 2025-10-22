@@ -5,17 +5,11 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { CodeVersionResponse } from "../controller/code-version.response";
-
-export interface CreateCodeVersionRequest {
-    language: string;
-    initialCode: string;
-}
-
-export interface UpdateCodeVersionRequest {
-    language?: string;
-    initialCode?: string;
-}
+import type {
+    CodeVersionResponse,
+    CreateCodeVersionRequest,
+    UpdateCodeVersionRequest,
+} from "../controller/code-version.response";
 
 export async function getCodeVersionByIdAction(
     challengeId: string,

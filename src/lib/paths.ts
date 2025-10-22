@@ -11,9 +11,9 @@ export const PATHS = {
             EDIT: (id: string) => `/dashboard/challenges/edit/${id}`,
             // Code Versions
             VERSIONS: {
-                // Create new code version
+                // Create new code version from create challenge
                 NEW: (challengeId: string) =>
-                    `/dashboard/challenges/edit/${challengeId}/versions/new`,
+                    `/dashboard/challenges/edit/${challengeId}/versions?editing=true`,
                 // View code version summary (read-only)
                 VIEW: (challengeId: string, codeVersionId: string) =>
                     `/dashboard/challenges/edit/${challengeId}/versions/${codeVersionId}`,

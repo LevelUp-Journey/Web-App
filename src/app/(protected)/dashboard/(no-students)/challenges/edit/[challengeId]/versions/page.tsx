@@ -1,5 +1,4 @@
 import VersionEditing from "@/components/challenges/code-versions/version-editing";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 
 interface PageProps {
     params: Promise<{ challengeId: string }>;
