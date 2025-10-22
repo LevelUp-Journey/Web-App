@@ -8,11 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import ImageUpload from "@/components/ui/image-upload";
 
 export default function CreatePostForm() {
     const router = useRouter();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [imageUrl, setImageUrl] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState(false);
     const [authorId, setAuthorId] = useState<string>("");
 
@@ -42,6 +44,7 @@ export default function CreatePostForm() {
                     content,
                     communityId: "default-community", // TODO: Make this configurable
                     authorId,
+                    imageUrl,
                 }),
             });
 
@@ -90,6 +93,12 @@ export default function CreatePostForm() {
                             disabled={isLoading}
                         />
                     </div>
+
+                    <ImageUpload
+                        value={imageUrl}
+                        onChange={setImageUrl}
+                        disabled={isLoading}
+                    />
 
                     <div className="flex gap-4 pt-4">
                         <Button type="submit" disabled={isLoading || !authorId}>
