@@ -4,10 +4,10 @@ import Editor from "@monaco-editor/react";
 import type { SVGProps } from "react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-
 import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
 import { Java } from "@/components/ui/svgs/java";
 import { Javascript } from "@/components/ui/svgs/javascript";
@@ -150,9 +150,14 @@ export default function CreateCodeVersionForm({
     if (step === "select") {
         return (
             <div className="container mx-auto p-4 max-w-4xl">
-                <h1 className="text-2xl font-semibold mb-6">
-                    Select Programming Language
+                <h1 className="text-2xl font-semibold mb-2">
+                    Choose Programming Language for Code Version
                 </h1>
+                <p className="text-muted-foreground mb-6">
+                    Select the programming language in which students will
+                    implement their solution for this challenge. You can add
+                    multiple code versions in different languages.
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                     {Object.values(ProgrammingLanguage).map((language) => {
                         const IconComponent = languageIcons[language];
@@ -216,21 +221,13 @@ export default function CreateCodeVersionForm({
                             Modify the code template as needed.
                         </p>
                     </div>
-                    <div className="flex-1 overflow-hidden">
-                        <Editor
-                            height="100%"
-                            language={getMonacoLanguage(selectedLanguage!)}
+                    <div className="flex-1 overflow-hidden p-4">
+                        <MonacoEditor
+                            language={getMonacoLanguage(
+                                selectedLanguage as ProgrammingLanguage,
+                            )}
                             value={code}
                             onChange={(value) => setCode(value || "")}
-                            theme="vs-dark"
-                            options={{
-                                minimap: { enabled: false },
-                                fontSize: 14,
-                                lineNumbers: "on",
-                                roundedSelection: false,
-                                scrollBeyondLastLine: false,
-                                automaticLayout: true,
-                            }}
                         />
                     </div>
                 </div>
