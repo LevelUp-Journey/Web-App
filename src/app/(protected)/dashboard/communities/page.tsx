@@ -84,7 +84,7 @@ export default function MyCommunitiesPage() {
     }
 
     return (
-        <div className="space-y-4 w-full container mx-auto">
+        <div className="space-y-4 w-full">
             {/* Search Bar - Centered */}
             <div className="flex justify-center pt-4">
                 <div className="relative max-w-md w-full">
@@ -104,17 +104,10 @@ export default function MyCommunitiesPage() {
                 </div>
             </div>
 
+            {/* Communities List */}
             <div className="container mx-auto p-4 space-y-4">
                 <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold flex items-center gap-2">
-                            <Users className="h-8 w-8" />
-                            My Communities
-                        </h1>
-                        <p className="text-muted-foreground mt-1">
-                            Manage and view your communities
-                        </p>
-                    </div>
+                    <h2 className="text-2xl font-semibold">My Communities</h2>
                     <Button onClick={() => router.push("/dashboard/community/create")}>
                         <Plus className="h-4 w-4 mr-2" />
                         Create Community

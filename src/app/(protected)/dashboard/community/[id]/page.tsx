@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Users, Plus, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,59 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { PostFeed } from "@/components/community/post-feed";
-import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { PostController } from "@/services/internal/community/controller/post.controller";
-import type { Community } from "@/services/internal/community/entities/community.entity";
-import type { Post } from "@/services/internal/community/entities/post.entity";
+import { useCommunityData } from "@/hooks/use-community-data";
 
 export default function CommunityPage() {
     const params = useParams();
     const router = useRouter();
     const communityId = params.id as string;
-
-    const [community, setCommunity] = useState<Community | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [ownerProfile, setOwnerProfile] = useState<any>(null);
-    const [currentUserId, setCurrentUserId] = useState<string>("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                setLoading(true);
-
-                // Get current user ID
-                const userId = await AuthController.getUserId();
-                setCurrentUserId(userId);
-
-                // Get community details
-                const communityData = await CommunityController.getCommunityById(communityId);
-                setCommunity(communityData);
-
-                // Get owner profile
-                const profile = await ProfileController.getProfileByUserId(communityData.ownerId);
-                setOwnerProfile(profile);
-
-                // Get posts for this community
-                const allPosts = await PostController.getAllPosts();
-                const communityPosts = allPosts.filter(post => post.communityId === communityId);
-                setPosts(communityPosts);
-
-            } catch (err) {
-                console.error("Error loading community:", err);
-                setError("Failed to load community");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (communityId) {
-            loadData();
-        }
-    }, [communityId]);
+    const { community, posts, ownerProfile, currentUserId, loading } = useCommunityData(communityId);
 
     if (loading) {
         return (
@@ -72,22 +25,15 @@ export default function CommunityPage() {
         );
     }
 
-    if (error || !community) {
+    if (!community) {
         return (
             <div className="container mx-auto p-6">
                 <div className="max-w-2xl mx-auto space-y-6">
-                    <Button
-                        variant="ghost"
-                        onClick={() => router.back()}
-                        className="mb-4"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back
+                    <Button variant="ghost" onClick={() => router.back()} className="mb-4">
+                        <ArrowLeft className="h-4 w-4 mr-2" /> Back
                     </Button>
-
                     <div className="text-center space-y-4">
-                        <h1 className="text-xl font-semibold">Error</h1>
-                        <p className="text-muted-foreground">{error || "Community not found"}</p>
+                        <h1 className="text-xl font-semibold">Community not found</h1>
                     </div>
                 </div>
             </div>
@@ -99,27 +45,16 @@ export default function CommunityPage() {
     return (
         <div className="container mx-auto p-6">
             <div className="max-w-6xl mx-auto space-y-6">
-                {/* Back Button */}
-                <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="mb-4"
-                >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
+                <Button variant="ghost" onClick={() => router.back()} className="mb-4">
+                    <ArrowLeft className="h-4 w-4 mr-2" /> Back
                 </Button>
 
                 {/* Community Header */}
                 <Card>
                     <div className="relative">
-                        {/* Banner */}
                         <div className="w-full h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 rounded-t-lg">
                             {community.imageUrl ? (
-                                <img
-                                    src={community.imageUrl}
-                                    alt={`${community.name} banner`}
-                                    className="w-full h-full object-cover"
-                                />
+                                <img src={community.imageUrl} alt={`${community.name} banner`} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center">
                                     <span className="text-6xl font-bold text-primary/20">
@@ -129,24 +64,18 @@ export default function CommunityPage() {
                             )}
                         </div>
 
-                        {/* Community Info */}
                         <CardContent className="pt-6">
                             <div className="flex items-start justify-between">
                                 <div className="space-y-4">
                                     <div>
                                         <h1 className="text-3xl font-bold">{community.name}</h1>
-                                        <p className="text-muted-foreground mt-2">
-                                            {community.description}
-                                        </p>
+                                        <p className="text-muted-foreground mt-2">{community.description}</p>
                                     </div>
 
-                                    {/* Owner Info */}
                                     <div className="flex items-center space-x-3">
                                         <Avatar className="h-10 w-10">
                                             <AvatarImage src={ownerProfile?.profileUrl} />
-                                            <AvatarFallback>
-                                                {ownerProfile?.username?.charAt(0).toUpperCase() || "U"}
-                                            </AvatarFallback>
+                                            <AvatarFallback>{ownerProfile?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                                         </Avatar>
                                         <div>
                                             <p className="text-sm font-medium">
@@ -159,21 +88,14 @@ export default function CommunityPage() {
                                     </div>
                                 </div>
 
-                                {/* Action Buttons */}
                                 <div className="flex gap-2">
                                     {isOwner && (
-                                        <Button
-                                            variant="outline"
-                                            onClick={() => router.push(`/dashboard/community/${community.id}/settings`)}
-                                        >
+                                        <Button variant="outline" onClick={() => router.push(`/dashboard/community/edit?id=${community.id}`)}>
                                             Settings
                                         </Button>
                                     )}
-                                    <Button
-                                        onClick={() => router.push(`/dashboard/community/posts/create`)}
-                                    >
-                                        <Plus className="h-4 w-4 mr-2" />
-                                        Create Post
+                                    <Button onClick={() => router.push(`/dashboard/community/posts/create`)}>
+                                        <Plus className="h-4 w-4 mr-2" /> Create Post
                                     </Button>
                                 </div>
                             </div>
@@ -181,7 +103,7 @@ export default function CommunityPage() {
                     </div>
                 </Card>
 
-                {/* Community Stats */}
+                {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Card>
                         <CardContent className="p-6 text-center">
@@ -199,9 +121,7 @@ export default function CommunityPage() {
                     </Card>
                     <Card>
                         <CardContent className="p-6 text-center">
-                            <Badge variant="secondary" className="text-lg px-3 py-1">
-                                Active
-                            </Badge>
+                            <Badge variant="secondary" className="text-lg px-3 py-1">Active</Badge>
                             <p className="text-sm text-muted-foreground mt-2">Status</p>
                         </CardContent>
                     </Card>
@@ -209,9 +129,7 @@ export default function CommunityPage() {
 
                 {/* Posts Feed */}
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Recent Posts</CardTitle>
-                    </CardHeader>
+                    <CardHeader><CardTitle>Recent Posts</CardTitle></CardHeader>
                     <CardContent>
                         <PostFeed posts={posts} title="Community Posts" showSearch={false} canCreatePost={true} />
                     </CardContent>
