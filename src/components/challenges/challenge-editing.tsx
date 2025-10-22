@@ -102,7 +102,7 @@ export default function ChallengeEditing({
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header */}
-            <header className="flex-shrink-0 p-6 border-b flex justify-between items-center">
+            <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">Edit Challenge</h1>
                     <p className="text-muted-foreground">

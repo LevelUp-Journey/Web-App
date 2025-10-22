@@ -548,7 +548,7 @@ function ImageDialog({
                                 ) : (
                                     <div className="border rounded-lg p-4 bg-muted/20">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-16 h-16 rounded border overflow-hidden bg-muted flex-shrink-0">
+                                            <div className="w-16 h-16 rounded border overflow-hidden bg-muted shrink-0">
                                                 <img
                                                     src={URL.createObjectURL(
                                                         file,

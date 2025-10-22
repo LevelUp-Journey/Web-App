@@ -8,6 +8,13 @@ import {
 } from "@/components/ui/resizable";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import {
+    Item,
+    ItemActions,
+    ItemContent,
+    ItemDescription,
+    ItemTitle,
+} from "../ui/item";
 
 interface ChallengeSummaryProps {
     challenge: Challenge;
@@ -23,7 +30,7 @@ export default function ChallengeSummary({
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header */}
-            <header className="flex-shrink-0 p-6 border-b flex justify-between items-center">
+            <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">
                         Challenge Summary
@@ -72,24 +79,30 @@ export default function ChallengeSummary({
                                 </h2>
                                 <div className="space-y-2">
                                     {codeVersions.map((version) => (
-                                        <div key={version.id}>
-                                            <div>
-                                                <strong>
+                                        <Item
+                                            key={version.id}
+                                            variant={"outline"}
+                                            size={"sm"}
+                                        >
+                                            <ItemContent>
+                                                <ItemTitle>
                                                     {version.language}
-                                                </strong>{" "}
-                                            </div>
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                asChild
-                                            >
-                                                <Link
-                                                    href={`/dashboard/challenges/edit/${challenge.id}/versions/${version.id}`}
+                                                </ItemTitle>
+                                            </ItemContent>
+                                            <ItemActions>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    asChild
                                                 >
-                                                    View
-                                                </Link>
-                                            </Button>
-                                        </div>
+                                                    <Link
+                                                        href={`/dashboard/challenges/edit/${challenge.id}/versions/${version.id}`}
+                                                    >
+                                                        View
+                                                    </Link>
+                                                </Button>
+                                            </ItemActions>
+                                        </Item>
                                     ))}
                                     {codeVersions.length === 0 && (
                                         <p className="text-muted-foreground text-sm">

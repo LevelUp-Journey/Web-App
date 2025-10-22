@@ -55,7 +55,7 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
 
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
-            <header className="flex-shrink-0 p-6 border-b">
+            <header className="shrink-0 p-6 border-b">
                 <h1 className="text-3xl font-bold mb-2">Add Code Version</h1>
                 <p className="text-muted-foreground">
                     Select a programming language to add a new code version for

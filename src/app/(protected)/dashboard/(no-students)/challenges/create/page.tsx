@@ -108,7 +108,7 @@ export default function CreateChallengePage() {
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header - Fixed height */}
-            <header className="flex-shrink-0 p-6 border-b">
+            <header className="shrink-0 p-6 border-b">
                 <h1 className="text-3xl font-bold mb-2">
                     Create New Challenge
                 </h1>
