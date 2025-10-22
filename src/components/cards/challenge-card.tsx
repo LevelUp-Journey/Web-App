@@ -22,11 +22,13 @@ const VERSION: UIVersion = UIVersion.B;
 interface ChallengeCardProps {
     challenge: Challenge;
     codeVersions: CodeVersion[];
+    adminMode?: boolean;
 }
 
 export default function ChallengeCard({
     challenge,
     codeVersions,
+    adminMode = false,
 }: ChallengeCardProps) {
     const router = useRouter();
 
@@ -70,18 +72,33 @@ export default function ChallengeCard({
                     </p>
                 </CardContent>
                 <CardFooter>
-                    <Button
-                        size="sm"
-                        onClick={() => {
-                            router.push(
-                                PATHS.DASHBOARD.CHALLENGES.WITH_ID(
-                                    challenge.id,
-                                ),
-                            );
-                        }}
-                    >
-                        start coding
-                    </Button>
+                    {adminMode ? (
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                router.push(
+                                    PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                        challenge.id,
+                                    ),
+                                );
+                            }}
+                        >
+                            View Summary
+                        </Button>
+                    ) : (
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                router.push(
+                                    PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                        challenge.id,
+                                    ),
+                                );
+                            }}
+                        >
+                            start coding
+                        </Button>
+                    )}
                 </CardFooter>
             </Card>
         );
@@ -125,18 +142,33 @@ export default function ChallengeCard({
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button
-                        size="sm"
-                        onClick={() => {
-                            router.push(
-                                PATHS.DASHBOARD.CHALLENGES.WITH_ID(
-                                    challenge.id,
-                                ),
-                            );
-                        }}
-                    >
-                        start coding
-                    </Button>
+                    {adminMode ? (
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                router.push(
+                                    PATHS.DASHBOARD.CHALLENGES.EDIT(
+                                        challenge.id,
+                                    ),
+                                );
+                            }}
+                        >
+                            View Summary
+                        </Button>
+                    ) : (
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                router.push(
+                                    PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                        challenge.id,
+                                    ),
+                                );
+                            }}
+                        >
+                            start coding
+                        </Button>
+                    )}
                 </CardFooter>
             </Card>
         );
@@ -175,16 +207,31 @@ export default function ChallengeCard({
                 </div>
             </CardContent>
             <CardFooter>
-                <Button
-                    size="sm"
-                    onClick={() => {
-                        router.push(
-                            PATHS.DASHBOARD.CHALLENGES.WITH_ID(challenge.id),
-                        );
-                    }}
-                >
-                    start coding
-                </Button>
+                {adminMode ? (
+                    <Button
+                        size="sm"
+                        onClick={() => {
+                            router.push(
+                                PATHS.DASHBOARD.CHALLENGES.EDIT(challenge.id),
+                            );
+                        }}
+                    >
+                        View Summary
+                    </Button>
+                ) : (
+                    <Button
+                        size="sm"
+                        onClick={() => {
+                            router.push(
+                                PATHS.DASHBOARD.CHALLENGES.WITH_ID(
+                                    challenge.id,
+                                ),
+                            );
+                        }}
+                    >
+                        start coding
+                    </Button>
+                )}
             </CardFooter>
         </Card>
     );

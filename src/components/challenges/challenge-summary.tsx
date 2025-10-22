@@ -1,14 +1,9 @@
 import Link from "next/link";
-import CodeVersionsList from "./code-versions-list";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Button } from "@/components/ui/button";
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import CodeVersionsList from "./code-versions-list";
 
 interface ChallengeSummaryProps {
     challenge: Challenge;
@@ -22,7 +17,7 @@ export default function ChallengeSummary({
     markdownSource,
 }: ChallengeSummaryProps) {
     return (
-        <section className="h-screen flex flex-col p-4 container mx-auto">
+        <section className="h-screen flex flex-col p-4 w-full max-w-4xl mx-auto">
             {/* Header */}
             <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
@@ -40,51 +35,44 @@ export default function ChallengeSummary({
                 </div>
             </header>
 
-            {/* Resizable panels */}
-            <div className="flex-1 overflow-hidden">
-                <ResizablePanelGroup direction="horizontal" className="h-full">
-                    {/* Left Column - Challenge Details and Code Versions */}
-                    <ResizablePanel defaultSize={40} minSize={30}>
-                        <div className="h-full overflow-y-auto p-6 space-y-6">
-                            {/* Challenge Details */}
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                                <div>
-                                    <strong>Title:</strong> {challenge.name}
-                                </div>
-                                <div>
-                                    <strong>Status:</strong> {challenge.status}
-                                </div>
-                                <div>
-                                    <strong>Experience Points:</strong>{" "}
-                                    {challenge.experiencePoints}
-                                </div>
-                                <div>
-                                    <strong>Tags:</strong>{" "}
-                                    {challenge.tags
-                                        .map((tag) => tag.name)
-                                        .join(", ")}
-                                </div>
-                            </div>
-
-                            <CodeVersionsList
-                                challengeId={challenge.id}
-                                codeVersions={codeVersions}
-                            />
+            {/* Vertical Layout */}
+            <div className="flex-1 overflow-y-auto space-y-6 p-6">
+                {/* Challenge Details */}
+                <div className="space-y-4">
+                    <h2 className="text-xl font-semibold">Challenge Details</h2>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <strong>Title:</strong> {challenge.name}
                         </div>
-                    </ResizablePanel>
-
-                    <ResizableHandle withHandle />
-
-                    {/* Right Column - Description */}
-                    <ResizablePanel defaultSize={60} maxSize={70} minSize={50}>
-                        <div className="h-full overflow-y-auto p-6">
-                            <h2 className="text-xl font-semibold mb-4">
-                                Description
-                            </h2>
-                            <MdxRenderer source={markdownSource} />
+                        <div>
+                            <strong>Status:</strong> {challenge.status}
                         </div>
-                    </ResizablePanel>
-                </ResizablePanelGroup>
+                        <div>
+                            <strong>Experience Points:</strong>{" "}
+                            {challenge.experiencePoints}
+                        </div>
+                        <div>
+                            <strong>Tags:</strong>{" "}
+                            {challenge.tags.map((tag) => tag.name).join(", ")}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Code Versions */}
+                <div className="space-y-4">
+                    <CodeVersionsList
+                        challengeId={challenge.id}
+                        codeVersions={codeVersions}
+                    />
+                </div>
+
+                {/* Description */}
+                <div className="space-y-4">
+                    <h2 className="text-xl font-semibold">Description</h2>
+                    <div className="bg-muted p-4 rounded-md">
+                        <MdxRenderer source={markdownSource} />
+                    </div>
+                </div>
             </div>
         </section>
     );

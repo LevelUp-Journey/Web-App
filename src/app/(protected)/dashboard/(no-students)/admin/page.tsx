@@ -32,6 +32,7 @@ export default async function AdminPage() {
                         key={challenge.id}
                         challenge={challenge}
                         codeVersions={codeVersionsMap.get(challenge.id) || []}
+                        adminMode={true}
                     />
                 ))}
             </div>
