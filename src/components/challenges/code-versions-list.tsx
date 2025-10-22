@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,9 +16,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import { Item, ItemActions, ItemContent, ItemTitle } from "../ui/item";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { Item, ItemActions, ItemContent, ItemTitle } from "../ui/item";
 
 interface CodeVersionsListProps {
     challengeId: string;
@@ -62,7 +63,10 @@ export default function CodeVersionsList({
                         <ItemActions>
                             <Button size="sm" variant="outline" asChild>
                                 <Link
-                                    href={`/dashboard/challenges/edit/${challengeId}/versions/${version.id}`}
+                                    href={PATHS.DASHBOARD.CHALLENGES.TESTS.ADD(
+                                        challengeId,
+                                        version.id,
+                                    )}
                                 >
                                     <Edit className="h-4 w-4" />
                                 </Link>
