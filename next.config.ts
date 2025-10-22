@@ -1,16 +1,8 @@
-import createMDX from "@next/mdx";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+const nextConfig: NextConfig = {
+    /* config options here */
+    reactCompiler: true,
 };
 
-const withMDX = createMDX({
-    extension: /\.(md|mdx)$/,
-    options: {
-        remarkPlugins: ["remark-gfm"],
-        rehypePlugins: [],
-    },
-});
-
-export default withMDX(nextConfig);
+export default nextConfig;
