@@ -75,7 +75,7 @@ export default function AdminCommunityPage() {
         <div className="container mx-auto p-4 space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold">Community Management</h1>
-                <Button onClick={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE)}>
+                <Button onClick={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE)} size="sm">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Community
                 </Button>
@@ -96,7 +96,7 @@ export default function AdminCommunityPage() {
                     <p className="text-muted-foreground text-center mb-4">
                         Create your first community to get started.
                     </p>
-                    <Button onClick={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE)}>
+                    <Button onClick={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE)} size="sm">
                         <Plus className="h-4 w-4 mr-2" />
                         Create Community
                     </Button>

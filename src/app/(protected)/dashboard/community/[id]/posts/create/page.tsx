@@ -68,9 +68,10 @@ export default function CreatePostInCommunityPage() {
     if (error || !community) {
         return (
             <div className="container mx-auto p-6">
-                <div className="max-w-2xl mx-auto space-y-6">
+                <div className="space-y-6">
                     <Button
                         variant="ghost"
+                        size="sm"
                         onClick={() => router.back()}
                         className="mb-4"
                     >
@@ -89,9 +90,10 @@ export default function CreatePostInCommunityPage() {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="space-y-6">
                 <Button
                     variant="ghost"
+                    size="sm"
                     onClick={() => router.back()}
                     className="mb-4"
                 >

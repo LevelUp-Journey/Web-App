@@ -1,5 +1,5 @@
 import { PostAssembler } from "./post.assembler";
-import { getAllPostsAction, getUserFeedPostsAction, createPostAction, type CreatePostRequest } from "../server/post.actions";
+import { getAllPostsAction, getPostsByUserIdAction, createPostAction, type CreatePostRequest } from "../server/post.actions";
 import type { Post } from "../entities/post.entity";
 import type { PostResponse } from "./post.response";
 
@@ -14,15 +14,11 @@ export class PostController {
         return PostAssembler.toEntitiesFromResponse(response.data as PostResponse[]);
     }
 
-    static async getUserFeedPosts(
-        userId: string,
-        limit: number = 20,
-        offset: number = 0,
-    ): Promise<Post[]> {
-        const response = await getUserFeedPostsAction(userId, limit, offset);
+    static async getPostsByUserId(userId: string): Promise<Post[]> {
+        const response = await getPostsByUserIdAction(userId);
 
         if (response.status !== 200) {
-            throw new Error(`Failed to fetch user feed posts: ${response.data}`);
+            throw new Error(`Failed to fetch posts by user: ${response.data}`);
         }
 
         return PostAssembler.toEntitiesFromResponse(response.data as PostResponse[]);

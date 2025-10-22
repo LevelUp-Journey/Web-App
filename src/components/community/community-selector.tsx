@@ -22,7 +22,7 @@ export function CommunitySelector({ communities, usernames, onSelectCommunity }:
                     <p className="text-muted-foreground mb-4">
                         Create a community first to start posting.
                     </p>
-                    <Button onClick={() => router.push("/dashboard/community/create")}>
+                    <Button onClick={() => router.push("/dashboard/community/create")} size="sm">
                         Create Community
                     </Button>
                 </CardContent>
@@ -44,7 +44,7 @@ export function CommunitySelector({ communities, usernames, onSelectCommunity }:
                             <img
                                 src={community.imageUrl}
                                 alt={`${community.name} banner`}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                className="w-full h-full object-cover"
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center">

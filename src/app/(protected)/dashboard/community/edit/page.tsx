@@ -65,7 +65,7 @@ export default function EditCommunityPage() {
             <div className="container mx-auto p-6">
                 <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
                     <p className="text-destructive">{error || "Community not found"}</p>
-                    <Button onClick={() => router.push("/dashboard/communities")}>
+                    <Button size="sm" onClick={() => router.push("/dashboard/communities")}>
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Back to Communities
                     </Button>
@@ -76,9 +76,10 @@ export default function EditCommunityPage() {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="space-y-6">
                 <Button
                     variant="ghost"
+                    size="sm"
                     onClick={() => router.back()}
                     className="mb-4"
                 >

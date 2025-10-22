@@ -95,7 +95,7 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                     />
 
                     <div className="flex gap-2">
-                        <Button type="submit" disabled={isSubmitting || !authorId}>
+                        <Button type="submit" disabled={isSubmitting || !authorId} size="sm">
                             {isSubmitting ? "Creating..." : "Create"}
                         </Button>
                         {onCancel && (
@@ -104,6 +104,7 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                                 variant="outline"
                                 onClick={onCancel}
                                 disabled={isSubmitting}
+                                size="sm"
                             >
                                 Cancel
                             </Button>

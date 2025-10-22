@@ -15,7 +15,8 @@ export const PATHS = {
         },
         COMMUNITY: {
             ROOT: "/dashboard/community",
-            POST: (id: string) => `/dashboard/community/${id}`,
+            POST: (id: string) => `/dashboard/community/post/${id}`,
+            WITH_ID: (id: string) => `/dashboard/community/${id}`,
         },
         SETTINGS: "/dashboard/settings",
         HELP: "/dashboard/help",

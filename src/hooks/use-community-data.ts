@@ -6,9 +6,19 @@ import { PostController } from "@/services/internal/community/controller/post.co
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 
+interface PostWithDetails extends Post {
+    authorProfile?: {
+        username: string;
+        profileUrl?: string;
+        firstName?: string;
+        lastName?: string;
+    };
+    community?: Community;
+}
+
 export function useCommunityData(communityId: string) {
     const [community, setCommunity] = useState<Community | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<PostWithDetails[]>([]);
     const [ownerProfile, setOwnerProfile] = useState<any>(null);
     const [currentUserId, setCurrentUserId] = useState<string>("");
     const [loading, setLoading] = useState(true);
@@ -30,7 +40,35 @@ export function useCommunityData(communityId: string) {
                 setOwnerProfile(profile);
 
                 const communityPosts = allPosts.filter(post => post.communityId === communityId);
-                setPosts(communityPosts);
+
+                // Get unique author IDs
+                const authorIds = [...new Set(communityPosts.map(p => p.authorId))];
+
+                // Get profiles for all authors
+                const profilePromises = authorIds.map(async (authorId) => {
+                    try {
+                        const profile = await ProfileController.getProfileByUserId(authorId);
+                        return { authorId, profile };
+                    } catch (error) {
+                        console.error(`Error loading profile for ${authorId}:`, error);
+                        return { authorId, profile: { username: "Unknown User" } };
+                    }
+                });
+
+                const profiles = await Promise.all(profilePromises);
+                const profileMap = new Map(profiles.map(p => [p.authorId, p.profile]));
+
+                // Combine posts with details
+                const postsWithDetails: PostWithDetails[] = communityPosts.map(post => ({
+                    ...post,
+                    authorProfile: profileMap.get(post.authorId),
+                    community: communityData,
+                }));
+
+                // Sort by creation date (newest first)
+                postsWithDetails.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+                setPosts(postsWithDetails);
             } catch (err) {
                 console.error("Error loading community:", err);
             } finally {

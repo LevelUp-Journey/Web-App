@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, UsersIcon, MessageSquareIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -12,11 +12,14 @@ import {
 } from "@/components/ui/input-group";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import { EmptyFeed } from "@/components/community/empty-feed";
+import { SearchProfileCard } from "@/components/profiles/search-profile-card";
 import { useCommunityFeed } from "@/hooks/use-community-feed";
+import { useUserSearch } from "@/hooks/use-user-search";
 
 export default function CommunityFeedPage() {
     const router = useRouter();
     const { posts, loading, error } = useCommunityFeed();
+    const { searchResults, searchLoading, searchError, searchUsers, clearSearch } = useUserSearch();
     const [searchTerm, setSearchTerm] = useState("");
 
     // Filtrar posts basado en el término de búsqueda
@@ -30,6 +33,16 @@ export default function CommunityFeedPage() {
             post.authorProfile?.username.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [posts, searchTerm]);
+
+    // Manejar búsqueda
+    const handleSearch = (term: string) => {
+        setSearchTerm(term);
+        if (term.trim()) {
+            searchUsers(term);
+        } else {
+            clearSearch();
+        }
+    };
 
     if (loading) {
         return (
@@ -63,9 +76,9 @@ export default function CommunityFeedPage() {
                 <div className="relative max-w-md w-full">
                     <InputGroup>
                         <InputGroupInput 
-                            placeholder="Search..." 
+                            placeholder="Search posts and users..." 
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => handleSearch(e.target.value)}
                         />
                         <InputGroupAddon>
                             <SearchIcon />
@@ -89,27 +102,67 @@ export default function CommunityFeedPage() {
                     </div>
                 </div>
 
-                {/* Posts Feed */}
-                <div className="space-y-6 w-full">
-                        {filteredPosts.length === 0 && posts.length > 0 ? (
+                {/* Search Results */}
+                {searchTerm.trim() && (
+                    <div className="space-y-6">
+                        {/* Users Section */}
+                        {searchResults.length > 0 && (
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <UsersIcon className="h-5 w-5" />
+                                    <h3 className="text-lg font-semibold">Users</h3>
+                                </div>
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                    {searchResults.map((profile) => (
+                                        <SearchProfileCard key={profile.id} profile={profile} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Posts Section */}
+                        {filteredPosts.length > 0 && (
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <MessageSquareIcon className="h-5 w-5" />
+                                    <h3 className="text-lg font-semibold">Posts</h3>
+                                </div>
+                                <div className="space-y-6">
+                                    {filteredPosts.map((post) => (
+                                        <FeedPostCard key={post.id} post={post} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* No Results */}
+                        {searchResults.length === 0 && filteredPosts.length === 0 && !searchLoading && (
                             <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg p-8">
                                 <SearchIcon className="h-16 w-16 text-muted-foreground mb-4" />
-                                <h2 className="text-xl font-semibold mb-2">No posts found</h2>
+                                <h2 className="text-xl font-semibold mb-2">No results found</h2>
                                 <p className="text-muted-foreground text-center mb-4 max-w-md">
-                                    No posts match your search. Try different keywords.
+                                    No posts or users match your search. Try different keywords.
                                 </p>
-                                <Button variant="outline" onClick={() => setSearchTerm("")}>
+                                <Button variant="outline" size="sm" onClick={() => handleSearch("")}>
                                     Clear Search
                                 </Button>
                             </div>
-                        ) : filteredPosts.length === 0 ? (
+                        )}
+                    </div>
+                )}
+
+                {/* Default Feed (when no search) */}
+                {!searchTerm.trim() && (
+                    <div className="space-y-6 w-full">
+                        {posts.length === 0 ? (
                             <EmptyFeed />
                         ) : (
-                            filteredPosts.map((post) => (
+                            posts.map((post) => (
                                 <FeedPostCard key={post.id} post={post} />
                             ))
                         )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

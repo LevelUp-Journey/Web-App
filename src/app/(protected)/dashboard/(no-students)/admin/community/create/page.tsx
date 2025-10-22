@@ -31,9 +31,10 @@ export default function CreateCommunityPage() {
     if (loading) {
         return (
             <div className="container mx-auto p-4">
-                <div className="max-w-2xl mx-auto space-y-6">
+                <div className="space-y-6">
                     <Button
                         variant="ghost"
+                        size="sm"
                         onClick={() => router.back()}
                         className="mb-4"
                     >
@@ -53,9 +54,10 @@ export default function CreateCommunityPage() {
     if (!userRole) {
         return (
             <div className="container mx-auto p-4">
-                <div className="max-w-2xl mx-auto space-y-6">
+                <div className="space-y-6">
                     <Button
                         variant="ghost"
+                        size="sm"
                         onClick={() => router.back()}
                         className="mb-4"
                     >
@@ -76,9 +78,10 @@ export default function CreateCommunityPage() {
 
     return (
         <div className="container mx-auto p-4">
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="space-y-6">
                 <Button
                     variant="ghost"
+                    size="sm"
                     onClick={() => router.push('/dashboard/admin/community')}
                     className="mb-4"
                 >

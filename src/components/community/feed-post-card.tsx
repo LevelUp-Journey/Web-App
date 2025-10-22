@@ -1,4 +1,7 @@
+"use client";
+
 import { Heart, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,6 +16,7 @@ interface PostWithDetails extends Post {
         firstName?: string;
         lastName?: string;
     };
+    authorProfileId?: string;
     community?: Community;
 }
 
@@ -21,12 +25,35 @@ interface FeedPostCardProps {
 }
 
 export function FeedPostCard({ post }: FeedPostCardProps) {
+    const router = useRouter();
+
+    const handleAuthorClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (post.authorProfileId) {
+            router.push(`/dashboard/profile/${post.authorProfileId}`);
+        }
+    };
+
+    const handleCommunityClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (post.community?.id) {
+            router.push(`/dashboard/community/${post.community.id}`);
+        }
+    };
+
+    const handleCommentsClick = () => {
+        router.push(`/dashboard/community/post/${post.id}`);
+    };
+
     return (
         <Card className="overflow-hidden w-full">
             <CardContent className="p-6">
                 {/* Post Header */}
                 <div className="flex items-start space-x-3 mb-4">
-                    <Avatar className="h-10 w-10">
+                    <Avatar 
+                        className="h-10 w-10 cursor-pointer hover:opacity-80 transition-opacity" 
+                        onClick={handleAuthorClick}
+                    >
                         <AvatarImage src={post.authorProfile?.profileUrl} />
                         <AvatarFallback>
                             {post.authorProfile?.username?.charAt(0).toUpperCase() || "U"}
@@ -34,11 +61,18 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                     </Avatar>
                     <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                            <span className="font-semibold">
+                            <span 
+                                className="font-semibold cursor-pointer"
+                                onClick={handleAuthorClick}
+                            >
                                 {post.authorProfile?.username || "Unknown User"}
                             </span>
                             <span className="text-muted-foreground">in</span>
-                            <Badge variant="outline" className="text-xs">
+                            <Badge 
+                                variant="outline" 
+                                className="text-xs cursor-pointer"
+                                onClick={handleCommunityClick}
+                            >
                                 {post.community?.name || "Unknown Community"}
                             </Badge>
                         </div>
@@ -68,13 +102,13 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
 
                 {/* Post Actions */}
                 <div className="flex items-center space-x-6 mt-6 pt-4 border-t">
-                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-red-500">
+                    <Button variant="ghost" size="sm">
                         <Heart className="h-4 w-4 mr-2" />
-                        Like
+                        0
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-blue-500">
+                    <Button variant="ghost" size="sm" onClick={handleCommentsClick}>
                         <MessageCircle className="h-4 w-4 mr-2" />
-                        Comment ({post.comments?.length || 0})
+                        {post.comments?.length || 0}
                     </Button>
                 </div>
 
