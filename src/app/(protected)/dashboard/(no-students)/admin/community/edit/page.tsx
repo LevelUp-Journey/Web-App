@@ -67,7 +67,7 @@ export default function EditCommunityPage() {
                     <p className="text-destructive">{error || "Community not found"}</p>
                     <Button onClick={() => router.push("/dashboard/admin/community")}>
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Admin Community
+                        Back to Community Management
                     </Button>
                 </div>
             </div>
@@ -83,7 +83,7 @@ export default function EditCommunityPage() {
                     className="mb-4"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Admin Community
+                    Back to Community Management
                 </Button>
 
                 <CommunityForm

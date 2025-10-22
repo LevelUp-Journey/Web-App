@@ -83,7 +83,7 @@ export default function CreateCommunityPage() {
                     className="mb-4"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Admin Community
+                    Back to Community Management
                 </Button>
 
                 <div>

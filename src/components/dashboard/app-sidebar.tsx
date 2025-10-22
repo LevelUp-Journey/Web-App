@@ -52,7 +52,7 @@ const administrativeItems = [
         icon: ShieldUser,
     },
     {
-        title: "Admin Community",
+        title: "Community Management",
         url: PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
         icon: Users,
     },

@@ -60,7 +60,7 @@ export default function CommunityFeedPage() {
         <div className="space-y-4 w-full h-full overflow-y-auto">
             {/* Search Bar - Centered */}
             <div className="flex justify-center pt-4">
-                <div className="relative max-w-lg w-full">
+                <div className="relative max-w-md w-full">
                     <InputGroup>
                         <InputGroupInput 
                             placeholder="Search..." 
