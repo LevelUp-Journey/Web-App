@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Plus, Users } from "lucide-react";
 import ProfileCard from "@/components/profiles/profile-card";
 import ProfileEditForm from "@/components/profiles/profile-edit-form";
-import CreateCommunityCard from "@/components/community/create-community-card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function AccountPage() {
@@ -55,7 +58,29 @@ export default function AccountPage() {
                             showEditButton={true}
                             onEdit={handleEdit}
                         />
-                        <CreateCommunityCard userRole={userRole || undefined} />
+                        {(userRole === 'ROLE_TEACHER' || userRole === 'ROLE_ADMIN') && (
+                            <Card>
+                                <CardContent className="p-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <Users className="h-5 w-5 text-muted-foreground" />
+                                            <div>
+                                                <h3 className="font-semibold">Create Community</h3>
+                                                <p className="text-sm text-muted-foreground">
+                                                    Start a new community
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <Link href="/dashboard/community/create">
+                                            <Button variant="outline" size="sm">
+                                                <Plus className="h-4 w-4 mr-2" />
+                                                Create
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
                     </>
                 )}
             </div>

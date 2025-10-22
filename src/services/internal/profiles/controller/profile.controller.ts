@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { AuthController } from "../../iam/controller/auth.controller";
 import {
     getProfileAction,
+    getProfileByIdAction,
     updateProfileAction,
 } from "../server/profile.actions";
 import type { ProfileResponse, UpdateProfileRequest } from "./profile.response";
@@ -33,5 +34,13 @@ export class ProfileController {
 
         const response = await getProfileAction(jwtPayload.userId);
         return response.data as ProfileResponse;
+    }
+
+    public static async getProfileById(profileId: string) {
+        const response = await getProfileByIdAction(profileId);
+        if (response.status === 200) {
+            return response.data as ProfileResponse;
+        }
+        throw new Error("Failed to fetch profile");
     }
 }
