@@ -2,22 +2,21 @@ export const ENV = {
     SERVICES: {
         IAM: {
             BASE_URL:
-                process.env.IAM_BASE_URL || "http://192.168.0.118:8081/api/v1",
+                process.env.IAM_BASE_URL || "http://localhost:8081/api/v1",
         },
         PROFILE: {
             BASE_URL:
-                process.env.PROFILE_BASE_URL ||
-                "http://192.168.0.118:8082/api/v1",
+                process.env.PROFILE_BASE_URL || "http://localhost:8082/api/v1",
         },
         CHALLENGES: {
             BASE_URL:
                 process.env.CHALLENGES_BASE_URL ||
-                "http://192.168.0.118:8083/api/v1",
+                "http://localhost:8083/api/v1",
         },
         COMMUNITY: {
             BASE_URL:
                 process.env.COMMUNITIES_BASE_URL ||
-                "http://192.168.0.118:8086/api/v1",
+                "http://localhost:8086/api/v1",
         },
         EXTERNAL: {
             CLOUDINARY: {

@@ -1,14 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
 import { serialize } from "next-mdx-remote-client/serialize";
 import StudentCodeEditor from "@/components/challenges/student-code-editor";
-import { getLocalizedPaths } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
+import { getSolutionByChallengeIdAndCodeVersionIdAction } from "@/services/internal/challenges/solutions/server/solutions.actions";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
+import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 
 interface PageProps {
     params: Promise<{
@@ -19,10 +18,9 @@ interface PageProps {
 }
 
 export default async function StudentEditorPage({ params }: PageProps) {
-    const { challengeId, codeVersionId, lang } = await params;
-    const PATHS = getLocalizedPaths(lang);
+    const { challengeId, codeVersionId } = await params;
 
-    // Fetch data on the server
+    // Fetch all data on the server
     const challenge: Challenge =
         await ChallengeController.getChallengeById(challengeId);
     const codeVersion: CodeVersion =
@@ -36,8 +34,26 @@ export default async function StudentEditorPage({ params }: PageProps) {
             codeVersionId,
         );
 
-    // Show all tests, including secret ones
-    const allTests = tests;
+    // Fetch student's solution
+    let solution: SolutionResponse | null = null;
+    try {
+        solution = await getSolutionByChallengeIdAndCodeVersionIdAction({
+            challengeId,
+            codeVersionId,
+        });
+        console.log("STUDENT SOLUTION:", solution);
+
+        // If solution exists but code is null, use initialCode
+        if (solution && solution.code === null) {
+            solution = {
+                ...solution,
+                code: codeVersion.initialCode,
+            };
+        }
+    } catch {
+        // No solution exists yet, will use initialCode
+        console.log("No solution found, using initial code");
+    }
 
     // Serialize the description for client-side rendering
     const serializedDescription = challenge.description
@@ -50,8 +66,9 @@ export default async function StudentEditorPage({ params }: PageProps) {
             <StudentCodeEditor
                 challenge={challenge}
                 codeVersion={codeVersion}
-                tests={allTests}
+                tests={tests}
                 serializedDescription={serializedDescription}
+                solution={solution}
             />
         </div>
     );

@@ -1,9 +1,8 @@
 "use client";
 
 import { ArrowLeft, Lock, Play } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
@@ -15,17 +14,20 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
+import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
+import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
+import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
     codeVersion: CodeVersion;
     tests: VersionTest[];
     serializedDescription: any;
+    solution: SolutionResponse | null;
 }
 
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
@@ -48,9 +50,43 @@ export default function StudentCodeEditor({
     codeVersion,
     tests,
     serializedDescription,
+    solution,
 }: StudentCodeEditorProps) {
-    const [code, setCode] = useState<string>(codeVersion.initialCode);
+    const [code, setCode] = useState<string>(
+        solution?.code || codeVersion.initialCode,
+    );
+    const [solutionId, setSolutionId] = useState<string | null>(
+        solution?.id || null,
+    );
+    const [isSaving, setIsSaving] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
+
+    // Auto-save with debounce of 3 seconds
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            // Skip if code hasn't changed
+            if (code === (solution?.code || codeVersion.initialCode)) {
+                return;
+            }
+
+            setIsSaving(true);
+            try {
+                await SolutionsController.updateSolution({
+                    solutionId: solutionId as string,
+                    code: code,
+                });
+
+                toast.success("Code saved successfully!");
+            } catch (error) {
+                console.error("Error saving code:", error);
+                toast.error("Failed to save code");
+            } finally {
+                setIsSaving(false);
+            }
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, [code, solutionId, solution?.code, codeVersion.initialCode]);
 
     const handleRunCode = async () => {
         setIsRunning(true);
@@ -79,21 +115,24 @@ export default function StudentCodeEditor({
 
                     <div>
                         <h1 className="text-2xl font-bold">{challenge.name}</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {getReadableLanguageName(
-                                codeVersion.language as ProgrammingLanguage,
-                            )}
-                        </p>
                     </div>
                 </div>
-                <Button
-                    onClick={handleRunCode}
-                    disabled={isRunning}
-                    variant="default"
-                >
-                    <Play className="h-4 w-4 mr-2" />
-                    {isRunning ? "Running..." : "Run Code"}
-                </Button>
+
+                <div className="flex items-center gap-2">
+                    {isSaving && (
+                        <span className="text-sm text-muted-foreground">
+                            Saving...
+                        </span>
+                    )}
+                    <Button
+                        onClick={handleRunCode}
+                        disabled={isRunning}
+                        variant="default"
+                    >
+                        <Play className="h-4 w-4 mr-2" />
+                        {isRunning ? "Running..." : "Run Code"}
+                    </Button>
+                </div>
             </header>
 
             {/* Resizable panels */}
@@ -108,7 +147,6 @@ export default function StudentCodeEditor({
                                 )}
                                 value={code}
                                 onChange={(value) => setCode(value || "")}
-                                readOnly={false}
                             />
                         </div>
                     </div>
