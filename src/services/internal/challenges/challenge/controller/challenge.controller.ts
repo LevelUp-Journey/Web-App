@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "../entities/challenge.entity";
 import {
