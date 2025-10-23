@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
+import { useReactions } from "@/hooks/use-reactions";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
 
@@ -29,6 +30,7 @@ export default function PostPage() {
     const [post, setPost] = useState<PostWithDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { userReaction: postUserReaction, isLoading: reactionLoading, toggleReaction, reactionCount } = useReactions(postId);
 
     useEffect(() => {
         const loadPost = async () => {
@@ -148,9 +150,15 @@ export default function PostPage() {
                     <Card>
                         <CardContent className="p-4">
                             <div className="flex items-center gap-4">
-                                <Button variant="ghost" size="sm">
-                                    <Heart className="h-4 w-4 mr-2" />
-                                    0 Likes
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={toggleReaction}
+                                    disabled={reactionLoading}
+                                    className={postUserReaction ? "text-red-500" : ""}
+                                >
+                                    <Heart className={`h-4 w-4 mr-2 ${postUserReaction ? "fill-current" : ""}`} />
+                                    {reactionCount} Likes
                                 </Button>
                                 <Button variant="ghost" size="sm">
                                     <MessageCircle className="h-4 w-4 mr-2" />

@@ -2,6 +2,7 @@
 
 import { Heart, MessageCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useReactions } from "@/hooks/use-reactions";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +27,7 @@ interface PostCardProps {
 
 export function PostCard({ post, layout = 'grid' }: PostCardProps) {
     const router = useRouter();
+    const { userReaction, isLoading, toggleReaction, reactionCount } = useReactions(post.id);
     const date = new Date(post.createdAt).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -68,9 +70,18 @@ export function PostCard({ post, layout = 'grid' }: PostCardProps) {
                 )}
             </CardContent>
             <CardFooter className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={(e) => e.stopPropagation()}>
-                    <Heart className="h-4 w-4 mr-2" />
-                    0
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleReaction();
+                    }}
+                    disabled={isLoading}
+                    className={userReaction ? "text-red-500" : ""}
+                >
+                    <Heart className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`} />
+                    {reactionCount}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => router.push(PATHS.DASHBOARD.COMMUNITY.POST(post.id))}>
                     <MessageCircle className="h-4 w-4 mr-2" />

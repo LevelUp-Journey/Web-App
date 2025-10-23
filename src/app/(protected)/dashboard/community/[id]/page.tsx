@@ -1,11 +1,10 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Users, Plus, MessageSquare } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { PostFeed } from "@/components/community/post-feed";
 import { useCommunityData } from "@/hooks/use-community-data";
 
@@ -13,7 +12,7 @@ export default function CommunityPage() {
     const params = useParams();
     const router = useRouter();
     const communityId = params.id as string;
-    const { community, posts, ownerProfile, currentUserId, loading } = useCommunityData(communityId);
+    const { community, posts, ownerProfile, currentUserId, canCreatePost, loading } = useCommunityData(communityId);
 
     if (loading) {
         return (
@@ -98,44 +97,22 @@ export default function CommunityPage() {
                                                 Settings
                                             </Button>
                                         )}
-                                        <Button size="sm" onClick={() => router.push(`/dashboard/community/posts/create`)}>
-                                            <Plus className="h-4 w-4 mr-2" /> Create Post
-                                        </Button>
+                                        {canCreatePost && (
+                                            <Button size="sm" onClick={() => router.push(`/dashboard/community/posts/create`)}>
+                                                <Plus className="h-4 w-4 mr-2" /> Create Post
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             </CardContent>
                         </div>
                     </Card>
 
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Card>
-                            <CardContent className="p-6 text-center">
-                                <Users className="h-8 w-8 text-primary mx-auto mb-2" />
-                                <div className="text-2xl font-bold">0</div>
-                                <p className="text-sm text-muted-foreground">Members</p>
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardContent className="p-6 text-center">
-                                <MessageSquare className="h-8 w-8 text-primary mx-auto mb-2" />
-                                <div className="text-2xl font-bold">{posts.length}</div>
-                                <p className="text-sm text-muted-foreground">Posts</p>
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardContent className="p-6 text-center">
-                                <Badge variant="secondary" className="text-lg px-3 py-1">Active</Badge>
-                                <p className="text-sm text-muted-foreground mt-2">Status</p>
-                            </CardContent>
-                        </Card>
-                    </div>
-
                     {/* Posts Feed */}
                     <Card>
                         <CardHeader><CardTitle>Recent Posts</CardTitle></CardHeader>
                         <CardContent>
-                            <PostFeed posts={posts} title="Community Posts" showSearch={false} canCreatePost={true} layout="list" />
+                            <PostFeed posts={posts} title="Community Posts" showSearch={false} canCreatePost={canCreatePost} layout="list" />
                         </CardContent>
                     </Card>
                 </div>

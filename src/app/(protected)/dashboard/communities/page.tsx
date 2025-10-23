@@ -14,6 +14,7 @@ import { CommunityCard } from "@/components/community/community-card";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { UserRole } from "@/lib/consts";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
 export default function MyCommunitiesPage() {
@@ -22,6 +23,7 @@ export default function MyCommunitiesPage() {
     const [loading, setLoading] = useState(true);
     const [usernames, setUsernames] = useState<Record<string, string>>({});
     const [searchTerm, setSearchTerm] = useState("");
+    const [canCreateCommunity, setCanCreateCommunity] = useState<boolean>(false);
 
     useEffect(() => {
         loadUserCommunities();
@@ -30,7 +32,15 @@ export default function MyCommunitiesPage() {
     const loadUserCommunities = async () => {
         try {
             setLoading(true);
-            const userId = await AuthController.getUserId();
+            const [userId, userRoles] = await Promise.all([
+                AuthController.getUserId(),
+                AuthController.getUserRoles()
+            ]);
+            
+            // Check if user can create communities (only TEACHER and ADMIN)
+            const hasCreatePermission = userRoles.includes(UserRole.TEACHER) || userRoles.includes(UserRole.ADMIN);
+            setCanCreateCommunity(hasCreatePermission);
+            
             const allCommunities = await CommunityController.getCommunities();
             
             // Filtrar solo las comunidades del usuario actual
@@ -108,10 +118,12 @@ export default function MyCommunitiesPage() {
             <div className="container mx-auto p-4 space-y-4">
                 <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-semibold">My Communities</h2>
-                    <Button onClick={() => router.push("/dashboard/community/create")}>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Create Community
-                    </Button>
+                    {canCreateCommunity && (
+                        <Button onClick={() => router.push("/dashboard/community/create")}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Create Community
+                        </Button>
+                    )}
                 </div>
 
                 {filteredCommunities.length === 0 && communities.length > 0 ? (
@@ -132,10 +144,12 @@ export default function MyCommunitiesPage() {
                         <p className="text-muted-foreground text-center mb-4 max-w-md">
                             Create your first community to start building your network and sharing content
                         </p>
-                        <Button onClick={() => router.push("/dashboard/community/create")}>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Create Your First Community
-                        </Button>
+                        {canCreateCommunity && (
+                            <Button onClick={() => router.push("/dashboard/community/create")}>
+                                <Plus className="h-4 w-4 mr-2" />
+                                Create Your First Community
+                            </Button>
+                        )}
                     </div>
                 ) : (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

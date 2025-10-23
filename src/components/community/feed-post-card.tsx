@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useReactions } from "@/hooks/use-reactions";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
@@ -26,6 +27,7 @@ interface FeedPostCardProps {
 
 export function FeedPostCard({ post }: FeedPostCardProps) {
     const router = useRouter();
+    const { userReaction, isLoading, toggleReaction, reactionCount } = useReactions(post.id);
 
     const handleAuthorClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -102,9 +104,15 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
 
                 {/* Post Actions */}
                 <div className="flex items-center space-x-6 mt-6 pt-4 border-t">
-                    <Button variant="ghost" size="sm">
-                        <Heart className="h-4 w-4 mr-2" />
-                        0
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={toggleReaction}
+                        disabled={isLoading}
+                        className={userReaction ? "text-red-500" : ""}
+                    >
+                        <Heart className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`} />
+                        {reactionCount}
                     </Button>
                     <Button variant="ghost" size="sm" onClick={handleCommentsClick}>
                         <MessageCircle className="h-4 w-4 mr-2" />
