@@ -27,6 +27,7 @@ import { getReadableLanguageName } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
 
 interface CodeVersionsListProps {
     challengeId: string;
@@ -43,6 +44,7 @@ export default function CodeVersionsList({
 }: CodeVersionsListProps) {
     const router = useRouter();
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [startingId, setStartingId] = useState<string | null>(null);
 
     const handleDelete = async (codeVersionId: string) => {
         setDeletingId(codeVersionId);
@@ -58,6 +60,25 @@ export default function CodeVersionsList({
             toast.error("Failed to delete code version");
         } finally {
             setDeletingId(null);
+        }
+    };
+
+    const handleStartChallenge = async (codeVersionId: string) => {
+        setStartingId(codeVersionId);
+        try {
+            await SolutionsController.createSolution({
+                challengeId,
+                codeVersionId,
+            });
+            toast.success("Challenge started!");
+            router.push(
+                `/editor/challenges/${challengeId}/version/${codeVersionId}`,
+            );
+        } catch (error) {
+            console.error("Error starting challenge:", error);
+            toast.error("Failed to start challenge");
+        } finally {
+            setStartingId(null);
         }
     };
 
@@ -155,14 +176,15 @@ export default function CodeVersionsList({
                                 <Button
                                     size="default"
                                     variant="outline"
-                                    asChild
+                                    onClick={() =>
+                                        handleStartChallenge(version.id)
+                                    }
+                                    disabled={startingId === version.id}
                                 >
-                                    <Link
-                                        href={`/editor/challenges/${challengeId}/version/${version.id}`}
-                                    >
-                                        <Play className="h-4 w-4 mr-2" />
-                                        Start Challenge
-                                    </Link>
+                                    <Play className="h-4 w-4 mr-2" />
+                                    {startingId === version.id
+                                        ? "Starting..."
+                                        : "Start Challenge"}
                                 </Button>
                             )}
                         </ItemActions>

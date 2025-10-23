@@ -2,9 +2,9 @@ import Link from "next/link";
 import ChallengeCard from "@/components/cards/challenge-card";
 import { Button } from "@/components/ui/button";
 import { PATHS } from "@/lib/paths";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default async function AdminPage() {
@@ -23,7 +23,6 @@ export default async function AdminPage() {
             codeVersionsMap.set(challenge.id, versions);
         }),
     );
-
     return (
         <div className="container mx-auto p-4 space-y-4">
             <div className="flex justify-between items-center">
