@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
+import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 interface SearchProfileCardProps {
     profile: ProfileResponse;

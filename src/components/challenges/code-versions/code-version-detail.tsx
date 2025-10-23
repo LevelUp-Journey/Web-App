@@ -4,6 +4,7 @@ import { Plus, TestTube } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
 import {
     Item,
@@ -17,7 +18,6 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
-
 import {
     getReadableLanguageName,
     type ProgrammingLanguage,
@@ -27,7 +27,6 @@ import { getMonacoLanguage } from "@/lib/utils";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
-import MonacoEditor from "../monaco/monaco-editor";
 
 interface CodeVersionDetailProps {
     challengeId: string;

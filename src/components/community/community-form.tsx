@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Users } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ImageUpload from "@/components/ui/image-upload";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import type { Community } from "@/services/internal/community/entities/community.entity";
 import type {
     CreateCommunityRequest,
     UpdateCommunityRequest,
 } from "@/services/internal/community/server/community.actions";
-import type { Community } from "@/services/internal/community/entities/community.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 interface CommunityFormProps {
     communityId?: string;

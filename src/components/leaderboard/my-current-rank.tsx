@@ -1,6 +1,9 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { RankIcon, getRankFromPoints } from "./rank-icon";
 import { Trophy } from "lucide-react";
+import {
+    getRankFromPoints,
+    RankIcon,
+} from "@/components/leaderboard/rank-icon";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface MyCurrentRankProps {
     totalPoints: number;

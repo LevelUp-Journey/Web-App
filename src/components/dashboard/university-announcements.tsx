@@ -1,7 +1,11 @@
 "use client";
 import Autoplay from "embla-carousel-autoplay";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+} from "@/components/ui/carousel";
 import { CONSTS } from "@/lib/consts";
-import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 
 export default function UniversityAnnouncements() {
     return (

@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { PATHS } from "@/lib/paths";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type {
     ProfileResponse,
     UpdateProfileRequest,
-} from "@/services/internal/profiles/controller/profile.response";
+} from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export default function SignUpStep2() {
     const router = useRouter();

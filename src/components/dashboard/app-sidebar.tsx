@@ -10,9 +10,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { UserRole } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { NavUser } from "@/components/dashboard/nav-user";
 import {
     Sidebar,
     SidebarContent,
@@ -24,8 +22,10 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "../ui/sidebar";
-import { NavUser } from "./nav-user";
+} from "@/components/ui/sidebar";
+import { UserRole } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 // Menu items.
 const topItems = [

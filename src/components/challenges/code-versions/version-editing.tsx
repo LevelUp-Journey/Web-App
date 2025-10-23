@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
 import {
     Item,
@@ -23,7 +24,6 @@ import { Python } from "@/components/ui/svgs/python";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import MonacoEditor from "../monaco/monaco-editor";
 
 interface VersionEditingProps {
     challengeId: string;

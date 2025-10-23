@@ -1,8 +1,8 @@
 "use client";
 
-import { SearchIcon, PlusIcon } from "lucide-react";
+import { PlusIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
-import { PostCard } from "./post-card";
+import { PostCard } from "@/components/community/post-card";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,

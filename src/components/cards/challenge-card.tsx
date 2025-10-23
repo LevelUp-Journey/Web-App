@@ -2,20 +2,20 @@
 
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { ProgrammingLanguage } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
-import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import FullLanguageBadge from "@/components/cards/full-language-badge";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
     CardTitle,
-} from "../ui/card";
-import FullLanguageBadge from "./full-language-badge";
+} from "@/components/ui/card";
+import type { ProgrammingLanguage } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
+import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 
 interface ChallengeCardProps {
     challenge: Challenge;

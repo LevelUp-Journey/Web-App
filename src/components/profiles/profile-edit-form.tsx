@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProfileImageUpload from "@/components/ui/profile-image-upload";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type {
     ProfileResponse,
     UpdateProfileRequest,
-} from "@/services/internal/profiles/controller/profile.response";
+} from "@/services/internal/profiles/profiles/controller/profile.response";
 
 interface ProfileEditFormProps {
     profileId?: string;
