@@ -87,7 +87,7 @@ export default function StudentCodeEditor({
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
                 {/* Left Panel - Monaco Editor */}
-                <ResizablePanel defaultSize={50} minSize={30}>
+                <ResizablePanel defaultSize={70} minSize={50} maxSize={70}>
                     <div className="h-full flex flex-col">
                         <div className="flex-1 overflow-hidden p-4">
                             <MonacoEditor
@@ -105,7 +105,7 @@ export default function StudentCodeEditor({
                 <ResizableHandle withHandle />
 
                 {/* Right Panel - Tabs for Description and Tests */}
-                <ResizablePanel defaultSize={50} minSize={30}>
+                <ResizablePanel defaultSize={30} minSize={30}>
                     <div className="h-full flex flex-col">
                         <Tabs
                             defaultValue="description"
