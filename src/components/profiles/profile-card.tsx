@@ -1,16 +1,17 @@
 "use client";
 
-import { Edit, Github, User } from "lucide-react";
+import { Edit, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
+import { GithubDark } from "../ui/svgs/githubDark";
 
 interface ProfileCardProps {
-    profileId?: string;
+    profileId: string;
     showEditButton?: boolean;
     onEdit?: () => void;
 }
@@ -30,9 +31,12 @@ export default function ProfileCard({
                 setLoading(true);
                 let profileData: ProfileResponse;
 
+                const userId = await AuthController.getUserId();
+                console.log("fetching for ", userId);
+
                 if (profileId) {
                     profileData =
-                        await ProfileController.getProfileByUserId(profileId);
+                        await ProfileController.getProfileByUserId(userId);
                 } else {
                     profileData =
                         await ProfileController.getCurrentUserProfile();
@@ -119,7 +123,7 @@ export default function ProfileCard({
                 {profile.profileUrl &&
                     !profile.profileUrl.includes("cloudinary.com") && (
                         <div className="flex items-center gap-2">
-                            <Github className="h-4 w-4 text-muted-foreground" />
+                            <GithubDark className="h-4 w-4 text-muted-foreground" />
                             <a
                                 href={profile.profileUrl}
                                 target="_blank"

@@ -48,7 +48,6 @@ export class AuthController {
 
     public static async getAuthToken(): Promise<string> {
         const authTokens = await getAuthTokenAction();
-        console.log("tokens", authTokens);
         return authTokens.token;
     }
 

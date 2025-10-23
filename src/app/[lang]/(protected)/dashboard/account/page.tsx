@@ -30,12 +30,7 @@ export default function AccountPage() {
                         onSuccess={handleSuccess}
                     />
                 ) : (
-                    <>
-                        <ProfileCard
-                            showEditButton={true}
-                            onEdit={handleEdit}
-                        />
-                    </>
+                    <ProfileCard showEditButton={true} onEdit={handleEdit} />
                 )}
             </div>
         </div>

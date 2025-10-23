@@ -45,7 +45,7 @@ export default function AuthLayout({
             </header>
 
             {/* Main Content */}
-            <main className="flex-grow flex items-center justify-center px-4 py-10">
+            <main className="grow flex items-center justify-center px-4 py-10">
                 <div className="w-full max-w-md p-8 rounded-xl shadow-sm">
                     {children}
                 </div>
