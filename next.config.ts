@@ -5,10 +5,6 @@ const nextConfig = {
     reactCompiler: true,
     // Configure `pageExtensions` to include MDX files for imports
     pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
-    i18n: {
-        locales: ['en', 'es'],
-        defaultLocale: 'en',
-    },
 };
 
 const withMDX = createMDX({

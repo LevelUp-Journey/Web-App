@@ -10,6 +10,7 @@
         "format": "biome format --write"
     },
     "dependencies": {
+        "@formatjs/intl-localematcher": "^0.6.2",
         "@hookform/resolvers": "^5.2.2",
         "@lexical/list": "^0.37.0",
         "@lexical/markdown": "^0.37.0",
@@ -48,6 +49,7 @@
         "embla-carousel-react": "^8.6.0",
         "jwt-decode": "^4.0.0",
         "lucide-react": "^0.546.0",
+        "negotiator": "^1.0.0",
         "next": "16.0.0",
         "next-mdx-remote-client": "^2.1.7",
         "next-themes": "^0.4.6",
@@ -57,6 +59,7 @@
         "react-dropzone": "^14.3.8",
         "react-hook-form": "^7.65.0",
         "react-resizable-panels": "^3.0.6",
+        "server-only": "^0.0.1",
         "sonner": "^2.0.7",
         "tailwind-merge": "^3.3.1",
         "zod": "^4.1.12"
@@ -64,6 +67,7 @@
     "devDependencies": {
         "@biomejs/biome": "2.2.0",
         "@tailwindcss/postcss": "^4",
+        "@types/negotiator": "^0.6.4",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",

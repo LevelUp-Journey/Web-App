@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    LEADERBOARD_HTTP,
+    PROFILES_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -12,7 +12,7 @@ export async function getLeaderboardAction(
     offset: number = 0,
 ): Promise<RequestSuccess<LeaderboardEntry[]> | RequestFailure> {
     try {
-        const response = await LEADERBOARD_HTTP.get<LeaderboardEntry[]>(
+        const response = await PROFILES_HTTP.get<LeaderboardEntry[]>(
             `/leaderboard?limit=${limit}&offset=${offset}`,
         );
         return { data: response.data, status: response.status };
@@ -21,17 +21,17 @@ export async function getLeaderboardAction(
             response?: { data?: unknown; status?: number };
             message?: string;
         };
-        
+
         let errorMessage = axiosError.message || "Unknown error";
-        
+
         if (axiosError.response?.data) {
-            if (typeof axiosError.response.data === 'string') {
+            if (typeof axiosError.response.data === "string") {
                 errorMessage = axiosError.response.data;
-            } else if (typeof axiosError.response.data === 'object') {
+            } else if (typeof axiosError.response.data === "object") {
                 errorMessage = JSON.stringify(axiosError.response.data);
             }
         }
-        
+
         return {
             data: errorMessage,
             status: axiosError.response?.status || 500,
@@ -43,7 +43,7 @@ export async function getUserPositionAction(
     userId: string,
 ): Promise<RequestSuccess<LeaderboardEntry> | RequestFailure> {
     try {
-        const response = await LEADERBOARD_HTTP.get<LeaderboardEntry>(
+        const response = await PROFILES_HTTP.get<LeaderboardEntry>(
             `/leaderboard/user/${userId}`,
         );
         return { data: response.data, status: response.status };
@@ -63,11 +63,12 @@ export async function getUserPositionAction(
     }
 }
 
-export async function getTop500Action(): Promise<RequestSuccess<LeaderboardEntry[]> | RequestFailure> {
+export async function getTop500Action(): Promise<
+    RequestSuccess<LeaderboardEntry[]> | RequestFailure
+> {
     try {
-        const response = await LEADERBOARD_HTTP.get<LeaderboardEntry[]>(
-            `/leaderboard/top500`,
-        );
+        const response =
+            await PROFILES_HTTP.get<LeaderboardEntry[]>(`/leaderboard/top500`);
         return { data: response.data, status: response.status };
     } catch (error: unknown) {
         const axiosError = error as {
@@ -85,9 +86,11 @@ export async function getTop500Action(): Promise<RequestSuccess<LeaderboardEntry
     }
 }
 
-export async function recalculateLeaderboardAction(): Promise<RequestSuccess<void> | RequestFailure> {
+export async function recalculateLeaderboardAction(): Promise<
+    RequestSuccess<void> | RequestFailure
+> {
     try {
-        const response = await LEADERBOARD_HTTP.post<void>(
+        const response = await PROFILES_HTTP.post<void>(
             `/leaderboard/recalculate`,
         );
         return { data: response.data, status: response.status };
