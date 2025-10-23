@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { CONSTS } from "@/lib/consts";
 
 export async function GET(request: NextRequest) {
