@@ -1,10 +1,10 @@
+import type { LeaderboardEntry } from "../entities/leaderboard.entity";
 import {
     getLeaderboardAction,
-    getUserPositionAction,
     getTop500Action,
+    getUserPositionAction,
     recalculateLeaderboardAction,
 } from "../server/leaderboard.actions";
-import type { LeaderboardEntry } from "../entities/leaderboard.entity";
 
 export class LeaderboardController {
     public static async getLeaderboard(

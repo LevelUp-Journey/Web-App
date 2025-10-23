@@ -1,8 +1,8 @@
+import type { CompetitiveProfile } from "../entities/competitive-profile.entity";
 import {
     getCompetitiveProfileAction,
     getUsersByRankAction,
 } from "../server/competitive.actions";
-import type { CompetitiveProfile } from "../entities/competitive-profile.entity";
 
 export class CompetitiveController {
     public static async getCompetitiveProfile(

@@ -1,10 +1,10 @@
-import {
-    createReactionAction,
-    getReactionsByPostIdAction,
-    deleteReactionAction,
-    type CreateReactionRequest,
-} from "../server/reaction.actions";
 import type { Reaction } from "../entities/reaction.entity";
+import {
+    type CreateReactionRequest,
+    createReactionAction,
+    deleteReactionAction,
+    getReactionsByPostIdAction,
+} from "../server/reaction.actions";
 
 export class ReactionController {
     static async createReaction(

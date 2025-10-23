@@ -15,6 +15,6 @@ export class CommunityAssembler {
     }
 
     static toEntitiesFromResponse(responses: CommunityResponse[]): Community[] {
-        return responses.map(this.toEntityFromResponse);
+        return responses.map(CommunityAssembler.toEntityFromResponse);
     }
 }

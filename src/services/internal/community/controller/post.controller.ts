@@ -1,11 +1,11 @@
-import { PostAssembler } from "./post.assembler";
+import type { Post } from "../entities/post.entity";
 import {
+    type CreatePostRequest,
+    createPostAction,
     getAllPostsAction,
     getPostsByUserIdAction,
-    createPostAction,
-    type CreatePostRequest,
 } from "../server/post.actions";
-import type { Post } from "../entities/post.entity";
+import { PostAssembler } from "./post.assembler";
 import type { PostResponse } from "./post.response";
 
 export class PostController {

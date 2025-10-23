@@ -31,6 +31,8 @@ export class PostAssembler {
     }
 
     public static toEntitiesFromResponse(responses: PostResponse[]): Post[] {
-        return responses.map((response) => this.toEntityFromResponse(response));
+        return responses.map((response) =>
+            PostAssembler.toEntityFromResponse(response),
+        );
     }
 }

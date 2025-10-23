@@ -1,10 +1,10 @@
 import { jwtDecode } from "jwt-decode";
-import { AuthController } from "../../iam/controller/auth.controller";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
     getProfileAction,
     getProfileByIdAction,
-    updateProfileAction,
     searchProfilesAction,
+    updateProfileAction,
 } from "../server/profile.actions";
 import type { ProfileResponse, UpdateProfileRequest } from "./profile.response";
 

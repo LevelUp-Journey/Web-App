@@ -1,14 +1,14 @@
-import { CommunityAssembler } from "./community.assembler";
+import type { Community } from "../entities/community.entity";
 import {
+    type CommunityResponse,
+    type CreateCommunityRequest,
     createCommunityAction,
     getCommunitiesAction,
     getCommunityByIdAction,
-    updateCommunityAction,
-    type CreateCommunityRequest,
     type UpdateCommunityRequest,
-    type CommunityResponse,
+    updateCommunityAction,
 } from "../server/community.actions";
-import type { Community } from "../entities/community.entity";
+import { CommunityAssembler } from "./community.assembler";
 
 export class CommunityController {
     static async createCommunity(
