@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "../entities/challenge.entity";
 import type { ChallengeResponse } from "./challenge.response";
 
@@ -15,7 +16,7 @@ const ChallengeValidator = z.object({
     name: z.string().min(1).max(100),
     description: z.string().max(1000),
     experiencePoints: z.number().min(0).max(10000),
-    status: z.string().min(1).max(100),
+    status: z.enum(ChallengeStatus),
     tags: z.array(ChallengeTagValidator),
 });
 
@@ -36,7 +37,7 @@ export class ChallengeAssembler {
             name: challenge.name,
             description: challenge.description,
             experiencePoints: challenge.experiencePoints,
-            status: challenge.status,
+            status: challenge.status as ChallengeStatus,
             tags: challenge.tags.map((tag) => ({
                 id: tag.id,
                 name: tag.name,

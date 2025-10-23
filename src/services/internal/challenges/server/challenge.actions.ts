@@ -1,5 +1,7 @@
 "use server";
 
+import { log } from "node:console";
+import type { AxiosError } from "axios";
 import {
     CHALLENGES_HTTP,
     type RequestFailure,
@@ -8,6 +10,7 @@ import {
 import type {
     ChallengeResponse,
     CreateChallengeRequest,
+    UpdateChallengeRequest,
 } from "../controller/challenge.response";
 
 export async function getPublicChallengesAction(): Promise<
@@ -66,14 +69,10 @@ export async function createChallengeAction(
             status: response.status,
         };
     } catch (error: unknown) {
-        const axiosError = error as {
-            response?: { data?: unknown; status?: number };
-            message?: string;
-        };
+        const axiosError = error as AxiosError<{ message: string }>;
         return {
             data: String(
-                axiosError.response?.data ||
-                    axiosError.message ||
+                (axiosError.response?.data?.message as string) ||
                     "Unknown error",
             ),
             status: axiosError.response?.status || 500,
@@ -91,6 +90,62 @@ export async function getChallengesByTeacherIdAction(
 
         return {
             data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function updateChallengeAction(
+    challengeId: string,
+    request: UpdateChallengeRequest,
+): Promise<RequestSuccess<ChallengeResponse> | RequestFailure> {
+    try {
+        const response = await CHALLENGES_HTTP.patch<ChallengeResponse>(
+            `/challenges/${challengeId}`,
+            request,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as AxiosError<{ message?: string }>;
+        return {
+            data: String(
+                (axiosError.response?.data?.message as string) ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function deleteChallengeAction(
+    challengeId: string,
+): Promise<RequestSuccess<true> | RequestFailure> {
+    try {
+        const response = await CHALLENGES_HTTP.delete(
+            `/challenges/${challengeId}`,
+        );
+
+        console.log("DELETE CHALLENGE RESPONSE", response);
+
+        return {
+            data: true,
             status: response.status,
         };
     } catch (error: unknown) {

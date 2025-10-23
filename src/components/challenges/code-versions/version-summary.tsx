@@ -1,3 +1,4 @@
+import { getReadableLanguageName } from "@/lib/consts";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 
 interface VersionSummaryProps {
@@ -36,7 +37,9 @@ export default function VersionSummary({
                                         className="p-4 border rounded-lg bg-card"
                                     >
                                         <h3 className="font-medium">
-                                            {version.language}
+                                            {getReadableLanguageName(
+                                                version.language,
+                                            )}
                                         </h3>
                                     </div>
                                 ))}

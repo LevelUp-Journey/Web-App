@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 
@@ -37,7 +38,7 @@ export default function VersionEditingForm({
                 },
             );
             toast.success("Code version updated successfully");
-            router.push(`/dashboard/challenges/${challengeId}`);
+            router.push(PATHS.DASHBOARD.CHALLENGES.EDIT(challengeId));
         } catch (error) {
             console.error("Error updating code version:", error);
             toast.error("Failed to update code version");

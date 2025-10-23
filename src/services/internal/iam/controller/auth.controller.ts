@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { ENV } from "@/lib/env";
 import {
     getAuthTokenAction,
@@ -27,7 +26,6 @@ export class AuthController {
             return data;
         }
 
-        toast.error("Error signing in");
         throw new Error("Error signing in");
     }
 
@@ -40,7 +38,6 @@ export class AuthController {
             return user;
         }
 
-        toast.error("Error signing up");
         throw new Error("Error signing up");
     }
 

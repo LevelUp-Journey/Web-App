@@ -8,7 +8,7 @@ export default function UniversityAnnouncements() {
         <Carousel
             opts={{ loop: true }}
             plugins={[Autoplay({ delay: CONSTS.DASHBOARD_CAROUSEL_SPEED })]}
-            className="w-full"
+            className="w-full px-4"
         >
             <CarouselContent>
                 <CarouselItem>

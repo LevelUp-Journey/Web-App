@@ -5,4 +5,5 @@ export interface VersionTest {
     expectedOutput: string;
     customValidationCode: string;
     failureMessage: string;
+    isSecret: boolean;
 }

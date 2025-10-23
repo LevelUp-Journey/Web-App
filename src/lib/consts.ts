@@ -23,3 +23,34 @@ export enum ChallengeDifficulty {
     HARD = "HARD",
     EXPERT = "EXPERT",
 }
+
+export enum ChallengeStatus {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+}
+
+export enum ProgrammingLanguage {
+    JAVASCRIPT = "JAVASCRIPT",
+    PYTHON = "PYTHON",
+    JAVA = "JAVA",
+    C_PLUS_PLUS = "C_PLUS_PLUS",
+}
+
+export function getReadableLanguageName(language: string): string {
+    switch (language) {
+        case ProgrammingLanguage.JAVASCRIPT:
+            return "JavaScript";
+        case ProgrammingLanguage.PYTHON:
+            return "Python";
+        case ProgrammingLanguage.JAVA:
+            return "Java";
+        case ProgrammingLanguage.C_PLUS_PLUS:
+            return "C++";
+        default:
+            // Handle unknown languages by capitalizing the first letter
+            return (
+                language.charAt(0).toUpperCase() +
+                language.slice(1).toLowerCase()
+            );
+    }
+}

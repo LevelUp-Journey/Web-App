@@ -1,20 +1,24 @@
 import Link from "next/link";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Button } from "@/components/ui/button";
+import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import CodeVersionsList from "./code-versions-list";
+import PublishButton from "./publish-button";
 
 interface ChallengeSummaryProps {
     challenge: Challenge;
     codeVersions: CodeVersion[];
     markdownSource: string;
+    isTeacher: boolean;
 }
 
 export default function ChallengeSummary({
     challenge,
     codeVersions,
     markdownSource,
+    isTeacher,
 }: ChallengeSummaryProps) {
     return (
         <section className="h-screen flex flex-col p-4 w-full max-w-4xl mx-auto">
@@ -28,10 +32,16 @@ export default function ChallengeSummary({
                         View the challenge details and description.
                     </p>
                 </div>
-                <div className="flex gap-4">
-                    <Button asChild>
-                        <Link href={`?editing=true`}>Edit Challenge</Link>
-                    </Button>
+                <div className="flex gap-2">
+                    {isTeacher &&
+                        challenge.status !== ChallengeStatus.PUBLISHED && (
+                            <PublishButton challengeId={challenge.id} />
+                        )}
+                    {isTeacher && (
+                        <Link href="?editing=true">
+                            <Button variant="outline">Edit</Button>
+                        </Link>
+                    )}
                 </div>
             </header>
 
@@ -63,6 +73,7 @@ export default function ChallengeSummary({
                     <CodeVersionsList
                         challengeId={challenge.id}
                         codeVersions={codeVersions}
+                        variant="summary"
                     />
                 </div>
 
