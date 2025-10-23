@@ -1,8 +1,10 @@
+"use client";
+
 import type { MDXComponents } from "mdx/types";
-import { MDXRemote } from "next-mdx-remote-client/rsc";
+import { hydrate, type SerializeResult } from "next-mdx-remote-client/csr";
 
 interface MdxRendererProps {
-    source: string;
+    serializedSource: SerializeResult | null;
 }
 
 const components: MDXComponents = {
@@ -84,8 +86,8 @@ const components: MDXComponents = {
     ),
 };
 
-export default async function MdxRenderer({ source }: MdxRendererProps) {
-    if (!source) {
+export default function MdxRenderer({ serializedSource }: MdxRendererProps) {
+    if (!serializedSource) {
         return (
             <p className="text-muted-foreground italic">
                 No description provided.
@@ -93,9 +95,24 @@ export default async function MdxRenderer({ source }: MdxRendererProps) {
         );
     }
 
+    if ("error" in serializedSource) {
+        return (
+            <p className="text-red-500 italic">
+                Error rendering description: {serializedSource.error.message}
+            </p>
+        );
+    }
+
+    const { content } = hydrate({
+        compiledSource: serializedSource.compiledSource,
+        frontmatter: serializedSource.frontmatter || {},
+        scope: serializedSource.scope || {},
+        components,
+    });
+
     return (
         <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-headings:text-foreground prose-p:text-foreground prose-li:text-foreground prose-strong:text-foreground prose-code:text-foreground prose-pre:bg-muted prose-code:bg-muted prose-blockquote:text-muted-foreground">
-            <MDXRemote source={source} components={components} />
+            {content}
         </div>
     );
 }
