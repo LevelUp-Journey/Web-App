@@ -1,5 +1,8 @@
+import Image from "next/image";
+import Link from "next/link";
 import { serialize } from "next-mdx-remote-client/serialize";
 import StudentCodeEditor from "@/components/challenges/student-code-editor";
+import { getLocalizedPaths } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
@@ -8,11 +11,16 @@ import type { CodeVersion } from "@/services/internal/challenges/challenge/entit
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 
 interface PageProps {
-    params: Promise<{ challengeId: string; codeVersionId: string }>;
+    params: Promise<{
+        challengeId: string;
+        codeVersionId: string;
+        lang: string;
+    }>;
 }
 
 export default async function StudentEditorPage({ params }: PageProps) {
-    const { challengeId, codeVersionId } = await params;
+    const { challengeId, codeVersionId, lang } = await params;
+    const PATHS = getLocalizedPaths(lang);
 
     // Fetch data on the server
     const challenge: Challenge =
@@ -37,11 +45,14 @@ export default async function StudentEditorPage({ params }: PageProps) {
         : null;
 
     return (
-        <StudentCodeEditor
-            challenge={challenge}
-            codeVersion={codeVersion}
-            tests={allTests}
-            serializedDescription={serializedDescription}
-        />
+        <div className="min-h-screen bg-background">
+            {/* Editor */}
+            <StudentCodeEditor
+                challenge={challenge}
+                codeVersion={codeVersion}
+                tests={allTests}
+                serializedDescription={serializedDescription}
+            />
+        </div>
     );
 }

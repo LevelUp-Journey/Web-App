@@ -1,6 +1,8 @@
 "use client";
 
-import { Lock, Play } from "lucide-react";
+import { ArrowLeft, Lock, Play } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
@@ -14,6 +16,7 @@ import {
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
@@ -66,13 +69,22 @@ export default function StudentCodeEditor({
         <section className="h-screen flex flex-col">
             {/* Header */}
             <header className="shrink-0 p-4 border-b flex justify-between items-center">
-                <div>
-                    <h1 className="text-2xl font-bold">{challenge.name}</h1>
-                    <p className="text-sm text-muted-foreground">
-                        {getReadableLanguageName(
-                            codeVersion.language as ProgrammingLanguage,
-                        )}
-                    </p>
+                <div className="flex items-center gap-4">
+                    <Link
+                        href={PATHS.DASHBOARD.ROOT}
+                        className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                    >
+                        <ArrowLeft />
+                    </Link>
+
+                    <div>
+                        <h1 className="text-2xl font-bold">{challenge.name}</h1>
+                        <p className="text-sm text-muted-foreground">
+                            {getReadableLanguageName(
+                                codeVersion.language as ProgrammingLanguage,
+                            )}
+                        </p>
+                    </div>
                 </div>
                 <Button
                     onClick={handleRunCode}
