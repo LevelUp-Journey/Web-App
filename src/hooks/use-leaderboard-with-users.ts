@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { LeaderboardController } from "@/services/internal/leaderboard/controller/leaderboard.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 export interface LeaderboardUserEntry {
     id: string;

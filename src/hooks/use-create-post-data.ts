@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 export function useCreatePostData() {
     const [communities, setCommunities] = useState<Community[]>([]);

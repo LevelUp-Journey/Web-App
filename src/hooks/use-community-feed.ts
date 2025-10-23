@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { PostController } from "@/services/internal/community/controller/post.controller";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import { PostController } from "@/services/internal/community/controller/post.controller";
 import { ReactionController } from "@/services/internal/community/controller/reaction.controller";
-import type { Post } from "@/services/internal/community/entities/post.entity";
 import type { Community } from "@/services/internal/community/entities/community.entity";
+import type { Post } from "@/services/internal/community/entities/post.entity";
 import type { Reaction } from "@/services/internal/community/entities/reaction.entity";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 interface PostWithDetails extends Post {
     authorProfile?: {
