@@ -21,6 +21,7 @@ interface StudentCodeEditorProps {
     challenge: Challenge;
     codeVersion: CodeVersion;
     tests: VersionTest[];
+    serializedDescription: any;
 }
 
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
@@ -42,6 +43,7 @@ export default function StudentCodeEditor({
     challenge,
     codeVersion,
     tests,
+    serializedDescription,
 }: StudentCodeEditorProps) {
     const [code, setCode] = useState<string>(codeVersion.initialCode);
     const [isRunning, setIsRunning] = useState(false);
@@ -133,8 +135,8 @@ export default function StudentCodeEditor({
                                         </h3>
                                         <div className="bg-muted p-4 rounded-md">
                                             <MdxRenderer
-                                                source={
-                                                    challenge.description || ""
+                                                serializedSource={
+                                                    serializedDescription
                                                 }
                                             />
                                         </div>

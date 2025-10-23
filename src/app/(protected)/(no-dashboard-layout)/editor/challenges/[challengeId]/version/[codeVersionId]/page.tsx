@@ -1,3 +1,4 @@
+import { serialize } from "next-mdx-remote-client/serialize";
 import StudentCodeEditor from "@/components/challenges/student-code-editor";
 import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
@@ -30,11 +31,17 @@ export default async function StudentEditorPage({ params }: PageProps) {
     // Filter out secret tests for students
     const publicTests = tests.filter((test) => !test.isSecret);
 
+    // Serialize the description for client-side rendering
+    const serializedDescription = challenge.description
+        ? await serialize({ source: challenge.description })
+        : null;
+
     return (
         <StudentCodeEditor
             challenge={challenge}
             codeVersion={codeVersion}
             tests={publicTests}
+            serializedDescription={serializedDescription}
         />
     );
 }

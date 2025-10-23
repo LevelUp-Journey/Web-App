@@ -1,3 +1,4 @@
+import { serialize } from "next-mdx-remote-client/serialize";
 import ChallengeEditing from "@/components/challenges/challenge-editing";
 import ChallengeSummary from "@/components/challenges/challenge-summary";
 import { UserRole } from "@/lib/consts";
@@ -29,6 +30,11 @@ export default async function ChallengePage({
 
     const isEditing = editing === "true";
 
+    // Serialize the description for client-side rendering
+    const serializedMarkdown = challenge.description
+        ? await serialize({ source: challenge.description })
+        : null;
+
     if (isEditing) {
         return (
             <ChallengeEditing
@@ -43,7 +49,7 @@ export default async function ChallengePage({
         <ChallengeSummary
             challenge={challenge}
             codeVersions={codeVersions}
-            markdownSource={challenge.description || ""}
+            serializedMarkdown={serializedMarkdown}
             isTeacher={isTeacher}
         />
     );

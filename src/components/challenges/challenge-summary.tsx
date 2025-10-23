@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { hydrate, type SerializeResult } from "next-mdx-remote-client/csr";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Button } from "@/components/ui/button";
 import { ChallengeStatus } from "@/lib/consts";
@@ -10,14 +13,14 @@ import PublishButton from "./publish-button";
 interface ChallengeSummaryProps {
     challenge: Challenge;
     codeVersions: CodeVersion[];
-    markdownSource: string;
+    serializedMarkdown: SerializeResult | null;
     isTeacher: boolean;
 }
 
 export default function ChallengeSummary({
     challenge,
     codeVersions,
-    markdownSource,
+    serializedMarkdown,
     isTeacher,
 }: ChallengeSummaryProps) {
     return (
@@ -81,7 +84,7 @@ export default function ChallengeSummary({
                 <div className="space-y-4">
                     <h2 className="text-xl font-semibold">Description</h2>
                     <div className="bg-muted p-4 rounded-md">
-                        <MdxRenderer source={markdownSource} />
+                        <MdxRenderer serializedSource={serializedMarkdown} />
                     </div>
                 </div>
             </div>
