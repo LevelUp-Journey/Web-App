@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, UserPlus, UserMinus, MessageSquare, Users } from "lucide-react";
+import {
+    ArrowLeft,
+    UserPlus,
+    UserMinus,
+    MessageSquare,
+    Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -44,7 +50,7 @@ export default function UserProfilePage() {
             const [profileData, userId, userPosts] = await Promise.all([
                 ProfileController.getProfileById(profileId),
                 AuthController.getUserId(),
-                PostController.getPostsByUserId(profileId)
+                PostController.getPostsByUserId(profileId),
             ]);
 
             setProfile(profileData);
@@ -53,7 +59,9 @@ export default function UserProfilePage() {
 
             // Load communities created by this user
             const allCommunities = await CommunityController.getCommunities();
-            const userCommunities = allCommunities.filter(c => c.ownerProfileId === profileId);
+            const userCommunities = allCommunities.filter(
+                (c) => c.ownerProfileId === profileId,
+            );
             setCommunities(userCommunities);
 
             // TODO: Load follow status, followers and following counts
@@ -61,7 +69,6 @@ export default function UserProfilePage() {
             setFollowersCount(0);
             setFollowingCount(0);
             setIsFollowing(false);
-
         } catch (error) {
             console.error("Error loading profile data:", error);
         } finally {
@@ -88,11 +95,17 @@ export default function UserProfilePage() {
         return (
             <div className="container mx-auto p-6">
                 <div className="max-w-2xl mx-auto space-y-6">
-                    <Button variant="ghost" onClick={() => router.back()} className="mb-4">
+                    <Button
+                        variant="ghost"
+                        onClick={() => router.back()}
+                        className="mb-4"
+                    >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Back
                     </Button>
                     <div className="text-center space-y-4">
-                        <h1 className="text-xl font-semibold">Profile not found</h1>
+                        <h1 className="text-xl font-semibold">
+                            Profile not found
+                        </h1>
                     </div>
                 </div>
             </div>
@@ -104,7 +117,11 @@ export default function UserProfilePage() {
     return (
         <div className="container mx-auto p-6">
             <div className="max-w-4xl mx-auto space-y-6">
-                <Button variant="ghost" onClick={() => router.back()} className="mb-4">
+                <Button
+                    variant="ghost"
+                    onClick={() => router.back()}
+                    className="mb-4"
+                >
                     <ArrowLeft className="h-4 w-4 mr-2" /> Back
                 </Button>
 
@@ -114,30 +131,45 @@ export default function UserProfilePage() {
                         <div className="flex items-start justify-between">
                             <div className="flex items-center space-x-4">
                                 <Avatar className="w-20 h-20">
-                                    <AvatarImage src={profile.profileUrl} alt={profile.username} />
+                                    <AvatarImage
+                                        src={profile.profileUrl}
+                                        alt={profile.username}
+                                    />
                                     <AvatarFallback className="text-lg">
-                                        {profile.firstName?.[0]}{profile.lastName?.[0]}
+                                        {profile.firstName?.[0]}
+                                        {profile.lastName?.[0]}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div>
                                     <h1 className="text-2xl font-bold">
                                         {profile.firstName} {profile.lastName}
                                     </h1>
-                                    <p className="text-muted-foreground">@{profile.username}</p>
+                                    <p className="text-muted-foreground">
+                                        @{profile.username}
+                                    </p>
                                     <div className="flex items-center gap-4 mt-2">
                                         <div className="flex items-center gap-1">
                                             <Users className="h-4 w-4" />
-                                            <span className="text-sm">{followersCount} followers</span>
+                                            <span className="text-sm">
+                                                {followersCount} followers
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <Users className="h-4 w-4" />
-                                            <span className="text-sm">{followingCount} following</span>
+                                            <span className="text-sm">
+                                                {followingCount} following
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             {!isOwnProfile && (
-                                <Button onClick={handleFollow} variant={isFollowing ? "outline" : "default"}>
+                                <Button
+                                    onClick={handleFollow}
+                                    variant={
+                                        isFollowing ? "outline" : "default"
+                                    }
+                                >
                                     {isFollowing ? (
                                         <>
                                             <UserMinus className="h-4 w-4 mr-2" />
@@ -159,7 +191,9 @@ export default function UserProfilePage() {
                 <Tabs defaultValue="posts" className="w-full">
                     <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="posts">Posts</TabsTrigger>
-                        <TabsTrigger value="communities">Communities</TabsTrigger>
+                        <TabsTrigger value="communities">
+                            Communities
+                        </TabsTrigger>
                         <TabsTrigger value="about">About</TabsTrigger>
                     </TabsList>
 
@@ -169,9 +203,12 @@ export default function UserProfilePage() {
                                 <Card>
                                     <CardContent className="p-8 text-center">
                                         <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                                        <h3 className="text-xl font-semibold mb-2">No posts yet</h3>
+                                        <h3 className="text-xl font-semibold mb-2">
+                                            No posts yet
+                                        </h3>
                                         <p className="text-muted-foreground">
-                                            This user hasn't posted anything yet.
+                                            This user hasn't posted anything
+                                            yet.
                                         </p>
                                     </CardContent>
                                 </Card>
@@ -201,17 +238,25 @@ export default function UserProfilePage() {
                                 <Card className="col-span-full">
                                     <CardContent className="p-8 text-center">
                                         <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                                        <h3 className="text-xl font-semibold mb-2">No communities</h3>
+                                        <h3 className="text-xl font-semibold mb-2">
+                                            No communities
+                                        </h3>
                                         <p className="text-muted-foreground">
-                                            This user hasn't created any communities yet.
+                                            This user hasn't created any
+                                            communities yet.
                                         </p>
                                     </CardContent>
                                 </Card>
                             ) : (
                                 communities.map((community) => (
-                                    <Card key={community.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                                    <Card
+                                        key={community.id}
+                                        className="cursor-pointer hover:shadow-md transition-shadow"
+                                    >
                                         <CardContent className="p-4">
-                                            <h3 className="font-semibold">{community.name}</h3>
+                                            <h3 className="font-semibold">
+                                                {community.name}
+                                            </h3>
                                             <p className="text-sm text-muted-foreground mt-1">
                                                 {community.description}
                                             </p>
@@ -229,7 +274,8 @@ export default function UserProfilePage() {
                             </CardHeader>
                             <CardContent>
                                 <p className="text-muted-foreground">
-                                    More information about this user will be displayed here.
+                                    More information about this user will be
+                                    displayed here.
                                 </p>
                             </CardContent>
                         </Card>

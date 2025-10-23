@@ -24,9 +24,13 @@ export function SearchProfileCard({ profile }: SearchProfileCardProps) {
             <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
                     <Avatar className="w-12 h-12">
-                        <AvatarImage src={profile.profileUrl} alt={profile.username} />
+                        <AvatarImage
+                            src={profile.profileUrl}
+                            alt={profile.username}
+                        />
                         <AvatarFallback>
-                            {profile.firstName?.[0]}{profile.lastName?.[0]}
+                            {profile.firstName?.[0]}
+                            {profile.lastName?.[0]}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">

@@ -43,7 +43,8 @@ export default function ImageUpload({
 
                 try {
                     // Upload to Cloudinary
-                    const imageUrl = await CloudinaryController.uploadImage(base64);
+                    const imageUrl =
+                        await CloudinaryController.uploadImage(base64);
                     setPreviewUrl(imageUrl);
                     onChange(imageUrl);
                 } catch (error) {
@@ -87,8 +88,7 @@ export default function ImageUpload({
                         <X className="h-4 w-4" />
                     </Button>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                </p>
+                <p className="text-xs text-muted-foreground"></p>
             </div>
         );
     }
@@ -110,7 +110,9 @@ export default function ImageUpload({
                     <div className="flex flex-col items-center justify-center py-8">
                         <Upload className="h-8 w-8 text-muted-foreground mb-2" />
                         <p className="text-sm font-medium">
-                            {isUploading ? "Uploading..." : "Click to upload image"}
+                            {isUploading
+                                ? "Uploading..."
+                                : "Click to upload image"}
                         </p>
                         <p className="text-xs text-muted-foreground">
                             PNG, JPG, JPEG, GIF, WebP up to 5MB

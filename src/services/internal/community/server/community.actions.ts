@@ -86,7 +86,9 @@ export async function getCommunityByIdAction(
     communityId: string,
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.get(`/communities/${communityId}`);
+        const response = await COMMUNITY_HTTP.get(
+            `/communities/${communityId}`,
+        );
 
         return {
             data: response.data,
@@ -113,7 +115,10 @@ export async function updateCommunityAction(
     request: UpdateCommunityRequest,
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.put(`/communities/${communityId}`, request);
+        const response = await COMMUNITY_HTTP.put(
+            `/communities/${communityId}`,
+            request,
+        );
 
         return {
             data: response.data,

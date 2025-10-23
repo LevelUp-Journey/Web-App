@@ -17,16 +17,10 @@ const rankSvgMap: Record<string, string> = {
 };
 
 export function RankIcon({ rank, className = "h-6 w-6" }: RankIconProps) {
-    const normalizedRank = rank.toLowerCase().replace(/\s+/g, '');
+    const normalizedRank = rank.toLowerCase().replace(/\s+/g, "");
     const svgPath = rankSvgMap[normalizedRank] || rankSvgMap.bronze;
 
-    return (
-        <img
-            src={svgPath}
-            alt={`${rank} rank`}
-            className={className}
-        />
-    );
+    return <img src={svgPath} alt={`${rank} rank`} className={className} />;
 }
 
 export function getRankFromPoints(points: number): string {

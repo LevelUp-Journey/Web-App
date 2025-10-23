@@ -38,7 +38,9 @@ export default function AuthLayout({
                 </div>
 
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={buttonHref} suppressHydrationWarning>{buttonMessage}</Link>
+                    <Link href={buttonHref} suppressHydrationWarning>
+                        {buttonMessage}
+                    </Link>
                 </Button>
             </header>
 

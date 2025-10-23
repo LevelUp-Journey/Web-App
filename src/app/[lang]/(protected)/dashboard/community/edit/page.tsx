@@ -12,7 +12,7 @@ export default function EditCommunityPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const communityId = searchParams.get("id");
-    
+
     const [community, setCommunity] = useState<Community | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -32,7 +32,8 @@ export default function EditCommunityPage() {
 
         try {
             setLoading(true);
-            const data = await CommunityController.getCommunityById(communityId);
+            const data =
+                await CommunityController.getCommunityById(communityId);
             setCommunity(data);
         } catch (err) {
             console.error("Error loading community:", err);
@@ -54,7 +55,9 @@ export default function EditCommunityPage() {
         return (
             <div className="container mx-auto p-6">
                 <div className="flex items-center justify-center min-h-[400px]">
-                    <p className="text-muted-foreground">Loading community...</p>
+                    <p className="text-muted-foreground">
+                        Loading community...
+                    </p>
                 </div>
             </div>
         );
@@ -64,8 +67,13 @@ export default function EditCommunityPage() {
         return (
             <div className="container mx-auto p-6">
                 <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-                    <p className="text-destructive">{error || "Community not found"}</p>
-                    <Button size="sm" onClick={() => router.push("/dashboard/communities")}>
+                    <p className="text-destructive">
+                        {error || "Community not found"}
+                    </p>
+                    <Button
+                        size="sm"
+                        onClick={() => router.push("/dashboard/communities")}
+                    >
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Back to Communities
                     </Button>

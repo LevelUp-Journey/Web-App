@@ -1,165 +1,165 @@
 {
-  "navigation": {
-    "home": "Inicio",
-    "dashboard": "Panel",
-    "challenges": "Desafíos",
-    "profile": "Perfil",
-    "settings": "Configuración",
-    "logout": "Cerrar sesión",
-    "login": "Iniciar sesión",
-    "signup": "Registrarse"
-  },
-  "common": {
-    "loading": "Cargando...",
-    "error": "Error",
-    "success": "Éxito",
-    "cancel": "Cancelar",
-    "save": "Guardar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "create": "Crear",
-    "update": "Actualizar",
-    "search": "Buscar",
-    "filter": "Filtrar",
-    "sort": "Ordenar",
-    "actions": "Acciones",
-    "back": "Atrás",
-    "next": "Siguiente",
-    "previous": "Anterior",
-    "submit": "Enviar",
-    "close": "Cerrar",
-    "confirm": "Confirmar",
-    "yes": "Sí",
-    "no": "No"
-  },
-  "auth": {
-    "login": {
-      "title": "Inicia sesión en tu cuenta",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "rememberMe": "Recuérdame",
-      "forgotPassword": "¿Olvidaste tu contraseña?",
-      "submit": "Iniciar sesión",
-      "noAccount": "¿No tienes una cuenta?",
-      "signUp": "Regístrate aquí"
+    "navigation": {
+        "home": "Inicio",
+        "dashboard": "Panel",
+        "challenges": "Desafíos",
+        "profile": "Perfil",
+        "settings": "Configuración",
+        "logout": "Cerrar sesión",
+        "login": "Iniciar sesión",
+        "signup": "Registrarse"
     },
-    "signup": {
-      "title": "Crear una cuenta",
-      "name": "Nombre completo",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "confirmPassword": "Confirmar contraseña",
-      "submit": "Registrarse",
-      "haveAccount": "¿Ya tienes una cuenta?",
-      "login": "Inicia sesión aquí"
+    "common": {
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "create": "Crear",
+        "update": "Actualizar",
+        "search": "Buscar",
+        "filter": "Filtrar",
+        "sort": "Ordenar",
+        "actions": "Acciones",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "previous": "Anterior",
+        "submit": "Enviar",
+        "close": "Cerrar",
+        "confirm": "Confirmar",
+        "yes": "Sí",
+        "no": "No"
+    },
+    "auth": {
+        "login": {
+            "title": "Inicia sesión en tu cuenta",
+            "email": "Correo electrónico",
+            "password": "Contraseña",
+            "rememberMe": "Recuérdame",
+            "forgotPassword": "¿Olvidaste tu contraseña?",
+            "submit": "Iniciar sesión",
+            "noAccount": "¿No tienes una cuenta?",
+            "signUp": "Regístrate aquí"
+        },
+        "signup": {
+            "title": "Crear una cuenta",
+            "name": "Nombre completo",
+            "email": "Correo electrónico",
+            "password": "Contraseña",
+            "confirmPassword": "Confirmar contraseña",
+            "submit": "Registrarse",
+            "haveAccount": "¿Ya tienes una cuenta?",
+            "login": "Inicia sesión aquí"
+        },
+        "errors": {
+            "invalidCredentials": "Correo electrónico o contraseña incorrectos",
+            "emailExists": "El correo electrónico ya existe",
+            "passwordMismatch": "Las contraseñas no coinciden",
+            "required": "Este campo es obligatorio",
+            "invalidEmail": "Dirección de correo electrónico no válida"
+        }
+    },
+    "dashboard": {
+        "welcome": "Bienvenido de nuevo",
+        "stats": {
+            "challenges": "Desafíos completados",
+            "experience": "Experiencia total",
+            "rank": "Rango actual",
+            "streak": "Días seguidos"
+        },
+        "recentActivity": "Actividad reciente",
+        "popularChallenges": "Desafíos populares"
+    },
+    "challenges": {
+        "title": "Desafíos",
+        "description": "Explora y completa desafíos de programación",
+        "create": "Crear desafío",
+        "edit": "Editar desafío",
+        "delete": "Eliminar desafío",
+        "publish": "Publicar",
+        "unpublish": "Despublicar",
+        "details": {
+            "title": "Detalles del desafío",
+            "description": "Descripción",
+            "difficulty": "Dificultad",
+            "experiencePoints": "Puntos de experiencia",
+            "language": "Lenguaje de programación",
+            "tags": "Etiquetas",
+            "status": "Estado",
+            "createdAt": "Creado el",
+            "updatedAt": "Actualizado el"
+        },
+        "status": {
+            "draft": "Borrador",
+            "published": "Publicado",
+            "archived": "Archivado"
+        },
+        "difficulty": {
+            "easy": "Fácil",
+            "medium": "Medio",
+            "hard": "Difícil"
+        },
+        "codeVersions": {
+            "title": "Versiones de código",
+            "create": "Agregar versión de código",
+            "edit": "Editar versión",
+            "delete": "Eliminar versión",
+            "language": "Lenguaje",
+            "initialCode": "Código inicial",
+            "functionName": "Nombre de función",
+            "testCases": "Casos de prueba"
+        },
+        "editor": {
+            "title": "Editor de código",
+            "description": "Descripción del desafío",
+            "yourSolution": "Tu solución",
+            "testCases": "Casos de prueba",
+            "runCode": "Ejecutar código",
+            "submit": "Enviar solución",
+            "running": "Ejecutando...",
+            "hint": "Pista",
+            "expectedOutput": "Salida esperada",
+            "actualOutput": "Tu salida",
+            "passed": "Aprobado",
+            "failed": "Fallido"
+        },
+        "messages": {
+            "created": "Desafío creado exitosamente",
+            "updated": "Desafío actualizado exitosamente",
+            "deleted": "Desafío eliminado exitosamente",
+            "published": "Desafío publicado exitosamente",
+            "unpublished": "Desafío despublicado exitosamente",
+            "submitSuccess": "¡Solución enviada exitosamente!",
+            "submitError": "Error al enviar la solución"
+        }
+    },
+    "profile": {
+        "title": "Perfil",
+        "edit": "Editar perfil",
+        "stats": "Estadísticas",
+        "achievements": "Logros",
+        "settings": "Configuración",
+        "information": {
+            "name": "Nombre",
+            "email": "Correo electrónico",
+            "bio": "Biografía",
+            "location": "Ubicación",
+            "website": "Sitio web",
+            "joinedDate": "Se unió"
+        },
+        "messages": {
+            "updated": "Perfil actualizado exitosamente",
+            "updateError": "Error al actualizar el perfil"
+        }
     },
     "errors": {
-      "invalidCredentials": "Correo electrónico o contraseña incorrectos",
-      "emailExists": "El correo electrónico ya existe",
-      "passwordMismatch": "Las contraseñas no coinciden",
-      "required": "Este campo es obligatorio",
-      "invalidEmail": "Dirección de correo electrónico no válida"
+        "notFound": "Página no encontrada",
+        "serverError": "Error del servidor",
+        "unauthorized": "Acceso no autorizado",
+        "forbidden": "Acceso prohibido",
+        "badRequest": "Solicitud incorrecta",
+        "generic": "Algo salió mal"
     }
-  },
-  "dashboard": {
-    "welcome": "Bienvenido de nuevo",
-    "stats": {
-      "challenges": "Desafíos completados",
-      "experience": "Experiencia total",
-      "rank": "Rango actual",
-      "streak": "Días seguidos"
-    },
-    "recentActivity": "Actividad reciente",
-    "popularChallenges": "Desafíos populares"
-  },
-  "challenges": {
-    "title": "Desafíos",
-    "description": "Explora y completa desafíos de programación",
-    "create": "Crear desafío",
-    "edit": "Editar desafío",
-    "delete": "Eliminar desafío",
-    "publish": "Publicar",
-    "unpublish": "Despublicar",
-    "details": {
-      "title": "Detalles del desafío",
-      "description": "Descripción",
-      "difficulty": "Dificultad",
-      "experiencePoints": "Puntos de experiencia",
-      "language": "Lenguaje de programación",
-      "tags": "Etiquetas",
-      "status": "Estado",
-      "createdAt": "Creado el",
-      "updatedAt": "Actualizado el"
-    },
-    "status": {
-      "draft": "Borrador",
-      "published": "Publicado",
-      "archived": "Archivado"
-    },
-    "difficulty": {
-      "easy": "Fácil",
-      "medium": "Medio",
-      "hard": "Difícil"
-    },
-    "codeVersions": {
-      "title": "Versiones de código",
-      "create": "Agregar versión de código",
-      "edit": "Editar versión",
-      "delete": "Eliminar versión",
-      "language": "Lenguaje",
-      "initialCode": "Código inicial",
-      "functionName": "Nombre de función",
-      "testCases": "Casos de prueba"
-    },
-    "editor": {
-      "title": "Editor de código",
-      "description": "Descripción del desafío",
-      "yourSolution": "Tu solución",
-      "testCases": "Casos de prueba",
-      "runCode": "Ejecutar código",
-      "submit": "Enviar solución",
-      "running": "Ejecutando...",
-      "hint": "Pista",
-      "expectedOutput": "Salida esperada",
-      "actualOutput": "Tu salida",
-      "passed": "Aprobado",
-      "failed": "Fallido"
-    },
-    "messages": {
-      "created": "Desafío creado exitosamente",
-      "updated": "Desafío actualizado exitosamente",
-      "deleted": "Desafío eliminado exitosamente",
-      "published": "Desafío publicado exitosamente",
-      "unpublished": "Desafío despublicado exitosamente",
-      "submitSuccess": "¡Solución enviada exitosamente!",
-      "submitError": "Error al enviar la solución"
-    }
-  },
-  "profile": {
-    "title": "Perfil",
-    "edit": "Editar perfil",
-    "stats": "Estadísticas",
-    "achievements": "Logros",
-    "settings": "Configuración",
-    "information": {
-      "name": "Nombre",
-      "email": "Correo electrónico",
-      "bio": "Biografía",
-      "location": "Ubicación",
-      "website": "Sitio web",
-      "joinedDate": "Se unió"
-    },
-    "messages": {
-      "updated": "Perfil actualizado exitosamente",
-      "updateError": "Error al actualizar el perfil"
-    }
-  },
-  "errors": {
-    "notFound": "Página no encontrada",
-    "serverError": "Error del servidor",
-    "unauthorized": "Acceso no autorizado",
-    "forbidden": "Acceso prohibido",
-    "badRequest": "Solicitud incorrecta",
-    "generic": "Algo salió mal"
-  }
 }

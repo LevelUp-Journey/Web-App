@@ -30,7 +30,12 @@ export default function PostPage() {
     const [post, setPost] = useState<PostWithDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { userReaction: postUserReaction, isLoading: reactionLoading, toggleReaction, reactionCount } = useReactions(postId);
+    const {
+        userReaction: postUserReaction,
+        isLoading: reactionLoading,
+        toggleReaction,
+        reactionCount,
+    } = useReactions(postId);
 
     useEffect(() => {
         const loadPost = async () => {
@@ -39,7 +44,7 @@ export default function PostPage() {
 
                 // Get the post
                 const allPosts = await PostController.getAllPosts();
-                const foundPost = allPosts.find(p => p.id === postId);
+                const foundPost = allPosts.find((p) => p.id === postId);
 
                 if (!foundPost) {
                     setError("Post not found");
@@ -47,10 +52,15 @@ export default function PostPage() {
                 }
 
                 // Get author profile
-                const authorProfile = await ProfileController.getProfileByUserId(foundPost.authorId);
+                const authorProfile =
+                    await ProfileController.getProfileByUserId(
+                        foundPost.authorId,
+                    );
 
                 // Get community
-                const community = await CommunityController.getCommunityById(foundPost.communityId);
+                const community = await CommunityController.getCommunityById(
+                    foundPost.communityId,
+                );
 
                 setPost({
                     ...foundPost,
@@ -85,11 +95,18 @@ export default function PostPage() {
             <div className="w-full h-full overflow-y-auto">
                 <div className="container mx-auto p-6">
                     <div className="space-y-6">
-                        <Button variant="ghost" size="sm" onClick={() => router.back()} className="mb-4">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => router.back()}
+                            className="mb-4"
+                        >
                             <ArrowLeft className="h-4 w-4 mr-2" /> Back
                         </Button>
                         <div className="text-center space-y-4">
-                            <h1 className="text-xl font-semibold">{error || "Post not found"}</h1>
+                            <h1 className="text-xl font-semibold">
+                                {error || "Post not found"}
+                            </h1>
                         </div>
                     </div>
                 </div>
@@ -97,17 +114,22 @@ export default function PostPage() {
         );
     }
 
-    const date = new Date(post.createdAt).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+    const date = new Date(post.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
     });
 
     return (
         <div className="w-full h-full overflow-y-auto">
             <div className="container mx-auto p-6">
                 <div className="space-y-6">
-                    <Button variant="ghost" size="sm" onClick={() => router.back()} className="mb-4">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.back()}
+                        className="mb-4"
+                    >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Back
                     </Button>
 
@@ -117,25 +139,47 @@ export default function PostPage() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="h-12 w-12">
-                                        <AvatarImage src={post.authorProfile?.profileUrl} alt={post.authorProfile?.username || "User"} />
+                                        <AvatarImage
+                                            src={post.authorProfile?.profileUrl}
+                                            alt={
+                                                post.authorProfile?.username ||
+                                                "User"
+                                            }
+                                        />
                                         <AvatarFallback>
-                                            {post.authorProfile?.firstName?.[0] || post.authorProfile?.username?.[0] || "U"}
+                                            {post.authorProfile
+                                                ?.firstName?.[0] ||
+                                                post.authorProfile
+                                                    ?.username?.[0] ||
+                                                "U"}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
                                         <p className="font-medium">
-                                            {post.authorProfile ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}` : "Unknown User"}
+                                            {post.authorProfile
+                                                ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}`
+                                                : "Unknown User"}
                                         </p>
-                                        <p className="text-sm text-muted-foreground">@{post.authorProfile?.username || "unknown"}</p>
-                                        <p className="text-xs text-muted-foreground">{date}</p>
+                                        <p className="text-sm text-muted-foreground">
+                                            @
+                                            {post.authorProfile?.username ||
+                                                "unknown"}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {date}
+                                        </p>
                                     </div>
                                 </div>
-                                <Badge variant="outline">{post.community?.name || "Community"}</Badge>
+                                <Badge variant="outline">
+                                    {post.community?.name || "Community"}
+                                </Badge>
                             </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <h1 className="text-2xl font-bold">{post.title}</h1>
-                            <p className="text-muted-foreground leading-relaxed">{post.content}</p>
+                            <p className="text-muted-foreground leading-relaxed">
+                                {post.content}
+                            </p>
                             {post.imageUrl && (
                                 <img
                                     src={post.imageUrl}
@@ -155,9 +199,13 @@ export default function PostPage() {
                                     size="sm"
                                     onClick={toggleReaction}
                                     disabled={reactionLoading}
-                                    className={postUserReaction ? "text-red-500" : ""}
+                                    className={
+                                        postUserReaction ? "text-red-500" : ""
+                                    }
                                 >
-                                    <Heart className={`h-4 w-4 mr-2 ${postUserReaction ? "fill-current" : ""}`} />
+                                    <Heart
+                                        className={`h-4 w-4 mr-2 ${postUserReaction ? "fill-current" : ""}`}
+                                    />
                                     {reactionCount} Likes
                                 </Button>
                                 <Button variant="ghost" size="sm">
@@ -171,7 +219,9 @@ export default function PostPage() {
                     {/* Comments Section */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Comments ({post.comments.length})</CardTitle>
+                            <CardTitle>
+                                Comments ({post.comments.length})
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             {post.comments.length === 0 ? (
@@ -181,17 +231,28 @@ export default function PostPage() {
                             ) : (
                                 <div className="space-y-4">
                                     {post.comments.map((comment, index) => (
-                                        <div key={index} className="border-b pb-4 last:border-b-0">
+                                        <div
+                                            key={index}
+                                            className="border-b pb-4 last:border-b-0"
+                                        >
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Avatar className="h-6 w-6">
-                                                    <AvatarFallback className="text-xs">U</AvatarFallback>
+                                                    <AvatarFallback className="text-xs">
+                                                        U
+                                                    </AvatarFallback>
                                                 </Avatar>
-                                                <span className="text-sm font-medium">Anonymous User</span>
+                                                <span className="text-sm font-medium">
+                                                    Anonymous User
+                                                </span>
                                                 <span className="text-xs text-muted-foreground">
-                                                    {new Date(comment.createdAt).toLocaleDateString()}
+                                                    {new Date(
+                                                        comment.createdAt,
+                                                    ).toLocaleDateString()}
                                                 </span>
                                             </div>
-                                            <p className="text-sm">{comment.content}</p>
+                                            <p className="text-sm">
+                                                {comment.content}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>

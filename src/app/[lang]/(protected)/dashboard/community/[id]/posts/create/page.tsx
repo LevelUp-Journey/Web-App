@@ -34,7 +34,7 @@ export default function CreatePostInCommunityPage() {
             setLoading(true);
             const [communityData, userId] = await Promise.all([
                 CommunityController.getCommunityById(communityId),
-                AuthController.getUserId()
+                AuthController.getUserId(),
             ]);
 
             setCommunity(communityData);
@@ -81,7 +81,9 @@ export default function CreatePostInCommunityPage() {
 
                     <div className="text-center space-y-4">
                         <h1 className="text-xl font-semibold">Error</h1>
-                        <p className="text-muted-foreground">{error || "Community not found"}</p>
+                        <p className="text-muted-foreground">
+                            {error || "Community not found"}
+                        </p>
                     </div>
                 </div>
             </div>

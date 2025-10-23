@@ -23,7 +23,8 @@ export default function MyCommunitiesPage() {
     const [loading, setLoading] = useState(true);
     const [usernames, setUsernames] = useState<Record<string, string>>({});
     const [searchTerm, setSearchTerm] = useState("");
-    const [canCreateCommunity, setCanCreateCommunity] = useState<boolean>(false);
+    const [canCreateCommunity, setCanCreateCommunity] =
+        useState<boolean>(false);
 
     useEffect(() => {
         loadUserCommunities();
@@ -34,18 +35,20 @@ export default function MyCommunitiesPage() {
             setLoading(true);
             const [userId, userRoles] = await Promise.all([
                 AuthController.getUserId(),
-                AuthController.getUserRoles()
+                AuthController.getUserRoles(),
             ]);
-            
+
             // Check if user can create communities (only TEACHER and ADMIN)
-            const hasCreatePermission = userRoles.includes(UserRole.TEACHER) || userRoles.includes(UserRole.ADMIN);
+            const hasCreatePermission =
+                userRoles.includes(UserRole.TEACHER) ||
+                userRoles.includes(UserRole.ADMIN);
             setCanCreateCommunity(hasCreatePermission);
-            
+
             const allCommunities = await CommunityController.getCommunities();
-            
+
             // Filtrar solo las comunidades del usuario actual
             const userCommunities = allCommunities.filter(
-                (community) => community.ownerId === userId
+                (community) => community.ownerId === userId,
             );
 
             // Cargar usernames para cada comunidad
@@ -54,14 +57,17 @@ export default function MyCommunitiesPage() {
                 userCommunities.map(async (community) => {
                     try {
                         const profile = await ProfileController.getProfileById(
-                            community.ownerProfileId
+                            community.ownerProfileId,
                         );
                         usernameMap[community.ownerId] = profile.username;
                     } catch (error) {
-                        console.error(`Error loading profile for ${community.ownerProfileId}:`, error);
+                        console.error(
+                            `Error loading profile for ${community.ownerProfileId}:`,
+                            error,
+                        );
                         usernameMap[community.ownerId] = "Unknown User";
                     }
-                })
+                }),
             );
 
             setUsernames(usernameMap);
@@ -76,10 +82,15 @@ export default function MyCommunitiesPage() {
     // Filtrar comunidades basado en el término de búsqueda
     const filteredCommunities = useMemo(() => {
         if (!searchTerm.trim()) return communities;
-        
-        return communities.filter((community) =>
-            community.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            community.description.toLowerCase().includes(searchTerm.toLowerCase())
+
+        return communities.filter(
+            (community) =>
+                community.name
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                community.description
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()),
         );
     }, [communities, searchTerm]);
 
@@ -87,7 +98,9 @@ export default function MyCommunitiesPage() {
         return (
             <div className="container mx-auto p-6">
                 <div className="flex items-center justify-center min-h-[400px]">
-                    <p className="text-muted-foreground">Loading communities...</p>
+                    <p className="text-muted-foreground">
+                        Loading communities...
+                    </p>
                 </div>
             </div>
         );
@@ -99,8 +112,8 @@ export default function MyCommunitiesPage() {
             <div className="flex justify-center pt-4">
                 <div className="relative max-w-md w-full">
                     <InputGroup>
-                        <InputGroupInput 
-                            placeholder="Search..." 
+                        <InputGroupInput
+                            placeholder="Search..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -119,7 +132,11 @@ export default function MyCommunitiesPage() {
                 <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-semibold">My Communities</h2>
                     {canCreateCommunity && (
-                        <Button onClick={() => router.push("/dashboard/community/create")}>
+                        <Button
+                            onClick={() =>
+                                router.push("/dashboard/community/create")
+                            }
+                        >
                             <Plus className="h-4 w-4 mr-2" />
                             Create Community
                         </Button>
@@ -129,23 +146,36 @@ export default function MyCommunitiesPage() {
                 {filteredCommunities.length === 0 && communities.length > 0 ? (
                     <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg p-8">
                         <SearchIcon className="h-16 w-16 text-muted-foreground mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">No communities found</h2>
+                        <h2 className="text-xl font-semibold mb-2">
+                            No communities found
+                        </h2>
                         <p className="text-muted-foreground text-center mb-4 max-w-md">
-                            No communities match your search. Try different keywords.
+                            No communities match your search. Try different
+                            keywords.
                         </p>
-                        <Button variant="outline" onClick={() => setSearchTerm("")}>
+                        <Button
+                            variant="outline"
+                            onClick={() => setSearchTerm("")}
+                        >
                             Clear Search
                         </Button>
                     </div>
                 ) : filteredCommunities.length === 0 ? (
                     <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg p-8">
                         <Users className="h-16 w-16 text-muted-foreground mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">No communities yet</h2>
+                        <h2 className="text-xl font-semibold mb-2">
+                            No communities yet
+                        </h2>
                         <p className="text-muted-foreground text-center mb-4 max-w-md">
-                            Create your first community to start building your network and sharing content
+                            Create your first community to start building your
+                            network and sharing content
                         </p>
                         {canCreateCommunity && (
-                            <Button onClick={() => router.push("/dashboard/community/create")}>
+                            <Button
+                                onClick={() =>
+                                    router.push("/dashboard/community/create")
+                                }
+                            >
                                 <Plus className="h-4 w-4 mr-2" />
                                 Create Your First Community
                             </Button>

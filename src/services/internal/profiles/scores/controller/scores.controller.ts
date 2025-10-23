@@ -1,9 +1,9 @@
+import type { Score } from "../entities/score.entity";
 import {
     getAllScoresAction,
     getScoresByUserIdAction,
     getTotalPointsByUserIdAction,
 } from "../server/scores.actions";
-import type { Score } from "../entities/score.entity";
 
 export class ScoresController {
     public static async getAllScores(): Promise<Score[]> {
@@ -16,9 +16,10 @@ export class ScoresController {
             throw new Error("403: Authentication required");
         }
 
-        const errorMessage = typeof response.data === 'string'
-            ? response.data
-            : JSON.stringify(response.data);
+        const errorMessage =
+            typeof response.data === "string"
+                ? response.data
+                : JSON.stringify(response.data);
         throw new Error(`Failed to fetch all scores: ${errorMessage}`);
     }
 
@@ -32,9 +33,10 @@ export class ScoresController {
             throw new Error("403: Authentication required");
         }
 
-        const errorMessage = typeof response.data === 'string'
-            ? response.data
-            : JSON.stringify(response.data);
+        const errorMessage =
+            typeof response.data === "string"
+                ? response.data
+                : JSON.stringify(response.data);
         throw new Error(`Failed to fetch user scores: ${errorMessage}`);
     }
 
@@ -48,9 +50,10 @@ export class ScoresController {
             throw new Error("403: Authentication required");
         }
 
-        const errorMessage = typeof response.data === 'string'
-            ? response.data
-            : JSON.stringify(response.data);
+        const errorMessage =
+            typeof response.data === "string"
+                ? response.data
+                : JSON.stringify(response.data);
         throw new Error(`Failed to fetch user total points: ${errorMessage}`);
     }
 }

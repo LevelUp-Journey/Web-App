@@ -16,7 +16,9 @@ export default function CreateCommunityPage() {
         const checkPermissions = async () => {
             try {
                 const roles = await AuthController.getUserRoles();
-                const role = roles.find(r => r === 'ROLE_TEACHER' || r === 'ROLE_ADMIN');
+                const role = roles.find(
+                    (r) => r === "ROLE_TEACHER" || r === "ROLE_ADMIN",
+                );
                 setUserRole(role || null);
             } catch (error) {
                 console.error("Error checking permissions:", error);
@@ -66,7 +68,9 @@ export default function CreateCommunityPage() {
                     </Button>
 
                     <div className="text-center space-y-4">
-                        <h1 className="text-2xl font-semibold">Access Denied</h1>
+                        <h1 className="text-2xl font-semibold">
+                            Access Denied
+                        </h1>
                         <p className="text-muted-foreground">
                             You don't have permission to create communities.
                         </p>
@@ -82,7 +86,7 @@ export default function CreateCommunityPage() {
                 <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => router.push('/dashboard/admin/community')}
+                    onClick={() => router.push("/dashboard/admin/community")}
                     className="mb-4"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
@@ -92,13 +96,14 @@ export default function CreateCommunityPage() {
                 <div>
                     <h1 className="text-2xl font-semibold">Create Community</h1>
                     <p className="text-muted-foreground">
-                        Create a new community for your students or organization.
+                        Create a new community for your students or
+                        organization.
                     </p>
                 </div>
 
                 <CommunityForm
-                    onSuccess={() => router.push('/dashboard/admin/community')}
-                    onCancel={() => router.push('/dashboard/admin/community')}
+                    onSuccess={() => router.push("/dashboard/admin/community")}
+                    onCancel={() => router.push("/dashboard/admin/community")}
                 />
             </div>
         </div>

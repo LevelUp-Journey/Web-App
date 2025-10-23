@@ -12,7 +12,10 @@ import ImageUpload from "@/components/ui/image-upload";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import type { CreateCommunityRequest, UpdateCommunityRequest } from "@/services/internal/community/server/community.actions";
+import type {
+    CreateCommunityRequest,
+    UpdateCommunityRequest,
+} from "@/services/internal/community/server/community.actions";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
 interface CommunityFormProps {
@@ -23,15 +26,17 @@ interface CommunityFormProps {
     onCancel?: () => void;
 }
 
-export function CommunityForm({ 
-    communityId, 
-    initialData, 
-    mode = "create", 
-    onSuccess, 
-    onCancel 
+export function CommunityForm({
+    communityId,
+    initialData,
+    mode = "create",
+    onSuccess,
+    onCancel,
 }: CommunityFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formData, setFormData] = useState<Omit<CreateCommunityRequest, 'ownerId' | 'ownerProfileId'>>({
+    const [formData, setFormData] = useState<
+        Omit<CreateCommunityRequest, "ownerId" | "ownerProfileId">
+    >({
         name: initialData?.name || "",
         description: initialData?.description || "",
         imageUrl: initialData?.imageUrl || "",
@@ -76,11 +81,16 @@ export function CommunityForm({
                 setFormData({ name: "", description: "", imageUrl: "" });
                 toast.success("Community created successfully!");
             }
-            
+
             onSuccess?.();
         } catch (error) {
-            console.error(`Error ${mode === "edit" ? "updating" : "creating"} community:`, error);
-            toast.error(`Failed to ${mode === "edit" ? "update" : "create"} community`);
+            console.error(
+                `Error ${mode === "edit" ? "updating" : "creating"} community:`,
+                error,
+            );
+            toast.error(
+                `Failed to ${mode === "edit" ? "update" : "create"} community`,
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -101,7 +111,12 @@ export function CommunityForm({
                         <Input
                             id="name"
                             value={formData.name}
-                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    name: e.target.value,
+                                }))
+                            }
                             placeholder="Enter community name"
                             disabled={isSubmitting}
                             required
@@ -113,7 +128,12 @@ export function CommunityForm({
                         <Textarea
                             id="description"
                             value={formData.description}
-                            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    description: e.target.value,
+                                }))
+                            }
                             placeholder="Describe your community"
                             disabled={isSubmitting}
                             required
@@ -124,16 +144,24 @@ export function CommunityForm({
                     <ImageUpload
                         label="Community Image (Optional)"
                         value={formData.imageUrl}
-                        onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url || "" }))}
+                        onChange={(url) =>
+                            setFormData((prev) => ({
+                                ...prev,
+                                imageUrl: url || "",
+                            }))
+                        }
                         disabled={isSubmitting}
                     />
 
                     <div className="flex gap-2">
                         <Button type="submit" disabled={isSubmitting} size="sm">
-                            {isSubmitting 
-                                ? (mode === "edit" ? "Updating..." : "Creating...") 
-                                : (mode === "edit" ? "Update" : "Create")
-                            }
+                            {isSubmitting
+                                ? mode === "edit"
+                                    ? "Updating..."
+                                    : "Creating..."
+                                : mode === "edit"
+                                  ? "Update"
+                                  : "Create"}
                         </Button>
                         {onCancel && (
                             <Button

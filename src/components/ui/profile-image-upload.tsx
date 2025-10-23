@@ -19,9 +19,11 @@ export default function ProfileImageUpload({
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
-        if (!file || !file.type.startsWith('image/')) return;
+        if (!file || !file.type.startsWith("image/")) return;
 
         setIsUploading(true);
 
@@ -30,7 +32,8 @@ export default function ProfileImageUpload({
             reader.onload = async () => {
                 const base64 = reader.result as string;
                 try {
-                    const imageUrl = await CloudinaryController.uploadImage(base64);
+                    const imageUrl =
+                        await CloudinaryController.uploadImage(base64);
                     if (imageUrl) {
                         onChange(imageUrl);
                     } else {
@@ -49,7 +52,7 @@ export default function ProfileImageUpload({
             setIsUploading(false);
         }
 
-        event.target.value = '';
+        event.target.value = "";
     };
 
     const handleClick = () => {

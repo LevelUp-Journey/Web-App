@@ -22,12 +22,17 @@ export default function CommunityFeedPage() {
     // Filtrar posts basado en el término de búsqueda
     const filteredPosts = useMemo(() => {
         if (!searchTerm.trim()) return posts;
-        
-        return posts.filter((post) =>
-            post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            post.community?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            post.authorProfile?.username.toLowerCase().includes(searchTerm.toLowerCase())
+
+        return posts.filter(
+            (post) =>
+                post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                post.community?.name
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                post.authorProfile?.username
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()),
         );
     }, [posts, searchTerm]);
 
@@ -67,8 +72,8 @@ export default function CommunityFeedPage() {
             <div className="flex justify-center pt-4">
                 <div className="relative max-w-md w-full">
                     <InputGroup>
-                        <InputGroupInput 
-                            placeholder="Search posts..." 
+                        <InputGroupInput
+                            placeholder="Search posts..."
                             value={searchTerm}
                             onChange={(e) => handleSearch(e.target.value)}
                         />
@@ -102,11 +107,16 @@ export default function CommunityFeedPage() {
                             <div className="space-y-4">
                                 <div className="flex items-center gap-2">
                                     <MessageSquareIcon className="h-5 w-5" />
-                                    <h3 className="text-lg font-semibold">Posts</h3>
+                                    <h3 className="text-lg font-semibold">
+                                        Posts
+                                    </h3>
                                 </div>
                                 <div className="space-y-6">
                                     {filteredPosts.map((post) => (
-                                        <FeedPostCard key={post.id} post={post} />
+                                        <FeedPostCard
+                                            key={post.id}
+                                            post={post}
+                                        />
                                     ))}
                                 </div>
                             </div>
@@ -116,11 +126,18 @@ export default function CommunityFeedPage() {
                         {filteredPosts.length === 0 && (
                             <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg p-8">
                                 <SearchIcon className="h-16 w-16 text-muted-foreground mb-4" />
-                                <h2 className="text-xl font-semibold mb-2">No results found</h2>
+                                <h2 className="text-xl font-semibold mb-2">
+                                    No results found
+                                </h2>
                                 <p className="text-muted-foreground text-center mb-4 max-w-md">
-                                    No posts match your search. Try different keywords.
+                                    No posts match your search. Try different
+                                    keywords.
                                 </p>
-                                <Button variant="outline" size="sm" onClick={() => handleSearch("")}>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleSearch("")}
+                                >
                                     Clear Search
                                 </Button>
                             </div>

@@ -1,165 +1,165 @@
 {
-  "navigation": {
-    "home": "Home",
-    "dashboard": "Dashboard",
-    "challenges": "Challenges",
-    "profile": "Profile",
-    "settings": "Settings",
-    "logout": "Logout",
-    "login": "Login",
-    "signup": "Sign Up"
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "Error",
-    "success": "Success",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "update": "Update",
-    "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
-    "actions": "Actions",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "submit": "Submit",
-    "close": "Close",
-    "confirm": "Confirm",
-    "yes": "Yes",
-    "no": "No"
-  },
-  "auth": {
-    "login": {
-      "title": "Login to Your Account",
-      "email": "Email",
-      "password": "Password",
-      "rememberMe": "Remember me",
-      "forgotPassword": "Forgot password?",
-      "submit": "Sign In",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up here"
+    "navigation": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "challenges": "Challenges",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "login": "Login",
+        "signup": "Sign Up"
     },
-    "signup": {
-      "title": "Create an Account",
-      "name": "Full Name",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "submit": "Sign Up",
-      "haveAccount": "Already have an account?",
-      "login": "Login here"
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "update": "Update",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "actions": "Actions",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "submit": "Submit",
+        "close": "Close",
+        "confirm": "Confirm",
+        "yes": "Yes",
+        "no": "No"
+    },
+    "auth": {
+        "login": {
+            "title": "Login to Your Account",
+            "email": "Email",
+            "password": "Password",
+            "rememberMe": "Remember me",
+            "forgotPassword": "Forgot password?",
+            "submit": "Sign In",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up here"
+        },
+        "signup": {
+            "title": "Create an Account",
+            "name": "Full Name",
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "submit": "Sign Up",
+            "haveAccount": "Already have an account?",
+            "login": "Login here"
+        },
+        "errors": {
+            "invalidCredentials": "Invalid email or password",
+            "emailExists": "Email already exists",
+            "passwordMismatch": "Passwords do not match",
+            "required": "This field is required",
+            "invalidEmail": "Invalid email address"
+        }
+    },
+    "dashboard": {
+        "welcome": "Welcome back",
+        "stats": {
+            "challenges": "Challenges Completed",
+            "experience": "Total Experience",
+            "rank": "Current Rank",
+            "streak": "Day Streak"
+        },
+        "recentActivity": "Recent Activity",
+        "popularChallenges": "Popular Challenges"
+    },
+    "challenges": {
+        "title": "Challenges",
+        "description": "Browse and complete coding challenges",
+        "create": "Create Challenge",
+        "edit": "Edit Challenge",
+        "delete": "Delete Challenge",
+        "publish": "Publish",
+        "unpublish": "Unpublish",
+        "details": {
+            "title": "Challenge Details",
+            "description": "Description",
+            "difficulty": "Difficulty",
+            "experiencePoints": "Experience Points",
+            "language": "Programming Language",
+            "tags": "Tags",
+            "status": "Status",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At"
+        },
+        "status": {
+            "draft": "Draft",
+            "published": "Published",
+            "archived": "Archived"
+        },
+        "difficulty": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard"
+        },
+        "codeVersions": {
+            "title": "Code Versions",
+            "create": "Add Code Version",
+            "edit": "Edit Version",
+            "delete": "Delete Version",
+            "language": "Language",
+            "initialCode": "Initial Code",
+            "functionName": "Function Name",
+            "testCases": "Test Cases"
+        },
+        "editor": {
+            "title": "Code Editor",
+            "description": "Challenge Description",
+            "yourSolution": "Your Solution",
+            "testCases": "Test Cases",
+            "runCode": "Run Code",
+            "submit": "Submit Solution",
+            "running": "Running...",
+            "hint": "Hint",
+            "expectedOutput": "Expected Output",
+            "actualOutput": "Your Output",
+            "passed": "Passed",
+            "failed": "Failed"
+        },
+        "messages": {
+            "created": "Challenge created successfully",
+            "updated": "Challenge updated successfully",
+            "deleted": "Challenge deleted successfully",
+            "published": "Challenge published successfully",
+            "unpublished": "Challenge unpublished successfully",
+            "submitSuccess": "Solution submitted successfully!",
+            "submitError": "Error submitting solution"
+        }
+    },
+    "profile": {
+        "title": "Profile",
+        "edit": "Edit Profile",
+        "stats": "Statistics",
+        "achievements": "Achievements",
+        "settings": "Settings",
+        "information": {
+            "name": "Name",
+            "email": "Email",
+            "bio": "Bio",
+            "location": "Location",
+            "website": "Website",
+            "joinedDate": "Joined"
+        },
+        "messages": {
+            "updated": "Profile updated successfully",
+            "updateError": "Error updating profile"
+        }
     },
     "errors": {
-      "invalidCredentials": "Invalid email or password",
-      "emailExists": "Email already exists",
-      "passwordMismatch": "Passwords do not match",
-      "required": "This field is required",
-      "invalidEmail": "Invalid email address"
+        "notFound": "Page not found",
+        "serverError": "Server error",
+        "unauthorized": "Unauthorized access",
+        "forbidden": "Access forbidden",
+        "badRequest": "Bad request",
+        "generic": "Something went wrong"
     }
-  },
-  "dashboard": {
-    "welcome": "Welcome back",
-    "stats": {
-      "challenges": "Challenges Completed",
-      "experience": "Total Experience",
-      "rank": "Current Rank",
-      "streak": "Day Streak"
-    },
-    "recentActivity": "Recent Activity",
-    "popularChallenges": "Popular Challenges"
-  },
-  "challenges": {
-    "title": "Challenges",
-    "description": "Browse and complete coding challenges",
-    "create": "Create Challenge",
-    "edit": "Edit Challenge",
-    "delete": "Delete Challenge",
-    "publish": "Publish",
-    "unpublish": "Unpublish",
-    "details": {
-      "title": "Challenge Details",
-      "description": "Description",
-      "difficulty": "Difficulty",
-      "experiencePoints": "Experience Points",
-      "language": "Programming Language",
-      "tags": "Tags",
-      "status": "Status",
-      "createdAt": "Created At",
-      "updatedAt": "Updated At"
-    },
-    "status": {
-      "draft": "Draft",
-      "published": "Published",
-      "archived": "Archived"
-    },
-    "difficulty": {
-      "easy": "Easy",
-      "medium": "Medium",
-      "hard": "Hard"
-    },
-    "codeVersions": {
-      "title": "Code Versions",
-      "create": "Add Code Version",
-      "edit": "Edit Version",
-      "delete": "Delete Version",
-      "language": "Language",
-      "initialCode": "Initial Code",
-      "functionName": "Function Name",
-      "testCases": "Test Cases"
-    },
-    "editor": {
-      "title": "Code Editor",
-      "description": "Challenge Description",
-      "yourSolution": "Your Solution",
-      "testCases": "Test Cases",
-      "runCode": "Run Code",
-      "submit": "Submit Solution",
-      "running": "Running...",
-      "hint": "Hint",
-      "expectedOutput": "Expected Output",
-      "actualOutput": "Your Output",
-      "passed": "Passed",
-      "failed": "Failed"
-    },
-    "messages": {
-      "created": "Challenge created successfully",
-      "updated": "Challenge updated successfully",
-      "deleted": "Challenge deleted successfully",
-      "published": "Challenge published successfully",
-      "unpublished": "Challenge unpublished successfully",
-      "submitSuccess": "Solution submitted successfully!",
-      "submitError": "Error submitting solution"
-    }
-  },
-  "profile": {
-    "title": "Profile",
-    "edit": "Edit Profile",
-    "stats": "Statistics",
-    "achievements": "Achievements",
-    "settings": "Settings",
-    "information": {
-      "name": "Name",
-      "email": "Email",
-      "bio": "Bio",
-      "location": "Location",
-      "website": "Website",
-      "joinedDate": "Joined"
-    },
-    "messages": {
-      "updated": "Profile updated successfully",
-      "updateError": "Error updating profile"
-    }
-  },
-  "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "unauthorized": "Unauthorized access",
-    "forbidden": "Access forbidden",
-    "badRequest": "Bad request",
-    "generic": "Something went wrong"
-  }
 }

@@ -1,15 +1,27 @@
-import { createReactionAction, getReactionsByPostIdAction, deleteReactionAction, type CreateReactionRequest } from "../server/reaction.actions";
+import {
+    createReactionAction,
+    getReactionsByPostIdAction,
+    deleteReactionAction,
+    type CreateReactionRequest,
+} from "../server/reaction.actions";
 import type { Reaction } from "../entities/reaction.entity";
 
 export class ReactionController {
-    static async createReaction(request: CreateReactionRequest): Promise<Reaction> {
+    static async createReaction(
+        request: CreateReactionRequest,
+    ): Promise<Reaction> {
         const response = await createReactionAction(request);
 
         if (response.status !== 200 && response.status !== 201) {
             // Provide more specific error messages
-            const errorMessage = typeof response.data === 'string' ? response.data : 'Unknown error';
-            if (errorMessage.includes('ReactionId must be a valid UUID')) {
-                throw new Error('Unable to create reaction due to server configuration issue. Please try again later.');
+            const errorMessage =
+                typeof response.data === "string"
+                    ? response.data
+                    : "Unknown error";
+            if (errorMessage.includes("ReactionId must be a valid UUID")) {
+                throw new Error(
+                    "Unable to create reaction due to server configuration issue. Please try again later.",
+                );
             }
             throw new Error(`Failed to create reaction: ${errorMessage}`);
         }

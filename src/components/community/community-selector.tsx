@@ -10,7 +10,11 @@ interface CommunitySelectorProps {
     onSelectCommunity: (community: Community) => void;
 }
 
-export function CommunitySelector({ communities, usernames, onSelectCommunity }: CommunitySelectorProps) {
+export function CommunitySelector({
+    communities,
+    usernames,
+    onSelectCommunity,
+}: CommunitySelectorProps) {
     const router = useRouter();
 
     if (communities.length === 0) {
@@ -18,11 +22,18 @@ export function CommunitySelector({ communities, usernames, onSelectCommunity }:
             <Card>
                 <CardContent className="p-8 text-center">
                     <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">No communities available</h3>
+                    <h3 className="text-xl font-semibold mb-2">
+                        No communities available
+                    </h3>
                     <p className="text-muted-foreground mb-4">
                         Create a community first to start posting.
                     </p>
-                    <Button onClick={() => router.push("/dashboard/community/create")} size="sm">
+                    <Button
+                        onClick={() =>
+                            router.push("/dashboard/community/create")
+                        }
+                        size="sm"
+                    >
                         Create Community
                     </Button>
                 </CardContent>
@@ -69,13 +80,19 @@ export function CommunitySelector({ communities, usernames, onSelectCommunity }:
                         {/* Footer con creador */}
                         <div className="pt-4 border-t flex items-center justify-between text-xs text-muted-foreground mt-auto">
                             <span className="font-medium">
-                                By <span className="text-foreground">{usernames[community.ownerId] || "Unknown User"}</span>
+                                By{" "}
+                                <span className="text-foreground">
+                                    {usernames[community.ownerId] ||
+                                        "Unknown User"}
+                                </span>
                             </span>
                             <span>
-                                {new Date(community.createdAt).toLocaleDateString('es-ES', {
-                                    day: 'numeric',
-                                    month: 'short',
-                                    year: 'numeric'
+                                {new Date(
+                                    community.createdAt,
+                                ).toLocaleDateString("es-ES", {
+                                    day: "numeric",
+                                    month: "short",
+                                    year: "numeric",
                                 })}
                             </span>
                         </div>

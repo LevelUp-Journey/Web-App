@@ -31,9 +31,11 @@ export default function ProfileCard({
                 let profileData: ProfileResponse;
 
                 if (profileId) {
-                    profileData = await ProfileController.getProfileByUserId(profileId);
+                    profileData =
+                        await ProfileController.getProfileByUserId(profileId);
                 } else {
-                    profileData = await ProfileController.getCurrentUserProfile();
+                    profileData =
+                        await ProfileController.getCurrentUserProfile();
                 }
 
                 setProfile(profileData);
@@ -95,32 +97,39 @@ export default function ProfileCard({
             <CardContent className="space-y-6">
                 <div className="flex items-center space-x-4">
                     <Avatar className="w-16 h-16">
-                        <AvatarImage src={profile.profileUrl} alt={profile.username} />
+                        <AvatarImage
+                            src={profile.profileUrl}
+                            alt={profile.username}
+                        />
                         <AvatarFallback>
-                            {profile.firstName?.[0]}{profile.lastName?.[0]}
+                            {profile.firstName?.[0]}
+                            {profile.lastName?.[0]}
                         </AvatarFallback>
                     </Avatar>
                     <div>
                         <h3 className="text-lg font-semibold">
                             {profile.firstName} {profile.lastName}
                         </h3>
-                        <p className="text-muted-foreground">@{profile.username}</p>
+                        <p className="text-muted-foreground">
+                            @{profile.username}
+                        </p>
                     </div>
                 </div>
 
-                {profile.profileUrl && !profile.profileUrl.includes('cloudinary.com') && (
-                    <div className="flex items-center gap-2">
-                        <Github className="h-4 w-4 text-muted-foreground" />
-                        <a
-                            href={profile.profileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            {profile.profileUrl}
-                        </a>
-                    </div>
-                )}
+                {profile.profileUrl &&
+                    !profile.profileUrl.includes("cloudinary.com") && (
+                        <div className="flex items-center gap-2">
+                            <Github className="h-4 w-4 text-muted-foreground" />
+                            <a
+                                href={profile.profileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                            >
+                                {profile.profileUrl}
+                            </a>
+                        </div>
+                    )}
             </CardContent>
         </Card>
     );

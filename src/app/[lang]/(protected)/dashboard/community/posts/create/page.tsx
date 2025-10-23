@@ -11,8 +11,10 @@ import type { Community } from "@/services/internal/community/entities/community
 
 export default function CreatePostPage() {
     const router = useRouter();
-    const { communities, authorId, usernames, loading, error } = useCreatePostData();
-    const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
+    const { communities, authorId, usernames, loading, error } =
+        useCreatePostData();
+    const [selectedCommunity, setSelectedCommunity] =
+        useState<Community | null>(null);
 
     const handlePostCreated = () => {
         router.push("/dashboard/community");

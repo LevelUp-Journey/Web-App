@@ -12,12 +12,20 @@ interface CommunityCardProps {
     adminMode?: boolean;
 }
 
-export function CommunityCard({ community, username, adminMode = false }: CommunityCardProps) {
+export function CommunityCard({
+    community,
+    username,
+    adminMode = false,
+}: CommunityCardProps) {
     const router = useRouter();
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
-        router.push(adminMode ? `/dashboard/admin/community/edit?id=${community.id}` : `/dashboard/community/edit?id=${community.id}`);
+        router.push(
+            adminMode
+                ? `/dashboard/admin/community/edit?id=${community.id}`
+                : `/dashboard/community/edit?id=${community.id}`,
+        );
     };
 
     const handleCreatePost = (e: React.MouseEvent) => {
@@ -58,14 +66,19 @@ export function CommunityCard({ community, username, adminMode = false }: Commun
                 {/* Footer con creador y fecha */}
                 <div className="pt-4 border-t flex items-center justify-between text-xs text-muted-foreground mt-auto">
                     <span className="font-medium">
-                        <span className="text-foreground">{username || "Unknown User"}</span>
+                        <span className="text-foreground">
+                            {username || "Unknown User"}
+                        </span>
                     </span>
                     <span>
-                        {new Date(community.createdAt).toLocaleDateString('es-ES', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric'
-                        })}
+                        {new Date(community.createdAt).toLocaleDateString(
+                            "es-ES",
+                            {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                            },
+                        )}
                     </span>
                 </div>
 

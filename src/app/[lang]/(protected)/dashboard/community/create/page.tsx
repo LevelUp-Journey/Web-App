@@ -16,7 +16,9 @@ export default function CreateCommunityPage() {
         const checkPermissions = async () => {
             try {
                 const roles = await AuthController.getUserRoles();
-                const role = roles.find(r => r === 'ROLE_TEACHER' || r === 'ROLE_ADMIN');
+                const role = roles.find(
+                    (r) => r === "ROLE_TEACHER" || r === "ROLE_ADMIN",
+                );
                 setUserRole(role || null);
             } catch (error) {
                 console.error("Error checking permissions:", error);
@@ -66,7 +68,9 @@ export default function CreateCommunityPage() {
                     </Button>
 
                     <div className="text-center space-y-4">
-                        <h1 className="text-2xl font-semibold">Access Denied</h1>
+                        <h1 className="text-2xl font-semibold">
+                            Access Denied
+                        </h1>
                         <p className="text-muted-foreground">
                             You don't have permission to create communities.
                         </p>
@@ -92,12 +96,13 @@ export default function CreateCommunityPage() {
                 <div>
                     <h1 className="text-2xl font-semibold">Create Community</h1>
                     <p className="text-muted-foreground">
-                        Create a new community for your students or organization.
+                        Create a new community for your students or
+                        organization.
                     </p>
                 </div>
 
                 <CommunityForm
-                    onSuccess={() => router.push('/dashboard/community')}
+                    onSuccess={() => router.push("/dashboard/community")}
                     onCancel={() => router.back()}
                 />
             </div>

@@ -74,7 +74,10 @@ export async function saveAuthTokenAction(token: string, refreshToken: string) {
     cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken);
 }
 
-export async function saveOAuthTokenAction(token: string, refreshToken?: string) {
+export async function saveOAuthTokenAction(
+    token: string,
+    refreshToken?: string,
+) {
     const cookieStore = await cookies();
     cookieStore.set(CONSTS.AUTH_TOKEN_KEY, token);
     if (refreshToken) {
@@ -133,7 +136,10 @@ export async function getUserIdFromTokenAction(): Promise<string> {
         }
         return decoded.userId;
     } catch (error) {
-        console.error("getUserIdFromTokenAction: failed to decode token:", error);
+        console.error(
+            "getUserIdFromTokenAction: failed to decode token:",
+            error,
+        );
         throw error;
     }
 }

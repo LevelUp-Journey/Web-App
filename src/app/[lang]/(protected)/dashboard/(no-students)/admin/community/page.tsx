@@ -21,27 +21,35 @@ export default function AdminCommunityPage() {
         const fetchCommunities = async () => {
             try {
                 const data = await CommunityController.getCommunities();
-                
+
                 // Cargar usernames para cada comunidad
                 const usernameMap: Record<string, string> = {};
                 await Promise.all(
                     data.map(async (community) => {
                         try {
-                            const profile = await ProfileController.getProfileById(
-                                community.ownerProfileId
-                            );
+                            const profile =
+                                await ProfileController.getProfileById(
+                                    community.ownerProfileId,
+                                );
                             usernameMap[community.ownerId] = profile.username;
                         } catch (error) {
-                            console.error(`Error loading profile for ${community.ownerProfileId}:`, error);
+                            console.error(
+                                `Error loading profile for ${community.ownerProfileId}:`,
+                                error,
+                            );
                             usernameMap[community.ownerId] = "Unknown User";
                         }
-                    })
+                    }),
                 );
 
                 setCommunities(data);
                 setUsernames(usernameMap);
             } catch (err) {
-                setError(err instanceof Error ? err.message : "Failed to load communities");
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : "Failed to load communities",
+                );
             } finally {
                 setLoading(false);
             }
@@ -54,7 +62,9 @@ export default function AdminCommunityPage() {
         return (
             <div className="container mx-auto p-4 space-y-4">
                 <div className="flex items-center justify-center min-h-[400px]">
-                    <p className="text-muted-foreground">Loading communities...</p>
+                    <p className="text-muted-foreground">
+                        Loading communities...
+                    </p>
                 </div>
             </div>
         );
@@ -75,7 +85,14 @@ export default function AdminCommunityPage() {
         <div className="container mx-auto p-4 space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold">Community Management</h1>
-                <Button onClick={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE)} size="sm">
+                <Button
+                    onClick={() =>
+                        router.push(
+                            PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE,
+                        )
+                    }
+                    size="sm"
+                >
                     <Plus className="h-4 w-4 mr-2" />
                     Create Community
                 </Button>
@@ -92,11 +109,20 @@ export default function AdminCommunityPage() {
             </div>
             {communities.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg p-8">
-                    <h2 className="text-xl font-semibold mb-2">No communities found</h2>
+                    <h2 className="text-xl font-semibold mb-2">
+                        No communities found
+                    </h2>
                     <p className="text-muted-foreground text-center mb-4">
                         Create your first community to get started.
                     </p>
-                    <Button onClick={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE)} size="sm">
+                    <Button
+                        onClick={() =>
+                            router.push(
+                                PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE,
+                            )
+                        }
+                        size="sm"
+                    >
                         <Plus className="h-4 w-4 mr-2" />
                         Create Community
                     </Button>

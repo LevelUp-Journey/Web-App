@@ -21,7 +21,8 @@ export function useCreatePostData() {
                 setAuthorId(userId);
 
                 // Get all communities
-                const allCommunities = await CommunityController.getCommunities();
+                const allCommunities =
+                    await CommunityController.getCommunities();
                 setCommunities(allCommunities);
 
                 // Load usernames for community owners
@@ -29,16 +30,21 @@ export function useCreatePostData() {
                 await Promise.all(
                     allCommunities.map(async (community) => {
                         try {
-                            const profile = await ProfileController.getProfileById(community.ownerProfileId);
+                            const profile =
+                                await ProfileController.getProfileById(
+                                    community.ownerProfileId,
+                                );
                             usernameMap[community.ownerId] = profile.username;
                         } catch (error) {
-                            console.error(`Error loading profile for ${community.ownerProfileId}:`, error);
+                            console.error(
+                                `Error loading profile for ${community.ownerProfileId}:`,
+                                error,
+                            );
                             usernameMap[community.ownerId] = "Unknown User";
                         }
-                    })
+                    }),
                 );
                 setUsernames(usernameMap);
-
             } catch (err) {
                 console.error("Error loading data:", err);
                 setError("Failed to load communities");

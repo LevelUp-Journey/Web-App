@@ -11,24 +11,26 @@ export class PostAssembler {
             content: response.content,
             imageUrl: response.imageUrl,
             createdAt: response.createdAt,
-            comments: response.comments.map(comment => ({
+            comments: response.comments.map((comment) => ({
                 id: comment.id,
                 authorId: comment.authorId,
                 content: comment.content,
                 imageUrl: comment.imageUrl,
                 createdAt: comment.createdAt,
             })),
-            reactions: response.reactions ? response.reactions.map(reaction => ({
-                id: reaction.id,
-                postId: reaction.postId,
-                userId: reaction.userId,
-                reactionType: reaction.reactionType,
-                createdAt: reaction.createdAt,
-            })) : [],
+            reactions: response.reactions
+                ? response.reactions.map((reaction) => ({
+                      id: reaction.id,
+                      postId: reaction.postId,
+                      userId: reaction.userId,
+                      reactionType: reaction.reactionType,
+                      createdAt: reaction.createdAt,
+                  }))
+                : [],
         };
     }
 
     public static toEntitiesFromResponse(responses: PostResponse[]): Post[] {
-        return responses.map(response => this.toEntityFromResponse(response));
+        return responses.map((response) => this.toEntityFromResponse(response));
     }
 }
