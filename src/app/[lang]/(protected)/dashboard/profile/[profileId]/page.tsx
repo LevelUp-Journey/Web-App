@@ -1,28 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
 import {
     ArrowLeft,
-    UserPlus,
-    UserMinus,
     MessageSquare,
+    UserMinus,
+    UserPlus,
     Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import ProfileCard from "@/components/profiles/profile-card";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import { PostController } from "@/services/internal/community/controller/post.controller";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
-import type { Post } from "@/services/internal/community/entities/post.entity";
+import { PostController } from "@/services/internal/community/controller/post.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
+import type { Post } from "@/services/internal/community/entities/post.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export default function UserProfilePage() {
     const params = useParams();

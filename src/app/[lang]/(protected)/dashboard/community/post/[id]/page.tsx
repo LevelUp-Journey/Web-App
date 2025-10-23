@@ -1,18 +1,18 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Heart, MessageCircle, User } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { PostController } from "@/services/internal/community/controller/post.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import { CommunityController } from "@/services/internal/community/controller/community.controller";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useReactions } from "@/hooks/use-reactions";
+import { CommunityController } from "@/services/internal/community/controller/community.controller";
+import { PostController } from "@/services/internal/community/controller/post.controller";
 import type { Post } from "@/services/internal/community/entities/post.entity";
-import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 interface PostWithDetails extends Post {
     authorProfile?: ProfileResponse;

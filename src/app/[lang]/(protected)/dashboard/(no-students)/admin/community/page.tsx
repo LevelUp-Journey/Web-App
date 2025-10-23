@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { CommunityCard } from "@/components/community/community-card";
+import { Button } from "@/components/ui/button";
+import { PATHS } from "@/lib/paths";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
-import { PATHS } from "@/lib/paths";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 export default function AdminCommunityPage() {
     const router = useRouter();

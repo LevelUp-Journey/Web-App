@@ -1,13 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
     AlertCircle,
-    RefreshCw,
     ChevronLeft,
     ChevronRight,
+    RefreshCw,
     Trophy,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MyCurrentRank } from "@/components/leaderboard/my-current-rank";
+import {
+    getRankFromPoints,
+    RankIcon,
+} from "@/components/leaderboard/rank-icon";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
     Table,
     TableBody,
@@ -16,18 +25,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-    RankIcon,
-    getRankFromPoints,
-} from "@/components/leaderboard/rank-icon";
-import { MyCurrentRank } from "@/components/leaderboard/my-current-rank";
 import { useLeaderboardWithUsers } from "@/hooks/use-leaderboard-with-users";
 import { getUserIdFromTokenAction } from "@/services/internal/iam/server/auth.actions";
-import { LeaderboardController } from "@/services/internal/leaderboard/controller/leaderboard.controller";
+import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 
 export default function LeaderboardPage() {
     const [page, setPage] = useState(1);
@@ -109,7 +109,9 @@ export default function LeaderboardPage() {
                             <Button
                                 onClick={
                                     isAuth
-                                        ? () => (window.location.href = "/auth")
+                                        ? () => {
+                                              window.location.href = "/auth";
+                                          }
                                         : () => {
                                               setRetryCount((c) => c + 1);
                                               window.location.reload();

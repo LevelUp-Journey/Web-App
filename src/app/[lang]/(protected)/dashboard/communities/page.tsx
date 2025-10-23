@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { Plus, SearchIcon, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Plus, Users, SearchIcon } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { CommunityCard } from "@/components/community/community-card";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -10,12 +11,11 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { CommunityCard } from "@/components/community/community-card";
-import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { UserRole } from "@/lib/consts";
+import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 export default function MyCommunitiesPage() {
     const router = useRouter();

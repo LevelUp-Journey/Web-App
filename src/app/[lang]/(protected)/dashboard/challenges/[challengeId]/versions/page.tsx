@@ -1,4 +1,4 @@
-import CreateCodeVersionForm from "./create-form";
+import CreateCodeVersionForm from "@/app/[lang]/(protected)/dashboard/challenges/[challengeId]/versions/create-form";
 
 interface PageProps {
     params: Promise<{ challengeId: string }>;

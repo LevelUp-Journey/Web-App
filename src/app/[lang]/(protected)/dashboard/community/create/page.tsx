@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { CommunityForm } from "@/components/community/community-form";
+import { Button } from "@/components/ui/button";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function CreateCommunityPage() {
