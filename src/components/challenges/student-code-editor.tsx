@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
-import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;

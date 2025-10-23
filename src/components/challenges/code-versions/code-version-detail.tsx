@@ -24,9 +24,9 @@ import {
 } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { getMonacoLanguage } from "@/lib/utils";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 
 interface CodeVersionDetailProps {
     challengeId: string;

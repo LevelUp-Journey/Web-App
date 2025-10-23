@@ -26,7 +26,9 @@ export default async function ChallengePage({
     const codeVersions: CodeVersion[] =
         await CodeVersionController.getCodeVersionsByChallengeId(challengeId);
     const userRoles = await AuthController.getUserRoles();
-    const isTeacher = userRoles.includes(UserRole.TEACHER);
+    const isTeacherOrAdmin =
+        userRoles.includes(UserRole.TEACHER) ||
+        userRoles.includes(UserRole.ADMIN);
 
     const isEditing = editing === "true";
 
@@ -35,7 +37,7 @@ export default async function ChallengePage({
         ? await serialize({ source: challenge.description })
         : null;
 
-    if (isEditing) {
+    if (isEditing && isTeacherOrAdmin) {
         return (
             <ChallengeEditing
                 challengeId={challengeId}
@@ -50,7 +52,7 @@ export default async function ChallengePage({
             challenge={challenge}
             codeVersions={codeVersions}
             serializedMarkdown={serializedMarkdown}
-            isTeacher={isTeacher}
+            isTeacher={isTeacherOrAdmin}
         />
     );
 }

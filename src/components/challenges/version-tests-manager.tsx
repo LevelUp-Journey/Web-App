@@ -24,8 +24,8 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
-import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
+import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import MonacoEditor from "./monaco/monaco-editor";
 
 interface VersionTestsManagerProps {
