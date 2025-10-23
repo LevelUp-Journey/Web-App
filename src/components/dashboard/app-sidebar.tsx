@@ -5,6 +5,7 @@ import {
     Home,
     Settings,
     ShieldUser,
+    Trophy,
     Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -42,6 +43,11 @@ const topItems = [
         title: "Community",
         url: PATHS.DASHBOARD.COMMUNITY.ROOT,
         icon: Users,
+    },
+    {
+        title: "Leaderboard",
+        url: PATHS.DASHBOARD.LEADERBOARD,
+        icon: Trophy,
     },
 ];
 
