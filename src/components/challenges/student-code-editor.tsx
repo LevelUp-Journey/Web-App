@@ -1,11 +1,12 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { Lock, Play } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import {
     ResizableHandle,
     ResizablePanel,
@@ -88,12 +89,7 @@ export default function StudentCodeEditor({
                 {/* Left Panel - Monaco Editor */}
                 <ResizablePanel defaultSize={50} minSize={30}>
                     <div className="h-full flex flex-col">
-                        <div className="p-4 border-b">
-                            <h2 className="text-lg font-semibold">
-                                Your Solution
-                            </h2>
-                        </div>
-                        <div className="flex-1 overflow-hidden">
+                        <div className="flex-1 overflow-hidden p-4">
                             <MonacoEditor
                                 language={getMonacoLanguage(
                                     codeVersion.language as ProgrammingLanguage,
@@ -173,34 +169,67 @@ export default function StudentCodeEditor({
                                     </h3>
                                     {tests.length === 0 ? (
                                         <p className="text-muted-foreground text-sm">
-                                            No public test cases available.
+                                            No test cases available.
                                         </p>
                                     ) : (
-                                        <div className="space-y-4">
+                                        <div className="space-y-2">
                                             {tests.map((test, index) => (
-                                                <div
+                                                <Item
                                                     key={test.id}
-                                                    className="border rounded-md p-4 space-y-2"
+                                                    variant="muted"
+                                                    size="sm"
                                                 >
-                                                    <h4 className="font-semibold">
-                                                        Test Case {index + 1}
-                                                    </h4>
-                                                    <div>
-                                                        <p className="text-sm font-medium">
-                                                            Input:
-                                                        </p>
-                                                        <pre className="bg-muted p-2 rounded text-xs overflow-x-auto">
-                                                            {test.input}
-                                                        </pre>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-medium text-muted-foreground">
-                                                            Expected output is
-                                                            hidden until you run
-                                                            your code
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                                    <ItemContent>
+                                                        <ItemTitle className="flex items-center gap-2">
+                                                            {test.isSecret && (
+                                                                <Lock className="h-4 w-4 text-muted-foreground" />
+                                                            )}
+                                                            Test Case{" "}
+                                                            {index + 1}
+                                                            {test.isSecret && (
+                                                                <span className="text-sm text-muted-foreground">
+                                                                    (Secret)
+                                                                </span>
+                                                            )}
+                                                        </ItemTitle>
+                                                        {test.isSecret ? (
+                                                            <div className="text-sm text-muted-foreground mt-2">
+                                                                This is a secret
+                                                                test used to
+                                                                validate your
+                                                                solution. Input
+                                                                and expected
+                                                                output are
+                                                                hidden.
+                                                            </div>
+                                                        ) : (
+                                                            <div className="mt-2 space-y-2">
+                                                                <div>
+                                                                    <p className="text-sm font-medium">
+                                                                        Input:
+                                                                    </p>
+                                                                    <pre className="bg-muted p-2 rounded text-xs overflow-x-auto mt-1">
+                                                                        {
+                                                                            test.input
+                                                                        }
+                                                                    </pre>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-sm font-medium text-muted-foreground">
+                                                                        Expected
+                                                                        output
+                                                                        is
+                                                                        hidden
+                                                                        until
+                                                                        you run
+                                                                        your
+                                                                        code
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </ItemContent>
+                                                </Item>
                                             ))}
                                         </div>
                                     )}

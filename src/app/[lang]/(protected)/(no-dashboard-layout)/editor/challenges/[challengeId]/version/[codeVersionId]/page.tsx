@@ -28,8 +28,8 @@ export default async function StudentEditorPage({ params }: PageProps) {
             codeVersionId,
         );
 
-    // Filter out secret tests for students
-    const publicTests = tests.filter((test) => !test.isSecret);
+    // Show all tests, including secret ones
+    const allTests = tests;
 
     // Serialize the description for client-side rendering
     const serializedDescription = challenge.description
@@ -40,7 +40,7 @@ export default async function StudentEditorPage({ params }: PageProps) {
         <StudentCodeEditor
             challenge={challenge}
             codeVersion={codeVersion}
-            tests={publicTests}
+            tests={allTests}
             serializedDescription={serializedDescription}
         />
     );

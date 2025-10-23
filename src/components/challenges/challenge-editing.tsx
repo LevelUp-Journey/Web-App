@@ -30,8 +30,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChallengeDifficulty } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
-import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 
 const formSchema = z.object({
     title: z
