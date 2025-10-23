@@ -1,8 +1,8 @@
 import CodeVersionDetail from "@/components/challenges/code-versions/code-version-detail";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 
 interface PageProps {
     params: Promise<{ challengeId: string; codeVersionId: string }>;

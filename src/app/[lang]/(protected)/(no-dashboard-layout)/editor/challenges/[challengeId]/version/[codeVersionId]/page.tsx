@@ -1,11 +1,11 @@
 import { serialize } from "next-mdx-remote-client/serialize";
 import StudentCodeEditor from "@/components/challenges/student-code-editor";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
-import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 
 interface PageProps {
     params: Promise<{ challengeId: string; codeVersionId: string }>;

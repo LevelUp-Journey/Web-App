@@ -28,8 +28,8 @@ import {
 } from "@/components/ui/select";
 import { ChallengeDifficulty } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
-import type { CreateChallengeRequest } from "@/services/internal/challenges/controller/challenge.response";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import type { CreateChallengeRequest } from "@/services/internal/challenges/challenge/controller/challenge.response";
 
 const formSchema = z.object({
     title: z
