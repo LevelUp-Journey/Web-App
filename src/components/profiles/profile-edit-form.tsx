@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ProfileImageUpload from "@/components/ui/profile-image-upload";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type {
     ProfileResponse,
@@ -109,13 +110,30 @@ export default function ProfileEditForm({
     if (loading) {
         return (
             <Card>
-                <CardContent className="p-6">
-                    <div className="animate-pulse space-y-4">
-                        <div className="h-4 bg-gray-200 rounded w-32"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
+                <CardHeader>
+                    <Skeleton className="h-6 w-32" />
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="flex justify-center">
+                        <Skeleton className="h-24 w-24 rounded-full" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-10 w-full" />
+                        </div>
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-10 w-full" />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                    <div className="flex gap-4 pt-4">
+                        <Skeleton className="h-10 w-32" />
+                        <Skeleton className="h-10 w-20" />
                     </div>
                 </CardContent>
             </Card>
@@ -128,7 +146,7 @@ export default function ProfileEditForm({
                 <CardTitle>Edit Profile</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex justify-center">
                         <ProfileImageUpload
                             value={formData.profileUrl}
@@ -139,30 +157,38 @@ export default function ProfileEditForm({
                         />
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input
-                            id="firstName"
-                            value={formData.firstName}
-                            onChange={(e) =>
-                                handleInputChange("firstName", e.target.value)
-                            }
-                            placeholder="Enter your first name"
-                            disabled={saving}
-                        />
-                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="firstName">First Name</Label>
+                            <Input
+                                id="firstName"
+                                value={formData.firstName}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "firstName",
+                                        e.target.value,
+                                    )
+                                }
+                                placeholder="Enter your first name"
+                                disabled={saving}
+                            />
+                        </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                            id="lastName"
-                            value={formData.lastName}
-                            onChange={(e) =>
-                                handleInputChange("lastName", e.target.value)
-                            }
-                            placeholder="Enter your last name"
-                            disabled={saving}
-                        />
+                        <div className="space-y-2">
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <Input
+                                id="lastName"
+                                value={formData.lastName}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "lastName",
+                                        e.target.value,
+                                    )
+                                }
+                                placeholder="Enter your last name"
+                                disabled={saving}
+                            />
+                        </div>
                     </div>
 
                     <div className="space-y-2">

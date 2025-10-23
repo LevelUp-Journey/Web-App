@@ -26,6 +26,7 @@ import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { VersionTestController } from "@/services/internal/challenges/controller/versions-test.controller";
 import type { VersionTest } from "@/services/internal/challenges/entities/version-test.entity";
+import MonacoEditor from "./monaco/monaco-editor";
 
 interface VersionTestsManagerProps {
     challengeId: string;
@@ -467,20 +468,10 @@ export default function VersionTestsManager({
 
                                     <TabsContent
                                         value="custom"
-                                        className="h-full flex flex-col"
+                                        className="h-full flex flex-col p-4"
                                     >
-                                        <div className="p-4 border-b">
-                                            <p className="text-sm text-muted-foreground">
-                                                Write custom validation code for
-                                                advanced test scenarios. This
-                                                code will be executed to
-                                                validate the solution.
-                                            </p>
-                                        </div>
-
                                         <div className="flex-1">
-                                            <Editor
-                                                height="100%"
+                                            <MonacoEditor
                                                 language={getMonacoLanguage(
                                                     language,
                                                 )}
@@ -490,15 +481,6 @@ export default function VersionTestsManager({
                                                         value || "",
                                                     )
                                                 }
-                                                theme="vs-dark"
-                                                options={{
-                                                    minimap: { enabled: false },
-                                                    fontSize: 14,
-                                                    lineNumbers: "on",
-                                                    roundedSelection: false,
-                                                    scrollBeyondLastLine: false,
-                                                    automaticLayout: true,
-                                                }}
                                             />
                                         </div>
 
