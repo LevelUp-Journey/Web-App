@@ -1,164 +1,150 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { AvatarDropzone } from "@/components/auth/signup/avatar-dropzone";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { PATHS } from "@/lib/paths";
-import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
-import type {
-    ProfileResponse,
-    UpdateProfileRequest,
-} from "@/services/internal/profiles/profiles/controller/profile.response";
+import { Label } from "@/components/ui/label";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+
+// Validation schema for names (firstName and lastName)
+const nameSchema = z
+    .string()
+    .trim()
+    .min(1, "Name cannot be empty")
+    .max(20, "Name cannot exceed 20 characters")
+    .regex(
+        /^[A-Za-zÁáÉéÍíÓóÚúÑñÜü\s-]+$/,
+        "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters",
+    );
+
+const formSchema = z.object({
+    firstName: nameSchema,
+    lastName: nameSchema,
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 export default function SignUpStep2() {
     const router = useRouter();
-
-    const [userProfile, setUserProfile] = useState<ProfileResponse | null>(
-        null,
-    );
-    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-    const [name, setName] = useState("");
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const PATHS = useLocalizedPaths();
     const [loading, setLoading] = useState(false);
 
-    // Fetch profile on component mount
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const profile = await ProfileController.getCurrentUserProfile();
-                console.log("Fetched profile:", profile);
-                setUserProfile(profile);
-                setName(profile?.username || "");
-                setImageUrl(profile?.profileUrl || null);
-            } catch (error) {
-                console.error("Failed to load profile:", error);
-                toast.error("Failed to load your profile. Please try again.");
-            } finally {
-                setIsLoadingProfile(false);
-            }
-        };
+    const form = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            firstName: "",
+            lastName: "",
+        },
+    });
 
-        fetchProfile();
-    }, []);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid },
+    } = form;
 
-    const handleImageUrlChange = (url: string) => {
-        setImageUrl(url);
-    };
-
-    const onProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!name.trim()) {
-            toast.error("Please enter a name");
-            return;
-        }
-
-        if (!userProfile) {
-            toast.error("Profile not loaded. Please try again.");
-            return;
-        }
-
+    const onSubmit = async (data: FormData) => {
         setLoading(true);
 
         try {
-            // Create FormData with the URL from Cloudinary (or current image)
-            const data: UpdateProfileRequest = {
-                username: name,
-                profileUrl: imageUrl ? imageUrl : undefined,
-            };
+            // Store the names in localStorage for the next step
+            localStorage.setItem("signup_firstName", data.firstName);
+            localStorage.setItem("signup_lastName", data.lastName);
 
-            await ProfileController.updateProfileByUserId(userProfile.id, data);
-
-            toast.success("Profile updated successfully!");
-            router.push(PATHS.DASHBOARD.ROOT);
+            // Navigate to step 3
+            const redirection = PATHS.AUTH.SIGN_UP.STEP(3);
+            router.push(redirection);
         } catch (error) {
-            console.error("Profile update error:", error);
-            toast.error("Failed to update profile. Please try again.");
+            console.error("Error saving names:", error);
+            toast.error("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
-    if (isLoadingProfile) {
-        return (
-            <div className="flex flex-col items-center justify-center py-12 gap-4">
-                <Spinner className="size-6" />
-                <p className="text-sm text-muted-foreground">
-                    Loading your profile...
-                </p>
-            </div>
-        );
-    }
-
-    if (!userProfile) {
-        return (
-            <div className="flex flex-col items-center justify-center gap-4 py-8">
-                <p className="text-sm text-destructive">
-                    Failed to load your profile
-                </p>
-                <Button onClick={() => router.back()} variant="outline">
-                    Go Back
-                </Button>
-            </div>
-        );
-    }
+    const handleBack = () => {
+        const redirection = PATHS.AUTH.SIGN_UP.STEP(1);
+        router.push(redirection);
+    };
 
     return (
-        <form onSubmit={onProfileUpdate} className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             {/* Header */}
             <div className="text-center">
                 <h1 className="mb-2 text-2xl font-semibold">
-                    Complete Your Profile
+                    Tell Us About Yourself
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                    Add a photo and name to get started
+                    Enter your first and last name to continue
                 </p>
             </div>
 
-            {/* Avatar Dropzone */}
-            <AvatarDropzone
-                onImageUrlChange={handleImageUrlChange}
-                currentImage={imageUrl}
-                disabled={loading}
-            />
-
-            {/* Name Input Section */}
+            {/* First Name Input */}
             <div className="flex flex-col gap-2">
-                <label htmlFor="name" className="text-sm font-medium">
-                    Your Name
-                </label>
+                <Label htmlFor="firstName" className="text-sm font-medium">
+                    First Name
+                </Label>
                 <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                    required
+                    id="firstName"
+                    type="text"
+                    placeholder="Enter your first name"
                     disabled={loading}
+                    autoFocus
+                    {...register("firstName")}
                 />
-                <p className="text-xs text-muted-foreground">
-                    You can change this anytime
-                </p>
+                {errors.firstName && (
+                    <p className="text-sm text-destructive">
+                        {errors.firstName.message}
+                    </p>
+                )}
             </div>
 
-            {/* Action Button */}
-            <Button
-                type="submit"
-                disabled={loading || !name.trim()}
-                size="lg"
-                className="w-full"
-            >
-                {loading ? (
-                    <>
-                        <Spinner /> Creating Profile...
-                    </>
-                ) : (
-                    "Start Your Adventure"
+            {/* Last Name Input */}
+            <div className="flex flex-col gap-2">
+                <Label htmlFor="lastName" className="text-sm font-medium">
+                    Last Name
+                </Label>
+                <Input
+                    id="lastName"
+                    type="text"
+                    placeholder="Enter your last name"
+                    disabled={loading}
+                    {...register("lastName")}
+                />
+                {errors.lastName && (
+                    <p className="text-sm text-destructive">
+                        {errors.lastName.message}
+                    </p>
                 )}
-            </Button>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3">
+                <Button
+                    type="submit"
+                    disabled={loading || !isValid}
+                    size="lg"
+                    className="w-full"
+                >
+                    {loading ? "Saving..." : "Continue"}
+                </Button>
+
+                <Button
+                    type="button"
+                    onClick={handleBack}
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                    disabled={loading}
+                >
+                    Back
+                </Button>
+            </div>
         </form>
     );
 }

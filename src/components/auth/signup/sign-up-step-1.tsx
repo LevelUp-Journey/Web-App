@@ -5,7 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PATHS } from "@/lib/paths";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function SignUpStep1() {
@@ -14,6 +14,7 @@ export default function SignUpStep1() {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const router = useRouter();
+    const PATHS = useLocalizedPaths();
 
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,7 +31,6 @@ export default function SignUpStep1() {
 
             if (response.token) {
                 const redirection = PATHS.AUTH.SIGN_UP.STEP(2);
-
                 router.push(redirection);
             }
         } catch (error) {
