@@ -8,16 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
+import { Skeleton } from "../ui/skeleton";
 import { GithubDark } from "../ui/svgs/githubDark";
 
 interface ProfileCardProps {
-    profileId: string;
     showEditButton?: boolean;
     onEdit?: () => void;
 }
 
 export default function ProfileCard({
-    profileId,
     showEditButton = false,
     onEdit,
 }: ProfileCardProps) {
@@ -29,18 +28,8 @@ export default function ProfileCard({
         const loadProfile = async () => {
             try {
                 setLoading(true);
-                let profileData: ProfileResponse;
-
-                const userId = await AuthController.getUserId();
-                console.log("fetching for ", userId);
-
-                if (profileId) {
-                    profileData =
-                        await ProfileController.getProfileByUserId(userId);
-                } else {
-                    profileData =
-                        await ProfileController.getCurrentUserProfile();
-                }
+                const profileData: ProfileResponse =
+                    await ProfileController.getCurrentUserProfile();
 
                 setProfile(profileData);
             } catch (err) {
@@ -52,7 +41,7 @@ export default function ProfileCard({
         };
 
         loadProfile();
-    }, [profileId]);
+    }, []);
 
     if (loading) {
         return (
@@ -60,10 +49,10 @@ export default function ProfileCard({
                 <CardContent className="p-6">
                     <div className="animate-pulse space-y-4">
                         <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+                            <Skeleton className="w-16 h-16 rounded-full"></Skeleton>
                             <div className="space-y-2">
-                                <div className="h-4 bg-gray-200 rounded w-32"></div>
-                                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                <Skeleton className="h-4 rounded w-32"></Skeleton>
+                                <Skeleton className="h-4 rounded w-24"></Skeleton>
                             </div>
                         </div>
                     </div>
