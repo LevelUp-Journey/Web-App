@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
+import { useMemo, useState } from "react";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export function useUserSearch() {
     const [searchResults, setSearchResults] = useState<ProfileResponse[]>([]);

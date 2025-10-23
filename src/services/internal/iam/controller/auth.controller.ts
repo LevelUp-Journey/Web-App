@@ -48,16 +48,15 @@ export class AuthController {
 
     public static async getAuthToken(): Promise<string> {
         const authTokens = await getAuthTokenAction();
-        console.log("tokens", authTokens);
         return authTokens.token;
     }
 
     public static async signInWithGoogle() {
-        window.location.href = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL!;
+        window.location.href = ENV.OAUTH.GOOGLE.AUTH_URL;
     }
 
     public static async signInWithGithub() {
-        window.location.href = process.env.NEXT_PUBLIC_GITHUB_AUTH_URL!;
+        window.location.href = ENV.OAUTH.GITHUB.AUTH_URL;
     }
 
     public static async signOut() {

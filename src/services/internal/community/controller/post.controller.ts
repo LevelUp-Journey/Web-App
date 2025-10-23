@@ -1,6 +1,11 @@
-import { PostAssembler } from "./post.assembler";
-import { getAllPostsAction, getPostsByUserIdAction, createPostAction, type CreatePostRequest } from "../server/post.actions";
 import type { Post } from "../entities/post.entity";
+import {
+    type CreatePostRequest,
+    createPostAction,
+    getAllPostsAction,
+    getPostsByUserIdAction,
+} from "../server/post.actions";
+import { PostAssembler } from "./post.assembler";
 import type { PostResponse } from "./post.response";
 
 export class PostController {
@@ -11,7 +16,9 @@ export class PostController {
             throw new Error(`Failed to fetch posts: ${response.data}`);
         }
 
-        return PostAssembler.toEntitiesFromResponse(response.data as PostResponse[]);
+        return PostAssembler.toEntitiesFromResponse(
+            response.data as PostResponse[],
+        );
     }
 
     static async getPostsByUserId(userId: string): Promise<Post[]> {
@@ -21,7 +28,9 @@ export class PostController {
             throw new Error(`Failed to fetch posts by user: ${response.data}`);
         }
 
-        return PostAssembler.toEntitiesFromResponse(response.data as PostResponse[]);
+        return PostAssembler.toEntitiesFromResponse(
+            response.data as PostResponse[],
+        );
     }
 
     static async createPost(request: CreatePostRequest): Promise<Post> {
@@ -31,6 +40,8 @@ export class PostController {
             throw new Error(`Failed to create post: ${response.data}`);
         }
 
-        return PostAssembler.toEntityFromResponse(response.data as PostResponse);
+        return PostAssembler.toEntityFromResponse(
+            response.data as PostResponse,
+        );
     }
 }

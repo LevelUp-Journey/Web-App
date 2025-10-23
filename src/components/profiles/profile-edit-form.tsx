@@ -1,14 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProfileImageUpload from "@/components/ui/profile-image-upload";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import type { ProfileResponse, UpdateProfileRequest } from "@/services/internal/profiles/controller/profile.response";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import type {
+    ProfileResponse,
+    UpdateProfileRequest,
+} from "@/services/internal/profiles/profiles/controller/profile.response";
 
 interface ProfileEditFormProps {
     profileId?: string;
@@ -39,9 +43,11 @@ export default function ProfileEditForm({
                 let profileData: ProfileResponse;
 
                 if (profileId) {
-                    profileData = await ProfileController.getProfileByUserId(profileId);
+                    profileData =
+                        await ProfileController.getProfileByUserId(profileId);
                 } else {
-                    profileData = await ProfileController.getCurrentUserProfile();
+                    profileData =
+                        await ProfileController.getCurrentUserProfile();
                 }
 
                 setProfile(profileData);
@@ -68,11 +74,18 @@ export default function ProfileEditForm({
             setSaving(true);
 
             if (profileId) {
-                await ProfileController.updateProfileByUserId(profileId, formData);
+                await ProfileController.updateProfileByUserId(
+                    profileId,
+                    formData,
+                );
             } else {
                 // For current user, we need to get the user ID first
-                const currentProfile = await ProfileController.getCurrentUserProfile();
-                await ProfileController.updateProfileByUserId(currentProfile.id, formData);
+                const currentProfile =
+                    await ProfileController.getCurrentUserProfile();
+                await ProfileController.updateProfileByUserId(
+                    currentProfile.id,
+                    formData,
+                );
             }
 
             onSuccess?.();
@@ -84,8 +97,11 @@ export default function ProfileEditForm({
         }
     };
 
-    const handleInputChange = (field: keyof UpdateProfileRequest, value: string) => {
-        setFormData(prev => ({
+    const handleInputChange = (
+        field: keyof UpdateProfileRequest,
+        value: string,
+    ) => {
+        setFormData((prev) => ({
             ...prev,
             [field]: value,
         }));
@@ -94,13 +110,30 @@ export default function ProfileEditForm({
     if (loading) {
         return (
             <Card>
-                <CardContent className="p-6">
-                    <div className="animate-pulse space-y-4">
-                        <div className="h-4 bg-gray-200 rounded w-32"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
-                        <div className="h-10 bg-gray-200 rounded"></div>
+                <CardHeader>
+                    <Skeleton className="h-6 w-32" />
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="flex justify-center">
+                        <Skeleton className="h-24 w-24 rounded-full" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-10 w-full" />
+                        </div>
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-10 w-full" />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                    <div className="flex gap-4 pt-4">
+                        <Skeleton className="h-10 w-32" />
+                        <Skeleton className="h-10 w-20" />
                     </div>
                 </CardContent>
             </Card>
@@ -113,35 +146,49 @@ export default function ProfileEditForm({
                 <CardTitle>Edit Profile</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex justify-center">
                         <ProfileImageUpload
                             value={formData.profileUrl}
-                            onChange={(url) => handleInputChange("profileUrl", url || "")}
+                            onChange={(url) =>
+                                handleInputChange("profileUrl", url || "")
+                            }
                             disabled={saving}
                         />
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input
-                            id="firstName"
-                            value={formData.firstName}
-                            onChange={(e) => handleInputChange("firstName", e.target.value)}
-                            placeholder="Enter your first name"
-                            disabled={saving}
-                        />
-                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="firstName">First Name</Label>
+                            <Input
+                                id="firstName"
+                                value={formData.firstName}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "firstName",
+                                        e.target.value,
+                                    )
+                                }
+                                placeholder="Enter your first name"
+                                disabled={saving}
+                            />
+                        </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                            id="lastName"
-                            value={formData.lastName}
-                            onChange={(e) => handleInputChange("lastName", e.target.value)}
-                            placeholder="Enter your last name"
-                            disabled={saving}
-                        />
+                        <div className="space-y-2">
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <Input
+                                id="lastName"
+                                value={formData.lastName}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "lastName",
+                                        e.target.value,
+                                    )
+                                }
+                                placeholder="Enter your last name"
+                                disabled={saving}
+                            />
+                        </div>
                     </div>
 
                     <div className="space-y-2">
@@ -149,7 +196,9 @@ export default function ProfileEditForm({
                         <Input
                             id="username"
                             value={formData.username}
-                            onChange={(e) => handleInputChange("username", e.target.value)}
+                            onChange={(e) =>
+                                handleInputChange("username", e.target.value)
+                            }
                             placeholder="Enter your username"
                             disabled={saving}
                         />

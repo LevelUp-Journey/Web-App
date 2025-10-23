@@ -75,7 +75,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import { shadcnTheme } from "./theme";
+import { shadcnTheme } from "@/components/challenges/editor/theme";
 import "./shadcn-styles.css";
 import { Button } from "@/components/ui/button";
 import {

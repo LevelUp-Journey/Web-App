@@ -1,22 +1,22 @@
 "use client";
 
+import { Edit, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Edit, Github, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
-import type { ProfileResponse } from "@/services/internal/profiles/controller/profile.response";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
+import { Skeleton } from "../ui/skeleton";
+import { GithubDark } from "../ui/svgs/githubDark";
 
 interface ProfileCardProps {
-    profileId?: string;
     showEditButton?: boolean;
     onEdit?: () => void;
 }
 
 export default function ProfileCard({
-    profileId,
     showEditButton = false,
     onEdit,
 }: ProfileCardProps) {
@@ -28,13 +28,8 @@ export default function ProfileCard({
         const loadProfile = async () => {
             try {
                 setLoading(true);
-                let profileData: ProfileResponse;
-
-                if (profileId) {
-                    profileData = await ProfileController.getProfileByUserId(profileId);
-                } else {
-                    profileData = await ProfileController.getCurrentUserProfile();
-                }
+                const profileData: ProfileResponse =
+                    await ProfileController.getCurrentUserProfile();
 
                 setProfile(profileData);
             } catch (err) {
@@ -46,7 +41,7 @@ export default function ProfileCard({
         };
 
         loadProfile();
-    }, [profileId]);
+    }, []);
 
     if (loading) {
         return (
@@ -54,10 +49,10 @@ export default function ProfileCard({
                 <CardContent className="p-6">
                     <div className="animate-pulse space-y-4">
                         <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+                            <Skeleton className="w-16 h-16 rounded-full"></Skeleton>
                             <div className="space-y-2">
-                                <div className="h-4 bg-gray-200 rounded w-32"></div>
-                                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                <Skeleton className="h-4 rounded w-32"></Skeleton>
+                                <Skeleton className="h-4 rounded w-24"></Skeleton>
                             </div>
                         </div>
                     </div>
@@ -95,32 +90,39 @@ export default function ProfileCard({
             <CardContent className="space-y-6">
                 <div className="flex items-center space-x-4">
                     <Avatar className="w-16 h-16">
-                        <AvatarImage src={profile.profileUrl} alt={profile.username} />
+                        <AvatarImage
+                            src={profile.profileUrl}
+                            alt={profile.username}
+                        />
                         <AvatarFallback>
-                            {profile.firstName?.[0]}{profile.lastName?.[0]}
+                            {profile.firstName?.[0]}
+                            {profile.lastName?.[0]}
                         </AvatarFallback>
                     </Avatar>
                     <div>
                         <h3 className="text-lg font-semibold">
                             {profile.firstName} {profile.lastName}
                         </h3>
-                        <p className="text-muted-foreground">@{profile.username}</p>
+                        <p className="text-muted-foreground">
+                            @{profile.username}
+                        </p>
                     </div>
                 </div>
 
-                {profile.profileUrl && !profile.profileUrl.includes('cloudinary.com') && (
-                    <div className="flex items-center gap-2">
-                        <Github className="h-4 w-4 text-muted-foreground" />
-                        <a
-                            href={profile.profileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                        >
-                            {profile.profileUrl}
-                        </a>
-                    </div>
-                )}
+                {profile.profileUrl &&
+                    !profile.profileUrl.includes("cloudinary.com") && (
+                        <div className="flex items-center gap-2">
+                            <GithubDark className="h-4 w-4 text-muted-foreground" />
+                            <a
+                                href={profile.profileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                            >
+                                {profile.profileUrl}
+                            </a>
+                        </div>
+                    )}
             </CardContent>
         </Card>
     );

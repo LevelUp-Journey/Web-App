@@ -27,7 +27,8 @@ interface FeedPostCardProps {
 
 export function FeedPostCard({ post }: FeedPostCardProps) {
     const router = useRouter();
-    const { userReaction, isLoading, toggleReaction, reactionCount } = useReactions(post.id);
+    const { userReaction, isLoading, toggleReaction, reactionCount } =
+        useReactions(post.id);
 
     const handleAuthorClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -52,26 +53,28 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
             <CardContent className="p-6">
                 {/* Post Header */}
                 <div className="flex items-start space-x-3 mb-4">
-                    <Avatar 
-                        className="h-10 w-10 cursor-pointer hover:opacity-80 transition-opacity" 
+                    <Avatar
+                        className="h-10 w-10 cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={handleAuthorClick}
                     >
                         <AvatarImage src={post.authorProfile?.profileUrl} />
                         <AvatarFallback>
-                            {post.authorProfile?.username?.charAt(0).toUpperCase() || "U"}
+                            {post.authorProfile?.username
+                                ?.charAt(0)
+                                .toUpperCase() || "U"}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                            <span 
+                            <span
                                 className="font-semibold cursor-pointer"
                                 onClick={handleAuthorClick}
                             >
                                 {post.authorProfile?.username || "Unknown User"}
                             </span>
                             <span className="text-muted-foreground">in</span>
-                            <Badge 
-                                variant="outline" 
+                            <Badge
+                                variant="outline"
                                 className="text-xs cursor-pointer"
                                 onClick={handleCommunityClick}
                             >
@@ -111,10 +114,16 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                         disabled={isLoading}
                         className={userReaction ? "text-red-500" : ""}
                     >
-                        <Heart className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`} />
+                        <Heart
+                            className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`}
+                        />
                         {reactionCount}
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={handleCommentsClick}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleCommentsClick}
+                    >
                         <MessageCircle className="h-4 w-4 mr-2" />
                         {post.comments?.length || 0}
                     </Button>
@@ -127,10 +136,15 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                             Recent Comments
                         </h4>
                         {post.comments.slice(0, 2).map((comment) => (
-                            <div key={comment.id} className="bg-muted/50 rounded-lg p-3">
+                            <div
+                                key={comment.id}
+                                className="bg-muted/50 rounded-lg p-3"
+                            >
                                 <p className="text-sm">{comment.content}</p>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    {new Date(comment.createdAt).toLocaleDateString()}
+                                    {new Date(
+                                        comment.createdAt,
+                                    ).toLocaleDateString()}
                                 </p>
                             </div>
                         ))}

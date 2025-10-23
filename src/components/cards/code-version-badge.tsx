@@ -1,9 +1,9 @@
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
+import { Java } from "@/components/ui/svgs/java";
+import { Javascript } from "@/components/ui/svgs/javascript";
+import { Python } from "@/components/ui/svgs/python";
 import { ProgrammingLanguage } from "@/lib/consts";
-import { CPlusPlus } from "../ui/svgs/cplusplus";
-import { Java } from "../ui/svgs/java";
-import { Javascript } from "../ui/svgs/javascript";
-import { Python } from "../ui/svgs/python";
+import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 
 const ICONS = {
     [ProgrammingLanguage.JAVA]: Java,

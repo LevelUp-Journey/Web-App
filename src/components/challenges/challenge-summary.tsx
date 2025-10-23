@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { hydrate, type SerializeResult } from "next-mdx-remote-client/csr";
+import CodeVersionsList from "@/components/challenges/code-versions-list";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
+import PublishButton from "@/components/challenges/publish-button";
 import { Button } from "@/components/ui/button";
 import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import CodeVersionsList from "./code-versions-list";
-import PublishButton from "./publish-button";
 
 interface ChallengeSummaryProps {
     challenge: Challenge;

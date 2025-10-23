@@ -41,7 +41,7 @@ export async function getPostsByUserIdAction(
         // TODO: Replace with specific endpoint when available
         const response = await COMMUNITY_HTTP.get("/posts");
         const allPosts = response.data as PostResponse[];
-        const userPosts = allPosts.filter(post => post.authorId === userId);
+        const userPosts = allPosts.filter((post) => post.authorId === userId);
 
         return {
             data: userPosts,

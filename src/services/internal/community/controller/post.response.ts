@@ -10,7 +10,7 @@ export interface ReactionResponse {
     id: string;
     postId: string;
     userId: string;
-    reactionType: 'LIKE';
+    reactionType: "LIKE";
     createdAt: string;
 }
 

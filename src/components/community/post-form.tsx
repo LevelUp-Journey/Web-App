@@ -16,7 +16,12 @@ interface PostFormProps {
     onCancel?: () => void;
 }
 
-export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFormProps) {
+export function PostForm({
+    communityId,
+    authorId,
+    onSuccess,
+    onCancel,
+}: PostFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         title: "",
@@ -41,8 +46,13 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
-                throw new Error(errorData.error || `Failed to create post (${response.status})`);
+                const errorData = await response
+                    .json()
+                    .catch(() => ({ error: "Unknown error" }));
+                throw new Error(
+                    errorData.error ||
+                        `Failed to create post (${response.status})`,
+                );
             }
 
             setFormData({ title: "", content: "", imageUrl: "" });
@@ -50,7 +60,11 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
             onSuccess?.();
         } catch (error) {
             console.error("Error creating post:", error);
-            toast.error(error instanceof Error ? error.message : "Failed to create post");
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to create post",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -68,7 +82,12 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                         <Input
                             id="title"
                             value={formData.title}
-                            onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    title: e.target.value,
+                                }))
+                            }
                             placeholder="Enter title..."
                             required
                             disabled={isSubmitting}
@@ -80,7 +99,12 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                         <Textarea
                             id="content"
                             value={formData.content}
-                            onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    content: e.target.value,
+                                }))
+                            }
                             placeholder="Share your thoughts..."
                             rows={6}
                             required
@@ -90,12 +114,21 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
 
                     <ImageUpload
                         value={formData.imageUrl}
-                        onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url || "" }))}
+                        onChange={(url) =>
+                            setFormData((prev) => ({
+                                ...prev,
+                                imageUrl: url || "",
+                            }))
+                        }
                         disabled={isSubmitting}
                     />
 
                     <div className="flex gap-2">
-                        <Button type="submit" disabled={isSubmitting || !authorId} size="sm">
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting || !authorId}
+                            size="sm"
+                        >
                             {isSubmitting ? "Creating..." : "Create"}
                         </Button>
                         {onCancel && (

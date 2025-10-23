@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ReactionController } from "@/services/internal/community/controller/reaction.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { ReactionController } from "@/services/internal/community/controller/reaction.controller";
 import type { Reaction } from "@/services/internal/community/entities/reaction.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export function useReactions(postId: string) {
     const [reactions, setReactions] = useState<Reaction[]>([]);
@@ -19,7 +19,8 @@ export function useReactions(postId: string) {
 
     const loadReactions = async () => {
         try {
-            const reactionsData = await ReactionController.getReactionsByPostId(postId);
+            const reactionsData =
+                await ReactionController.getReactionsByPostId(postId);
             setReactions(reactionsData);
         } catch (error) {
             console.error("Failed to load reactions:", error);
@@ -37,17 +38,22 @@ export function useReactions(postId: string) {
     };
 
     useEffect(() => {
-        if (currentUserId && reactions.length >= 0) {  // Allow checking even with empty reactions array
-            const userReaction = reactions.find(r => r.userId === currentUserId);
+        if (currentUserId && reactions.length >= 0) {
+            // Allow checking even with empty reactions array
+            const userReaction = reactions.find(
+                (r) => r.userId === currentUserId,
+            );
             setUserReaction(userReaction || null);
         } else if (!currentUserId) {
-            setUserReaction(null);  // Clear user reaction if no current user
+            setUserReaction(null); // Clear user reaction if no current user
         }
     }, [currentUserId, reactions]);
 
     const toggleReaction = async () => {
         if (!currentUserId) {
-            console.warn("useReactions: cannot toggle reaction - user not authenticated");
+            console.warn(
+                "useReactions: cannot toggle reaction - user not authenticated",
+            );
             return;
         }
 
@@ -60,16 +66,18 @@ export function useReactions(postId: string) {
             if (userReaction) {
                 // Remove reaction
                 await ReactionController.deleteReaction(userReaction.id);
-                setReactions(prev => prev.filter(r => r.id !== userReaction.id));
+                setReactions((prev) =>
+                    prev.filter((r) => r.id !== userReaction.id),
+                );
                 setUserReaction(null);
             } else {
                 // Add reaction
                 const newReaction = await ReactionController.createReaction({
                     postId,
                     userId: currentUserId,
-                    reactionType: 'LIKE'
+                    reactionType: "LIKE",
                 });
-                setReactions(prev => [...prev, newReaction]);
+                setReactions((prev) => [...prev, newReaction]);
                 setUserReaction(newReaction);
             }
         } catch (error) {
@@ -85,6 +93,6 @@ export function useReactions(postId: string) {
         userReaction,
         isLoading,
         toggleReaction,
-        reactionCount: reactions.length
+        reactionCount: reactions.length,
     };
 }

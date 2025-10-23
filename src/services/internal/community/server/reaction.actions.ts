@@ -1,4 +1,3 @@
-
 "use server";
 
 import {
@@ -11,7 +10,7 @@ import type { Reaction } from "../entities/reaction.entity";
 export interface CreateReactionRequest {
     postId: string;
     userId: string;
-    reactionType: 'LIKE';
+    reactionType: "LIKE";
 }
 
 export async function createReactionAction(
@@ -78,7 +77,9 @@ export async function deleteReactionAction(
     reactionId: string,
 ): Promise<RequestSuccess<void> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.delete(`/reactions/${reactionId}`);
+        const response = await COMMUNITY_HTTP.delete(
+            `/reactions/${reactionId}`,
+        );
 
         return {
             data: undefined,

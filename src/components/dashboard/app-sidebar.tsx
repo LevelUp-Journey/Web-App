@@ -1,4 +1,3 @@
-"use client";
 import {
     Code2,
     HelpCircle,
@@ -9,10 +8,7 @@ import {
     Users,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { UserRole } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { NavUser } from "@/components/dashboard/nav-user";
 import {
     Sidebar,
     SidebarContent,
@@ -24,8 +20,11 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "../ui/sidebar";
-import { NavUser } from "./nav-user";
+} from "@/components/ui/sidebar";
+import { UserRole } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 // Menu items.
 const topItems = [
@@ -77,17 +76,14 @@ const bottomItems = [
     },
 ];
 
-export default function AppSidebar() {
-    const [isTeacher, setIsTeacher] = useState(false);
+export default async function AppSidebar() {
+    const [roles, profile] = await Promise.all([
+        AuthController.getUserRoles(),
+        ProfileController.getCurrentUserProfile(),
+    ]);
 
-    useEffect(() => {
-        AuthController.getUserRoles().then((roles) => {
-            const hasValidRole =
-                roles.includes(UserRole.TEACHER) ||
-                roles.includes(UserRole.ADMIN);
-            setIsTeacher(hasValidRole);
-        });
-    }, []);
+    const isTeacher =
+        roles.includes(UserRole.TEACHER) || roles.includes(UserRole.ADMIN);
 
     return (
         <Sidebar>
@@ -162,12 +158,7 @@ export default function AppSidebar() {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
-                            <NavUser
-                                user={{
-                                    avatar: "",
-                                    name: "",
-                                }}
-                            />
+                            <NavUser profile={profile} />
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

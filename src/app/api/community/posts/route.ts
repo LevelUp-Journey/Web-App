@@ -1,18 +1,20 @@
 import { NextResponse } from "next/server";
 import { PostController } from "@/services/internal/community/controller/post.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { ProfileController } from "@/services/internal/profiles/controller/profile.controller";
 import type { CreatePostRequest } from "@/services/internal/community/server/post.actions";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json() as CreatePostRequest;
+        const body = (await request.json()) as CreatePostRequest;
 
         // Validate required fields
         if (!body.title || !body.content || !body.communityId) {
             return NextResponse.json(
-                { error: "Missing required fields: title, content, communityId" },
-                { status: 400 }
+                {
+                    error: "Missing required fields: title, content, communityId",
+                },
+                { status: 400 },
             );
         }
 
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
         console.error("Error creating post:", error);
         return NextResponse.json(
             { error: "Failed to create post" },
-            { status: 500 }
+            { status: 500 },
         );
     }
 }

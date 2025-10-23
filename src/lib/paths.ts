@@ -1,76 +1,75 @@
-export const PATHS = {
-    DASHBOARD: {
-        ROOT: "/dashboard",
-        PROFILE: "/dashboard/profile",
-        CHALLENGES: {
-            ROOT: "/dashboard/challenges",
-            CREATE: "/dashboard/challenges/create",
-            // View challenge summary (read-only), edit with ?editing=true
-            VIEW: (id: string) => `/dashboard/challenges/${id}`,
-            // Code Versions
-            VERSIONS: {
-                // Create new code version from create challenge
-                NEW: (challengeId: string) =>
-                    `/dashboard/challenges/${challengeId}/versions?editing=true`,
-                // View code version summary (read-only)
-                VIEW: (challengeId: string, codeVersionId: string) =>
-                    `/dashboard/challenges/${challengeId}/versions/${codeVersionId}`,
-                // Edit code version (editable)
-                EDIT: (challengeId: string, codeVersionId: string) =>
-                    `/dashboard/challenges/${challengeId}/versions/${codeVersionId}?editing=true`,
+// Server-side paths helper that accepts locale parameter
+export function getLocalizedPaths(locale: string) {
+    return {
+        DASHBOARD: {
+            ROOT: `/${locale}/dashboard`,
+            PROFILE: `/${locale}/dashboard/profile`,
+            CHALLENGES: {
+                ROOT: `/${locale}/dashboard/challenges`,
+                CREATE: `/${locale}/dashboard/challenges/create`,
+                VIEW: (id: string) => `/${locale}/dashboard/challenges/${id}`,
+                VERSIONS: {
+                    NEW: (challengeId: string) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions?editing=true`,
+                    VIEW: (challengeId: string, codeVersionId: string) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions/${codeVersionId}`,
+                    EDIT: (challengeId: string, codeVersionId: string) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions/${codeVersionId}?editing=true`,
+                },
+                TESTS: {
+                    LIST: (challengeId: string, codeVersionId: string) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests`,
+                    NEW: (challengeId: string, codeVersionId: string) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests?editing=true`,
+                    EDIT: (
+                        challengeId: string,
+                        codeVersionId: string,
+                        testId: string,
+                    ) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests?editing=true&testId=${testId}`,
+                    VIEW: (
+                        challengeId: string,
+                        codeVersionId: string,
+                        testId: string,
+                    ) =>
+                        `/${locale}/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests?testId=${testId}`,
+                },
             },
-            // Tests
-            TESTS: {
-                // View all tests for a code version
-                LIST: (challengeId: string, codeVersionId: string) =>
-                    `/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests`,
-                // Create new test
-                NEW: (challengeId: string, codeVersionId: string) =>
-                    `/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests?editing=true`,
-                // Edit specific test
-                EDIT: (
-                    challengeId: string,
-                    codeVersionId: string,
-                    testId: string,
-                ) =>
-                    `/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests?editing=true&testId=${testId}`,
-                // View specific test
-                VIEW: (
-                    challengeId: string,
-                    codeVersionId: string,
-                    testId: string,
-                ) =>
-                    `/dashboard/challenges/${challengeId}/versions/${codeVersionId}/tests?testId=${testId}`,
-            },
-        },
-        COMMUNITY: {
-            ROOT: "/dashboard/community",
-            POST: (id: string) => `/dashboard/community/post/${id}`,
-            WITH_ID: (id: string) => `/dashboard/community/${id}`,
-        },
-        LEADERBOARD: "/dashboard/leaderboard",
-        SETTINGS: "/dashboard/settings",
-        HELP: "/dashboard/help",
-        ADMINISTRATION: {
-            ROOT: "/dashboard/admin",
             COMMUNITY: {
-                ROOT: "/dashboard/admin/community",
-                CREATE: "/dashboard/admin/community/create",
-                EDIT: (id: string) => `/dashboard/admin/community/edit?id=${id}`,
+                ROOT: `/${locale}/dashboard/community`,
+                POST: (id: string) =>
+                    `/${locale}/dashboard/community/post/${id}`,
+                WITH_ID: (id: string) => `/${locale}/dashboard/community/${id}`,
+            },
+            LEADERBOARD: `/${locale}/dashboard/leaderboard`,
+            SETTINGS: `/${locale}/dashboard/settings`,
+            HELP: `/${locale}/dashboard/help`,
+            ADMINISTRATION: {
+                ROOT: `/${locale}/dashboard/admin`,
+                COMMUNITY: {
+                    ROOT: `/${locale}/dashboard/admin/community`,
+                    CREATE: `/${locale}/dashboard/admin/community/create`,
+                    EDIT: (id: string) =>
+                        `/${locale}/dashboard/admin/community/edit?id=${id}`,
+                },
             },
         },
-    },
-    AUTH: {
-        SIGN_IN: "/auth/sign-in",
-        SIGN_UP: {
-            ROOT: "/auth/sign-up",
-            STEP: (step: number) => `/auth/sign-up?step=${step}`,
+        AUTH: {
+            SIGN_IN: `/${locale}/auth/sign-in`,
+            SIGN_UP: {
+                ROOT: `/${locale}/auth/sign-up`,
+                STEP: (step: number) => `/${locale}/auth/sign-up?step=${step}`,
+            },
         },
-    },
-    ROOT: "/",
-    LEGAL: {
-        PRIVACY_POLICY: "/legal/privacy-policy",
-        TERMS: "/legal/terms",
-    },
-    UNAUTHORIZED: "/unauthorized",
-};
+        ROOT: `/${locale}`,
+        LEGAL: {
+            PRIVACY_POLICY: `/${locale}/legal/privacy-policy`,
+            TERMS: `/${locale}/legal/terms`,
+        },
+        UNAUTHORIZED: `/${locale}/unauthorized`,
+    };
+}
+
+// Default export with English locale for backwards compatibility
+// WARNING: This should only be used in server components or you should use useLocalizedPaths() hook
+export const PATHS = getLocalizedPaths("en");

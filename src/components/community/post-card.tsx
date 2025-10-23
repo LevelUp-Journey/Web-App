@@ -7,7 +7,12 @@ import type { Post } from "@/services/internal/community/entities/post.entity";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from "@/components/ui/card";
 import { PATHS } from "@/lib/paths";
 
 interface PostCardProps {
@@ -22,40 +27,55 @@ interface PostCardProps {
             name: string;
         };
     };
-    layout?: 'grid' | 'list';
+    layout?: "grid" | "list";
 }
 
-export function PostCard({ post, layout = 'grid' }: PostCardProps) {
+export function PostCard({ post, layout = "grid" }: PostCardProps) {
     const router = useRouter();
-    const { userReaction, isLoading, toggleReaction, reactionCount } = useReactions(post.id);
-    const date = new Date(post.createdAt).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+    const { userReaction, isLoading, toggleReaction, reactionCount } =
+        useReactions(post.id);
+    const date = new Date(post.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
     });
-    const content = post.content.length > 150 
-        ? `${post.content.substring(0, 150)}...` 
-        : post.content;
+    const content =
+        post.content.length > 150
+            ? `${post.content.substring(0, 150)}...`
+            : post.content;
 
     return (
-        <Card className={`hover:shadow-lg transition-shadow ${layout === 'list' ? 'w-full' : ''}`}>
+        <Card
+            className={`hover:shadow-lg transition-shadow ${layout === "list" ? "w-full" : ""}`}
+        >
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src={post.authorProfile?.profileUrl} alt={post.authorProfile?.username || "User"} />
+                            <AvatarImage
+                                src={post.authorProfile?.profileUrl}
+                                alt={post.authorProfile?.username || "User"}
+                            />
                             <AvatarFallback>
-                                {post.authorProfile?.firstName?.[0] || post.authorProfile?.username?.[0] || "U"}
+                                {post.authorProfile?.firstName?.[0] ||
+                                    post.authorProfile?.username?.[0] ||
+                                    "U"}
                             </AvatarFallback>
                         </Avatar>
                         <div>
                             <p className="font-medium">
-                                {post.authorProfile ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}` : "Unknown User"}
+                                {post.authorProfile
+                                    ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}`
+                                    : "Unknown User"}
                             </p>
-                            <p className="text-sm text-muted-foreground">@{post.authorProfile?.username || "unknown"}</p>
+                            <p className="text-sm text-muted-foreground">
+                                @{post.authorProfile?.username || "unknown"}
+                            </p>
                         </div>
                     </div>
-                    <Badge variant="outline">{post.community?.name || "Community"}</Badge>
+                    <Badge variant="outline">
+                        {post.community?.name || "Community"}
+                    </Badge>
                 </div>
             </CardHeader>
             <CardContent>
@@ -80,10 +100,18 @@ export function PostCard({ post, layout = 'grid' }: PostCardProps) {
                     disabled={isLoading}
                     className={userReaction ? "text-red-500" : ""}
                 >
-                    <Heart className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`} />
+                    <Heart
+                        className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`}
+                    />
                     {reactionCount}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => router.push(PATHS.DASHBOARD.COMMUNITY.POST(post.id))}>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                        router.push(PATHS.DASHBOARD.COMMUNITY.POST(post.id))
+                    }
+                >
                     <MessageCircle className="h-4 w-4 mr-2" />
                     {post.comments.length}
                 </Button>

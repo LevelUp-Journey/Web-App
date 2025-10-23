@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import CodeVersionsList from "@/components/challenges/code-versions-list";
+import DeleteChallengeButton from "@/components/challenges/delete-challenge-button";
 import {
     ShadcnTemplate,
     type ShadcnTemplateRef,
@@ -30,8 +32,6 @@ import { ChallengeDifficulty } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import CodeVersionsList from "./code-versions-list";
-import DeleteChallengeButton from "./delete-challenge-button";
 
 const formSchema = z.object({
     title: z

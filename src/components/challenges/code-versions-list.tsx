@@ -17,11 +17,16 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import {
+    Item,
+    ItemActions,
+    ItemContent,
+    ItemTitle,
+} from "@/components/ui/item";
 import { getReadableLanguageName } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
-import { Item, ItemActions, ItemContent, ItemTitle } from "../ui/item";
 
 interface CodeVersionsListProps {
     challengeId: string;
