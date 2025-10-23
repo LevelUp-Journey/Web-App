@@ -1,5 +1,8 @@
-// Server-side paths helper that accepts locale parameter
-export function getLocalizedPaths(locale: string) {
+"use client";
+
+import { type Locale, useLocale } from "./use-locale";
+
+function createPaths(locale: Locale) {
     return {
         DASHBOARD: {
             ROOT: `/${locale}/dashboard`,
@@ -70,6 +73,11 @@ export function getLocalizedPaths(locale: string) {
     };
 }
 
-// Default export with English locale for backwards compatibility
-// WARNING: This should only be used in server components or you should use useLocalizedPaths() hook
-export const PATHS = getLocalizedPaths("en");
+export function useLocalizedPaths() {
+    const locale = useLocale();
+    return createPaths(locale);
+}
+
+export function getLocalizedPaths(locale: Locale) {
+    return createPaths(locale);
+}
