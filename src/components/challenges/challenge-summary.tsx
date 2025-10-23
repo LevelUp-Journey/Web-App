@@ -1,10 +1,11 @@
 import Link from "next/link";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Button } from "@/components/ui/button";
+import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
 import CodeVersionsList from "./code-versions-list";
-import DeleteChallengeButton from "./delete-challenge-button";
+import PublishButton from "./publish-button";
 
 interface ChallengeSummaryProps {
     challenge: Challenge;
@@ -32,6 +33,10 @@ export default function ChallengeSummary({
                     </p>
                 </div>
                 <div className="flex gap-2">
+                    {isTeacher &&
+                        challenge.status !== ChallengeStatus.PUBLISHED && (
+                            <PublishButton challengeId={challenge.id} />
+                        )}
                     {isTeacher && (
                         <Link href="?editing=true">
                             <Button variant="outline">Edit</Button>

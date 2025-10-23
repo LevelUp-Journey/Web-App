@@ -24,6 +24,11 @@ export enum ChallengeDifficulty {
     EXPERT = "EXPERT",
 }
 
+export enum ChallengeStatus {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+}
+
 export enum ProgrammingLanguage {
     JAVASCRIPT = "JAVASCRIPT",
     PYTHON = "PYTHON",

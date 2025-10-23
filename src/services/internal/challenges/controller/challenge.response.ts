@@ -29,6 +29,15 @@ export interface CreateChallengeRequest {
     tagIds: string[];
 }
 
+export interface UpdateChallengeRequest {
+    name?: string;
+    description?: string;
+    experiencePoints?: number;
+    difficulty?: string;
+    status?: string;
+    tags?: string[];
+}
+
 export interface GetChallengesByTeacherIdRequest {
     teacherId: string;
 }

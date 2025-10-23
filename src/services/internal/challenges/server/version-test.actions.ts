@@ -17,10 +17,11 @@ export interface CreateVersionTestRequest {
 }
 
 export interface UpdateVersionTestRequest {
-    input?: string;
-    expectedOutput?: string;
-    customValidationCode?: string;
-    failureMessage?: string;
+    input: string;
+    expectedOutput: string;
+    customValidationCode: string;
+    failureMessage: string;
+    isSecret: boolean;
 }
 
 export async function getVersionTestByIdAction(

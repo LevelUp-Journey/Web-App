@@ -68,19 +68,18 @@ export default function ChallengeCard({
             <CardFooter>
                 {adminMode ? (
                     <Button
-                        size="default"
+                        size="sm"
                         onClick={() => {
                             router.push(
-                                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id) +
-                                    "?editing=true",
+                                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id),
                             );
                         }}
                     >
-                        Edit Challenge
+                        View
                     </Button>
                 ) : (
                     <Button
-                        size="default"
+                        size="sm"
                         onClick={() => {
                             router.push(
                                 PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id),

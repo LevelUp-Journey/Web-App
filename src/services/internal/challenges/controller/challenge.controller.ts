@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "../entities/challenge.entity";
 import {
     createChallengeAction,
@@ -5,11 +7,13 @@ import {
     getChallengeByIdAction,
     getChallengesByTeacherIdAction,
     getPublicChallengesAction,
+    updateChallengeAction,
 } from "../server/challenge.actions";
 import { ChallengeAssembler } from "./challenge.assembler";
 import type {
     ChallengeResponse,
     CreateChallengeRequest,
+    UpdateChallengeRequest,
 } from "./challenge.response";
 
 export class ChallengeController {
@@ -30,7 +34,6 @@ export class ChallengeController {
         request: CreateChallengeRequest,
     ): Promise<Challenge> {
         const response = await createChallengeAction(request);
-        console.log("RESPONSE DE CREATION", response);
         if (response.status === 200 || response.status === 201) {
             return ChallengeAssembler.toEntityFromResponse(
                 response.data as ChallengeResponse,
@@ -63,6 +66,27 @@ export class ChallengeController {
             );
         }
         throw new Error("Failed to fetch challenges");
+    }
+
+    public static async updateChallenge(
+        challengeId: string,
+        request: UpdateChallengeRequest,
+    ) {
+        const response = await updateChallengeAction(challengeId, request);
+
+        if (response.status === 200) {
+            return ChallengeAssembler.toEntityFromResponse(
+                response.data as ChallengeResponse,
+            );
+        }
+
+        throw new Error(response.data as string);
+    }
+
+    public static async publishChallenge(challengeId: string) {
+        return await ChallengeController.updateChallenge(challengeId, {
+            status: ChallengeStatus.PUBLISHED,
+        });
     }
 
     public static async deleteChallenge(challengeId: string): Promise<boolean> {
