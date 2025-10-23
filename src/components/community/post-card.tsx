@@ -2,6 +2,7 @@
 
 import { Heart, MessageCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useReactions } from "@/hooks/use-reactions";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -10,11 +11,23 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { PATHS } from "@/lib/paths";
 
 interface PostCardProps {
-    post: Post;
+    post: Post & {
+        authorProfile?: {
+            username: string;
+            profileUrl?: string;
+            firstName?: string;
+            lastName?: string;
+        };
+        community?: {
+            name: string;
+        };
+    };
+    layout?: 'grid' | 'list';
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, layout = 'grid' }: PostCardProps) {
     const router = useRouter();
+    const { userReaction, isLoading, toggleReaction, reactionCount } = useReactions(post.id);
     const date = new Date(post.createdAt).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -25,22 +38,24 @@ export function PostCard({ post }: PostCardProps) {
         : post.content;
 
     return (
-        <Card className="hover:shadow-lg transition-shadow">
+        <Card className={`hover:shadow-lg transition-shadow ${layout === 'list' ? 'w-full' : ''}`}>
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src="" alt={post.authorId} />
+                            <AvatarImage src={post.authorProfile?.profileUrl} alt={post.authorProfile?.username || "User"} />
                             <AvatarFallback>
-                                <User className="h-5 w-5" />
+                                {post.authorProfile?.firstName?.[0] || post.authorProfile?.username?.[0] || "U"}
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className="font-medium">{post.authorId}</p>
-                            <p className="text-sm text-muted-foreground">{date}</p>
+                            <p className="font-medium">
+                                {post.authorProfile ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}` : "Unknown User"}
+                            </p>
+                            <p className="text-sm text-muted-foreground">@{post.authorProfile?.username || "unknown"}</p>
                         </div>
                     </div>
-                    <Badge variant="outline">Community #{post.communityId}</Badge>
+                    <Badge variant="outline">{post.community?.name || "Community"}</Badge>
                 </div>
             </CardHeader>
             <CardContent>
@@ -54,23 +69,23 @@ export function PostCard({ post }: PostCardProps) {
                     />
                 )}
             </CardContent>
-            <CardFooter className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm">
-                        <Heart className="h-4 w-4 mr-1" />
-                        0
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                        <MessageCircle className="h-4 w-4 mr-1" />
-                        {post.comments.length}
-                    </Button>
-                </div>
+            <CardFooter className="flex items-center gap-2">
                 <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    onClick={() => router.push(PATHS.DASHBOARD.COMMUNITY.POST(post.id))}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleReaction();
+                    }}
+                    disabled={isLoading}
+                    className={userReaction ? "text-red-500" : ""}
                 >
-                    View
+                    <Heart className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`} />
+                    {reactionCount}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => router.push(PATHS.DASHBOARD.COMMUNITY.POST(post.id))}>
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    {post.comments.length}
                 </Button>
             </CardFooter>
         </Card>

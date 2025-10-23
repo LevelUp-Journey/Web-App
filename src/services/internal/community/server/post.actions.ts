@@ -33,18 +33,18 @@ export async function getAllPostsAction(): Promise<
     }
 }
 
-export async function getUserFeedPostsAction(
+export async function getPostsByUserIdAction(
     userId: string,
-    limit: number = 20,
-    offset: number = 0,
 ): Promise<RequestSuccess<PostResponse[]> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.get(
-            `/posts/feed/${userId}?limit=${limit}&offset=${offset}`,
-        );
+        // For now, get all posts and filter by authorId
+        // TODO: Replace with specific endpoint when available
+        const response = await COMMUNITY_HTTP.get("/posts");
+        const allPosts = response.data as PostResponse[];
+        const userPosts = allPosts.filter(post => post.authorId === userId);
 
         return {
-            data: response.data,
+            data: userPosts,
             status: response.status,
         };
     } catch (error: unknown) {
@@ -66,6 +66,7 @@ export async function getUserFeedPostsAction(
 export interface CreatePostRequest {
     communityId: string;
     authorId: string;
+    authorProfileId: string;
     title: string;
     content: string;
     imageUrl?: string;

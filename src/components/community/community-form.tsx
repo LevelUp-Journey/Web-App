@@ -129,7 +129,7 @@ export function CommunityForm({
                     />
 
                     <div className="flex gap-2">
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button type="submit" disabled={isSubmitting} size="sm">
                             {isSubmitting 
                                 ? (mode === "edit" ? "Updating..." : "Creating...") 
                                 : (mode === "edit" ? "Update" : "Create")
@@ -141,6 +141,7 @@ export function CommunityForm({
                                 variant="outline"
                                 onClick={onCancel}
                                 disabled={isSubmitting}
+                                size="sm"
                             >
                                 Cancel
                             </Button>

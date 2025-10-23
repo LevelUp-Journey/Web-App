@@ -18,6 +18,13 @@ export class PostAssembler {
                 imageUrl: comment.imageUrl,
                 createdAt: comment.createdAt,
             })),
+            reactions: response.reactions ? response.reactions.map(reaction => ({
+                id: reaction.id,
+                postId: reaction.postId,
+                userId: reaction.userId,
+                reactionType: reaction.reactionType,
+                createdAt: reaction.createdAt,
+            })) : [],
         };
     }
 

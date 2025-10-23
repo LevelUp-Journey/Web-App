@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CommunityForm } from "@/components/community/community-form";
@@ -10,9 +10,9 @@ import type { Community } from "@/services/internal/community/entities/community
 
 export default function EditCommunityPage() {
     const router = useRouter();
-    const params = useParams();
-    const communityId = params.id as string;
-    
+    const searchParams = useSearchParams();
+    const communityId = searchParams.get("id");
+
     const [community, setCommunity] = useState<Community | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -43,11 +43,11 @@ export default function EditCommunityPage() {
     };
 
     const handleSuccess = () => {
-        router.push("/dashboard/communities");
+        router.push("/dashboard/admin/community");
     };
 
     const handleCancel = () => {
-        router.back();
+        router.push("/dashboard/admin/community");
     };
 
     if (loading) {
@@ -65,9 +65,9 @@ export default function EditCommunityPage() {
             <div className="container mx-auto p-6">
                 <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
                     <p className="text-destructive">{error || "Community not found"}</p>
-                    <Button onClick={() => router.push("/dashboard/communities")}>
+                    <Button size="sm" onClick={() => router.push("/dashboard/admin/community")}>
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Communities
+                        Back to Community Management
                     </Button>
                 </div>
             </div>
@@ -76,14 +76,15 @@ export default function EditCommunityPage() {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="space-y-6">
                 <Button
                     variant="ghost"
-                    onClick={() => router.back()}
+                    size="sm"
+                    onClick={() => router.push("/dashboard/admin/community")}
                     className="mb-4"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
+                    Back to Community Management
                 </Button>
 
                 <CommunityForm

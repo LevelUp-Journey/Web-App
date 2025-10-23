@@ -36,18 +36,21 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                     ...formData,
                     communityId,
                     authorId,
-                    imageUrl: formData.imageUrl || undefined,
+                    imageUrl: formData.imageUrl || null,
                 }),
             });
 
-            if (!response.ok) throw new Error("Failed to create post");
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+                throw new Error(errorData.error || `Failed to create post (${response.status})`);
+            }
 
             setFormData({ title: "", content: "", imageUrl: "" });
             toast.success("Post created successfully!");
             onSuccess?.();
         } catch (error) {
             console.error("Error creating post:", error);
-            toast.error("Failed to create post");
+            toast.error(error instanceof Error ? error.message : "Failed to create post");
         } finally {
             setIsSubmitting(false);
         }
@@ -92,7 +95,7 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                     />
 
                     <div className="flex gap-2">
-                        <Button type="submit" disabled={isSubmitting || !authorId}>
+                        <Button type="submit" disabled={isSubmitting || !authorId} size="sm">
                             {isSubmitting ? "Creating..." : "Create"}
                         </Button>
                         {onCancel && (
@@ -101,6 +104,7 @@ export function PostForm({ communityId, authorId, onSuccess, onCancel }: PostFor
                                 variant="outline"
                                 onClick={onCancel}
                                 disabled={isSubmitting}
+                                size="sm"
                             >
                                 Cancel
                             </Button>

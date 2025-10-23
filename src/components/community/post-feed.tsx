@@ -17,6 +17,7 @@ interface PostFeedProps {
     title?: string;
     showSearch?: boolean;
     canCreatePost?: boolean;
+    layout?: 'grid' | 'list';
 }
 
 export function PostFeed({
@@ -24,6 +25,7 @@ export function PostFeed({
     title = "Community Posts",
     showSearch = true,
     canCreatePost = false,
+    layout = 'grid',
 }: PostFeedProps) {
     return (
         <div className="space-y-4">
@@ -48,16 +50,16 @@ export function PostFeed({
                     <h2 className="text-2xl font-semibold">{title}</h2>
                     {canCreatePost && (
                         <Link href="/dashboard/community/posts/create">
-                            <Button>
+                            <Button size="sm">
                                 <PlusIcon className="mr-2 h-4 w-4" />
                                 Create
                             </Button>
                         </Link>
                     )}
                 </div>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className={layout === 'grid' ? "grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "space-y-4"}>
                     {posts.map((post) => (
-                        <PostCard key={post.id} post={post} />
+                        <PostCard key={post.id} post={post} layout={layout} />
                     ))}
                 </div>
             </div>

@@ -4,6 +4,7 @@ import {
     getProfileAction,
     getProfileByIdAction,
     updateProfileAction,
+    searchProfilesAction,
 } from "../server/profile.actions";
 import type { ProfileResponse, UpdateProfileRequest } from "./profile.response";
 
@@ -42,5 +43,13 @@ export class ProfileController {
             return response.data as ProfileResponse;
         }
         throw new Error("Failed to fetch profile");
+    }
+
+    public static async searchProfiles(query: string) {
+        const response = await searchProfilesAction(query);
+        if (response.status === 200) {
+            return response.data as ProfileResponse[];
+        }
+        throw new Error("Failed to search profiles");
     }
 }

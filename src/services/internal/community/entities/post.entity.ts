@@ -6,6 +6,14 @@ export interface Comment {
     createdAt: string;
 }
 
+export interface Reaction {
+    id: string;
+    postId: string;
+    userId: string;
+    reactionType: 'LIKE';
+    createdAt: string;
+}
+
 export interface Post {
     id: string;
     communityId: string;
@@ -15,4 +23,5 @@ export interface Post {
     imageUrl?: string;
     createdAt: string;
     comments: Comment[];
+    reactions: Reaction[];
 }

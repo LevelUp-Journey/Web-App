@@ -88,7 +88,6 @@ export default function ImageUpload({
                     </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                    Click the X to remove the image
                 </p>
             </div>
         );

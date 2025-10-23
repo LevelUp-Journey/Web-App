@@ -45,12 +45,19 @@ export const PATHS = {
         },
         COMMUNITY: {
             ROOT: "/dashboard/community",
-            POST: (id: string) => `/dashboard/community/${id}`,
+            POST: (id: string) => `/dashboard/community/post/${id}`,
+            WITH_ID: (id: string) => `/dashboard/community/${id}`,
         },
+        LEADERBOARD: "/dashboard/leaderboard",
         SETTINGS: "/dashboard/settings",
         HELP: "/dashboard/help",
         ADMINISTRATION: {
             ROOT: "/dashboard/admin",
+            COMMUNITY: {
+                ROOT: "/dashboard/admin/community",
+                CREATE: "/dashboard/admin/community/create",
+                EDIT: (id: string) => `/dashboard/admin/community/edit?id=${id}`,
+            },
         },
     },
     AUTH: {

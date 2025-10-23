@@ -109,7 +109,6 @@ export async function getUserRolesFromTokenAction(): Promise<UserRole[]> {
     const authToken = await getAuthTokenAction();
 
     const decoded = jwtDecode<{ roles: UserRole[] }>(authToken.token);
-    console.log("USER ROLES:", decoded.roles);
     const roles = decoded.roles as UserRole[];
 
     return roles;
@@ -127,13 +126,23 @@ export async function refreshTokenAction() {
 }
 
 export async function getUserIdFromTokenAction(): Promise<string> {
-    const decoded = await decodeJWT();
-
-    return decoded.userId;
+    try {
+        const decoded = await decodeJWT();
+        if (!decoded.userId) {
+            throw new Error("No userId found in token");
+        }
+        return decoded.userId;
+    } catch (error) {
+        console.error("getUserIdFromTokenAction: failed to decode token:", error);
+        throw error;
+    }
 }
 
 export async function decodeJWT() {
     const authToken = await getAuthTokenAction();
+    if (authToken.token === "NO_TOKEN_FOUND") {
+        throw new Error("No authentication token found");
+    }
     const decoded = jwtDecode<JWTPayload>(authToken.token);
     return decoded;
 }
