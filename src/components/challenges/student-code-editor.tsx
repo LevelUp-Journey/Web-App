@@ -74,6 +74,7 @@ export default function StudentCodeEditor({
     const [savingDots, setSavingDots] = useState("");
     const [submitResults, setSubmitResults] =
         useState<SubmitSolutionResponse | null>(null);
+    const [activeTab, setActiveTab] = useState("description");
 
     // Auto-save with debounce of 3 seconds
     useEffect(() => {
@@ -134,6 +135,7 @@ export default function StudentCodeEditor({
             )) as SubmitSolutionResponse;
 
             setSubmitResults(response);
+            setActiveTab("tests");
             toast.success(response.message);
         } catch (error) {
             console.error("Error submitting solution:", error);
@@ -210,7 +212,8 @@ export default function StudentCodeEditor({
                 <ResizablePanel defaultSize={30} minSize={30}>
                     <div className="h-full flex flex-col">
                         <Tabs
-                            defaultValue="description"
+                            value={activeTab}
+                            onValueChange={setActiveTab}
                             className="h-full flex flex-col"
                         >
                             <TabsList className="m-4">
