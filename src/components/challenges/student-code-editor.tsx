@@ -9,7 +9,8 @@ import {
     XCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import type { SerializeResult } from "next-mdx-remote-client/csr";
+import { useState } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
@@ -21,40 +22,42 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAutoSave } from "@/hooks/challenges/use-auto-save";
+import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
 import { CONSTS, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
-import type {
-    SolutionResponse,
-    SubmitSolutionResponse,
-} from "@/services/internal/challenges/solutions/controller/solutions.response";
+import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
     codeVersion: CodeVersion;
     tests: VersionTest[];
-    serializedDescription: any;
+    serializedDescription: SerializeResult | null;
     solution: SolutionResponse | null;
 }
 
+/**
+ * Convierte el lenguaje de programación al formato de Monaco Editor
+ */
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
-    switch (language) {
-        case ProgrammingLanguage.JAVASCRIPT:
-            return "javascript";
-        case ProgrammingLanguage.PYTHON:
-            return "python";
-        case ProgrammingLanguage.JAVA:
-            return "java";
-        case ProgrammingLanguage.C_PLUS_PLUS:
-            return "cpp";
-        default:
-            return "javascript";
-    }
+    const languageMap: Record<ProgrammingLanguage, string> = {
+        [ProgrammingLanguage.JAVASCRIPT]: "javascript",
+        [ProgrammingLanguage.PYTHON]: "python",
+        [ProgrammingLanguage.JAVA]: "java",
+        [ProgrammingLanguage.C_PLUS_PLUS]: "cpp",
+    };
+
+    return languageMap[language] || "javascript";
 };
 
+/**
+ * Componente principal del editor de código para estudiantes
+ * Permite editar, guardar automáticamente y ejecutar soluciones de código
+ */
 export default function StudentCodeEditor({
     challenge,
     codeVersion,
@@ -62,88 +65,113 @@ export default function StudentCodeEditor({
     serializedDescription,
     solution,
 }: StudentCodeEditorProps) {
-    const [code, setCode] = useState<string>(
-        solution?.code || codeVersion.initialCode,
+    // Estado de la UI
+    const [activeTab, setActiveTab] = useState<"description" | "tests">(
+        "description",
     );
-    const [solutionId, setSolutionId] = useState<string | null>(
-        solution?.id || null,
-    );
-    const [isSaving, setIsSaving] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isManualSaving, setIsManualSaving] = useState(false);
-    const [savingDots, setSavingDots] = useState("");
-    const [submitResults, setSubmitResults] =
-        useState<SubmitSolutionResponse | null>(null);
-    const [activeTab, setActiveTab] = useState("description");
 
-    // Auto-save with debounce of 3 seconds
-    useEffect(() => {
-        const timer = setTimeout(async () => {
-            // Skip if code hasn't changed
-            if (code === (solution?.code || codeVersion.initialCode)) {
-                return;
+    // ID de la solución (inmutable)
+    const solutionId = solution?.id || null;
+
+    // Hook de auto-guardado con debounce
+    const {
+        content: code,
+        updateContent: setCode,
+        saveStatus,
+        isManualSaving,
+        hasUnsavedChanges,
+        saveManually,
+    } = useAutoSave({
+        initialContent: solution?.code || codeVersion.initialCode,
+        onSave: async (codeToSave) => {
+            if (!solutionId) {
+                throw new Error("No solution ID available");
             }
 
-            setIsSaving(true);
-            try {
-                await SolutionsController.updateSolution({
-                    solutionId: solutionId as string,
-                    code: code,
-                });
-
-                toast.success("Code saved successfully!");
-            } catch (error) {
-                console.error("Error saving code:", error);
-                toast.error("Failed to save code");
-            } finally {
-                setIsSaving(false);
-            }
-        }, CONSTS.SOLUTION_UPDATE_DELAY);
-
-        return () => clearTimeout(timer);
-    }, [code, solutionId, solution?.code, codeVersion.initialCode]);
-
-    useEffect(() => {
-        if (!isManualSaving) return;
-        const interval = setInterval(() => {
-            setSavingDots((prev) => (prev.length < 3 ? prev + "." : ""));
-        }, 500);
-        return () => clearInterval(interval);
-    }, [isManualSaving]);
-
-    const handleSave = async () => {
-        setIsManualSaving(true);
-        try {
             await SolutionsController.updateSolution({
-                solutionId: solutionId as string,
-                code: code,
+                solutionId,
+                code: codeToSave,
             });
+        },
+        delay: CONSTS.SOLUTION_UPDATE_DELAY,
+        enabled: !!solutionId,
+    });
+
+    // Hook de envío de solución
+    const { submit, isSubmitting, submitResult } = useSubmitSolution({
+        onSubmit: async () => {
+            if (!solutionId) {
+                throw new Error("No solution ID available");
+            }
+
+            const result = await SolutionsController.submitSolution(solutionId);
+
+            if (!result) {
+                throw new Error("Failed to submit solution");
+            }
+
+            return result;
+        },
+        onSuccess: (result) => {
+            setActiveTab("tests");
+            toast.success(result.message);
+        },
+        onError: (error) => {
+            console.error("Error submitting solution:", error);
+            toast.error("Failed to submit solution");
+        },
+    });
+
+    /**
+     * Manejador de guardado manual
+     */
+    const handleManualSave = async () => {
+        try {
+            await saveManually();
             toast.success("Code saved successfully!");
         } catch (error) {
             console.error("Error saving code:", error);
             toast.error("Failed to save code");
-        } finally {
-            setIsManualSaving(false);
         }
     };
 
+    /**
+     * Manejador de envío de solución
+     */
     const handleSubmit = async () => {
-        setIsSubmitting(true);
         try {
-            const response = (await SolutionsController.submitSolution(
-                solutionId as string,
-            )) as SubmitSolutionResponse;
-
-            setSubmitResults(response);
-            setActiveTab("tests");
-            toast.success(response.message);
-        } catch (error) {
-            console.error("Error submitting solution:", error);
-            toast.error("Failed to submit solution");
-        } finally {
-            setIsSubmitting(false);
+            await submit();
+        } catch {
+            // El error ya se maneja en el hook
         }
     };
+
+    /**
+     * Obtiene el texto del botón de guardado según el estado
+     */
+    const getSaveButtonText = (): string => {
+        if (isManualSaving) return "Saving...";
+        if (saveStatus === "saved") return "Saved";
+        if (saveStatus === "error") return "Error";
+        return "Save";
+    };
+
+    /**
+     * Obtiene la variante del botón de guardado según el estado
+     */
+    const getSaveButtonVariant = (): "outline" | "default" | "secondary" => {
+        if (saveStatus === "saved") return "secondary";
+        if (saveStatus === "error") return "outline";
+        return "outline";
+    };
+
+    // Estados de deshabilitado de los botones
+    const isSaveDisabled = isManualSaving || !hasUnsavedChanges || !solutionId;
+    const isSubmitDisabled =
+        isSubmitting ||
+        isManualSaving ||
+        saveStatus === "saving" ||
+        !solutionId;
 
     return (
         <section className="h-screen flex flex-col">
@@ -153,37 +181,48 @@ export default function StudentCodeEditor({
                     <Link
                         href={PATHS.DASHBOARD.ROOT}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                        aria-label="Back to dashboard"
                     >
-                        <ArrowLeft />
+                        <ArrowLeft className="h-5 w-5" />
                     </Link>
 
                     <div>
                         <h1 className="text-2xl font-bold">{challenge.name}</h1>
+                        <p className="text-sm text-muted-foreground">
+                            {challenge.experiencePoints} XP
+                        </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {isSaving && (
-                        <span className="text-sm text-muted-foreground">
-                            Saving...
+                    {/* Indicador de auto-guardado */}
+                    {saveStatus === "saving" && (
+                        <span className="text-sm text-muted-foreground animate-pulse">
+                            Auto-saving...
                         </span>
                     )}
+
+                    {/* Botón de guardado manual */}
                     <Button
-                        onClick={handleSave}
-                        disabled={isManualSaving}
-                        variant="outline"
-                        size={"sm"}
+                        onClick={handleManualSave}
+                        disabled={isSaveDisabled}
+                        variant={getSaveButtonVariant()}
+                        size="sm"
+                        aria-label="Save code manually"
                     >
-                        <Save />
-                        {isManualSaving ? `Saving${savingDots}` : "Save"}
+                        <Save className="h-4 w-4" />
+                        {getSaveButtonText()}
                     </Button>
+
+                    {/* Botón de ejecución */}
                     <Button
                         onClick={handleSubmit}
-                        disabled={isSubmitting || isManualSaving}
+                        disabled={isSubmitDisabled}
                         variant="default"
-                        size={"sm"}
+                        size="sm"
+                        aria-label="Run code and submit solution"
                     >
-                        <Play />
+                        <Play className="h-4 w-4" />
                         {isSubmitting ? "Executing..." : "Run Code"}
                     </Button>
                 </div>
@@ -192,7 +231,7 @@ export default function StudentCodeEditor({
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
                 {/* Left Panel - Monaco Editor */}
-                <ResizablePanel defaultSize={70} minSize={50} maxSize={70}>
+                <ResizablePanel defaultSize={70} minSize={50} maxSize={80}>
                     <div className="h-full flex flex-col">
                         <div className="flex-1 overflow-hidden p-4">
                             <MonacoEditor
@@ -209,11 +248,13 @@ export default function StudentCodeEditor({
                 <ResizableHandle withHandle />
 
                 {/* Right Panel - Tabs for Description and Tests */}
-                <ResizablePanel defaultSize={30} minSize={30}>
+                <ResizablePanel defaultSize={30} minSize={20}>
                     <div className="h-full flex flex-col">
                         <Tabs
                             value={activeTab}
-                            onValueChange={setActiveTab}
+                            onValueChange={(value) =>
+                                setActiveTab(value as "description" | "tests")
+                            }
                             className="h-full flex flex-col"
                         >
                             <TabsList className="m-4">
@@ -225,6 +266,7 @@ export default function StudentCodeEditor({
                                 </TabsTrigger>
                             </TabsList>
 
+                            {/* Description Tab */}
                             <TabsContent
                                 value="description"
                                 className="flex-1 overflow-y-auto p-4 m-0"
@@ -234,12 +276,18 @@ export default function StudentCodeEditor({
                                         <h3 className="text-lg font-semibold mb-2">
                                             Challenge Description
                                         </h3>
-                                        <div className="bg-muted p-4 rounded-md">
-                                            <MdxRenderer
-                                                serializedSource={
-                                                    serializedDescription
-                                                }
-                                            />
+                                        <div className="bg-muted p-4 rounded-md prose prose-sm dark:prose-invert max-w-none">
+                                            {serializedDescription ? (
+                                                <MdxRenderer
+                                                    serializedSource={
+                                                        serializedDescription
+                                                    }
+                                                />
+                                            ) : (
+                                                <p className="text-muted-foreground">
+                                                    No description available.
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -248,22 +296,34 @@ export default function StudentCodeEditor({
                                             Details
                                         </h3>
                                         <div className="space-y-2 text-sm">
-                                            <div>
+                                            <div className="flex justify-between">
                                                 <strong>
                                                     Experience Points:
-                                                </strong>{" "}
-                                                {challenge.experiencePoints}
+                                                </strong>
+                                                <span>
+                                                    {challenge.experiencePoints}{" "}
+                                                    XP
+                                                </span>
                                             </div>
-                                            <div>
-                                                <strong>Function Name:</strong>{" "}
-                                                {codeVersion.functionName ||
-                                                    "N/A"}
+                                            <div className="flex justify-between">
+                                                <strong>Function Name:</strong>
+                                                <span className="font-mono">
+                                                    {codeVersion.functionName ||
+                                                        "N/A"}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <strong>Language:</strong>
+                                                <span>
+                                                    {codeVersion.language}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </TabsContent>
 
+                            {/* Tests Tab */}
                             <TabsContent
                                 value="tests"
                                 className="flex-1 overflow-y-auto p-4 m-0"
@@ -272,32 +332,61 @@ export default function StudentCodeEditor({
                                     <h3 className="text-lg font-semibold">
                                         Test Cases
                                     </h3>
-                                    {submitResults && (
+
+                                    {/* Resultados de envío */}
+                                    {submitResult && (
                                         <div
-                                            className={`p-4 rounded ${submitResults.passedTests === submitResults.totalTests ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}
+                                            className={`p-4 rounded-lg border ${
+                                                submitResult.passedTests ===
+                                                submitResult.totalTests
+                                                    ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
+                                                    : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
+                                            }`}
                                         >
-                                            <p className="font-medium">
-                                                Submission Results:{" "}
-                                                {submitResults.passedTests}/
-                                                {submitResults.totalTests} tests
-                                                passed
-                                            </p>
-                                            <p className="text-sm text-muted-foreground">
-                                                Time taken:{" "}
-                                                {submitResults.timeTaken}ms
-                                            </p>
-                                            {submitResults.passedTests ===
-                                            submitResults.totalTests ? (
-                                                <p className="text-green-600 font-medium">
-                                                    All tests passed!
+                                            <div className="space-y-2">
+                                                <p className="font-medium">
+                                                    Submission Results:{" "}
+                                                    <span
+                                                        className={
+                                                            submitResult.passedTests ===
+                                                            submitResult.totalTests
+                                                                ? "text-green-600 dark:text-green-400"
+                                                                : "text-red-600 dark:text-red-400"
+                                                        }
+                                                    >
+                                                        {
+                                                            submitResult.passedTests
+                                                        }
+                                                        /
+                                                        {
+                                                            submitResult.totalTests
+                                                        }{" "}
+                                                        tests passed
+                                                    </span>
                                                 </p>
-                                            ) : (
-                                                <p className="text-red-600 font-medium">
-                                                    Some tests failed.
+                                                <p className="text-sm text-muted-foreground">
+                                                    Time taken:{" "}
+                                                    {submitResult.timeTaken}ms
                                                 </p>
-                                            )}
+                                                {submitResult.passedTests ===
+                                                submitResult.totalTests ? (
+                                                    <p className="text-green-600 dark:text-green-400 font-medium flex items-center gap-2">
+                                                        <CheckCircle className="h-5 w-5" />
+                                                        All tests passed!
+                                                        Congratulations!
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-red-600 dark:text-red-400 font-medium flex items-center gap-2">
+                                                        <XCircle className="h-5 w-5" />
+                                                        Some tests failed. Keep
+                                                        trying!
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
                                     )}
+
+                                    {/* Lista de tests */}
                                     {tests.length === 0 ? (
                                         <p className="text-muted-foreground text-sm">
                                             No test cases available.
@@ -306,14 +395,16 @@ export default function StudentCodeEditor({
                                         <div className="space-y-2">
                                             {tests.map((test, index) => {
                                                 const isPassed =
-                                                    submitResults?.approvedTestIds.includes(
+                                                    submitResult?.approvedTestIds.includes(
                                                         test.id,
                                                     );
-                                                const itemClass = submitResults
+
+                                                const itemClass = submitResult
                                                     ? isPassed
-                                                        ? "bg-green-50 border-green-200"
-                                                        : "bg-red-50 border-red-200"
+                                                        ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
+                                                        : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
                                                     : "";
+
                                                 return (
                                                     <Item
                                                         key={test.id}
@@ -323,23 +414,26 @@ export default function StudentCodeEditor({
                                                     >
                                                         <ItemContent>
                                                             <ItemTitle className="flex items-center gap-2">
-                                                                {submitResults &&
+                                                                {submitResult &&
                                                                     (isPassed ? (
-                                                                        <CheckCircle className="h-4 w-4 text-green-600" />
+                                                                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                                                                     ) : (
-                                                                        <XCircle className="h-4 w-4 text-red-600" />
+                                                                        <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                                                                     ))}
                                                                 {test.isSecret && (
                                                                     <Lock className="h-4 w-4 text-muted-foreground" />
                                                                 )}
-                                                                Test Case{" "}
-                                                                {index + 1}
+                                                                <span>
+                                                                    Test Case{" "}
+                                                                    {index + 1}
+                                                                </span>
                                                                 {test.isSecret && (
-                                                                    <span className="text-sm text-muted-foreground">
+                                                                    <span className="text-xs text-muted-foreground">
                                                                         (Secret)
                                                                     </span>
                                                                 )}
                                                             </ItemTitle>
+
                                                             {test.isSecret ? (
                                                                 <div className="text-sm text-muted-foreground mt-2">
                                                                     This is a
@@ -355,31 +449,35 @@ export default function StudentCodeEditor({
                                                                 </div>
                                                             ) : (
                                                                 <div className="mt-2 space-y-2">
+                                                                    {/* Input */}
                                                                     <div>
-                                                                        <p className="text-sm font-medium">
+                                                                        <p className="text-sm font-medium mb-1">
                                                                             Input:
                                                                         </p>
-                                                                        <pre className="bg-muted p-2 rounded text-xs overflow-x-auto mt-1">
+                                                                        <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
                                                                             {
                                                                                 test.input
                                                                             }
                                                                         </pre>
                                                                     </div>
-                                                                    {submitResults ? (
+
+                                                                    {/* Expected Output */}
+                                                                    {submitResult ? (
                                                                         <div>
-                                                                            <p className="text-sm font-medium">
+                                                                            <p className="text-sm font-medium mb-1">
                                                                                 Expected
                                                                                 Output:
                                                                             </p>
-                                                                            <pre className="bg-muted p-2 rounded text-xs overflow-x-auto mt-1">
+                                                                            <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
                                                                                 {
                                                                                     test.expectedOutput
                                                                                 }
                                                                             </pre>
                                                                         </div>
                                                                     ) : (
-                                                                        <div>
-                                                                            <p className="text-sm font-medium text-muted-foreground">
+                                                                        <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                                                                            <Lock className="h-3 w-3" />
+                                                                            <p>
                                                                                 Expected
                                                                                 output
                                                                                 is
