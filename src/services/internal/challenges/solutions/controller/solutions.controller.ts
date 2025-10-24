@@ -1,6 +1,7 @@
 import {
     createSolutionAction,
     getSolutionByChallengeIdAndCodeVersionIdAction,
+    submitSolutionAction,
     updateSolutionAction,
 } from "../server/solutions.actions";
 import type {
@@ -40,6 +41,17 @@ export class SolutionsController {
             const response =
                 await getSolutionByChallengeIdAndCodeVersionIdAction(request);
             console.log("GET SOLUTION BY CHALLENGE ID AND CODE", response);
+            return response;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    public static async submitSolution(solutionId: string) {
+        try {
+            const response = await submitSolutionAction(solutionId);
+            console.log("SUBMIT SOLUTION", response);
             return response;
         } catch (e) {
             console.log(e);

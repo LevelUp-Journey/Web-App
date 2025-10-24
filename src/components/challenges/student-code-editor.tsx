@@ -1,6 +1,13 @@
 "use client";
 
-import { ArrowLeft, Lock, Play, Save } from "lucide-react";
+import {
+    ArrowLeft,
+    CheckCircle,
+    Lock,
+    Play,
+    Save,
+    XCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -20,7 +27,10 @@ import type { Challenge } from "@/services/internal/challenges/challenge/entitie
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
-import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
+import type {
+    SolutionResponse,
+    SubmitSolutionResponse,
+} from "@/services/internal/challenges/solutions/controller/solutions.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
@@ -59,9 +69,11 @@ export default function StudentCodeEditor({
         solution?.id || null,
     );
     const [isSaving, setIsSaving] = useState(false);
-    const [isRunning, setIsRunning] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isManualSaving, setIsManualSaving] = useState(false);
     const [savingDots, setSavingDots] = useState("");
+    const [submitResults, setSubmitResults] =
+        useState<SubmitSolutionResponse | null>(null);
 
     // Auto-save with debounce of 3 seconds
     useEffect(() => {
@@ -114,16 +126,20 @@ export default function StudentCodeEditor({
         }
     };
 
-    const handleRunCode = async () => {
-        setIsRunning(true);
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
         try {
-            // TODO: Implement code execution logic
-            toast.success("Code executed successfully!");
+            const response = (await SolutionsController.submitSolution(
+                solutionId as string,
+            )) as SubmitSolutionResponse;
+            
+            setSubmitResults(response);
+            toast.success(response.message);
         } catch (error) {
-            console.error("Error running code:", error);
-            toast.error("Failed to run code");
+            console.error("Error submitting solution:", error);
+            toast.error("Failed to submit solution");
         } finally {
-            setIsRunning(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -160,13 +176,13 @@ export default function StudentCodeEditor({
                         {isManualSaving ? `Saving${savingDots}` : "Save"}
                     </Button>
                     <Button
-                        onClick={handleRunCode}
-                        disabled={isRunning || isManualSaving}
+                        onClick={handleSubmit}
+                        disabled={isSubmitting || isManualSaving}
                         variant="default"
                         size={"sm"}
                     >
                         <Play />
-                        {isRunning ? "Running..." : "Run Code"}
+                        {isSubmitting ? "Executing..." : "Run Code"}
                     </Button>
                 </div>
             </header>
@@ -253,70 +269,129 @@ export default function StudentCodeEditor({
                                     <h3 className="text-lg font-semibold">
                                         Test Cases
                                     </h3>
+                                    {submitResults && (
+                                        <div className="p-4 rounded bg-muted">
+                                            <p className="font-medium">
+                                                Submission Results:{" "}
+                                                {submitResults.passedTests}/
+                                                {submitResults.totalTests} tests
+                                                passed
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                Time taken:{" "}
+                                                {submitResults.timeTaken}ms
+                                            </p>
+                                            {submitResults.success ? (
+                                                <p className="text-green-600 font-medium">
+                                                    All tests passed!
+                                                </p>
+                                            ) : (
+                                                <p className="text-red-600 font-medium">
+                                                    Some tests failed.
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
                                     {tests.length === 0 ? (
                                         <p className="text-muted-foreground text-sm">
                                             No test cases available.
                                         </p>
                                     ) : (
                                         <div className="space-y-2">
-                                            {tests.map((test, index) => (
-                                                <Item
-                                                    key={test.id}
-                                                    variant="muted"
-                                                    size="sm"
-                                                >
-                                                    <ItemContent>
-                                                        <ItemTitle className="flex items-center gap-2">
-                                                            {test.isSecret && (
-                                                                <Lock className="h-4 w-4 text-muted-foreground" />
-                                                            )}
-                                                            Test Case{" "}
-                                                            {index + 1}
-                                                            {test.isSecret && (
-                                                                <span className="text-sm text-muted-foreground">
-                                                                    (Secret)
-                                                                </span>
-                                                            )}
-                                                        </ItemTitle>
-                                                        {test.isSecret ? (
-                                                            <div className="text-sm text-muted-foreground mt-2">
-                                                                This is a secret
-                                                                test used to
-                                                                validate your
-                                                                solution. Input
-                                                                and expected
-                                                                output are
-                                                                hidden.
-                                                            </div>
-                                                        ) : (
-                                                            <div className="mt-2 space-y-2">
-                                                                <div>
-                                                                    <p className="text-sm font-medium">
-                                                                        Input:
-                                                                    </p>
-                                                                    <pre className="bg-muted p-2 rounded text-xs overflow-x-auto mt-1">
-                                                                        {
-                                                                            test.input
-                                                                        }
-                                                                    </pre>
+                                            {tests.map((test, index) => {
+                                                const isPassed =
+                                                    submitResults?.approvedTestIds.includes(
+                                                        test.id,
+                                                    );
+                                                const itemClass = submitResults
+                                                    ? isPassed
+                                                        ? "bg-green-50 border-green-200"
+                                                        : "bg-red-50 border-red-200"
+                                                    : "";
+                                                return (
+                                                    <Item
+                                                        key={test.id}
+                                                        variant="muted"
+                                                        size="sm"
+                                                        className={itemClass}
+                                                    >
+                                                        <ItemContent>
+                                                            <ItemTitle className="flex items-center gap-2">
+                                                                {submitResults &&
+                                                                    (isPassed ? (
+                                                                        <CheckCircle className="h-4 w-4 text-green-600" />
+                                                                    ) : (
+                                                                        <XCircle className="h-4 w-4 text-red-600" />
+                                                                    ))}
+                                                                {test.isSecret && (
+                                                                    <Lock className="h-4 w-4 text-muted-foreground" />
+                                                                )}
+                                                                Test Case{" "}
+                                                                {index + 1}
+                                                                {test.isSecret && (
+                                                                    <span className="text-sm text-muted-foreground">
+                                                                        (Secret)
+                                                                    </span>
+                                                                )}
+                                                            </ItemTitle>
+                                                            {test.isSecret ? (
+                                                                <div className="text-sm text-muted-foreground mt-2">
+                                                                    This is a
+                                                                    secret test
+                                                                    used to
+                                                                    validate
+                                                                    your
+                                                                    solution.
+                                                                    Input and
+                                                                    expected
+                                                                    output are
+                                                                    hidden.
                                                                 </div>
-                                                                <div>
-                                                                    <p className="text-sm font-medium text-muted-foreground">
-                                                                        Expected
-                                                                        output
-                                                                        is
-                                                                        hidden
-                                                                        until
-                                                                        you run
-                                                                        your
-                                                                        code
-                                                                    </p>
+                                                            ) : (
+                                                                <div className="mt-2 space-y-2">
+                                                                    <div>
+                                                                        <p className="text-sm font-medium">
+                                                                            Input:
+                                                                        </p>
+                                                                        <pre className="bg-muted p-2 rounded text-xs overflow-x-auto mt-1">
+                                                                            {
+                                                                                test.input
+                                                                            }
+                                                                        </pre>
+                                                                    </div>
+                                                                    {submitResults ? (
+                                                                        <div>
+                                                                            <p className="text-sm font-medium">
+                                                                                Expected
+                                                                                Output:
+                                                                            </p>
+                                                                            <pre className="bg-muted p-2 rounded text-xs overflow-x-auto mt-1">
+                                                                                {
+                                                                                    test.expectedOutput
+                                                                                }
+                                                                            </pre>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div>
+                                                                            <p className="text-sm font-medium text-muted-foreground">
+                                                                                Expected
+                                                                                output
+                                                                                is
+                                                                                hidden
+                                                                                until
+                                                                                you
+                                                                                submit
+                                                                                your
+                                                                                solution
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                            </div>
-                                                        )}
-                                                    </ItemContent>
-                                                </Item>
-                                            ))}
+                                                            )}
+                                                        </ItemContent>
+                                                    </Item>
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </div>

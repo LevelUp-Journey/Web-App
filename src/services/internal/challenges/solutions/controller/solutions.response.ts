@@ -26,3 +26,14 @@ export interface GetSolutionByChallengeIdAndCodeRequest {
     challengeId: string;
     codeVersionId: string;
 }
+
+export interface SubmitSolutionResponse {
+    solutionReportId: string;
+    message: string;
+    success: boolean;
+    approvedTestIds: string[];
+    totalTests: number;
+    passedTests: number;
+    executionDetails: string;
+    timeTaken: number;
+}

@@ -4,6 +4,7 @@ import { CHALLENGES_HTTP } from "@/services/axios.config";
 import type {
     CreateSolutionRequest,
     SolutionResponse,
+    SubmitSolutionResponse,
     UpdateSolutionRequest,
 } from "../controller/solutions.response";
 
@@ -54,6 +55,16 @@ export async function getSolutionByChallengeIdAndCodeVersionIdAction({
     const response = await CHALLENGES_HTTP.get<SolutionResponse>(
         `/challenges/${challengeId}/code-versions/${codeVersionId}/solutions`,
     );
+
+    return response.data;
+}
+
+export async function submitSolutionAction(solutionId: string) {
+    const response = await CHALLENGES_HTTP.put<SubmitSolutionResponse>(
+        `/solutions/${solutionId}/submissions`,
+    );
+
+    console.log("SUBMIT ACTION RESPONSE", response);
 
     return response.data;
 }

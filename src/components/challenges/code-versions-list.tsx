@@ -70,7 +70,6 @@ export default function CodeVersionsList({
                 challengeId,
                 codeVersionId,
             });
-            toast.success("Challenge started!");
             router.push(
                 `/editor/challenges/${challengeId}/version/${codeVersionId}`,
             );
