@@ -23,6 +23,7 @@ export class SolutionsController {
 
     public static async updateSolution(request: UpdateSolutionRequest) {
         try {
+            console.log("UPDATE REQUEST", request);
             const response = await updateSolutionAction(request);
             console.log("UPDATE SOLUTION", response);
             return response;

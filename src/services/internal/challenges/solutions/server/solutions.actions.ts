@@ -26,7 +26,7 @@ export async function updateSolutionAction({
         code,
     });
 
-    console.log(response);
+    console.log("UPDATE ACTION RESPONSE", response);
 
     return response.data;
 }

@@ -3,11 +3,11 @@ import StudentCodeEditor from "@/components/challenges/student-code-editor";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
-import { getSolutionByChallengeIdAndCodeVersionIdAction } from "@/services/internal/challenges/solutions/server/solutions.actions";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
+import { getSolutionByChallengeIdAndCodeVersionIdAction } from "@/services/internal/challenges/solutions/server/solutions.actions";
 
 interface PageProps {
     params: Promise<{
