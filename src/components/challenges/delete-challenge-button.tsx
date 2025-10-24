@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { PATHS } from "@/lib/paths";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 
 interface DeleteChallengeButtonProps {
     challengeId: string;

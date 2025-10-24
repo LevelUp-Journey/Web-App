@@ -8,9 +8,9 @@ import {
     InputGroupInput,
 } from "@/components/ui/input-group";
 import { UIVersion } from "@/lib/consts";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 const CHALLENGE_LIST_UI_VERSIONS = UIVersion.A;
 

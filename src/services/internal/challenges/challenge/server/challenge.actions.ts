@@ -1,6 +1,5 @@
 "use server";
 
-import { log } from "node:console";
 import type { AxiosError } from "axios";
 import {
     CHALLENGES_HTTP,

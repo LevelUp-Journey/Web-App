@@ -6,9 +6,9 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 export default async function ChallengesPage() {
     // Fetch challenges

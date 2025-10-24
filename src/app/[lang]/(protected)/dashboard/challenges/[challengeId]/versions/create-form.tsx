@@ -14,7 +14,7 @@ import { Javascript } from "@/components/ui/svgs/javascript";
 import { Python } from "@/components/ui/svgs/python";
 import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 
 const getCodeTemplate = (language: ProgrammingLanguage): string => {
     switch (language) {

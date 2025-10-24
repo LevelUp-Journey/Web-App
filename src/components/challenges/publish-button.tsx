@@ -1,11 +1,10 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { ChallengeController } from "@/services/internal/challenges/controller/challenge.controller";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 
 interface PublishButtonProps {
     challengeId: string;
