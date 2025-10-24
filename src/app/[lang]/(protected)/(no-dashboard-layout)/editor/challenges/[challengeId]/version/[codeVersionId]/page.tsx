@@ -35,25 +35,11 @@ export default async function StudentEditorPage({ params }: PageProps) {
         );
 
     // Fetch student's solution
-    let solution: SolutionResponse | null = null;
-    try {
-        solution = await getSolutionByChallengeIdAndCodeVersionIdAction({
+    const solution: SolutionResponse =
+        await getSolutionByChallengeIdAndCodeVersionIdAction({
             challengeId,
             codeVersionId,
         });
-        console.log("STUDENT SOLUTION:", solution);
-
-        // If solution exists but code is null, use initialCode
-        if (solution && solution.code === null) {
-            solution = {
-                ...solution,
-                code: codeVersion.initialCode,
-            };
-        }
-    } catch {
-        // No solution exists yet, will use initialCode
-        console.log("No solution found, using initial code");
-    }
 
     // Serialize the description for client-side rendering
     const serializedDescription = challenge.description

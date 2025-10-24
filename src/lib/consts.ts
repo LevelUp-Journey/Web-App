@@ -3,6 +3,7 @@ export const CONSTS = {
     AUTH_REFRESH_TOKEN_KEY: "refresh_token",
     USER_STORE_KEY: "user_store",
     DASHBOARD_CAROUSEL_SPEED: 5000,
+    SOLUTION_UPDATE_DELAY: 1500,
 };
 
 export enum UIVersion {

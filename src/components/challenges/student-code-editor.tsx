@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Lock, Play } from "lucide-react";
+import { ArrowLeft, Lock, Play, Save } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -14,13 +14,13 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProgrammingLanguage } from "@/lib/consts";
+import { CONSTS, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
-import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
+import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
@@ -60,6 +60,8 @@ export default function StudentCodeEditor({
     );
     const [isSaving, setIsSaving] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
+    const [isManualSaving, setIsManualSaving] = useState(false);
+    const [savingDots, setSavingDots] = useState("");
 
     // Auto-save with debounce of 3 seconds
     useEffect(() => {
@@ -83,10 +85,34 @@ export default function StudentCodeEditor({
             } finally {
                 setIsSaving(false);
             }
-        }, 3000);
+        }, CONSTS.SOLUTION_UPDATE_DELAY);
 
         return () => clearTimeout(timer);
     }, [code, solutionId, solution?.code, codeVersion.initialCode]);
+
+    useEffect(() => {
+        if (!isManualSaving) return;
+        const interval = setInterval(() => {
+            setSavingDots((prev) => (prev.length < 3 ? prev + "." : ""));
+        }, 500);
+        return () => clearInterval(interval);
+    }, [isManualSaving]);
+
+    const handleSave = async () => {
+        setIsManualSaving(true);
+        try {
+            await SolutionsController.updateSolution({
+                solutionId: solutionId as string,
+                code: code,
+            });
+            toast.success("Code saved successfully!");
+        } catch (error) {
+            console.error("Error saving code:", error);
+            toast.error("Failed to save code");
+        } finally {
+            setIsManualSaving(false);
+        }
+    };
 
     const handleRunCode = async () => {
         setIsRunning(true);
@@ -125,11 +151,21 @@ export default function StudentCodeEditor({
                         </span>
                     )}
                     <Button
-                        onClick={handleRunCode}
-                        disabled={isRunning}
-                        variant="default"
+                        onClick={handleSave}
+                        disabled={isManualSaving}
+                        variant="outline"
+                        size={"sm"}
                     >
-                        <Play className="h-4 w-4 mr-2" />
+                        <Save />
+                        {isManualSaving ? `Saving${savingDots}` : "Save"}
+                    </Button>
+                    <Button
+                        onClick={handleRunCode}
+                        disabled={isRunning || isManualSaving}
+                        variant="default"
+                        size={"sm"}
+                    >
+                        <Play />
                         {isRunning ? "Running..." : "Run Code"}
                     </Button>
                 </div>
