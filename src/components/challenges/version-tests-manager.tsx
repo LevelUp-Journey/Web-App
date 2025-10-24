@@ -166,7 +166,7 @@ export default function VersionTestsManager({
         setIsSecret(test.isSecret);
     };
 
-    const handleSubmit = async () => {
+    const handleSaveBasic = async () => {
         if (!input.trim() || !expectedOutput.trim()) {
             toast.error("Input and expected output are required");
             return;
@@ -182,12 +182,12 @@ export default function VersionTestsManager({
                         codeVersionId,
                         input: input.trim(),
                         expectedOutput: expectedOutput.trim(),
-                        customValidationCode: customValidationCode.trim(),
+                        customValidationCode: "",
                         failureMessage: failureMessage.trim(),
                         isSecret,
                     },
                 );
-                toast.success("Test created successfully");
+                toast.success("Basic test created successfully");
             } else if (selectedTest) {
                 await VersionTestController.updateVersionTest(
                     challengeId,
@@ -196,12 +196,12 @@ export default function VersionTestsManager({
                     {
                         input: input.trim(),
                         expectedOutput: expectedOutput.trim(),
-                        customValidationCode: customValidationCode.trim(),
+                        customValidationCode: "",
                         failureMessage: failureMessage.trim(),
                         isSecret,
                     },
                 );
-                toast.success("Test updated successfully");
+                toast.success("Basic test updated successfully");
             }
 
             await loadTests();
@@ -209,8 +209,58 @@ export default function VersionTestsManager({
                 handleCreateTest(); // Reset form for next test
             }
         } catch (error) {
-            console.error("Error saving test:", error);
-            toast.error("Failed to save test");
+            console.error("Error saving basic test:", error);
+            toast.error("Failed to save basic test");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleSaveCustom = async () => {
+        if (!customValidationCode.trim()) {
+            toast.error("Custom validation code is required");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            if (isCreating) {
+                await VersionTestController.createVersionTest(
+                    challengeId,
+                    codeVersionId,
+                    {
+                        codeVersionId,
+                        input: "",
+                        expectedOutput: "",
+                        customValidationCode: customValidationCode.trim(),
+                        failureMessage: failureMessage.trim(),
+                        isSecret,
+                    },
+                );
+                toast.success("Custom test created successfully");
+            } else if (selectedTest) {
+                await VersionTestController.updateVersionTest(
+                    challengeId,
+                    codeVersionId,
+                    selectedTest.id,
+                    {
+                        input: "",
+                        expectedOutput: "",
+                        customValidationCode: customValidationCode.trim(),
+                        failureMessage: failureMessage.trim(),
+                        isSecret,
+                    },
+                );
+                toast.success("Custom test updated successfully");
+            }
+
+            await loadTests();
+            if (isCreating) {
+                handleCreateTest(); // Reset form for next test
+            }
+        } catch (error) {
+            console.error("Error saving custom test:", error);
+            toast.error("Failed to save custom test");
         } finally {
             setIsSubmitting(false);
         }
@@ -453,15 +503,15 @@ export default function VersionTestsManager({
 
                                         <div className="pt-4">
                                             <Button
-                                                onClick={handleSubmit}
+                                                onClick={handleSaveBasic}
                                                 disabled={isSubmitting}
                                                 className="w-full"
                                             >
                                                 {isSubmitting
                                                     ? "Saving..."
                                                     : isCreating
-                                                      ? "Create Test"
-                                                      : "Update Test"}
+                                                      ? "Create Basic Test"
+                                                      : "Update Basic Test"}
                                             </Button>
                                         </div>
                                     </TabsContent>
@@ -484,17 +534,53 @@ export default function VersionTestsManager({
                                             />
                                         </div>
 
+                                        <div className="space-y-2 mt-4">
+                                            <Label htmlFor="failureMessageCustom">
+                                                Failure Message (Optional)
+                                            </Label>
+                                            <Input
+                                                id="failureMessageCustom"
+                                                placeholder="Custom failure message..."
+                                                value={failureMessage}
+                                                onChange={(e) =>
+                                                    setFailureMessage(
+                                                        e.target.value,
+                                                    )
+                                                }
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div className="flex items-center space-x-2">
+                                                <Switch
+                                                    id="isSecretCustom"
+                                                    checked={isSecret}
+                                                    onCheckedChange={
+                                                        setIsSecret
+                                                    }
+                                                />
+                                                <Label htmlFor="isSecretCustom">
+                                                    Secret Test
+                                                </Label>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Secret tests are not visible to
+                                                students and are used for
+                                                additional validation.
+                                            </p>
+                                        </div>
+
                                         <div className="p-4 border-t">
                                             <Button
-                                                onClick={handleSubmit}
+                                                onClick={handleSaveCustom}
                                                 disabled={isSubmitting}
                                                 className="w-full"
                                             >
                                                 {isSubmitting
                                                     ? "Saving..."
                                                     : isCreating
-                                                      ? "Create Test"
-                                                      : "Update Test"}
+                                                      ? "Create Custom Test"
+                                                      : "Update Custom Test"}
                                             </Button>
                                         </div>
                                     </TabsContent>

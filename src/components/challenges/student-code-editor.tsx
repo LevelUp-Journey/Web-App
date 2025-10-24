@@ -132,7 +132,7 @@ export default function StudentCodeEditor({
             const response = (await SolutionsController.submitSolution(
                 solutionId as string,
             )) as SubmitSolutionResponse;
-            
+
             setSubmitResults(response);
             toast.success(response.message);
         } catch (error) {
@@ -270,7 +270,9 @@ export default function StudentCodeEditor({
                                         Test Cases
                                     </h3>
                                     {submitResults && (
-                                        <div className="p-4 rounded bg-muted">
+                                        <div
+                                            className={`p-4 rounded ${submitResults.passedTests === submitResults.totalTests ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}
+                                        >
                                             <p className="font-medium">
                                                 Submission Results:{" "}
                                                 {submitResults.passedTests}/
@@ -281,7 +283,8 @@ export default function StudentCodeEditor({
                                                 Time taken:{" "}
                                                 {submitResults.timeTaken}ms
                                             </p>
-                                            {submitResults.success ? (
+                                            {submitResults.passedTests ===
+                                            submitResults.totalTests ? (
                                                 <p className="text-green-600 font-medium">
                                                     All tests passed!
                                                 </p>
