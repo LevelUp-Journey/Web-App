@@ -24,7 +24,7 @@ export default async function AdminPage() {
         }),
     );
     return (
-        <div className="container mx-auto p-4 space-y-4">
+        <div className="w-full max-w-4xl mx-auto p-4 space-y-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-semibold">
                     Admin Dashboard - My Challenges
@@ -35,13 +35,14 @@ export default async function AdminPage() {
                     </Link>
                 </Button>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-col gap-4">
                 {challenges.map((challenge) => (
                     <ChallengeCard
                         key={challenge.id}
                         challenge={challenge}
                         codeVersions={codeVersionsMap.get(challenge.id) || []}
                         adminMode={true}
+                        className="w-full"
                     />
                 ))}
             </div>

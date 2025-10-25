@@ -14,10 +14,11 @@ import {
 } from "@/components/ui/card";
 import type { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
+import { cn } from "@/lib/utils";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
-interface ChallengeCardProps {
+interface ChallengeCardProps extends React.ComponentProps<"div"> {
     challenge: Challenge;
     codeVersions: CodeVersion[];
     adminMode?: boolean;
@@ -27,11 +28,17 @@ export default function ChallengeCard({
     challenge,
     codeVersions,
     adminMode = false,
+    className,
+    ...props
 }: ChallengeCardProps) {
     const router = useRouter();
 
     return (
-        <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
+        <Card
+            key={challenge.id}
+            className={cn("hover:shadow-lg transition-shadow", className)}
+            {...props}
+        >
             <CardHeader className="flex items-center justify-between flex-row">
                 <CardTitle className="flex items-center justify-between">
                     {challenge.name}
