@@ -1,4 +1,5 @@
 import {
+    BookOpen,
     Code2,
     HelpCircle,
     Home,
@@ -47,6 +48,11 @@ const topItems = [
         title: "Leaderboard",
         url: PATHS.DASHBOARD.LEADERBOARD,
         icon: Trophy,
+    },
+    {
+        title: "Courses",
+        url: PATHS.DASHBOARD.COURSES.ROOT,
+        icon: BookOpen,
     },
 ];
 
