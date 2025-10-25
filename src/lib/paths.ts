@@ -46,11 +46,17 @@ export function getLocalizedPaths(locale: string) {
             HELP: `/${locale}/dashboard/help`,
             ADMINISTRATION: {
                 ROOT: `/${locale}/dashboard/admin`,
+                CHALLENGES: {
+                    ROOT: `/${locale}/dashboard/admin/challenges`,
+                },
                 COMMUNITY: {
                     ROOT: `/${locale}/dashboard/admin/community`,
                     CREATE: `/${locale}/dashboard/admin/community/create`,
                     EDIT: (id: string) =>
                         `/${locale}/dashboard/admin/community/edit?id=${id}`,
+                },
+                COURSES: {
+                    ROOT: `/${locale}/dashboard/admin/courses`,
                 },
             },
             COURSES: {
