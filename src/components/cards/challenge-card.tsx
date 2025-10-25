@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/card";
 import type { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 interface ChallengeCardProps {
     challenge: Challenge;
