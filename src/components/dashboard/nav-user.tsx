@@ -1,6 +1,12 @@
 "use client";
 
-import { EllipsisVertical, LogOut, UserCircle2Icon } from "lucide-react";
+import {
+    EllipsisVertical,
+    LogOut,
+    MoonIcon,
+    SunIcon,
+    UserCircle2Icon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,9 +28,11 @@ import {
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
+import { useTheme } from "next-themes";
 
 export function NavUser({ profile }: { profile: ProfileResponse }) {
     const { isMobile } = useSidebar();
+    const { setTheme } = useTheme();
     const router = useRouter();
 
     const displayName =
@@ -102,6 +110,18 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
                             <DropdownMenuItem onClick={handleAccountClick}>
                                 <UserCircle2Icon />
                                 Account
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setTheme((prev) =>
+                                        prev === "light" ? "dark" : "light",
+                                    );
+                                }}
+                            >
+                                <SunIcon className="dark:hidden" />
+                                <MoonIcon className="hidden dark:inline" />
+                                Theme
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />

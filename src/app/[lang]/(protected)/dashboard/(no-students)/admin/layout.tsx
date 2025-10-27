@@ -1,9 +1,9 @@
+import Link from "next/link";
 import {
     NavigationMenu,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Separator } from "@/components/ui/separator";
 import { getLocalizedPaths } from "@/lib/paths";
@@ -30,6 +30,10 @@ export default async function AdminLayout({
             href: PATHS.DASHBOARD.ADMINISTRATION.CHALLENGES.ROOT,
         },
         { label: "Courses", href: PATHS.DASHBOARD.ADMINISTRATION.COURSES.ROOT },
+        {
+            label: "Guides",
+            href: PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
+        },
     ];
 
     return (
@@ -46,11 +50,8 @@ export default async function AdminLayout({
                 <NavigationMenuList>
                     {navLinks.map((link) => (
                         <NavigationMenuItem key={link.label}>
-                            <NavigationMenuLink
-                                href={link.href}
-                                className={navigationMenuTriggerStyle()}
-                            >
-                                {link.label}
+                            <NavigationMenuLink asChild>
+                                <Link href={link.href}>{link.label}</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                     ))}

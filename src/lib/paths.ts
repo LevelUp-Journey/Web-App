@@ -58,6 +58,9 @@ export function getLocalizedPaths(locale: string) {
                 COURSES: {
                     ROOT: `/${locale}/dashboard/admin/courses`,
                 },
+                GUIDES: {
+                    ROOT: `/${locale}/dashboard/admin/guides`,
+                },
             },
             COURSES: {
                 ROOT: `/${locale}/dashboard/courses`,
