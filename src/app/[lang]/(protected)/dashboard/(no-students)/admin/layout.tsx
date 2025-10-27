@@ -23,6 +23,15 @@ export default async function AdminLayout({
     const userId = await AuthController.getUserId();
     const profile = await ProfileController.getProfileByUserId(userId);
 
+    const navLinks = [
+        { label: "General", href: PATHS.DASHBOARD.ADMINISTRATION.ROOT },
+        {
+            label: "Challenges",
+            href: PATHS.DASHBOARD.ADMINISTRATION.CHALLENGES.ROOT,
+        },
+        { label: "Courses", href: PATHS.DASHBOARD.ADMINISTRATION.COURSES.ROOT },
+    ];
+
     return (
         <div className="w-full max-w-6xl mx-auto p-4 space-y-4">
             <div className="space-y-2">
@@ -35,32 +44,16 @@ export default async function AdminLayout({
 
             <NavigationMenu>
                 <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink
-                            href={PATHS.DASHBOARD.ADMINISTRATION.ROOT}
-                            className={navigationMenuTriggerStyle()}
-                        >
-                            General
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink
-                            href={
-                                PATHS.DASHBOARD.ADMINISTRATION.CHALLENGES.ROOT
-                            }
-                            className={navigationMenuTriggerStyle()}
-                        >
-                            Challenges
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink
-                            href={PATHS.DASHBOARD.ADMINISTRATION.COURSES.ROOT}
-                            className={navigationMenuTriggerStyle()}
-                        >
-                            Courses
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
+                    {navLinks.map((link) => (
+                        <NavigationMenuItem key={link.label}>
+                            <NavigationMenuLink
+                                href={link.href}
+                                className={navigationMenuTriggerStyle()}
+                            >
+                                {link.label}
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    ))}
                 </NavigationMenuList>
             </NavigationMenu>
 
