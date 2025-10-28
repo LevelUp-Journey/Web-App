@@ -15,6 +15,70 @@ import type {
     UpdateCourseRequest,
 } from "../controller/course.response";
 
+// Additional action methods for specific filtering endpoints
+export async function getCoursesByStatusAction(
+    status: "DRAFT" | "PUBLISHED" | "ARCHIVED",
+): Promise<RequestSuccess<CourseListResponse> | RequestFailure> {
+    try {
+        const response = await LEARNING_HTTP.get<CourseListResponse>(
+            `/courses/status/${status}`,
+        );
+
+        return {
+            status: response.status,
+            data: response.data,
+        } as RequestSuccess<CourseListResponse>;
+    } catch (e) {
+        const error = e as AxiosError;
+        return {
+            data: error.message,
+            status: error.status,
+        };
+    }
+}
+
+export async function getCoursesByTeacherAction(
+    teacherId: string,
+): Promise<RequestSuccess<CourseListResponse> | RequestFailure> {
+    try {
+        const response = await LEARNING_HTTP.get<CourseListResponse>(
+            `/courses/teacher/${teacherId}`,
+        );
+
+        return {
+            status: response.status,
+            data: response.data,
+        } as RequestSuccess<CourseListResponse>;
+    } catch (e) {
+        const error = e as AxiosError;
+        return {
+            data: error.message,
+            status: error.status,
+        };
+    }
+}
+
+export async function getCoursesByDifficultyAction(
+    difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
+): Promise<RequestSuccess<CourseListResponse> | RequestFailure> {
+    try {
+        const response = await LEARNING_HTTP.get<CourseListResponse>(
+            `/courses/difficulty/${difficulty}`,
+        );
+
+        return {
+            status: response.status,
+            data: response.data,
+        } as RequestSuccess<CourseListResponse>;
+    } catch (e) {
+        const error = e as AxiosError;
+        return {
+            data: error.message,
+            status: error.status,
+        };
+    }
+}
+
 // CREATE
 export async function createCourseAction(
     data: CreateCourseRequest,

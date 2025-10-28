@@ -8,6 +8,7 @@ import {
     type RequestSuccess,
 } from "../../../axios.config";
 import type {
+    ChangeGuideStatusRequest,
     CreateGuideRequest,
     GetGuideListParams,
     GuideListResponse,
@@ -20,9 +21,16 @@ export async function createGuideAction(
     data: CreateGuideRequest,
 ): Promise<RequestSuccess<GuideResponse> | RequestFailure> {
     try {
+        const requestBody = {
+            courseId: data.courseId,
+            title: data.title,
+            description: data.description,
+            markdownContent: data.markdownContent,
+        };
+
         const response = await LEARNING_HTTP.post<GuideResponse>(
             "/guides",
-            data,
+            requestBody,
         );
 
         revalidatePath("/guides");
@@ -61,9 +69,30 @@ export async function getGuideByIdAction(
     }
 }
 
+export async function getGuidesByCourseAction(
+    courseId: string,
+): Promise<RequestSuccess<GuideResponse[]> | RequestFailure> {
+    try {
+        const response = await LEARNING_HTTP.get<GuideResponse[]>(
+            `/guides/course/${courseId}`,
+        );
+
+        return {
+            status: response.status,
+            data: response.data,
+        } as RequestSuccess<GuideResponse[]>;
+    } catch (e) {
+        const error = e as AxiosError;
+        return {
+            data: error.message,
+            status: error.status,
+        };
+    }
+}
+
 export async function getGuideListAction(
     params?: GetGuideListParams,
-): Promise<RequestSuccess<GuideListResponse> | RequestFailure> {
+): Promise<RequestSuccess<GuideResponse[]> | RequestFailure> {
     try {
         const queryParams = new URLSearchParams();
         if (params?.page) queryParams.append("page", params.page.toString());
@@ -71,14 +100,17 @@ export async function getGuideListAction(
         if (params?.courseId) queryParams.append("courseId", params.courseId);
         if (params?.authorId) queryParams.append("authorId", params.authorId);
 
-        const response = await LEARNING_HTTP.get<GuideListResponse>(
-            `/guides?${queryParams}`,
-        );
+        const url =
+            params && Object.keys(params).length > 0
+                ? `/guides?${queryParams}`
+                : "/guides";
+
+        const response = await LEARNING_HTTP.get<GuideResponse[]>(url);
 
         return {
             status: response.status,
             data: response.data,
-        } as RequestSuccess<GuideListResponse>;
+        } as RequestSuccess<GuideResponse[]>;
     } catch (e) {
         const error = e as AxiosError;
         return {
@@ -94,9 +126,38 @@ export async function updateGuideAction(
     data: UpdateGuideRequest,
 ): Promise<RequestSuccess<GuideResponse> | RequestFailure> {
     try {
+        const requestBody = {
+            title: data.title,
+            description: data.description,
+            markdownContent: data.markdownContent,
+        };
+
         const response = await LEARNING_HTTP.put<GuideResponse>(
             `/guides/${id}`,
-            data,
+            requestBody,
+        );
+
+        revalidatePath("/guides");
+        return {
+            status: response.status,
+            data: response.data,
+        } as RequestSuccess<GuideResponse>;
+    } catch (e) {
+        const error = e as AxiosError;
+        return {
+            data: error.message,
+            status: error.status,
+        };
+    }
+}
+
+export async function changeGuideStatusAction(
+    id: string,
+    status: "DRAFT" | "PUBLISHED" | "PROTECTED",
+): Promise<RequestSuccess<GuideResponse> | RequestFailure> {
+    try {
+        const response = await LEARNING_HTTP.patch<GuideResponse>(
+            `/guides/${id}/status?status=${status}`,
         );
 
         revalidatePath("/guides");

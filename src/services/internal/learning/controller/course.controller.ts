@@ -4,6 +4,9 @@ import {
     deleteCourseAction,
     getCourseByIdAction,
     getCourseListAction,
+    getCoursesByDifficultyAction,
+    getCoursesByStatusAction,
+    getCoursesByTeacherAction,
     publishCourseAction,
     unpublishCourseAction,
     updateCourseAction,
@@ -71,6 +74,64 @@ export class CourseController {
             }
         } catch (error) {
             console.error("Error getting course list:", error);
+            throw error;
+        }
+    }
+
+    static async getByStatus(
+        status: "DRAFT" | "PUBLISHED" | "ARCHIVED",
+    ): Promise<CourseListResponse> {
+        try {
+            const response = await getCoursesByStatusAction(status);
+            if (
+                response.status &&
+                response.status >= 200 &&
+                response.status < 300
+            ) {
+                return (response as RequestSuccess<CourseListResponse>).data;
+            } else {
+                throw new Error((response as RequestFailure).data);
+            }
+        } catch (error) {
+            console.error("Error getting courses by status:", error);
+            throw error;
+        }
+    }
+
+    static async getByTeacher(teacherId: string): Promise<CourseListResponse> {
+        try {
+            const response = await getCoursesByTeacherAction(teacherId);
+            if (
+                response.status &&
+                response.status >= 200 &&
+                response.status < 300
+            ) {
+                return (response as RequestSuccess<CourseListResponse>).data;
+            } else {
+                throw new Error((response as RequestFailure).data);
+            }
+        } catch (error) {
+            console.error("Error getting courses by teacher:", error);
+            throw error;
+        }
+    }
+
+    static async getByDifficulty(
+        difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
+    ): Promise<CourseListResponse> {
+        try {
+            const response = await getCoursesByDifficultyAction(difficulty);
+            if (
+                response.status &&
+                response.status >= 200 &&
+                response.status < 300
+            ) {
+                return (response as RequestSuccess<CourseListResponse>).data;
+            } else {
+                throw new Error((response as RequestFailure).data);
+            }
+        } catch (error) {
+            console.error("Error getting courses by difficulty:", error);
             throw error;
         }
     }

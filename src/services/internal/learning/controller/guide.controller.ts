@@ -1,9 +1,11 @@
 import type { RequestFailure, RequestSuccess } from "../../../axios.config";
 import {
+    changeGuideStatusAction,
     createGuideAction,
     deleteGuideAction,
     getGuideByIdAction,
     getGuideListAction,
+    getGuidesByCourseAction,
     updateGuideAction,
 } from "../server/guide.actions";
 import type {
@@ -63,12 +65,38 @@ export class GuideController {
                 response.status >= 200 &&
                 response.status < 300
             ) {
-                return (response as RequestSuccess<GuideListResponse>).data;
+                // Backend returns an array directly, wrap it in GuideListResponse format
+                const guides = (response as RequestSuccess<GuideResponse[]>)
+                    .data;
+                return {
+                    data: guides,
+                    total: guides.length,
+                    page: params?.page || 1,
+                    limit: params?.limit || guides.length,
+                };
             } else {
                 throw new Error((response as RequestFailure).data);
             }
         } catch (error) {
             console.error("Error getting guide list:", error);
+            throw error;
+        }
+    }
+
+    static async getByCourse(courseId: string): Promise<GuideResponse[]> {
+        try {
+            const response = await getGuidesByCourseAction(courseId);
+            if (
+                response.status &&
+                response.status >= 200 &&
+                response.status < 300
+            ) {
+                return (response as RequestSuccess<GuideResponse[]>).data;
+            } else {
+                throw new Error((response as RequestFailure).data);
+            }
+        } catch (error) {
+            console.error("Error getting guides by course:", error);
             throw error;
         }
     }
@@ -91,6 +119,27 @@ export class GuideController {
             }
         } catch (error) {
             console.error("Error updating guide:", error);
+            throw error;
+        }
+    }
+
+    static async changeStatus(
+        id: string,
+        status: "DRAFT" | "PUBLISHED" | "PROTECTED",
+    ): Promise<GuideResponse> {
+        try {
+            const response = await changeGuideStatusAction(id, status);
+            if (
+                response.status &&
+                response.status >= 200 &&
+                response.status < 300
+            ) {
+                return (response as RequestSuccess<GuideResponse>).data;
+            } else {
+                throw new Error((response as RequestFailure).data);
+            }
+        } catch (error) {
+            console.error("Error changing guide status:", error);
             throw error;
         }
     }
