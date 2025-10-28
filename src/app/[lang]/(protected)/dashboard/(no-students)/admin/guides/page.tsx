@@ -11,9 +11,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import type { RequestSuccess } from "@/services/axios.config";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { GuideController } from "@/services/internal/learning/controller/guide.controller";
 import type { GuideResponse } from "@/services/internal/learning/controller/guide.response";
+import { getGuideListAction } from "@/services/internal/learning/server/guide.actions";
 
 export default function GuidesPage() {
     const [userRole, setUserRole] = useState<string | null>(null);
