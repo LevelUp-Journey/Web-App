@@ -24,7 +24,7 @@ export default async function CourseGuidesPage({
 
     try {
         const course = await CourseController.getById(id);
-        const guides = await GuideController.getList({ courseId: id });
+        const guides = await GuideController.getByCourse(id);
 
         return (
             <div className="space-y-6">
@@ -51,7 +51,7 @@ export default async function CourseGuidesPage({
                     </div>
                 </div>
 
-                {guides.data.length === 0 ? (
+                {guides.length === 0 ? (
                     <div className="text-center py-8">
                         <p className="text-muted-foreground">
                             No guides available for this course yet.
@@ -59,34 +59,48 @@ export default async function CourseGuidesPage({
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {guides.data
-                            .sort((a, b) => a.order - b.order)
+                        {guides
+                            .sort((a, b) => a.orderIndex - b.orderIndex)
                             .map((guide) => (
                                 <Card key={guide.id}>
                                     <CardHeader>
                                         <CardTitle className="flex items-center justify-between">
                                             <span>{guide.title}</span>
-                                            {guide.isProtected && (
-                                                <span className="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                                                    Protected
-                                                </span>
-                                            )}
+                                            <span
+                                                className={`text-sm px-2 py-1 rounded ${
+                                                    guide.status === "PUBLISHED"
+                                                        ? "bg-green-100 text-green-800"
+                                                        : guide.status ===
+                                                            "PROTECTED"
+                                                          ? "bg-blue-100 text-blue-800"
+                                                          : "bg-yellow-100 text-yellow-800"
+                                                }`}
+                                            >
+                                                {guide.status}
+                                            </span>
                                         </CardTitle>
                                         <CardDescription>
-                                            Order: {guide.order}
+                                            {guide.description ||
+                                                "No description"}
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
-                                        <Button asChild>
-                                            <Link
-                                                href={PATHS.DASHBOARD.COURSES.GUIDES.VIEW(
-                                                    course.id,
-                                                    guide.id,
-                                                )}
-                                            >
-                                                Read Guide
-                                            </Link>
-                                        </Button>
+                                        <div className="flex justify-between items-center">
+                                            <div className="text-sm text-muted-foreground">
+                                                Order: {guide.orderIndex} •
+                                                Likes: {guide.totalLikes}
+                                            </div>
+                                            <Button asChild>
+                                                <Link
+                                                    href={PATHS.DASHBOARD.COURSES.GUIDES.VIEW(
+                                                        course.id,
+                                                        guide.id,
+                                                    )}
+                                                >
+                                                    Read Guide
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </CardContent>
                                 </Card>
                             ))}

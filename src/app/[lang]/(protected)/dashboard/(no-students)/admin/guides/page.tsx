@@ -33,7 +33,6 @@ export default function GuidesPage() {
 
                 if (role) {
                     const guideList = await GuideController.getList();
-                    console.log("Response client hook:", guideList.data);
                     setGuides(guideList.data);
                 }
             } catch (err) {
@@ -101,19 +100,43 @@ export default function GuidesPage() {
                             <CardHeader>
                                 <CardTitle>{guide.title}</CardTitle>
                                 <CardDescription>
-                                    Course ID: {guide.courseId}
+                                    {guide.description || "No description"}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            Status:
+                                        </span>
+                                        <span
+                                            className={`px-2 py-1 rounded text-xs ${
+                                                guide.status === "PUBLISHED"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : guide.status === "DRAFT"
+                                                      ? "bg-yellow-100 text-yellow-800"
+                                                      : "bg-blue-100 text-blue-800"
+                                            }`}
+                                        >
+                                            {guide.status}
+                                        </span>
+                                    </div>
                                     <p className="text-sm text-muted-foreground">
-                                        Order: {guide.order}
+                                        Order: {guide.orderIndex}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
-                                        Protected:{" "}
-                                        {guide.isProtected ? "Yes" : "No"}
+                                        Likes: {guide.totalLikes}
                                     </p>
-                                    <div className="flex gap-2">
+                                    <p className="text-sm text-muted-foreground">
+                                        Author: {guide.authorId}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Created:{" "}
+                                        {new Date(
+                                            guide.createdAt,
+                                        ).toLocaleDateString()}
+                                    </p>
+                                    <div className="flex gap-2 pt-2">
                                         <Button
                                             asChild
                                             variant="outline"
