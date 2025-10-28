@@ -1,4 +1,8 @@
-import { createGuideAction, getGuideAction } from "../server/guide.actions";
+import {
+    createGuideAction,
+    getAllGuidesAction,
+    getGuideAction,
+} from "../server/guide.actions";
 import type { CreateGuideRequest } from "./guide.response";
 
 export class GuideController {
@@ -9,6 +13,11 @@ export class GuideController {
 
     public static async createGuide(guide: CreateGuideRequest) {
         const response = await createGuideAction(guide);
+        return response;
+    }
+
+    public static async getAllGuides() {
+        const response = await getAllGuidesAction();
         return response;
     }
 }

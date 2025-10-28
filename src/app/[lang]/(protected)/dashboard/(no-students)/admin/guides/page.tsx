@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/card";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { GuideController } from "@/services/internal/learning/controller/guide.controller";
-import type { GuideResponse } from "@/services/internal/learning/controller/guide.response";
+import { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
 export default function GuidesPage() {
     const [userRole, setUserRole] = useState<string | null>(null);
@@ -32,8 +32,8 @@ export default function GuidesPage() {
                 setUserRole(role || null);
 
                 if (role) {
-                    const guideList = await GuideController.getList();
-                    setGuides(guideList.data);
+                    const guideList = await GuideController.getAllGuides();
+                    setGuides(guideList);
                 }
             } catch (err) {
                 console.error("Error loading guides:", err);
@@ -121,9 +121,6 @@ export default function GuidesPage() {
                                             {guide.status}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-muted-foreground">
-                                        Order: {guide.orderIndex}
-                                    </p>
                                     <p className="text-sm text-muted-foreground">
                                         Likes: {guide.totalLikes}
                                     </p>

@@ -18,10 +18,9 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
-import { GuideController } from "@/services/internal/learning/controller/guide.controller";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
 const formSchema = z.object({
-    courseId: z.string().min(1, "Course ID is required"),
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
     markdownContent: z.string().min(1, "Content is required"),
@@ -38,7 +37,6 @@ export default function CreateGuidePage() {
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            courseId: "",
             title: "",
             description: "",
             markdownContent: "",
@@ -50,14 +48,14 @@ export default function CreateGuidePage() {
         try {
             const markdownContent =
                 editorRef.current?.getMarkdown() || data.markdownContent;
-            await GuideController.create({
-                courseId: data.courseId,
+
+            await GuideController.createGuide({
                 title: data.title,
-                description: data.description,
+                description: data.description as string,
                 markdownContent,
             });
 
-            router.push(PATHS.DASHBOARD.COURSES.GUIDES.ROOT(data.courseId));
+            router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
         } catch (error) {
             console.error("Error creating guide:", error);
         } finally {
@@ -83,26 +81,6 @@ export default function CreateGuidePage() {
                             onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-6"
                         >
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor="courseId"
-                                    className="text-sm font-medium"
-                                >
-                                    Course ID *
-                                </Label>
-                                <Input
-                                    id="courseId"
-                                    {...form.register("courseId")}
-                                    placeholder="Enter course ID"
-                                    className="w-full"
-                                />
-                                {form.formState.errors.courseId && (
-                                    <p className="text-sm text-red-500">
-                                        {form.formState.errors.courseId.message}
-                                    </p>
-                                )}
-                            </div>
-
                             <div className="space-y-2">
                                 <Label
                                     htmlFor="title"
