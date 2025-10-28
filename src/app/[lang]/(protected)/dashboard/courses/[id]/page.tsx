@@ -9,10 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { getLocalizedPaths } from "@/lib/paths";
-import { CourseController } from "@/services/internal/learning/controller/course.controller";
-import type { CourseResponse } from "@/services/internal/learning/controller/course.response";
-import { GuideController } from "@/services/internal/learning/controller/guide.controller";
-import type { GuideResponse } from "@/services/internal/learning/controller/guide.response";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
 export default async function CoursePage({
     params,

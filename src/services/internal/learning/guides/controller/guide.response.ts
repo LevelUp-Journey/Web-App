@@ -1,4 +1,4 @@
-export interface Guide {
+export interface GuideResponse {
     id: string;
     title: string;
     description: string;
@@ -8,4 +8,10 @@ export interface Guide {
     authorId: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface CreateGuideRequest {
+    title: string;
+    description: string;
+    markdownContent: string;
 }

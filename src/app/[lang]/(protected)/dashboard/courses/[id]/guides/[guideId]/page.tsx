@@ -5,28 +5,21 @@ import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getLocalizedPaths } from "@/lib/paths";
-import { CourseController } from "@/services/internal/learning/controller/course.controller";
-import { GuideController } from "@/services/internal/learning/controller/guide.controller";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
 export default async function GuidePage({
     params,
 }: {
     params: Promise<{ lang: string; id: string; guideId: string }>;
 }) {
-    const { lang, id: courseId, guideId } = await params;
+    const { lang, guideId } = await params;
     const PATHS = getLocalizedPaths(lang);
 
     try {
-        const course = await CourseController.getById(courseId);
-        const guide = await GuideController.getById(guideId);
-
-        // Verify guide belongs to course
-        if (guide.courseId !== courseId) {
-            notFound();
-        }
+        const guide = await GuideController.getGuideById(guideId);
 
         // Serialize the markdown content for MDX rendering
-        const serializedMarkdown = guide.markdownContent
+        const serializedMarkdown = guide.description
             ? await serialize({ source: guide.markdownContent })
             : null;
 
