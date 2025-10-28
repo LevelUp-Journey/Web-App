@@ -57,9 +57,15 @@ export function getLocalizedPaths(locale: string) {
                 },
                 COURSES: {
                     ROOT: `/${locale}/dashboard/admin/courses`,
+                    CREATE: `/${locale}/dashboard/admin/courses/create`,
                 },
                 GUIDES: {
                     ROOT: `/${locale}/dashboard/admin/guides`,
+                    CREATE: `/${locale}/dashboard/admin/guides/create`,
+                    VIEW: (id: string) =>
+                        `/${locale}/dashboard/admin/guides/${id}`,
+                    EDIT: (id: string) =>
+                        `/${locale}/dashboard/admin/guides/${id}/edit`,
                 },
             },
             COURSES: {
@@ -67,6 +73,13 @@ export function getLocalizedPaths(locale: string) {
                 CREATE: `/${locale}/dashboard/courses/create`,
                 EDIT: (id: string) =>
                     `/${locale}/dashboard/courses/edit?id=${id}`,
+                VIEW: (id: string) => `/${locale}/dashboard/courses/${id}`,
+                GUIDES: {
+                    ROOT: (courseId: string) =>
+                        `/${locale}/dashboard/courses/${courseId}/guides`,
+                    VIEW: (courseId: string, guideId: string) =>
+                        `/${locale}/dashboard/courses/${courseId}/guides/${guideId}`,
+                },
             },
         },
         AUTH: {

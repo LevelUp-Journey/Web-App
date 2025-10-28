@@ -9,7 +9,7 @@ export default function ProtectedLayout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main className="w-full h-screen overflow-hidden">{children}</main>
+            <main className="w-full h-screen">{children}</main>
         </SidebarProvider>
     );
 }

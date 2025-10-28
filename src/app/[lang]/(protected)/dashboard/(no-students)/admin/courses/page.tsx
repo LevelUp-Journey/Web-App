@@ -15,7 +15,7 @@ export default async function AdminCoursesPage({
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">My Courses</h2>
                 <Button asChild>
-                    <Link href={PATHS.DASHBOARD.COURSES.CREATE}>
+                    <Link href={PATHS.DASHBOARD.ADMINISTRATION.COURSES.CREATE}>
                         Create Course
                     </Link>
                 </Button>
