@@ -83,10 +83,7 @@ const bottomItems = [
 ];
 
 export default async function AppSidebar() {
-    const [roles, profile] = await Promise.all([
-        AuthController.getUserRoles(),
-        ProfileController.getCurrentUserProfile(),
-    ]);
+    const roles = await AuthController.getUserRoles();
 
     const isTeacher =
         roles.includes(UserRole.TEACHER) || roles.includes(UserRole.ADMIN);
@@ -164,7 +161,6 @@ export default async function AppSidebar() {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
-                            <NavUser profile={profile} />
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

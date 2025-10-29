@@ -9,6 +9,7 @@ import {
     ShadcnTemplate,
     type ShadcnTemplateRef,
 } from "@/components/challenges/editor/lexkitEditor";
+import { CoverDropzone } from "@/components/learning/cover-dropzone";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,10 +20,12 @@ import {
 } from "@/components/ui/resizable";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
+import type { CreateGuideRequest } from "@/services/internal/learning/guides/controller/guide.response";
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
+    cover: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -38,6 +41,7 @@ export default function CreateGuidePage() {
         defaultValues: {
             title: "",
             description: "",
+            cover: "",
         },
     });
 
@@ -52,10 +56,11 @@ export default function CreateGuidePage() {
                 throw new Error("Content cannot be empty");
             }
 
-            const request = {
+            const request: CreateGuideRequest = {
                 title: data.title,
                 description: data.description || "",
                 markdownContent,
+                cover: data.cover || "",
             };
 
             console.log("CREATING GUIDE REQUEST", request);
@@ -123,6 +128,26 @@ export default function CreateGuidePage() {
                                     placeholder="Enter guide description"
                                     className="w-full"
                                 />
+                            </div>
+
+                            {/* Cover Image */}
+                            <div className="space-y-2">
+                                <Label className="text-sm font-medium">
+                                    Cover Image
+                                </Label>
+                                <CoverDropzone
+                                    onImageUrlChange={(url) =>
+                                        form.setValue("cover", url)
+                                    }
+                                    currentImage={form.watch("cover")}
+                                    disabled={saving}
+                                    aspectRatio="wide"
+                                />
+                                {form.formState.errors.cover && (
+                                    <p className="text-sm text-red-500">
+                                        {form.formState.errors.cover.message}
+                                    </p>
+                                )}
                             </div>
 
                             {/* Buttons */}

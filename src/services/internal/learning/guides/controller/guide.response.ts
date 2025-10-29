@@ -14,4 +14,5 @@ export interface CreateGuideRequest {
     title: string;
     description: string;
     markdownContent: string;
+    cover: string;
 }
