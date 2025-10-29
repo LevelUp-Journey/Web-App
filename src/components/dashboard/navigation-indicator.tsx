@@ -1,3 +1,7 @@
+"use client";
+import { usePathname } from "next/navigation";
+
 export function NavigationIndicator() {
-    return <div></div>;
+    const pathname = usePathname();
+    return <div>{pathname}</div>;
 }

@@ -19,12 +19,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSidebar } from "@/components/ui/sidebar";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export function NavUser({ profile }: { profile: ProfileResponse }) {
-    const { isMobile } = useSidebar();
     const { setTheme } = useTheme();
     const router = useRouter();
 
@@ -57,7 +55,7 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
+                side={"bottom"}
                 align="end"
                 sideOffset={4}
             >
