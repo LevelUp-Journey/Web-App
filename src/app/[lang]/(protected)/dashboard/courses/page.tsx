@@ -11,6 +11,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
 import type { CourseResponse } from "@/services/internal/learning/courses/controller/course.response";
 
 export default function CoursesPage() {
@@ -21,10 +22,8 @@ export default function CoursesPage() {
     useEffect(() => {
         const loadCourses = async () => {
             try {
-                const courseList = await CourseController.getList({
-                    status: "PUBLISHED",
-                });
-                setCourses(courseList.data);
+                const courseList = await CourseController.getCourses();
+                setCourses(courseList);
             } catch (error) {
                 console.error("Error loading courses:", error);
             } finally {

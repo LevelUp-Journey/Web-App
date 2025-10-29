@@ -1,5 +1,15 @@
-import { Course } from "@/services/internal/learning/courses/domain/course.entity";
-
-export type CourseResponse = Course;
-
-export type CourseListResponse = Course[];
+export interface CourseResponse {
+    id: string;
+    title: string;
+    description: string;
+    teacherId: string;
+    status: string;
+    difficulty: string;
+    totalGuides: number;
+    rating: number;
+    totalLikes: number;
+    completionScore: number;
+    cover: string;
+    createdAt: string;
+    updatedAt: string;
+}
