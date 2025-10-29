@@ -2,26 +2,17 @@
 
 import {
     AlertCircle,
-    ChevronLeft,
-    ChevronRight,
     RefreshCw,
     Trophy,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MyCurrentRank } from "@/components/leaderboard/my-current-rank";
+import { LeaderboardList } from "@/components/leaderboard/leaderboard-list";
+import { LeaderboardPagination } from "@/components/leaderboard/leaderboard-pagination";
 import { RankIcon } from "@/components/leaderboard/rank-icon";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 import { useLeaderboardWithUsers } from "@/hooks/use-leaderboard-with-users";
 import { getUserIdFromTokenAction } from "@/services/internal/iam/server/auth.actions";
 import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
@@ -38,7 +29,7 @@ export default function LeaderboardPage() {
 
     const itemsPerPage = 15;
     const offset = (page - 1) * itemsPerPage;
-    const { leaderboard, loading, error } = useLeaderboardWithUsers(
+    const { leaderboard, totalUsers, loading, error } = useLeaderboardWithUsers(
         itemsPerPage,
         offset,
     );
@@ -131,7 +122,7 @@ export default function LeaderboardPage() {
         );
     }
 
-    const totalPages = Math.ceil(500 / itemsPerPage);
+    const totalPages = Math.ceil(totalUsers / itemsPerPage);
 
     return (
         <div className="w-full h-full p-6 overflow-hidden">
@@ -141,113 +132,16 @@ export default function LeaderboardPage() {
                     <Card className="flex-1 flex flex-col">
                         <CardContent className="p-0 flex-1 flex flex-col">
                             <div className="flex-1 overflow-auto">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="w-20"></TableHead>
-                                            <TableHead className="w-16"></TableHead>
-                                            <TableHead>Username</TableHead>
-                                            <TableHead className="text-right w-32">
-                                                Points
-                                            </TableHead>
-                                            <TableHead className="text-right w-32">
-                                                Challenges
-                                            </TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {leaderboard.map((entry) => (
-                                            <TableRow
-                                                key={entry.id}
-                                                className={
-                                                    entry.userId ===
-                                                    currentUserId
-                                                        ? "bg-primary/10"
-                                                        : ""
-                                                }
-                                            >
-                                                <TableCell>
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className="w-12 justify-center"
-                                                    >
-                                                        {entry.position}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <RankIcon
-                                                        rank={entry.currentRank}
-                                                        className="w-8 h-8"
-                                                    />
-                                                </TableCell>
-                                                <TableCell className="font-mono">
-                                                    {entry.username ||
-                                                        entry.userId.substring(
-                                                            0,
-                                                            20,
-                                                        )}
-                                                </TableCell>
-                                                <TableCell className="text-right font-mono">
-                                                    {entry.totalPoints.toLocaleString()}
-                                                </TableCell>
-                                                <TableCell className="text-right font-mono">
-                                                    {entry.totalPoints}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                <LeaderboardList
+                                    leaderboard={leaderboard}
+                                    currentUserId={currentUserId}
+                                />
                             </div>
-                            <div className="flex items-center justify-center gap-2 p-4 border-t flex-shrink-0">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() =>
-                                        setPage((p) => Math.max(1, p - 1))
-                                    }
-                                    disabled={page === 1}
-                                >
-                                    <ChevronLeft className="h-4 w-4" />
-                                    Previous
-                                </Button>
-                                {Array.from(
-                                    { length: Math.min(5, totalPages) },
-                                    (_, i) => {
-                                        const pageNum =
-                                            page <= 3 ? i + 1 : page - 2 + i;
-                                        if (pageNum > totalPages) return null;
-                                        return (
-                                            <Button
-                                                key={pageNum}
-                                                variant={
-                                                    page === pageNum
-                                                        ? "default"
-                                                        : "ghost"
-                                                }
-                                                size="sm"
-                                                onClick={() => setPage(pageNum)}
-                                                className="w-10"
-                                            >
-                                                {pageNum}
-                                            </Button>
-                                        );
-                                    },
-                                )}
-                                {page < totalPages - 2 && <span>...</span>}
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() =>
-                                        setPage((p) =>
-                                            Math.min(totalPages, p + 1),
-                                        )
-                                    }
-                                    disabled={page === totalPages}
-                                >
-                                    Next
-                                    <ChevronRight className="h-4 w-4" />
-                                </Button>
-                            </div>
+                            <LeaderboardPagination
+                                page={page}
+                                totalPages={totalPages}
+                                onPageChange={setPage}
+                            />
                         </CardContent>
                     </Card>
                 </div>
