@@ -3,6 +3,7 @@ import {
     Code2,
     HelpCircle,
     Home,
+    Library,
     Settings,
     ShieldUser,
     Trophy,
@@ -53,6 +54,11 @@ const topItems = [
         title: "Courses",
         url: PATHS.DASHBOARD.COURSES.ROOT,
         icon: BookOpen,
+    },
+    {
+        title: "Guides",
+        url: PATHS.DASHBOARD.GUIDES.ROOT,
+        icon: Library,
     },
 ];
 

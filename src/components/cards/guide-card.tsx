@@ -1,6 +1,6 @@
 "use client";
 
-import { EllipsisVertical, Heart, ImageIcon } from "lucide-react";
+import { Calendar, EllipsisVertical, Heart, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,15 @@ export default function GuideCard({
     className,
     ...props
 }: GuideCardProps) {
+    const formattedDate = new Date(guide.createdAt).toLocaleDateString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        },
+    );
+
     return (
         <Card
             key={guide.id}
@@ -101,25 +110,27 @@ export default function GuideCard({
 
             <CardContent>
                 <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex justify-between">
-                        <span>Status:</span>
-                        <span
-                            className={cn(
-                                "px-2 py-1 rounded text-xs font-medium",
-                                guide.status === "PUBLISHED"
-                                    ? "bg-green-100 text-green-800"
-                                    : guide.status === "DRAFT"
-                                      ? "bg-yellow-100 text-yellow-800"
-                                      : "bg-blue-100 text-blue-800",
-                            )}
-                        >
-                            {guide.status}
-                        </span>
+                    {adminMode && (
+                        <div className="flex justify-between">
+                            <span>Status:</span>
+                            <span
+                                className={cn(
+                                    "px-2 py-1 rounded text-xs font-medium",
+                                    guide.status === "PUBLISHED"
+                                        ? "bg-green-100 text-green-800"
+                                        : guide.status === "DRAFT"
+                                          ? "bg-yellow-100 text-yellow-800"
+                                          : "bg-blue-100 text-blue-800",
+                                )}
+                            >
+                                {guide.status}
+                            </span>
+                        </div>
+                    )}
+                    <div className="flex items-center gap-1.5">
+                        <Calendar className="h-4 w-4" />
+                        <time dateTime={guide.createdAt}>{formattedDate}</time>
                     </div>
-                    <p>
-                        Created:{" "}
-                        {new Date(guide.createdAt).toLocaleDateString()}
-                    </p>
                 </div>
             </CardContent>
         </Card>
