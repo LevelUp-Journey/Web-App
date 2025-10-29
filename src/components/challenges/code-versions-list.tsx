@@ -97,9 +97,7 @@ export default function CodeVersionsList({
                             <Button
                                 size="default"
                                 variant="outline"
-                                onClick={() =>
-                                    handleStartChallenge(version.id)
-                                }
+                                onClick={() => handleStartChallenge(version.id)}
                                 disabled={startingId === version.id}
                             >
                                 <Play className="h-4 w-4 mr-2" />
@@ -161,13 +159,14 @@ export default function CodeVersionsList({
                                                             Delete Code Version
                                                         </AlertDialogTitle>
                                                         <AlertDialogDescription>
-                                                            Are you sure you want to
-                                                            delete the{" "}
+                                                            Are you sure you
+                                                            want to delete the{" "}
                                                             {getReadableLanguageName(
                                                                 version.language,
                                                             )}{" "}
                                                             code version? This
-                                                            action cannot be undone.
+                                                            action cannot be
+                                                            undone.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
