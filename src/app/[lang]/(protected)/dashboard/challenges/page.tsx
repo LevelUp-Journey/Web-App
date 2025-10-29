@@ -28,21 +28,6 @@ export default async function ChallengesPage() {
 
     return (
         <div className="space-y-4 w-full">
-            {/* Search Bar - Centered */}
-            <div className="flex justify-center pt-4">
-                <div className="relative max-w-md w-full">
-                    <InputGroup>
-                        <InputGroupInput placeholder="Search..." />
-                        <InputGroupAddon>
-                            <SearchIcon />
-                        </InputGroupAddon>
-                        <InputGroupAddon align="inline-end">
-                            <InputGroupButton>Search</InputGroupButton>
-                        </InputGroupAddon>
-                    </InputGroup>
-                </div>
-            </div>
-
             {/* Challenges List */}
             <div className="container mx-auto p-4 space-y-4">
                 <h2 className="text-2xl font-semibold">Challenges</h2>

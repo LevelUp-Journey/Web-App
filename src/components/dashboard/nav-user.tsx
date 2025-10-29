@@ -19,12 +19,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
-} from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
 import { Badge } from "@/components/ui/badge";
@@ -36,12 +37,14 @@ export default function ChallengeCard({
     return (
         <Card
             key={challenge.id}
-            className={cn("hover:shadow-lg transition-shadow", className)}
+            className={cn("hover:shadow-lg transition-shadow gap-4", className)}
             {...props}
         >
             <CardHeader className="flex items-center justify-between flex-row">
                 <CardTitle className="flex items-center justify-between">
-                    {challenge.name}
+                    <Link href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}>
+                        {challenge.name}
+                    </Link>
                 </CardTitle>
                 <div className="flex items-center gap-2 ">
                     <Button size={"icon"} variant={"ghost"}>
@@ -52,18 +55,6 @@ export default function ChallengeCard({
             </CardHeader>
             <CardContent>
                 <div className="flex flex-wrap gap-2">
-                    {challenge.tags.map((tag) => (
-                        <Badge
-                            key={tag.id}
-                            style={{
-                                backgroundColor: tag.color,
-                            }}
-                        >
-                            {tag.name}
-                        </Badge>
-                    ))}
-                </div>
-                <div className="flex flex-wrap gap-2 mt-2">
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
                             key={version.id}
@@ -72,7 +63,7 @@ export default function ChallengeCard({
                     ))}
                 </div>
             </CardContent>
-            <CardFooter>
+            {/*<CardFooter>
                 {adminMode ? (
                     <Button
                         size="sm"
@@ -96,7 +87,7 @@ export default function ChallengeCard({
                         start coding
                     </Button>
                 )}
-            </CardFooter>
+            </CardFooter>*/}
         </Card>
     );
 }

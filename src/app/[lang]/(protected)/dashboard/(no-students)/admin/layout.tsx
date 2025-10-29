@@ -5,6 +5,7 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { Separator } from "@/components/ui/separator";
 import { getLocalizedPaths } from "@/lib/paths";
 
 export default async function AdminLayout({
@@ -31,7 +32,7 @@ export default async function AdminLayout({
     ];
 
     return (
-        <div className="w-full max-w-6xl mx-auto p-4 space-y-4">
+        <div className="w-full p-4 space-y-4">
             <NavigationMenu>
                 <NavigationMenuList>
                     {navLinks.map((link) => (
@@ -43,6 +44,8 @@ export default async function AdminLayout({
                     ))}
                 </NavigationMenuList>
             </NavigationMenu>
+
+            <Separator />
 
             <div className="mt-6">{children}</div>
         </div>
