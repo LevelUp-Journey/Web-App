@@ -11,6 +11,8 @@ export async function createGuideAction(request: CreateGuideRequest) {
         "/guides",
         request,
     );
+
+    console.log("CREATING GUIDE RESPONSE", response.data);
     return response.data;
 }
 

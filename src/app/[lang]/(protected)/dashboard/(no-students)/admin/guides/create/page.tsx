@@ -23,7 +23,6 @@ import { GuideController } from "@/services/internal/learning/guides/controller/
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
-    markdownContent: z.string().min(1, "Content is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -39,22 +38,30 @@ export default function CreateGuidePage() {
         defaultValues: {
             title: "",
             description: "",
-            markdownContent: "",
         },
     });
 
     const onSubmit = async (data: FormData) => {
         setSaving(true);
         try {
-            const markdownContent =
-                editorRef.current?.getMarkdown() || data.markdownContent;
+            const editor = editorRef.current;
+            if (!editor) throw new Error("Editor not initialized");
 
-            await GuideController.createGuide({
+            const markdownContent = editor.getMarkdown();
+            if (!markdownContent || markdownContent.trim() === "") {
+                throw new Error("Content cannot be empty");
+            }
+
+            const request = {
                 title: data.title,
-                description: data.description as string,
+                description: data.description || "",
                 markdownContent,
-            });
+            };
 
+            console.log("CREATING GUIDE REQUEST", request);
+            const response = await GuideController.createGuide(request);
+
+            console.log("GUIDE CREATED:", response);
             router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
         } catch (error) {
             console.error("Error creating guide:", error);
@@ -81,6 +88,7 @@ export default function CreateGuidePage() {
                             onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-6"
                         >
+                            {/* Title */}
                             <div className="space-y-2">
                                 <Label
                                     htmlFor="title"
@@ -101,6 +109,7 @@ export default function CreateGuidePage() {
                                 )}
                             </div>
 
+                            {/* Description */}
                             <div className="space-y-2">
                                 <Label
                                     htmlFor="description"
@@ -116,6 +125,7 @@ export default function CreateGuidePage() {
                                 />
                             </div>
 
+                            {/* Buttons */}
                             <div className="flex justify-end space-x-2 pt-4">
                                 <Button
                                     type="button"
