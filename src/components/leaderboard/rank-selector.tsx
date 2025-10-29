@@ -8,7 +8,7 @@ interface RankSelectorProps {
 }
 
 const ranks = [
-    { name: "TOP500", value: null, label: "Top 500" },
+    { name: "ALL", value: null, label: "Top" },
     { name: "BRONZE", value: "BRONZE", label: "Bronze" },
     { name: "SILVER", value: "SILVER", label: "Silver" },
     { name: "GOLD", value: "GOLD", label: "Gold" },
@@ -39,14 +39,8 @@ export function RankSelector({ selectedRank, onRankChange }: RankSelectorProps) 
                     )}
                     <div className="text-center">
                         <h2 className="text-5xl font-bold text-white tracking-wider mb-2">
-                            {currentRank.label.toUpperCase()}
+                            {currentRank.value ? currentRank.label.toUpperCase() : "LEADERBOARD"}
                         </h2>
-                        <p className="text-slate-400 text-sm">
-                            {currentRank.value
-                                ? `Showing ${currentRank.label} ranked players`
-                                : "Showing top 500 players across all ranks"
-                            }
-                        </p>
                     </div>
                 </div>
             </div>
