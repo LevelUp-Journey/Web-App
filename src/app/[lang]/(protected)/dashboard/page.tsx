@@ -31,22 +31,7 @@ export default async function DashboardPage() {
     );
 
     return (
-        <div className="space-y-4 w-full container mx-auto">
-            {/* Search Bar - Centered */}
-            <div className="flex justify-center pt-4">
-                <div className="relative max-w-md w-full">
-                    <InputGroup>
-                        <InputGroupInput placeholder="Search..." />
-                        <InputGroupAddon>
-                            <SearchIcon />
-                        </InputGroupAddon>
-                        <InputGroupAddon align="inline-end">
-                            <InputGroupButton>Search</InputGroupButton>
-                        </InputGroupAddon>
-                    </InputGroup>
-                </div>
-            </div>
-
+        <div className="space-y-4 w-full container mx-auto pt-4">
             {/* Carousel - Full Width */}
             <UniversityAnnouncements />
 

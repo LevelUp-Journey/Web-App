@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 

@@ -3,7 +3,7 @@ import { Java } from "@/components/ui/svgs/java";
 import { Javascript } from "@/components/ui/svgs/javascript";
 import { Python } from "@/components/ui/svgs/python";
 import { ProgrammingLanguage } from "@/lib/consts";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 const ICONS = {
     [ProgrammingLanguage.JAVA]: Java,

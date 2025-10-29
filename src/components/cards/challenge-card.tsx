@@ -1,23 +1,23 @@
 "use client";
 
-import { Star } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { EllipsisVertical, Star } from "lucide-react";
+import Link from "next/link";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import type { Challenge } from "@/services/internal/challenges/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { cn } from "@/lib/utils";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
-interface ChallengeCardProps {
+interface ChallengeCardProps extends React.ComponentProps<"div"> {
     challenge: Challenge;
     codeVersions: CodeVersion[];
     adminMode?: boolean;
@@ -27,36 +27,58 @@ export default function ChallengeCard({
     challenge,
     codeVersions,
     adminMode = false,
+    className,
+    ...props
 }: ChallengeCardProps) {
-    const router = useRouter();
-
     return (
-        <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
+        <Card
+            key={challenge.id}
+            className={cn("hover:shadow-lg transition-shadow gap-4", className)}
+            {...props}
+        >
             <CardHeader className="flex items-center justify-between flex-row">
                 <CardTitle className="flex items-center justify-between">
-                    {challenge.name}
+                    <Link
+                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}
+                        className="hover:underline"
+                    >
+                        {challenge.name}
+                    </Link>
                 </CardTitle>
-                <div className="flex items-center gap-2 ">
-                    <Button size={"icon"} variant={"ghost"}>
-                        <Star className="text-yellow-400" size={18} />
-                    </Button>
-                    {challenge.stars.length}
+                <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
+                        <Button size={"icon"} variant={"ghost"}>
+                            <Star className="text-yellow-400" size={18} />
+                        </Button>
+                        {challenge.stars.length}
+                    </div>
+                    {adminMode && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button size={"icon"} variant={"ghost"}>
+                                    <EllipsisVertical />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(
+                                            challenge.id,
+                                        )}
+                                    >
+                                        Edit Challenge
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    Delete Challenge
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
             </CardHeader>
             <CardContent>
                 <div className="flex flex-wrap gap-2">
-                    {challenge.tags.map((tag) => (
-                        <Badge
-                            key={tag.id}
-                            style={{
-                                backgroundColor: tag.color,
-                            }}
-                        >
-                            {tag.name}
-                        </Badge>
-                    ))}
-                </div>
-                <div className="flex flex-wrap gap-2 mt-2">
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
                             key={version.id}
@@ -65,31 +87,6 @@ export default function ChallengeCard({
                     ))}
                 </div>
             </CardContent>
-            <CardFooter>
-                {adminMode ? (
-                    <Button
-                        size="sm"
-                        onClick={() => {
-                            router.push(
-                                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id),
-                            );
-                        }}
-                    >
-                        View
-                    </Button>
-                ) : (
-                    <Button
-                        size="sm"
-                        onClick={() => {
-                            router.push(
-                                PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id),
-                            );
-                        }}
-                    >
-                        start coding
-                    </Button>
-                )}
-            </CardFooter>
         </Card>
     );
 }

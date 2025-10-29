@@ -20,21 +20,29 @@ export const PROFILES_HTTP = axios.create({
     baseURL: ENV.SERVICES.PROFILE.BASE_URL,
 });
 
-[IAM_HTTP, CHALLENGES_HTTP, COMMUNITY_HTTP, PROFILES_HTTP].forEach(
-    (httpClient) => {
-        httpClient.interceptors.request.use(async (config) => {
-            const authTokens = await getAuthTokenAction();
-            if (authTokens && authTokens.token !== "NO_TOKEN_FOUND") {
-                config.headers.Authorization = `Bearer ${authTokens.token}`;
-                config.headers.set(
-                    CONSTS.AUTH_REFRESH_TOKEN_KEY,
-                    authTokens.refreshToken,
-                );
-            }
-            return config;
-        });
-    },
-);
+export const LEARNING_HTTP = axios.create({
+    baseURL: ENV.SERVICES.LEARNING.BASE_URL,
+});
+
+[
+    IAM_HTTP,
+    CHALLENGES_HTTP,
+    COMMUNITY_HTTP,
+    PROFILES_HTTP,
+    LEARNING_HTTP,
+].forEach((httpClient) => {
+    httpClient.interceptors.request.use(async (config) => {
+        const authTokens = await getAuthTokenAction();
+        if (authTokens && authTokens.token !== "NO_TOKEN_FOUND") {
+            config.headers.Authorization = `Bearer ${authTokens.token}`;
+            config.headers.set(
+                CONSTS.AUTH_REFRESH_TOKEN_KEY,
+                authTokens.refreshToken,
+            );
+        }
+        return config;
+    });
+});
 
 export interface RequestFailure {
     data: string;

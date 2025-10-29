@@ -19,6 +19,11 @@ export const ENV = {
                 process.env.COMMUNITIES_BASE_URL ||
                 "http://192.168.0.118:8086/api/v1",
         },
+        LEARNING: {
+            BASE_URL:
+                process.env.LEARNING_BASE_URL ||
+                "http://192.168.0.118:8085/api/v1",
+        },
         EXTERNAL: {
             CLOUDINARY: {
                 CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
