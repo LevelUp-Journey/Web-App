@@ -11,8 +11,6 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
-import { CourseController } from "@/services/internal/learning/controller/course.controller";
-import type { CourseResponse } from "@/services/internal/learning/controller/course.response";
 
 export default function CoursesPage() {
     const [courses, setCourses] = useState<CourseResponse[]>([]);
