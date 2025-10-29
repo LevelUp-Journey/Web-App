@@ -1,11 +1,19 @@
 "use client";
 
-import { ChevronRight, Home } from "lucide-react";
+import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
-interface BreadcrumbItem {
+interface BreadcrumbItemData {
     label: string;
     href?: string;
 }
@@ -16,7 +24,6 @@ async function fetchResourceName(
     id: string,
 ): Promise<string> {
     try {
-        // Aquí debes reemplazar con tus endpoints reales
         const endpoints = {
             challenge: `/api/challenges/${id}`,
             guide: `/api/guides/${id}`,
@@ -28,7 +35,6 @@ async function fetchResourceName(
         if (!response.ok) throw new Error("Failed to fetch");
 
         const data = await response.json();
-        // Ajusta según la estructura de tu respuesta
         return data.title || data.name || "Unknown";
     } catch (error) {
         console.error(`Error fetching ${type} name:`, error);
@@ -61,28 +67,19 @@ const SEGMENT_LABELS: Record<string, string> = {
     terms: "Terms of Service",
 };
 
-// Patrones para identificar recursos dinámicos
-const DYNAMIC_PATTERNS = {
-    challenge: /\/challenges\/([a-zA-Z0-9-]+)(?:\/|$)/,
-    guide: /\/guides\/([a-zA-Z0-9-]+)(?:\/|$)/,
-    course: /\/courses\/([a-zA-Z0-9-]+)(?:\/|$)/,
-    post: /\/post\/([a-zA-Z0-9-]+)(?:\/|$)/,
-};
-
 export function Breadcrumbs() {
     const pathname = usePathname();
-    const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([]);
+    const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItemData[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function generateBreadcrumbs() {
             if (!pathname) return;
 
-            // Remover locale del path (ej: /en, /es)
             const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}\//, "/");
             const segments = pathWithoutLocale.split("/").filter(Boolean);
 
-            const items: BreadcrumbItem[] = [
+            const items: BreadcrumbItemData[] = [
                 { label: "Home", href: "/dashboard" },
             ];
 
@@ -96,7 +93,6 @@ export function Breadcrumbs() {
 
                 // Ignorar segmentos que son IDs puros (UUID, números, etc.)
                 if (/^[a-f0-9-]{36}$/.test(segment) || /^\d+$/.test(segment)) {
-                    // Intentar obtener el nombre del recurso
                     const prevSegment = segments[i - 1];
                     let resourceType:
                         | "challenge"
@@ -149,7 +145,6 @@ export function Breadcrumbs() {
                         href: fullPath,
                     });
                 } else {
-                    // Usar etiqueta del mapeo o capitalizar
                     const label =
                         SEGMENT_LABELS[segment] ||
                         segment.charAt(0).toUpperCase() + segment.slice(1);
@@ -172,40 +167,40 @@ export function Breadcrumbs() {
     }
 
     return (
-        <nav className="flex items-center space-x-2 text-sm text-muted-foreground py-3 px-4">
-            {breadcrumbs.map((item, index) => {
-                const isLast = index === breadcrumbs.length - 1;
+        <Breadcrumb className="py-3 px-4">
+            <BreadcrumbList>
+                {breadcrumbs.map((item, index) => {
+                    const isLast = index === breadcrumbs.length - 1;
 
-                return (
-                    <div key={index} className="flex items-center space-x-2">
-                        {index === 0 ? (
-                            <Link
-                                href={item.href || "#"}
-                                className="hover:text-foreground transition-colors flex items-center"
-                            >
-                                <Home className="w-4 h-4" />
-                            </Link>
-                        ) : (
-                            <>
-                                <ChevronRight className="w-4 h-4" />
+                    return (
+                        <div key={index} className="contents">
+                            <BreadcrumbItem>
                                 {isLast ? (
-                                    <span className="font-medium text-foreground">
-                                        {item.label}
-                                    </span>
+                                    <BreadcrumbPage>
+                                        {index === 0 ? (
+                                            <Home className="w-4 h-4" />
+                                        ) : (
+                                            item.label
+                                        )}
+                                    </BreadcrumbPage>
                                 ) : (
-                                    <Link
-                                        href={item.href || "#"}
-                                        className="hover:text-foreground transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
+                                    <BreadcrumbLink asChild>
+                                        <Link href={item.href || "#"}>
+                                            {index === 0 ? (
+                                                <Home className="w-4 h-4" />
+                                            ) : (
+                                                item.label
+                                            )}
+                                        </Link>
+                                    </BreadcrumbLink>
                                 )}
-                            </>
-                        )}
-                    </div>
-                );
-            })}
-        </nav>
+                            </BreadcrumbItem>
+                            {!isLast && <BreadcrumbSeparator />}
+                        </div>
+                    );
+                })}
+            </BreadcrumbList>
+        </Breadcrumb>
     );
 }
 
@@ -215,12 +210,11 @@ export function NavigationIndicator() {
 
     if (!pathname) return null;
 
-    // Remover locale del path
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}\//, "/");
     const segments = pathWithoutLocale.split("/").filter(Boolean);
     const locale = pathname.match(/^\/([a-z]{2})\//)?.[1] || "en";
 
-    const breadcrumbs: BreadcrumbItem[] = [
+    const breadcrumbs: BreadcrumbItemData[] = [
         { label: "Home", href: `/${locale}/dashboard` },
     ];
 
@@ -269,39 +263,41 @@ export function NavigationIndicator() {
     if (breadcrumbs.length <= 1) return null;
 
     return (
-        <nav className="flex items-center space-x-2 text-sm text-muted-foreground py-3 px-4 bg-background">
-            {breadcrumbs.map((item, index) => {
-                const isLast = index === breadcrumbs.length - 1;
+        <div>
+            <Breadcrumb className="py-3 px-4 bg-background">
+                <BreadcrumbList>
+                    {breadcrumbs.map((item, index) => {
+                        const isLast = index === breadcrumbs.length - 1;
 
-                return (
-                    <div key={index} className="flex items-center space-x-2">
-                        {index === 0 ? (
-                            <Link
-                                href={item.href || "#"}
-                                className="hover:text-foreground transition-colors flex items-center"
-                            >
-                                <Home className="w-4 h-4" />
-                            </Link>
-                        ) : (
-                            <>
-                                <ChevronRight className="w-4 h-4" />
-                                {isLast ? (
-                                    <span className="font-medium text-foreground">
-                                        {item.label}
-                                    </span>
-                                ) : (
-                                    <Link
-                                        href={item.href || "#"}
-                                        className="hover:text-foreground transition-colors"
-                                    >
-                                        {item.label}
-                                    </Link>
-                                )}
-                            </>
-                        )}
-                    </div>
-                );
-            })}
-        </nav>
+                        return (
+                            <div key={index} className="contents">
+                                <BreadcrumbItem>
+                                    {isLast ? (
+                                        <BreadcrumbPage>
+                                            {index === 0 ? (
+                                                <Home className="w-4 h-4" />
+                                            ) : (
+                                                item.label
+                                            )}
+                                        </BreadcrumbPage>
+                                    ) : (
+                                        <BreadcrumbLink asChild>
+                                            <Link href={item.href || "#"}>
+                                                {index === 0 ? (
+                                                    <Home className="w-4 h-4" />
+                                                ) : (
+                                                    item.label
+                                                )}
+                                            </Link>
+                                        </BreadcrumbLink>
+                                    )}
+                                </BreadcrumbItem>
+                                {!isLast && <BreadcrumbSeparator />}
+                            </div>
+                        );
+                    })}
+                </BreadcrumbList>
+            </Breadcrumb>
+        </div>
     );
 }
