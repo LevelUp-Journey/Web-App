@@ -8,15 +8,12 @@ import {
 
 export function SearchInput() {
     return (
-        <div className="max-w-md w-full">
+        <div className="max-w-xs w-full">
             <div className="relative">
                 <InputGroup>
-                    <InputGroupInput placeholder="Search..." />
+                    <InputGroupInput placeholder="Search something..." />
                     <InputGroupAddon>
                         <SearchIcon />
-                    </InputGroupAddon>
-                    <InputGroupAddon align="inline-end">
-                        <InputGroupButton>Search</InputGroupButton>
                     </InputGroupAddon>
                 </InputGroup>
             </div>

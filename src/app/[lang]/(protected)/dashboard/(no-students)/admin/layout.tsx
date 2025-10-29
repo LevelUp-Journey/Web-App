@@ -47,7 +47,7 @@ export default async function AdminLayout({
 
             <Separator />
 
-            <div className="mt-6">{children}</div>
+            <div className="mt-6 w-full max-w-6xl mx-auto">{children}</div>
         </div>
     );
 }
