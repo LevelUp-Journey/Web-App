@@ -9,10 +9,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MyCurrentRank } from "@/components/leaderboard/my-current-rank";
-import {
-    getRankFromPoints,
-    RankIcon,
-} from "@/components/leaderboard/rank-icon";
+import { RankIcon } from "@/components/leaderboard/rank-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -35,6 +32,7 @@ export default function LeaderboardPage() {
     const [userPosition, setUserPosition] = useState<{
         position: number;
         totalPoints: number;
+        currentRank: string;
     } | null>(null);
     const [retryCount, setRetryCount] = useState(0);
 
@@ -178,9 +176,7 @@ export default function LeaderboardPage() {
                                                 </TableCell>
                                                 <TableCell>
                                                     <RankIcon
-                                                        rank={getRankFromPoints(
-                                                            entry.totalPoints,
-                                                        )}
+                                                        rank={entry.currentRank}
                                                         className="w-8 h-8"
                                                     />
                                                 </TableCell>
@@ -259,8 +255,7 @@ export default function LeaderboardPage() {
                     <div className="h-6"></div>
                     {userPosition && (
                         <MyCurrentRank
-                            totalPoints={userPosition.totalPoints}
-                            position={userPosition.position}
+                            rank={userPosition.currentRank}
                         />
                     )}
                 </div>

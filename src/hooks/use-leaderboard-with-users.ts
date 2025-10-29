@@ -8,6 +8,7 @@ export interface LeaderboardUserEntry {
     totalPoints: number;
     position: number;
     isTop500: boolean;
+    currentRank: string;
     username?: string;
     firstName?: string;
     lastName?: string;

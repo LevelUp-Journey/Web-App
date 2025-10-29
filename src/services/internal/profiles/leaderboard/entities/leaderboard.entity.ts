@@ -4,4 +4,5 @@ export interface LeaderboardEntry {
     totalPoints: number;
     position: number;
     isTop500: boolean;
+    currentRank: string;
 }
