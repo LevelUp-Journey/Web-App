@@ -5,7 +5,7 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { LeaderboardEntry } from "../entities/leaderboard.entity";
+import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderboard.entity";
 
 export async function getLeaderboardAction(
     limit: number = 50,
@@ -64,11 +64,35 @@ export async function getUserPositionAction(
 }
 
 export async function getTop500Action(): Promise<
-    RequestSuccess<LeaderboardEntry[]> | RequestFailure
+    RequestSuccess<LeaderboardResponse> | RequestFailure
 > {
     try {
         const response =
-            await PROFILES_HTTP.get<LeaderboardEntry[]>(`/leaderboard/top500`);
+            await PROFILES_HTTP.get<LeaderboardResponse>(`/leaderboard/top500`);
+        return { data: response.data, status: response.status };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function getUsersByRankAction(
+    rank: string,
+): Promise<RequestSuccess<LeaderboardEntry[]> | RequestFailure> {
+    try {
+        const response = await PROFILES_HTTP.get<LeaderboardEntry[]>(
+            `/competitive/profiles/rank/${rank.toUpperCase()}`,
+        );
         return { data: response.data, status: response.status };
     } catch (error: unknown) {
         const axiosError = error as {

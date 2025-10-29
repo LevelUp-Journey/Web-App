@@ -3,6 +3,7 @@ import {
     getLeaderboardAction,
     getTop500Action,
     getUserPositionAction,
+    getUsersByRankAction,
     recalculateLeaderboardAction,
 } from "../server/leaderboard.actions";
 
@@ -46,8 +47,27 @@ export class LeaderboardController {
         throw new Error(`Failed to fetch user position: ${errorMessage}`);
     }
 
-    public static async getTop500(): Promise<LeaderboardEntry[]> {
+    public static async getTop500(): Promise<LeaderboardResponse> {
         const response = await getTop500Action();
+        if (response.status === 200) {
+            return response.data as LeaderboardResponse;
+        }
+
+        if (response.status === 403) {
+            throw new Error("403: Authentication required");
+        }
+
+        const errorMessage =
+            typeof response.data === "string"
+                ? response.data
+                : JSON.stringify(response.data);
+        throw new Error(`Failed to fetch top 500: ${errorMessage}`);
+    }
+
+    public static async getUsersByRank(
+        rank: string,
+    ): Promise<LeaderboardEntry[]> {
+        const response = await getUsersByRankAction(rank);
         if (response.status === 200) {
             return response.data as LeaderboardEntry[];
         }
@@ -60,7 +80,7 @@ export class LeaderboardController {
             typeof response.data === "string"
                 ? response.data
                 : JSON.stringify(response.data);
-        throw new Error(`Failed to fetch top 500: ${errorMessage}`);
+        throw new Error(`Failed to fetch users by rank: ${errorMessage}`);
     }
 
     public static async recalculateLeaderboard(): Promise<void> {

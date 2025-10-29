@@ -9,7 +9,8 @@ const rankSvgMap: Record<string, string> = {
     bronze: "/ranks/rank-bronze.svg",
     silver: "/ranks/rank-silver.svg",
     gold: "/ranks/rank-gold.svg",
-    platinium: "/ranks/rank-platinium.svg",
+    platinum: "/ranks/rank-platinum.svg",
+    platinium: "/ranks/rank-platinium.svg", // Legacy support
     diamond: "/ranks/rank-diamond.svg",
     master: "/ranks/rank-master.svg",
     grandmaster: "/ranks/rank-grandmaster.svg",
