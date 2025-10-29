@@ -20,6 +20,7 @@ export function useLeaderboardWithUsers(
     offset: number = 0,
 ) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardUserEntry[]>([]);
+    const [totalUsers, setTotalUsers] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -33,9 +34,11 @@ export function useLeaderboardWithUsers(
                 const leaderboardData =
                     await LeaderboardController.getLeaderboard(limit, offset);
 
+                setTotalUsers(leaderboardData.totalUsers);
+
                 // Fetch user profiles for each leaderboard entry
                 const entriesWithUsers = await Promise.all(
-                    leaderboardData.map(async (entry) => {
+                    leaderboardData.entries.map(async (entry) => {
                         try {
                             const profile =
                                 await ProfileController.getProfileByUserId(
@@ -78,5 +81,5 @@ export function useLeaderboardWithUsers(
         fetchLeaderboardWithUsers();
     }, [limit, offset]);
 
-    return { leaderboard, loading, error };
+    return { leaderboard, totalUsers, loading, error };
 }

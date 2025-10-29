@@ -1,4 +1,4 @@
-import type { LeaderboardEntry } from "../entities/leaderboard.entity";
+import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderboard.entity";
 import {
     getLeaderboardAction,
     getTop500Action,
@@ -10,10 +10,10 @@ export class LeaderboardController {
     public static async getLeaderboard(
         limit: number = 50,
         offset: number = 0,
-    ): Promise<LeaderboardEntry[]> {
+    ): Promise<LeaderboardResponse> {
         const response = await getLeaderboardAction(limit, offset);
         if (response.status === 200) {
-            return response.data as LeaderboardEntry[];
+            return response.data as unknown as LeaderboardResponse;
         }
 
         if (response.status === 403) {
