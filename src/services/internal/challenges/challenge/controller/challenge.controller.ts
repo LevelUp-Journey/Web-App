@@ -218,3 +218,61 @@ export class ChallengeController {
         }
     }
 }
+
+// ==========================================
+// EJEMPLO DE USO CON MANEJO DE ERRORES
+// ==========================================
+
+/*
+// En un componente de página
+export default async function ChallengesPage() {
+    // Este método nunca causará que la app se rompa
+    const challenges = await ChallengeController.getPublicChallenges();
+
+    return (
+        <div>
+            {challenges.length > 0 ? (
+                challenges.map(challenge => <ChallengeCard key={challenge.id} challenge={challenge} />)
+            ) : (
+                <p>No challenges available</p>
+            )}
+        </div>
+    );
+}
+
+// En un Server Action o API Route con try-catch
+"use server";
+
+export async function createChallengeHandler(data: CreateChallengeRequest) {
+    try {
+        const challenge = await ChallengeController.createChallenge(data);
+        return { success: true, challenge };
+    } catch (error) {
+        if (error instanceof ChallengeError) {
+            return {
+                success: false,
+                error: error.message,
+                statusCode: error.statusCode
+            };
+        }
+        return {
+            success: false,
+            error: "An unexpected error occurred"
+        };
+    }
+}
+
+// En un componente cliente con toast notifications
+"use client";
+
+async function handleDelete(challengeId: string) {
+    const success = await ChallengeController.deleteChallenge(challengeId);
+
+    if (success) {
+        toast.success("Challenge deleted successfully");
+        router.refresh();
+    } else {
+        toast.error("Failed to delete challenge");
+    }
+}
+*/
