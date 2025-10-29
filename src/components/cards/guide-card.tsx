@@ -1,6 +1,7 @@
 "use client";
 
-import { EllipsisVertical, Heart } from "lucide-react";
+import { EllipsisVertical, Heart, ImageIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,9 +29,34 @@ export default function GuideCard({
     return (
         <Card
             key={guide.id}
-            className={cn("hover:shadow-lg transition-shadow gap-4", className)}
+            className={cn(
+                "hover:shadow-lg transition-shadow overflow-hidden",
+                className,
+            )}
             {...props}
         >
+            {/* Cover Image */}
+            <Link
+                href={PATHS.DASHBOARD.GUIDES.VIEW(guide.id)}
+                className="block"
+            >
+                <div className="relative w-full aspect-video bg-muted">
+                    {guide.cover ? (
+                        <Image
+                            src={guide.cover}
+                            alt={guide.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="w-12 h-12 text-muted-foreground/50" />
+                        </div>
+                    )}
+                </div>
+            </Link>
+
             <CardHeader className="flex items-center justify-between flex-row">
                 <CardTitle className="flex items-center justify-between">
                     <Link
@@ -40,7 +66,6 @@ export default function GuideCard({
                         {guide.title}
                     </Link>
                 </CardTitle>
-
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 text-sm">
                         <Button size="icon" variant="ghost">
@@ -48,7 +73,6 @@ export default function GuideCard({
                         </Button>
                         {guide.totalLikes}
                     </div>
-
                     {adminMode && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
