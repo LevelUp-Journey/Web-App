@@ -93,24 +93,25 @@ export default function CodeVersionsList({
                             </ItemTitle>
                         </ItemContent>
                         <ItemActions>
-                            {isTeacher ? (
-                                variant === "summary" ? (
-                                    <Button
-                                        size="default"
-                                        variant="outline"
-                                        asChild
-                                    >
-                                        <Link
-                                            href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
-                                                challengeId,
-                                                version.id,
-                                            )}
-                                        >
-                                            <Eye className="h-4 w-4" />
-                                        </Link>
-                                    </Button>
-                                ) : (
-                                    <>
+                            {/* Botón Start Challenge - siempre visible */}
+                            <Button
+                                size="default"
+                                variant="outline"
+                                onClick={() =>
+                                    handleStartChallenge(version.id)
+                                }
+                                disabled={startingId === version.id}
+                            >
+                                <Play className="h-4 w-4 mr-2" />
+                                {startingId === version.id
+                                    ? "Starting..."
+                                    : "Start Challenge"}
+                            </Button>
+
+                            {/* Botones adicionales solo para teachers */}
+                            {isTeacher && (
+                                <>
+                                    {variant === "summary" ? (
                                         <Button
                                             size="default"
                                             variant="outline"
@@ -122,69 +123,72 @@ export default function CodeVersionsList({
                                                     version.id,
                                                 )}
                                             >
-                                                <Edit className="h-4 w-4" />
+                                                <Eye className="h-4 w-4" />
                                             </Link>
                                         </Button>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    size="default"
-                                                    variant="outline"
-                                                    disabled={
-                                                        deletingId ===
-                                                        version.id
-                                                    }
+                                    ) : (
+                                        <>
+                                            <Button
+                                                size="default"
+                                                variant="outline"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                                                        challengeId,
+                                                        version.id,
+                                                    )}
                                                 >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                        Delete Code Version
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Are you sure you want to
-                                                        delete the{" "}
-                                                        {getReadableLanguageName(
-                                                            version.language,
-                                                        )}{" "}
-                                                        code version? This
-                                                        action cannot be undone.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Cancel
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                version.id,
-                                                            )
+                                                    <Edit className="h-4 w-4" />
+                                                </Link>
+                                            </Button>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button
+                                                        size="default"
+                                                        variant="outline"
+                                                        disabled={
+                                                            deletingId ===
+                                                            version.id
                                                         }
                                                     >
-                                                        Delete
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </>
-                                )
-                            ) : (
-                                <Button
-                                    size="default"
-                                    variant="outline"
-                                    onClick={() =>
-                                        handleStartChallenge(version.id)
-                                    }
-                                    disabled={startingId === version.id}
-                                >
-                                    <Play className="h-4 w-4 mr-2" />
-                                    {startingId === version.id
-                                        ? "Starting..."
-                                        : "Start Challenge"}
-                                </Button>
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Delete Code Version
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Are you sure you want to
+                                                            delete the{" "}
+                                                            {getReadableLanguageName(
+                                                                version.language,
+                                                            )}{" "}
+                                                            code version? This
+                                                            action cannot be undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    version.id,
+                                                                )
+                                                            }
+                                                        >
+                                                            Delete
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </>
+                                    )}
+                                </>
                             )}
                         </ItemActions>
                     </Item>
