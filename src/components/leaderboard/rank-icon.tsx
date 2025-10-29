@@ -14,6 +14,7 @@ const rankSvgMap: Record<string, string> = {
     diamond: "/ranks/rank-diamond.svg",
     master: "/ranks/rank-master.svg",
     grandmaster: "/ranks/rank-grandmaster.svg",
+    top: "/ranks/rank-top.svg",
 };
 
 export function RankIcon({ rank, className = "h-6 w-6" }: RankIconProps) {

@@ -31,12 +31,12 @@ export function useLeaderboardByRank(rank: string | null) {
                 let leaderboardEntries;
                 let total = 0;
 
-                if (rank) {
+                if (rank && rank !== "TOP") {
                     // Fetch users by specific rank
                     leaderboardEntries = await LeaderboardController.getUsersByRank(rank);
                     total = leaderboardEntries.length;
                 } else {
-                    // Fetch top 500 (all ranks)
+                    // Fetch top 500 (all ranks) - used for null rank or "TOP" rank
                     const response = await LeaderboardController.getTop500();
                     leaderboardEntries = response.entries;
                     total = response.totalUsers;

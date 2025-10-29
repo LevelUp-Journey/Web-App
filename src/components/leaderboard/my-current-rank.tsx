@@ -14,7 +14,6 @@ export function MyCurrentRank({ rank }: MyCurrentRankProps) {
                     <h3 className="text-xl font-bold">My Current Rank</h3>
 
                     <div className="relative w-48 h-48 mx-auto flex items-center justify-center">
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-full blur-xl" />
                         <RankIcon
                             rank={rank}
                             className="w-32 h-32 relative z-10"
