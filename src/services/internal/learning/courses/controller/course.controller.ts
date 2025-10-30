@@ -1,9 +1,16 @@
 import {
     createCourseAction,
     getCourseByIdAction,
+    getCourseGuidesFullByCourseIdAction,
     getCoursesAction,
+    updateCourseByIdAction,
 } from "../server/course.actions";
-import type { CourseResponse, CreateCourseRequest } from "./course.response";
+import type {
+    CourseGuideFullResponse,
+    CourseResponse,
+    CreateCourseRequest,
+    UpdateCourseRequest,
+} from "./course.response";
 
 export class CourseController {
     public static async getCourses(): Promise<CourseResponse[]> {
@@ -22,6 +29,24 @@ export class CourseController {
         id: string,
     ): Promise<CourseResponse | null> {
         const response = await getCourseByIdAction(id);
+        return response;
+    }
+
+    public static async updateCourse(
+        id: string,
+        request: UpdateCourseRequest,
+    ): Promise<CourseResponse> {
+        const response = (await updateCourseByIdAction(
+            id,
+            request,
+        )) as CourseResponse;
+        return response;
+    }
+
+    public static async getCourseGuidesFullByCourseId(
+        courseId: string,
+    ): Promise<CourseGuideFullResponse[]> {
+        const response = await getCourseGuidesFullByCourseIdAction(courseId);
         return response;
     }
 }

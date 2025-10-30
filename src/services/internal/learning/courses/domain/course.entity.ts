@@ -12,6 +12,12 @@ export interface Course {
     totalLikes: number;
     completionScore: number;
     cover: string;
+    guides: CourseGuide[];
     createdAt: string;
     updatedAt: string;
+}
+
+export interface CourseGuide {
+    guideId: string;
+    position: number;
 }
