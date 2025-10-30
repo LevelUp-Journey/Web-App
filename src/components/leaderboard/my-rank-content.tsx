@@ -1,9 +1,12 @@
+"use client";
+
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import MyRankCard from "@/components/leaderboard/user-page/MyRankCard";
 
 export function MyRankContent() {
     return (
-        <div>page 1</div>
+        <div className="py-4">
+            <MyRankCard />
+        </div>
     );
 }
