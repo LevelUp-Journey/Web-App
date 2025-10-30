@@ -5,7 +5,7 @@ import { CompetitiveController } from "@/services/internal/profiles/competitive/
 import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { UsersByRankResponse } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
-import type { LeaderboardEntry } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
+import type { LeaderboardResponse } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export interface UserWithProfile {
@@ -20,7 +20,7 @@ export interface UserWithProfile {
 const ITEMS_PER_PAGE = 20;
 
 export function useLeaderboardData(selectedRank: string) {
-    const [usersData, setUsersData] = useState<UsersByRankResponse | LeaderboardEntry[] | null>(null);
+    const [usersData, setUsersData] = useState<UsersByRankResponse | LeaderboardResponse | null>(null);
     const [usersWithProfiles, setUsersWithProfiles] = useState<UserWithProfile[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -36,29 +36,22 @@ export function useLeaderboardData(selectedRank: string) {
             try {
                 const offset = currentPage * ITEMS_PER_PAGE;
 
-                let data: UsersByRankResponse | LeaderboardEntry[];
+                let data: UsersByRankResponse | LeaderboardResponse;
+                let userEntries: any[];
+                let totalCount: number;
+
                 if (selectedRank === "TOP500") {
-                    data = await LeaderboardController.getTop500(offset);
+                    const leaderboardResponse = await LeaderboardController.getTop500(offset);
+                    data = leaderboardResponse;
+                    userEntries = leaderboardResponse.entries || [];
+                    totalCount = leaderboardResponse.totalUsers || 0;
                 } else {
-                    data = await CompetitiveController.getUsersByRank(selectedRank, offset);
+                    const rankResponse = await CompetitiveController.getUsersByRank(selectedRank, offset);
+                    data = rankResponse;
+                    userEntries = rankResponse.profiles || [];
+                    totalCount = rankResponse.totalUsers || 0;
                 }
                 setUsersData(data);
-
-                // Handle different response structures
-                let userEntries: any[];
-                let totalUsers: number;
-
-                if (selectedRank === "TOP500") {
-                    // TOP500 API returns array directly
-                    userEntries = Array.isArray(data) ? data : [];
-                    // For TOP500, we assume 500 total users, but API might not provide this
-                    totalUsers = 500; // This should be provided by API ideally
-                } else {
-                    // Other ranks return object with profiles and totalUsers
-                    const responseData = data as UsersByRankResponse;
-                    userEntries = responseData.profiles || [];
-                    totalUsers = responseData.totalUsers || 0;
-                }
 
                 // Validate that userEntries is an array
                 if (!Array.isArray(userEntries)) {
@@ -119,7 +112,9 @@ export function useLeaderboardData(selectedRank: string) {
         fetchUsers();
     }, [selectedRank, currentPage]);
 
-    const totalUsers = selectedRank === "TOP500" ? 500 : (usersData as UsersByRankResponse)?.totalUsers || 0;
+    const totalUsers = usersData
+        ? ('entries' in usersData ? usersData.totalUsers : usersData.totalUsers)
+        : 0;
     const totalPages = Math.ceil(totalUsers / ITEMS_PER_PAGE);
     const hasNextPage = (currentPage + 1) * ITEMS_PER_PAGE < totalUsers;
     const hasPrevPage = currentPage > 0;
