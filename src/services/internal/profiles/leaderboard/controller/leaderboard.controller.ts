@@ -46,8 +46,10 @@ export class LeaderboardController {
         throw new Error(`Failed to fetch user position: ${errorMessage}`);
     }
 
-    public static async getTop500(): Promise<LeaderboardResponse> {
-        const response = await getTop500Action();
+    public static async getTop500(
+        offset: number = 0,
+    ): Promise<LeaderboardResponse> {
+        const response = await getTop500Action(offset);
         if (response.status === 200) {
             return response.data as LeaderboardResponse;
         }

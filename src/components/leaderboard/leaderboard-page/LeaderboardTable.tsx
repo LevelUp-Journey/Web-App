@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
+import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { UsersByRankResponse } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
+import type { LeaderboardResponse } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 import {
     Table,
@@ -25,7 +27,7 @@ interface UserWithProfile {
     id: string;
     userId: string;
     totalPoints: number;
-    currentRank: string;
+    currentRank?: string; // Optional for leaderboard entries
     leaderboardPosition?: number;
     profile?: ProfileResponse;
 }
@@ -43,7 +45,7 @@ const RANK_ICONS: Record<string, string> = {
 const ITEMS_PER_PAGE = 20;
 
 export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
-    const [usersData, setUsersData] = useState<UsersByRankResponse | null>(null);
+    const [usersData, setUsersData] = useState<UsersByRankResponse | LeaderboardResponse | null>(null);
     const [usersWithProfiles, setUsersWithProfiles] = useState<UserWithProfile[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -58,21 +60,32 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
             setLoading(true);
             try {
                 const offset = currentPage * ITEMS_PER_PAGE;
-                const data = await CompetitiveController.getUsersByRank(selectedRank, offset);
+                
+                let data: UsersByRankResponse | LeaderboardResponse;
+                if (selectedRank === "TOP500") {
+                    data = await LeaderboardController.getTop500(offset);
+                } else {
+                    data = await CompetitiveController.getUsersByRank(selectedRank, offset);
+                }
                 setUsersData(data);
 
+                // Handle different response structures
+                const userEntries = selectedRank === "TOP500" 
+                    ? (data as LeaderboardResponse).entries 
+                    : (data as UsersByRankResponse).profiles;
+
                 // Fetch profiles for each user
-                const profilePromises = data.profiles.map(async (profile) => {
+                const profilePromises = userEntries.map(async (entry) => {
                     try {
-                        const userProfile = await ProfileController.getProfileByUserId(profile.userId);
+                        const userProfile = await ProfileController.getProfileByUserId(entry.userId);
                         return {
-                            ...profile,
+                            ...entry,
                             profile: userProfile,
                         };
                     } catch (error) {
-                        console.error(`Failed to fetch profile for user ${profile.userId}:`, error);
+                        console.error(`Failed to fetch profile for user ${entry.userId}:`, error);
                         return {
-                            ...profile,
+                            ...entry,
                             profile: undefined,
                         };
                     }
@@ -81,7 +94,7 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                 const usersWithProfilesData = await Promise.all(profilePromises);
                 setUsersWithProfiles(usersWithProfilesData);
             } catch (error) {
-                console.error("Failed to fetch users by rank:", error);
+                console.error("Failed to fetch users:", error);
                 setUsersData(null);
                 setUsersWithProfiles([]);
             } finally {
@@ -92,8 +105,9 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
         fetchUsers();
     }, [selectedRank, currentPage]);
 
-    const totalPages = usersData ? Math.ceil(usersData.totalUsers / ITEMS_PER_PAGE) : 0;
-    const hasNextPage = (currentPage + 1) * ITEMS_PER_PAGE < (usersData?.totalUsers || 0);
+    const totalUsers = usersData?.totalUsers || 0;
+    const totalPages = Math.ceil(totalUsers / ITEMS_PER_PAGE);
+    const hasNextPage = (currentPage + 1) * ITEMS_PER_PAGE < totalUsers;
     const hasPrevPage = currentPage > 0;
 
     const handlePrevPage = () => {
@@ -136,14 +150,25 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        <Image
-                                            src={RANK_ICONS[user.currentRank]}
-                                            alt={user.currentRank}
-                                            width={32}
-                                            height={32}
-                                            className="w-8 h-8 object-contain"
-                                            unoptimized
-                                        />
+                                        {selectedRank === "TOP500" ? (
+                                            <Image
+                                                src="/ranks-trophies/trophy-grandmaster.svg"
+                                                alt="Top 500"
+                                                width={32}
+                                                height={32}
+                                                className="w-8 h-8 object-contain"
+                                                unoptimized
+                                            />
+                                        ) : (
+                                            <Image
+                                                src={RANK_ICONS[user.currentRank!]}
+                                                alt={user.currentRank!}
+                                                width={32}
+                                                height={32}
+                                                className="w-8 h-8 object-contain"
+                                                unoptimized
+                                            />
+                                        )}
                                     </div>
                                 </TableCell>
                                 <TableCell className="font-medium">

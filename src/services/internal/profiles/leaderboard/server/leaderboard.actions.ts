@@ -63,12 +63,16 @@ export async function getUserPositionAction(
     }
 }
 
-export async function getTop500Action(): Promise<
-    RequestSuccess<LeaderboardResponse> | RequestFailure
-> {
+export async function getTop500Action(
+    offset: number = 0,
+): Promise<RequestSuccess<LeaderboardResponse> | RequestFailure> {
     try {
-        const response =
-            await PROFILES_HTTP.get<LeaderboardResponse>(`/leaderboard/top500`);
+        const response = await PROFILES_HTTP.get<LeaderboardResponse>(
+            `/leaderboard/top500`,
+            {
+                params: { offset },
+            },
+        );
         return { data: response.data, status: response.status };
     } catch (error: unknown) {
         const axiosError = error as {

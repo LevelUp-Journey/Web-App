@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 
 const RANKS = [
+    { key: "TOP500", name: "Top 500", icon: "/ranks-trophies/trophy-grandmaster.svg" }, // Using grandmaster trophy as icon
     { key: "BRONZE", name: "Bronze", icon: "/ranks/rank-bronze.svg" },
     { key: "SILVER", name: "Silver", icon: "/ranks/rank-silver.svg" },
     { key: "GOLD", name: "Gold", icon: "/ranks/rank-gold.svg" },
@@ -23,7 +24,7 @@ const RANKS = [
 ];
 
 export function LeaderboardPage() {
-    const [selectedRank, setSelectedRank] = useState("BRONZE");
+    const [selectedRank, setSelectedRank] = useState("TOP500");
 
     const selectedRankData = RANKS.find(rank => rank.key === selectedRank) || RANKS[0];
 
