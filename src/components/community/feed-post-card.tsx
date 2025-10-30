@@ -49,12 +49,12 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
     };
 
     return (
-        <Card className="overflow-hidden w-full">
-            <CardContent className="p-6">
+        <Card className="overflow-hidden w-full hover:bg-muted/30 transition-colors cursor-pointer" onClick={handleCommentsClick}>
+            <CardContent className="p-3">
                 {/* Post Header */}
-                <div className="flex items-start space-x-3 mb-4">
+                <div className="flex items-start space-x-2 mb-2">
                     <Avatar
-                        className="h-10 w-10 cursor-pointer hover:opacity-80 transition-opacity"
+                        className="h-8 w-8 cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={handleAuthorClick}
                     >
                         <AvatarImage src={post.authorProfile?.profileUrl} />
@@ -64,97 +64,76 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                                 .toUpperCase() || "U"}
                         </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1">
-                        <div className="flex items-center space-x-2">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-2 flex-wrap">
                             <span
-                                className="font-semibold cursor-pointer"
+                                className="font-semibold text-sm cursor-pointer hover:underline"
                                 onClick={handleAuthorClick}
                             >
                                 {post.authorProfile?.username || "Unknown User"}
                             </span>
-                            <span className="text-muted-foreground">in</span>
+                            <span className="text-muted-foreground text-xs">·</span>
                             <Badge
                                 variant="outline"
-                                className="text-xs cursor-pointer"
+                                className="text-xs cursor-pointer h-5"
                                 onClick={handleCommunityClick}
                             >
                                 {post.community?.name || "Unknown Community"}
                             </Badge>
+                            <span className="text-muted-foreground text-xs">·</span>
+                            <span className="text-xs text-muted-foreground">
+                                {new Date(post.createdAt).toLocaleDateString()}
+                            </span>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                            {new Date(post.createdAt).toLocaleDateString()}
-                        </p>
                     </div>
                 </div>
 
                 {/* Post Content */}
-                <div className="space-y-3">
-                    <h3 className="text-xl font-semibold">{post.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                        {post.content}
+                <div className="space-y-2 ml-10">
+                    <h3 className="text-base font-semibold leading-tight">{post.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-snug line-clamp-3">
+                        {post.content.length > 150 
+                            ? `${post.content.slice(0, 150)}...` 
+                            : post.content}
                     </p>
 
                     {post.imageUrl && (
-                        <div className="mt-4">
+                        <div className="mt-2 -mx-2">
                             <img
                                 src={post.imageUrl}
                                 alt={post.title}
-                                className="w-full max-h-96 object-cover rounded-lg"
+                                className="w-full max-h-80 object-cover rounded-lg"
                             />
                         </div>
                     )}
-                </div>
 
-                {/* Post Actions */}
-                <div className="flex items-center space-x-6 mt-6 pt-4 border-t">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={toggleReaction}
-                        disabled={isLoading}
-                        className={userReaction ? "text-red-500" : ""}
-                    >
-                        <Heart
-                            className={`h-4 w-4 mr-2 ${userReaction ? "fill-current" : ""}`}
-                        />
-                        {reactionCount}
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleCommentsClick}
-                    >
-                        <MessageCircle className="h-4 w-4 mr-2" />
-                        {post.comments?.length || 0}
-                    </Button>
-                </div>
-
-                {/* Comments Preview */}
-                {post.comments && post.comments.length > 0 && (
-                    <div className="mt-4 space-y-3">
-                        <h4 className="text-sm font-semibold text-muted-foreground">
-                            Recent Comments
-                        </h4>
-                        {post.comments.slice(0, 2).map((comment) => (
-                            <div
-                                key={comment.id}
-                                className="bg-muted/50 rounded-lg p-3"
-                            >
-                                <p className="text-sm">{comment.content}</p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    {new Date(
-                                        comment.createdAt,
-                                    ).toLocaleDateString()}
-                                </p>
-                            </div>
-                        ))}
-                        {post.comments.length > 2 && (
-                            <p className="text-sm text-muted-foreground">
-                                View all {post.comments.length} comments
-                            </p>
-                        )}
+                    {/* Post Actions - Horizontal */}
+                    <div className="flex items-center space-x-4 pt-2">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toggleReaction();
+                            }}
+                            disabled={isLoading}
+                            className={`h-8 text-xs ${userReaction ? "text-red-500" : "text-muted-foreground"}`}
+                        >
+                            <Heart
+                                className={`h-3.5 w-3.5 mr-1.5 ${userReaction ? "fill-current" : ""}`}
+                            />
+                            {reactionCount}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 text-xs text-muted-foreground"
+                        >
+                            <MessageCircle className="h-3.5 w-3.5 mr-1.5" />
+                            {post.comments?.length || 0}
+                        </Button>
                     </div>
-                )}
+                </div>
             </CardContent>
         </Card>
     );
