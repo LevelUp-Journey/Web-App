@@ -5,14 +5,14 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { LeaderboardEntry } from "../entities/leaderboard.entity";
+import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderboard.entity";
 
 export async function getLeaderboardAction(
     limit: number = 50,
     offset: number = 0,
-): Promise<RequestSuccess<LeaderboardEntry[]> | RequestFailure> {
+): Promise<RequestSuccess<LeaderboardResponse> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<LeaderboardEntry[]>(
+        const response = await PROFILES_HTTP.get<LeaderboardResponse>(
             `/leaderboard?limit=${limit}&offset=${offset}`,
         );
         return { data: response.data, status: response.status };
@@ -63,12 +63,16 @@ export async function getUserPositionAction(
     }
 }
 
-export async function getTop500Action(): Promise<
-    RequestSuccess<LeaderboardEntry[]> | RequestFailure
-> {
+export async function getTop500Action(
+    offset: number = 0,
+): Promise<RequestSuccess<LeaderboardResponse> | RequestFailure> {
     try {
-        const response =
-            await PROFILES_HTTP.get<LeaderboardEntry[]>(`/leaderboard/top500`);
+        const response = await PROFILES_HTTP.get<LeaderboardResponse>(
+            `/leaderboard/top500`,
+            {
+                params: { offset },
+            },
+        );
         return { data: response.data, status: response.status };
     } catch (error: unknown) {
         const axiosError = error as {

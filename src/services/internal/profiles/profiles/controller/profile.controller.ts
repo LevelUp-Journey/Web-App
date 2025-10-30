@@ -1,6 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
+    getAllProfilesAction,
     getProfileAction,
     getProfileByIdAction,
     searchProfilesAction,
@@ -43,6 +44,14 @@ export class ProfileController {
             return response.data as ProfileResponse;
         }
         throw new Error("Failed to fetch profile");
+    }
+
+    public static async getAllProfiles(): Promise<ProfileResponse[]> {
+        const response = await getAllProfilesAction();
+        if (response.status === 200) {
+            return response.data as ProfileResponse[];
+        }
+        throw new Error("Failed to fetch all profiles");
     }
 
     public static async searchProfiles(query: string) {

@@ -54,6 +54,30 @@ export async function getProfileByIdAction(
     }
 }
 
+export async function getAllProfilesAction(): Promise<
+    RequestSuccess<ProfileResponse[]> | RequestFailure
+> {
+    try {
+        const response = await PROFILES_HTTP.get<ProfileResponse[]>(
+            `/profiles`,
+        );
+        return { data: response.data, status: response.status };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
 export async function searchProfilesAction(
     query: string,
 ): Promise<RequestSuccess<ProfileResponse[]> | RequestFailure> {

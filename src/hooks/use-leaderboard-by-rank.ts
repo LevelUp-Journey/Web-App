@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
@@ -15,10 +16,7 @@ export interface LeaderboardUserEntry {
     profileImageUrl?: string;
 }
 
-export function useLeaderboardWithUsers(
-    limit: number = 15,
-    offset: number = 0,
-) {
+export function useLeaderboardByRank(rank: string | null) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardUserEntry[]>([]);
     const [totalUsers, setTotalUsers] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -30,15 +28,34 @@ export function useLeaderboardWithUsers(
                 setLoading(true);
                 setError(null);
 
-                // Fetch leaderboard data
-                const leaderboardData =
-                    await LeaderboardController.getLeaderboard(limit, offset);
+                // Fetch leaderboard data based on rank filter
+                let leaderboardEntries;
+                let total = 0;
 
-                setTotalUsers(leaderboardData.totalUsers);
+                if (rank && rank !== "TOP") {
+                    // Fetch users by specific rank from Competitive profiles
+                    const rankResponse = await CompetitiveController.getUsersByRank(rank);
+                    leaderboardEntries = rankResponse.profiles.map(profile => ({
+                        id: profile.id,
+                        userId: profile.userId,
+                        totalPoints: profile.totalPoints,
+                        position: 0, // Position not provided by competitive endpoint
+                        isTop500: false,
+                        currentRank: profile.currentRank,
+                    }));
+                    total = rankResponse.totalUsers;
+                } else {
+                    // Fetch top 500 (all ranks) - used for null rank or "TOP" rank
+                    const response = await LeaderboardController.getTop500();
+                    leaderboardEntries = response.entries;
+                    total = response.totalUsers;
+                }
+
+                setTotalUsers(total);
 
                 // Fetch user profiles for each leaderboard entry
                 const entriesWithUsers = await Promise.all(
-                    leaderboardData.entries.map(async (entry) => {
+                    leaderboardEntries.map(async (entry) => {
                         try {
                             const profile =
                                 await ProfileController.getProfileByUserId(
@@ -79,7 +96,7 @@ export function useLeaderboardWithUsers(
         };
 
         fetchLeaderboardWithUsers();
-    }, [limit, offset]);
+    }, [rank]);
 
     return { leaderboard, totalUsers, loading, error };
 }

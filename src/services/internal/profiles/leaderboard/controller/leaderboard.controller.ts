@@ -1,4 +1,4 @@
-import type { LeaderboardEntry } from "../entities/leaderboard.entity";
+import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderboard.entity";
 import {
     getLeaderboardAction,
     getTop500Action,
@@ -10,10 +10,10 @@ export class LeaderboardController {
     public static async getLeaderboard(
         limit: number = 50,
         offset: number = 0,
-    ): Promise<LeaderboardEntry[]> {
+    ): Promise<LeaderboardResponse> {
         const response = await getLeaderboardAction(limit, offset);
         if (response.status === 200) {
-            return response.data as LeaderboardEntry[];
+            return response.data as LeaderboardResponse;
         }
 
         if (response.status === 403) {
@@ -46,10 +46,12 @@ export class LeaderboardController {
         throw new Error(`Failed to fetch user position: ${errorMessage}`);
     }
 
-    public static async getTop500(): Promise<LeaderboardEntry[]> {
-        const response = await getTop500Action();
+    public static async getTop500(
+        offset: number = 0,
+    ): Promise<LeaderboardResponse> {
+        const response = await getTop500Action(offset);
         if (response.status === 200) {
-            return response.data as LeaderboardEntry[];
+            return response.data as LeaderboardResponse;
         }
 
         if (response.status === 403) {

@@ -5,6 +5,12 @@ export interface CompetitiveProfile {
     currentRank: string;
     nextRank: string;
     pointsNeededForNextRank: number;
+    leaderboardPosition?: number;
+}
+
+export interface UsersByRankResponse {
+    profiles: CompetitiveProfile[];
+    totalUsers: number;
 }
 
 export interface LeaderboardEntry {
