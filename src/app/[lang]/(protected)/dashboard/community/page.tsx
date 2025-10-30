@@ -10,14 +10,23 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import { EmptyFeed } from "@/components/community/empty-feed";
 import { useCommunityFeed } from "@/hooks/use-community-feed";
+import { useFollowingFeed } from "@/hooks/use-following-feed";
 
 export default function CommunityFeedPage() {
     const router = useRouter();
-    const { posts, loading, error } = useCommunityFeed();
+    const { posts: allPosts, loading: allLoading, error: allError } = useCommunityFeed();
+    const { posts: followingPosts, loading: followingLoading, error: followingError } = useFollowingFeed();
     const [searchTerm, setSearchTerm] = useState("");
+    const [activeTab, setActiveTab] = useState<"feed" | "following">("feed");
+
+    // Determine which posts to use based on active tab
+    const posts = activeTab === "feed" ? allPosts : followingPosts;
+    const loading = activeTab === "feed" ? allLoading : followingLoading;
+    const error = activeTab === "feed" ? allError : followingError;
 
     // Filtrar posts basado en el término de búsqueda
     const filteredPosts = useMemo(() => {
@@ -88,16 +97,27 @@ export default function CommunityFeedPage() {
             </div>
 
             {/* Feed Content */}
-            <div className="container mx-auto px-6 py-4 space-y-4">
-                {/* Header */}
-                <div className="flex items-center">
-                    <div>
-                        <h2 className="text-2xl font-semibold">Feed</h2>
-                        <p className="text-muted-foreground">
-                            Discover posts from all communities
-                        </p>
+            <div className="container mx-auto px-4 py-4">
+                <div className="max-w-2xl mx-auto space-y-4">
+                    {/* Header with Tabs */}
+                    <div className="flex flex-col gap-4">
+                        <div>
+                            <h2 className="text-2xl font-semibold">Community</h2>
+                            <p className="text-muted-foreground">
+                                {activeTab === "feed" 
+                                    ? "Discover posts from all communities"
+                                    : "Posts from communities you follow"}
+                            </p>
+                        </div>
+
+                        {/* Tabs */}
+                        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "feed" | "following")}>
+                            <TabsList>
+                                <TabsTrigger value="feed">Feed</TabsTrigger>
+                                <TabsTrigger value="following">Following</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                     </div>
-                </div>
 
                 {/* Search Results */}
                 {searchTerm.trim() && (
@@ -111,7 +131,7 @@ export default function CommunityFeedPage() {
                                         Posts
                                     </h3>
                                 </div>
-                                <div className="space-y-6">
+                                <div className="space-y-4">
                                     {filteredPosts.map((post) => (
                                         <FeedPostCard
                                             key={post.id}
@@ -147,7 +167,7 @@ export default function CommunityFeedPage() {
 
                 {/* Default Feed (when no search) */}
                 {!searchTerm.trim() && (
-                    <div className="space-y-6 w-full">
+                    <div className="space-y-4">
                         {posts.length === 0 ? (
                             <EmptyFeed />
                         ) : (
@@ -157,6 +177,7 @@ export default function CommunityFeedPage() {
                         )}
                     </div>
                 )}
+                </div>
             </div>
         </div>
     );
