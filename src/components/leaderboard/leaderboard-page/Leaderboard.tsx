@@ -13,14 +13,14 @@ import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 
 const RANKS = [
-    { key: "TOP500", name: "Top 500", icon: "/ranks-trophies/trophy-grandmaster.svg" }, // Using grandmaster trophy as icon
-    { key: "BRONZE", name: "Bronze", icon: "/ranks/rank-bronze.svg" },
-    { key: "SILVER", name: "Silver", icon: "/ranks/rank-silver.svg" },
-    { key: "GOLD", name: "Gold", icon: "/ranks/rank-gold.svg" },
-    { key: "PLATINUM", name: "Platinum", icon: "/ranks/rank-platinum.svg" },
-    { key: "DIAMOND", name: "Diamond", icon: "/ranks/rank-diamond.svg" },
-    { key: "MASTER", name: "Master", icon: "/ranks/rank-master.svg" },
+    { key: "TOP500", name: "Top 500" }, // No icon for Top 500
     { key: "GRANDMASTER", name: "Grandmaster", icon: "/ranks/rank-grandmaster.svg" },
+    { key: "MASTER", name: "Master", icon: "/ranks/rank-master.svg" },
+    { key: "DIAMOND", name: "Diamond", icon: "/ranks/rank-diamond.svg" },
+    { key: "PLATINUM", name: "Platinum", icon: "/ranks/rank-platinum.svg" },
+    { key: "GOLD", name: "Gold", icon: "/ranks/rank-gold.svg" },
+    { key: "SILVER", name: "Silver", icon: "/ranks/rank-silver.svg" },
+    { key: "BRONZE", name: "Bronze", icon: "/ranks/rank-bronze.svg" },
 ];
 
 export function LeaderboardPage() {
@@ -35,14 +35,16 @@ export function LeaderboardPage() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="flex items-center gap-2">
-                            <Image
-                                src={selectedRankData.icon}
-                                alt={selectedRankData.name}
-                                width={20}
-                                height={20}
-                                className="w-5 h-5"
-                                unoptimized
-                            />
+                            {selectedRankData.icon && (
+                                <Image
+                                    src={selectedRankData.icon}
+                                    alt={selectedRankData.name}
+                                    width={20}
+                                    height={20}
+                                    className="w-5 h-5"
+                                    unoptimized
+                                />
+                            )}
                             {selectedRankData.name}
                             <ChevronDownIcon className="h-4 w-4" />
                         </Button>
@@ -54,14 +56,16 @@ export function LeaderboardPage() {
                                 onClick={() => setSelectedRank(rank.key)}
                                 className="cursor-pointer flex items-center gap-2"
                             >
-                                <Image
-                                    src={rank.icon}
-                                    alt={rank.name}
-                                    width={16}
-                                    height={16}
-                                    className="w-4 h-4"
-                                    unoptimized
-                                />
+                                {rank.icon && (
+                                    <Image
+                                        src={rank.icon}
+                                        alt={rank.name}
+                                        width={16}
+                                        height={16}
+                                        className="w-4 h-4"
+                                        unoptimized
+                                    />
+                                )}
                                 {rank.name}
                             </DropdownMenuItem>
                         ))}

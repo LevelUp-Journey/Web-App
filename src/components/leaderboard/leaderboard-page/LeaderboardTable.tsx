@@ -39,7 +39,7 @@ const RANK_ICONS: Record<string, string> = {
     PLATINUM: "/ranks/rank-platinum.svg",
     DIAMOND: "/ranks/rank-diamond.svg",
     MASTER: "/ranks/rank-master.svg",
-    GRANDMASTER: "/ranks-trophies/trophy-grandmaster.svg",
+    GRANDMASTER: "/ranks/rank-grandmaster.svg",
 };
 
 const ITEMS_PER_PAGE = 20;
@@ -74,8 +74,29 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                     ? (data as LeaderboardResponse).entries 
                     : (data as UsersByRankResponse).profiles;
 
-                // Fetch profiles for each user
-                const profilePromises = userEntries.map(async (entry) => {
+                // For TOP500, fetch competitive profiles to get currentRank
+                let entriesWithRank = [...userEntries];
+                if (selectedRank === "TOP500") {
+                    const rankPromises = userEntries.map(async (entry) => {
+                        try {
+                            const competitiveProfile = await CompetitiveController.getCompetitiveProfile(entry.userId);
+                            return {
+                                ...entry,
+                                currentRank: competitiveProfile.currentRank,
+                            };
+                        } catch (error) {
+                            console.error(`Failed to fetch competitive profile for user ${entry.userId}:`, error);
+                            return {
+                                ...entry,
+                                currentRank: "BRONZE", // Default fallback
+                            };
+                        }
+                    });
+                    entriesWithRank = await Promise.all(rankPromises);
+                }
+
+                // Fetch user profiles for each entry
+                const profilePromises = entriesWithRank.map(async (entry) => {
                     try {
                         const userProfile = await ProfileController.getProfileByUserId(entry.userId);
                         return {
@@ -146,29 +167,18 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                         {usersWithProfiles.map((user) => (
                             <TableRow key={user.id}>
                                 <TableCell className="font-bold text-lg">
-                                    #{user.leaderboardPosition || "-"}
+                                    #{selectedRank === "TOP500" ? (user as any).position : user.leaderboardPosition || "-"}
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        {selectedRank === "TOP500" ? (
-                                            <Image
-                                                src="/ranks-trophies/trophy-grandmaster.svg"
-                                                alt="Top 500"
-                                                width={32}
-                                                height={32}
-                                                className="w-8 h-8 object-contain"
-                                                unoptimized
-                                            />
-                                        ) : (
-                                            <Image
-                                                src={RANK_ICONS[user.currentRank!]}
-                                                alt={user.currentRank!}
-                                                width={32}
-                                                height={32}
-                                                className="w-8 h-8 object-contain"
-                                                unoptimized
-                                            />
-                                        )}
+                                        <Image
+                                            src={RANK_ICONS[user.currentRank || "BRONZE"]}
+                                            alt={user.currentRank || "Bronze"}
+                                            width={32}
+                                            height={32}
+                                            className="w-8 h-8 object-contain"
+                                            unoptimized
+                                        />
                                     </div>
                                 </TableCell>
                                 <TableCell className="font-medium">
