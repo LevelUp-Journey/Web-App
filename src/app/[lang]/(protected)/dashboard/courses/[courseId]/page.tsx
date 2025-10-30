@@ -3,15 +3,18 @@ import {
     BookOpen,
     Calendar,
     Heart,
+    Pencil,
     Star,
     Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
 
 import CourseGuideCard from "@/components/cards/course-guide-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -20,12 +23,32 @@ import type { CourseGuideFullResponse } from "@/services/internal/learning/cours
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
+// Helper to check if user is teacher/admin
+async function getUserRole(): Promise<string | null> {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("session");
+    
+    if (!sessionCookie?.value) {
+        return null;
+    }
+
+    try {
+        // Decode JWT to get role
+        const payload = JSON.parse(
+            Buffer.from(sessionCookie.value.split(".")[1], "base64").toString()
+        );
+        return payload.role || null;
+    } catch {
+        return null;
+    }
+}
+
 export default async function DashboardCoursePage({
     params,
 }: {
-    params: Promise<{ courseId: string }>;
+    params: Promise<{ courseId: string; lang: string }>;
 }) {
-    const { courseId } = await params;
+    const { courseId, lang } = await params;
 
     // ✅ Fetch data from controllers (Server-side)
     const course = await CourseController.getCourseById(courseId);
@@ -56,6 +79,10 @@ export default async function DashboardCoursePage({
         },
     );
 
+    // Check if user is teacher/admin
+    const userRole = await getUserRole();
+    const isTeacherOrAdmin = userRole === "TEACHER" || userRole === "ADMIN";
+
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section with Cover */}
@@ -82,30 +109,44 @@ export default async function DashboardCoursePage({
                     )}
                 >
                     {/* Status Badge & Meta */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                        <Badge
-                            variant="secondary"
-                            className={cn(
-                                "text-xs uppercase tracking-wider",
-                                getDifficultyColor(course.difficulty),
-                            )}
-                        >
-                            {course.difficulty}
-                        </Badge>
-                        <Badge
-                            variant={
-                                course.status === "published"
-                                    ? "default"
-                                    : "secondary"
-                            }
-                            className="text-xs uppercase tracking-wider"
-                        >
-                            {course.status}
-                        </Badge>
-                        <span className="text-sm text-muted-foreground">
-                            {course.totalGuides}{" "}
-                            {course.totalGuides === 1 ? "guide" : "guides"}
-                        </span>
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <Badge
+                                variant="secondary"
+                                className={cn(
+                                    "text-xs uppercase tracking-wider",
+                                    getDifficultyColor(course.difficulty),
+                                )}
+                            >
+                                {course.difficulty}
+                            </Badge>
+                            <Badge
+                                variant={
+                                    course.status === "published"
+                                        ? "default"
+                                        : "secondary"
+                                }
+                                className="text-xs uppercase tracking-wider"
+                            >
+                                {course.status}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                                {course.totalGuides}{" "}
+                                {course.totalGuides === 1 ? "guide" : "guides"}
+                            </span>
+                        </div>
+
+                        {/* Edit Button - Only for teachers/admins */}
+                        {isTeacherOrAdmin && (
+                            <Button asChild size="sm" variant="outline">
+                                <Link
+                                    href={`/${lang}/dashboard/admin/courses/edit/${courseId}`}
+                                >
+                                    <Pencil className="h-4 w-4 mr-2" />
+                                    Edit Course
+                                </Link>
+                            </Button>
+                        )}
                     </div>
 
                     {/* Title */}

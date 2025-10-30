@@ -51,3 +51,13 @@ export interface CourseGuideFullResponse {
     createdAt: string;
     position: number;
 }
+
+export interface AddGuideToCourseRequest {
+    guideId: string;
+    position: number;
+}
+
+export interface ReorderCourseRequest {
+    guideId: string;
+    newPosition: number;
+}

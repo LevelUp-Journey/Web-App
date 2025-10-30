@@ -2,9 +2,11 @@
 
 import { LEARNING_HTTP } from "@/services/axios.config";
 import type {
+    AddGuideToCourseRequest,
     CourseGuideFullResponse,
     CourseResponse,
     CreateCourseRequest,
+    ReorderCourseRequest,
     UpdateCourseRequest,
 } from "../controller/course.response";
 
@@ -52,5 +54,34 @@ export async function getCourseGuidesFullByCourseIdAction(
         `/courses/${courseId}/guides`,
     );
 
+    return response.data;
+}
+
+export async function searchCoursesAction(name: string) {
+    const response = await LEARNING_HTTP.post<CourseGuideFullResponse[]>(
+        "/courses/search",
+        { name },
+    );
+    return response.data;
+}
+export async function addGuideToCourseAction(
+    courseId: string,
+    request: AddGuideToCourseRequest,
+): Promise<CourseResponse> {
+    const response = await LEARNING_HTTP.post<CourseResponse>(
+        `/courses/${courseId}/guides`,
+        request,
+    );
+    return response.data;
+}
+
+export async function reorderCourseGuideAction(
+    courseId: string,
+    request: ReorderCourseRequest,
+): Promise<CourseResponse> {
+    const response = await LEARNING_HTTP.put<CourseResponse>(
+        `/courses/${courseId}/guides/reorder`,
+        request,
+    );
     return response.data;
 }
