@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon, MessageSquareIcon } from "lucide-react";
+import { SearchIcon, MessageSquareIcon, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -77,39 +77,25 @@ export default function CommunityFeedPage() {
 
     return (
         <div className="space-y-4 w-full h-full overflow-y-auto">
-            {/* Search Bar - Centered */}
-            <div className="flex justify-center pt-4">
-                <div className="relative max-w-md w-full">
-                    <InputGroup>
-                        <InputGroupInput
-                            placeholder="Search posts..."
-                            value={searchTerm}
-                            onChange={(e) => handleSearch(e.target.value)}
-                        />
-                        <InputGroupAddon>
-                            <SearchIcon />
-                        </InputGroupAddon>
-                        <InputGroupAddon align="inline-end">
-                            <InputGroupButton>Search</InputGroupButton>
-                        </InputGroupAddon>
-                    </InputGroup>
-                </div>
+            {/* Back Button - Outside Feed Layout */}
+            <div className="container mx-auto px-4 pt-4">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                </Button>
             </div>
 
             {/* Feed Content */}
             <div className="container mx-auto px-4 py-4">
+                
                 <div className="max-w-2xl mx-auto space-y-4">
                     {/* Header with Tabs */}
-                    <div className="flex flex-col gap-4">
-                        <div>
-                            <h2 className="text-2xl font-semibold">Community</h2>
-                            <p className="text-muted-foreground">
-                                {activeTab === "feed" 
-                                    ? "Discover posts from all communities"
-                                    : "Posts from communities you follow"}
-                            </p>
-                        </div>
-
+                    <div className="flex justify-center gap-4">
                         {/* Tabs */}
                         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "feed" | "following")}>
                             <TabsList>
