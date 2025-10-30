@@ -160,7 +160,7 @@ export default function CommunityPage() {
                                                 size="sm"
                                                 onClick={() =>
                                                     router.push(
-                                                        `/dashboard/community/posts/create`,
+                                                        `/dashboard/community/${community.id}/posts/create`,
                                                     )
                                                 }
                                                 className="whitespace-nowrap"
