@@ -93,7 +93,7 @@ export default function MyRankCard() {
 
     return (
         <div className="max-w-md mx-auto">
-            <Card className="bg-muted/20">
+            <Card className="bg-transparent border-none">
                 <CardContent className="flex flex-col items-center gap-6 py-8">
                     <div className="text-2xl text-muted-foreground">My Current Rank</div>
 
@@ -102,7 +102,7 @@ export default function MyRankCard() {
                         alt={profile.currentRank}
                         width={144}
                         height={144}
-                        className="w-36 h-36 object-contain drop-shadow-[0_20px_40px_rgba(255,255,255,0.5)]"
+                        className="w-36 h-36 object-contain"
                         unoptimized
                     />
 
