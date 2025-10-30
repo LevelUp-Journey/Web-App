@@ -15,7 +15,7 @@ const RANKS = [
     { key: "BRONZE", name: "Bronze" },
     { key: "SILVER", name: "Silver" },
     { key: "GOLD", name: "Gold" },
-    { key: "PLATINIUM", name: "Platinum" },
+    { key: "PLATINUM", name: "Platinum" },
     { key: "DIAMOND", name: "Diamond" },
     { key: "MASTER", name: "Master" },
     { key: "GRANDMASTER", name: "Grandmaster" },
