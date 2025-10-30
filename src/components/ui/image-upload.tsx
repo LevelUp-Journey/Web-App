@@ -1,15 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { X, Upload } from "lucide-react";
+import { useRef } from "react";
+import { ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { CloudinaryController } from "@/services/external/cloudinary/cloudinary.controller";
-import {
-    Dropzone,
-    DropzoneContent,
-    DropzoneEmptyState,
-} from "@/components/ui/shadcn-io/dropzone";
 
 interface ImageUploadProps {
     value?: string;
@@ -22,18 +16,13 @@ export default function ImageUpload({
     value,
     onChange,
     disabled = false,
-    label = "Post Image (Optional)",
+    label = "Image",
 }: ImageUploadProps) {
-    const [isUploading, setIsUploading] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(value || null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFileSelect = async (files: File[]) => {
-        if (files.length === 0) return;
-
-        const file = files[0];
+    const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
         if (!file) return;
-
-        setIsUploading(true);
 
         try {
             // Upload to Cloudinary using signed upload
@@ -51,65 +40,27 @@ export default function ImageUpload({
         }
     };
 
-    const handleRemove = () => {
-        setPreviewUrl(null);
-        onChange(undefined);
-    };
-
-    if (previewUrl) {
-        return (
-            <div className="space-y-2">
-                <Label>{label.replace(" (Optional)", "")}</Label>
-                <div className="relative">
-                    <img
-                        src={previewUrl}
-                        alt="Post preview"
-                        className="w-full h-48 object-cover rounded-lg border"
-                    />
-                    <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        className="absolute top-2 right-2"
-                        onClick={handleRemove}
-                        disabled={disabled || isUploading}
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
-                </div>
-                <p className="text-xs text-muted-foreground"></p>
-            </div>
-        );
-    }
-
     return (
-        <div className="space-y-2">
-            <Label>Upload Image</Label>
-            <Dropzone
-                accept={{
-                    "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
-                }}
-                maxSize={5 * 1024 * 1024} // 5MB
-                maxFiles={1}
-                onDrop={handleFileSelect}
-                disabled={disabled || isUploading}
-                className="w-full"
+        <div>
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileSelect}
+                className="hidden"
+                disabled={disabled}
+            />
+            <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={disabled}
+                className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full px-4 py-2"
             >
-                <DropzoneEmptyState>
-                    <div className="flex flex-col items-center justify-center py-8">
-                        <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                        <p className="text-sm font-medium">
-                            {isUploading
-                                ? "Uploading..."
-                                : "Click to upload image"}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                            PNG, JPG, JPEG, GIF, WebP up to 5MB
-                        </p>
-                    </div>
-                </DropzoneEmptyState>
-                <DropzoneContent />
-            </Dropzone>
+                <ImagePlus className="h-5 w-5 mr-2" />
+                <span className="font-medium">{label}</span>
+            </Button>
         </div>
     );
 }

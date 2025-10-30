@@ -5,13 +5,12 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PostForm } from "@/components/community/post-form";
-import { CommunitySelector } from "@/components/community/community-selector";
 import { useCreatePostData } from "@/hooks/use-create-post-data";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
 export default function CreatePostPage() {
     const router = useRouter();
-    const { communities, authorId, usernames, loading, error } =
+    const { communities, authorId, usernames, canCreatePost, loading, error } =
         useCreatePostData();
     const [selectedCommunity, setSelectedCommunity] =
         useState<Community | null>(null);
@@ -22,7 +21,12 @@ export default function CreatePostPage() {
 
     if (loading) {
         return (
-            <div className="container mx-auto p-6">
+            <div className="min-h-screen bg-background">
+                <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+                    <div className="flex items-center justify-center px-4 py-3">
+                        <h1 className="text-lg font-semibold">Create Post</h1>
+                    </div>
+                </div>
                 <div className="flex items-center justify-center min-h-[400px]">
                     <p className="text-muted-foreground">Loading...</p>
                 </div>
@@ -32,19 +36,25 @@ export default function CreatePostPage() {
 
     if (error) {
         return (
-            <div className="container mx-auto p-6">
-                <div className="max-w-2xl mx-auto space-y-6">
-                    <Button
-                        variant="ghost"
-                        onClick={() => router.back()}
-                        className="mb-4"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back
-                    </Button>
-
+            <div className="min-h-screen bg-background">
+                <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+                    <div className="flex items-center justify-between px-4 py-3">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => router.back()}
+                            className="flex items-center gap-2 -ml-2"
+                        >
+                            <ArrowLeft className="h-5 w-5" />
+                            <span className="font-medium">Back</span>
+                        </Button>
+                        <h1 className="text-lg font-semibold">Error</h1>
+                        <div className="w-16" />
+                    </div>
+                </div>
+                <div className="px-4 py-6">
                     <div className="text-center space-y-4">
-                        <h1 className="text-xl font-semibold">Error</h1>
+                        <h2 className="text-xl font-semibold">Error</h2>
                         <p className="text-muted-foreground">{error}</p>
                     </div>
                 </div>
@@ -52,50 +62,123 @@ export default function CreatePostPage() {
         );
     }
 
-    return (
-        <div className="container mx-auto p-6">
-            <div className="max-w-6xl mx-auto space-y-6">
-                <Button
-                    variant="ghost"
-                    onClick={() => router.back()}
-                    className="mb-4"
-                >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
-                </Button>
+    if (!canCreatePost) {
+        return (
+            <div className="min-h-screen bg-background">
+                <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+                    <div className="flex items-center justify-between px-4 py-3">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => router.back()}
+                            className="flex items-center gap-2 -ml-2"
+                        >
+                            <ArrowLeft className="h-5 w-5" />
+                            <span className="font-medium">Back</span>
+                        </Button>
+                        <h1 className="text-lg font-semibold">Create Post</h1>
+                        <div className="w-16" />
+                    </div>
+                </div>
+                <div className="px-4 py-6">
+                    <div className="text-center space-y-6 border-2 border-dashed rounded-xl p-8 mx-4">
+                        <h2 className="text-2xl font-semibold">Cannot Create Posts</h2>
+                        <p className="text-muted-foreground text-base max-w-sm mx-auto leading-relaxed">
+                            Only teachers and administrators can create new posts. 
+                            However, you can still comment on existing posts and participate in discussions!
+                        </p>
+                        <Button onClick={() => router.push("/dashboard/community")} className="rounded-full px-6">
+                            Browse Communities
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
+    return (
+        <div className="min-h-screen bg-background">
+            {/* Mobile Header */}
+            <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+                <div className="flex items-center justify-between px-4 py-3">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.back()}
+                        className="flex items-center gap-2 -ml-2"
+                    >
+                        <ArrowLeft className="h-5 w-5" />
+                        <span className="font-medium">Back</span>
+                    </Button>
+
+                    {!selectedCommunity ? (
+                        <h1 className="text-lg font-semibold">Create Post</h1>
+                    ) : (
+                        <h1 className="text-lg font-semibold truncate max-w-[200px]">
+                            {selectedCommunity.name}
+                        </h1>
+                    )}
+
+                    <div className="w-16" /> {/* Spacer for centering */}
+                </div>
+            </div>
+
+            {/* Mobile Content */}
+                        {/* Mobile Content */}
+            <div className="px-4 py-6 pb-24">
                 {!selectedCommunity ? (
                     <div className="space-y-6">
-                        <div className="text-center space-y-2">
-                            <h1 className="text-3xl font-bold">Create Post</h1>
-                            <p className="text-muted-foreground">
-                                Select a community to share your post
+                        <div className="text-center space-y-3">
+                            <h2 className="text-2xl font-bold">Create Post</h2>
+                            <p className="text-muted-foreground text-base">
+                                Choose a community to share your post
                             </p>
                         </div>
 
-                        <CommunitySelector
-                            communities={communities}
-                            usernames={usernames}
-                            onSelectCommunity={setSelectedCommunity}
-                        />
+                        {/* Teacher Flow: Direct community selection with create buttons */}
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            {communities.map((community) => (
+                                <div
+                                    key={community.id}
+                                    className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                                    onClick={() => setSelectedCommunity(community)}
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold text-lg mb-2">
+                                                {community.name}
+                                            </h3>
+                                            <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
+                                                {community.description}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                by {usernames[community.ownerId] || "Unknown"}
+                                            </p>
+                                        </div>
+                                        <Button
+                                            size="sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedCommunity(community);
+                                            }}
+                                            className="ml-3"
+                                        >
+                                            Create Post
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h1 className="text-2xl font-semibold">
-                                    Create Post in {selectedCommunity.name}
-                                </h1>
-                                <p className="text-muted-foreground">
-                                    Share your thoughts with the community
-                                </p>
-                            </div>
-                            <Button
-                                variant="outline"
-                                onClick={() => setSelectedCommunity(null)}
-                            >
-                                Change Community
-                            </Button>
+                        <div className="text-center space-y-2 mb-6">
+                            <h2 className="text-xl font-semibold">
+                                Create Post in {selectedCommunity.name}
+                            </h2>
+                            <p className="text-muted-foreground text-sm">
+                                Share your thoughts with the community
+                            </p>
                         </div>
 
                         <PostForm

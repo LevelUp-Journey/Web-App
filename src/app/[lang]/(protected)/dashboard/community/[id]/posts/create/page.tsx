@@ -91,33 +91,36 @@ export default function CreatePostInCommunityPage() {
     }
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="space-y-6">
+        <div className="min-h-screen bg-background">
+            {/* Simple Header */}
+            <div className="flex items-center px-4 py-4">
                 <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => router.back()}
-                    className="mb-4"
+                    className="flex items-center gap-2 -ml-2"
                 >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
+                    <ArrowLeft className="h-5 w-5" />
+                    <span className="font-medium">Back</span>
                 </Button>
+            </div>
 
-                <div>
-                    <h1 className="text-2xl font-semibold">
-                        Create Post in {community.name}
+            {/* Content */}
+            <div className="px-4 py-6 pb-24">
+                <div className="max-w-2xl mx-auto space-y-6">
+                    {/* Simple Title */}
+                    <h1 className="text-xl font-semibold">
+                        Create post in {community.name}
                     </h1>
-                    <p className="text-muted-foreground">
-                        Share your thoughts with the community
-                    </p>
-                </div>
 
-                <PostForm
-                    communityId={community.id}
-                    authorId={authorId}
-                    onSuccess={handlePostCreated}
-                    onCancel={handleCancel}
-                />
+                    {/* Post Form */}
+                    <PostForm
+                        communityId={community.id}
+                        authorId={authorId}
+                        onSuccess={handlePostCreated}
+                        onCancel={handleCancel}
+                    />
+                </div>
             </div>
         </div>
     );

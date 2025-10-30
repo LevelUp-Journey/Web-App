@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { UserRole } from "@/lib/consts";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
@@ -8,6 +9,7 @@ export function useCreatePostData() {
     const [communities, setCommunities] = useState<Community[]>([]);
     const [authorId, setAuthorId] = useState<string>("");
     const [usernames, setUsernames] = useState<Record<string, string>>({});
+    const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -16,9 +18,19 @@ export function useCreatePostData() {
             try {
                 setLoading(true);
 
-                // Get current user ID
-                const userId = await AuthController.getUserId();
+                // Get current user ID and roles
+                const [userId, userRoles] = await Promise.all([
+                    AuthController.getUserId(),
+                    AuthController.getUserRoles(),
+                ]);
+                
                 setAuthorId(userId);
+
+                // Check if user can create posts (only TEACHER and ADMIN)
+                const hasCreatePermission =
+                    userRoles.includes(UserRole.TEACHER) ||
+                    userRoles.includes(UserRole.ADMIN);
+                setCanCreatePost(hasCreatePermission);
 
                 // Get all communities
                 const allCommunities =
@@ -56,5 +68,5 @@ export function useCreatePostData() {
         loadData();
     }, []);
 
-    return { communities, authorId, usernames, loading, error };
+    return { communities, authorId, usernames, canCreatePost, loading, error };
 }
