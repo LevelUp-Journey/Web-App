@@ -13,3 +13,18 @@ export interface CourseResponse {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface CreateCourseRequest {
+    title: string;
+    description: string;
+    difficulty: CourseDifficulty;
+    completionScore: number;
+    cover: string;
+}
+
+export enum CourseDifficulty {
+    BEGINNER = "BEGINNER",
+    INTERMEDIATE = "INTERMEDIATE",
+    ADVANCED = "ADVANCED",
+    EXPERT = "EXPERT",
+}
