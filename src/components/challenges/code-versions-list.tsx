@@ -83,7 +83,7 @@ export default function CodeVersionsList({
 
     return (
         <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Code Versions</h2>
+            <h2 className="text-xl font-semibold">Available Languages</h2>
             <div className="space-y-2">
                 {codeVersions.map((version) => (
                     <Item key={version.id} variant="muted" size="sm">

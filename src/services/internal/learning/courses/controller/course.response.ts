@@ -10,6 +10,7 @@ export interface CourseResponse {
     totalLikes: number;
     completionScore: number;
     cover: string;
+    guides: CourseGuideResponse[];
     createdAt: string;
     updatedAt: string;
 }
@@ -27,4 +28,36 @@ export enum CourseDifficulty {
     INTERMEDIATE = "INTERMEDIATE",
     ADVANCED = "ADVANCED",
     EXPERT = "EXPERT",
+}
+
+export interface UpdateCourseRequest {
+    title: string;
+    description: string;
+    difficulty: CourseDifficulty;
+    completionScore: number;
+    cover: string;
+}
+
+export interface CourseGuideResponse {
+    guideId: string;
+    position: number;
+}
+
+export interface CourseGuideFullResponse {
+    id: string;
+    title: string;
+    totalLikes: number;
+    cover: string;
+    createdAt: string;
+    position: number;
+}
+
+export interface AddGuideToCourseRequest {
+    guideId: string;
+    position: number;
+}
+
+export interface ReorderCourseRequest {
+    guideId: string;
+    newPosition: number;
 }
