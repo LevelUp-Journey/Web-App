@@ -33,6 +33,15 @@ interface DataTableProps<TData, TValue> {
     data: TData[];
     loading?: boolean;
     emptyMessage?: string;
+    // Server-side pagination props
+    pageIndex?: number;
+    pageCount?: number;
+    onPreviousPage?: () => void;
+    onNextPage?: () => void;
+    onFirstPage?: () => void;
+    onLastPage?: () => void;
+    canPreviousPage?: boolean;
+    canNextPage?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,19 +49,34 @@ export function DataTable<TData, TValue>({
     data,
     loading = false,
     emptyMessage = "No results found.",
+    pageIndex = 0,
+    pageCount = 1,
+    onPreviousPage,
+    onNextPage,
+    onFirstPage,
+    onLastPage,
+    canPreviousPage = false,
+    canNextPage = false,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
+
+    // Determine if we're using server-side pagination
+    const isServerPagination = onNextPage !== undefined || onPreviousPage !== undefined;
 
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        // Only use client-side pagination if server-side is not provided
+        ...(isServerPagination ? {} : { getPaginationRowModel: getPaginationRowModel() }),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         state: {
             sorting,
         },
+        // For server-side pagination, we need to manage manually
+        manualPagination: isServerPagination,
+        pageCount: isServerPagination ? pageCount : undefined,
     });
 
     if (loading) {
@@ -122,15 +146,15 @@ export function DataTable<TData, TValue>({
                 <div className="flex items-center space-x-6 lg:space-x-8">
 
                     <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-                        Page {table.getState().pagination.pageIndex + 1} of{" "}
-                        {table.getPageCount()}
+                        Page {isServerPagination ? pageIndex + 1 : table.getState().pagination.pageIndex + 1} of{" "}
+                        {isServerPagination ? pageCount : table.getPageCount()}
                     </div>
                     <div className="flex items-center space-x-2">
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => table.setPageIndex(0)}
-                            disabled={!table.getCanPreviousPage()}
+                            onClick={() => isServerPagination ? onFirstPage?.() : table.setPageIndex(0)}
+                            disabled={isServerPagination ? !canPreviousPage : !table.getCanPreviousPage()}
                         >
                             <span className="sr-only">Go to first page</span>
                             {"<<"}
@@ -138,8 +162,8 @@ export function DataTable<TData, TValue>({
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
+                            onClick={() => isServerPagination ? onPreviousPage?.() : table.previousPage()}
+                            disabled={isServerPagination ? !canPreviousPage : !table.getCanPreviousPage()}
                         >
                             <span className="sr-only">Go to previous page</span>
                             {"<"}
@@ -147,8 +171,8 @@ export function DataTable<TData, TValue>({
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
+                            onClick={() => isServerPagination ? onNextPage?.() : table.nextPage()}
+                            disabled={isServerPagination ? !canNextPage : !table.getCanNextPage()}
                         >
                             <span className="sr-only">Go to next page</span>
                             {">"}
@@ -156,8 +180,8 @@ export function DataTable<TData, TValue>({
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                            disabled={!table.getCanNextPage()}
+                            onClick={() => isServerPagination ? onLastPage?.() : table.setPageIndex(table.getPageCount() - 1)}
+                            disabled={isServerPagination ? !canNextPage : !table.getCanNextPage()}
                         >
                             <span className="sr-only">Go to last page</span>
                             {">>"}

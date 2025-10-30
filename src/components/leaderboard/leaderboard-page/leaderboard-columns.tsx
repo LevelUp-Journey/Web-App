@@ -50,9 +50,9 @@ export const getLeaderboardColumns = (selectedRank: string): ColumnDef<UserWithP
     },
     {
         accessorKey: "totalPoints",
-        header: "Points",
+        header: () => <div className="text-center">Points</div>,
         cell: ({ row }) => {
-            return <div className="text-right font-semibold">{row.original.totalPoints.toLocaleString()}</div>;
+            return <div className="text-center font-semibold">{row.original.totalPoints.toLocaleString()}</div>;
         },
     },
 ];

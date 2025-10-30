@@ -9,7 +9,18 @@ interface LeaderboardTableProps {
 }
 
 export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
-    const { usersWithProfiles, loading } = useLeaderboardData(selectedRank);
+    const {
+        usersWithProfiles,
+        loading,
+        currentPage,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
+        handlePrevPage,
+        handleNextPage,
+        handleFirstPage,
+        handleLastPage,
+    } = useLeaderboardData(selectedRank);
 
     if (loading) {
         return <div className="text-center py-8">Loading...</div>;
@@ -26,9 +37,15 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                 data={usersWithProfiles}
                 loading={loading}
                 emptyMessage="No users found for this rank"
+                pageIndex={currentPage}
+                pageCount={totalPages}
+                onPreviousPage={handlePrevPage}
+                onNextPage={handleNextPage}
+                onFirstPage={handleFirstPage}
+                onLastPage={handleLastPage}
+                canPreviousPage={hasPrevPage}
+                canNextPage={hasNextPage}
             />
-
-            {/* Pagination Controls removed */}
         </div>
     );
 }

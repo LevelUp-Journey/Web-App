@@ -136,6 +136,14 @@ export function useLeaderboardData(selectedRank: string) {
         }
     };
 
+    const handleFirstPage = () => {
+        setCurrentPage(0);
+    };
+
+    const handleLastPage = () => {
+        setCurrentPage(totalPages - 1);
+    };
+
     return {
         usersWithProfiles,
         loading,
@@ -145,6 +153,8 @@ export function useLeaderboardData(selectedRank: string) {
         hasPrevPage,
         handlePrevPage,
         handleNextPage,
+        handleFirstPage,
+        handleLastPage,
         totalUsers,
     };
 }
