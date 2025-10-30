@@ -5,7 +5,7 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PostFeed } from "@/components/community/post-feed";
+import { FeedPostCard } from "@/components/community/feed-post-card";
 import { useCommunityData } from "@/hooks/use-community-data";
 
 export default function CommunityPage() {
@@ -62,22 +62,27 @@ export default function CommunityPage() {
     const isOwner = currentUserId === community.ownerId;
 
     return (
-        <div className="w-full h-full overflow-y-auto">
-            <div className="container mx-auto p-6">
-                <div className="max-w-6xl mx-auto space-y-6">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => router.back()}
-                        className="mb-4"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back
-                    </Button>{" "}
-                    {/* Community Header */}
-                    <Card>
+        <div className="space-y-4 w-full h-full overflow-y-auto bg-muted/20">
+            {/* Back Button - Outside Main Layout */}
+            <div className="container mx-auto px-4 pt-4">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                </Button>
+            </div>
+
+            {/* Main Content */}
+            <div className="container mx-auto px-4 py-4">
+                <div className="max-w-2xl mx-auto space-y-8">
+                    {/* Community Header - Full Width Banner */}
+                    <Card className="overflow-hidden border-0 shadow-lg">
                         <div className="relative">
-                            <div className="w-full h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 rounded-t-lg">
+                            <div className="w-full h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5">
                                 {community.imageUrl ? (
                                     <img
                                         src={community.imageUrl}
@@ -86,7 +91,7 @@ export default function CommunityPage() {
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
-                                        <span className="text-6xl font-bold text-primary/20">
+                                        <span className="text-8xl font-bold text-primary/20">
                                             {community.name
                                                 .charAt(0)
                                                 .toUpperCase()}
@@ -95,26 +100,26 @@ export default function CommunityPage() {
                                 )}
                             </div>
 
-                            <CardContent className="pt-6">
+                            <CardContent className="pt-8 pb-6">
                                 <div className="flex items-start justify-between">
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 flex-1">
                                         <div>
-                                            <h1 className="text-3xl font-bold">
+                                            <h1 className="text-4xl font-bold mb-2">
                                                 {community.name}
                                             </h1>
-                                            <p className="text-muted-foreground mt-2">
+                                            <p className="text-muted-foreground text-lg leading-relaxed">
                                                 {community.description}
                                             </p>
                                         </div>
 
-                                        <div className="flex items-center space-x-3">
-                                            <Avatar className="h-10 w-10">
+                                        <div className="flex items-center space-x-4">
+                                            <Avatar className="h-12 w-12">
                                                 <AvatarImage
                                                     src={
                                                         ownerProfile?.profileUrl
                                                     }
                                                 />
-                                                <AvatarFallback>
+                                                <AvatarFallback className="text-lg">
                                                     {ownerProfile?.username
                                                         ?.charAt(0)
                                                         .toUpperCase() || "U"}
@@ -123,18 +128,19 @@ export default function CommunityPage() {
                                             <div>
                                                 <p className="text-sm font-medium">
                                                     Created by{" "}
-                                                    {ownerProfile?.username ||
-                                                        "Unknown User"}
+                                                    <span className="font-semibold">
+                                                        {ownerProfile?.username ||
+                                                            "Unknown User"}
+                                                    </span>
                                                 </p>
                                                 <p className="text-xs text-muted-foreground">
-                                                    {ownerProfile?.firstName}{" "}
-                                                    {ownerProfile?.lastName}
+                                                    Community Owner
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex gap-2">
+                                    <div className="flex flex-col gap-3 ml-6">
                                         {isOwner && (
                                             <Button
                                                 variant="outline"
@@ -144,6 +150,7 @@ export default function CommunityPage() {
                                                         `/dashboard/community/edit?id=${community.id}`,
                                                     )
                                                 }
+                                                className="whitespace-nowrap"
                                             >
                                                 Settings
                                             </Button>
@@ -156,6 +163,7 @@ export default function CommunityPage() {
                                                         `/dashboard/community/posts/create`,
                                                     )
                                                 }
+                                                className="whitespace-nowrap"
                                             >
                                                 <Plus className="h-4 w-4 mr-2" />{" "}
                                                 Create Post
@@ -166,21 +174,13 @@ export default function CommunityPage() {
                             </CardContent>
                         </div>
                     </Card>
+
                     {/* Posts Feed */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Recent Posts</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <PostFeed
-                                posts={posts}
-                                title="Community Posts"
-                                showSearch={false}
-                                canCreatePost={canCreatePost}
-                                layout="list"
-                            />
-                        </CardContent>
-                    </Card>
+                    <div className="space-y-4">
+                        {posts.map((post) => (
+                            <FeedPostCard key={post.id} post={post} />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
