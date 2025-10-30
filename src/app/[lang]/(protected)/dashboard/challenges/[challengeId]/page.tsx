@@ -21,8 +21,9 @@ export default async function ChallengePage({
     const { editing } = await searchParams;
 
     // Fetch data on the server
-    const challenge: Challenge =
-        await ChallengeController.getChallengeById(challengeId);
+    const challenge: Challenge = (await ChallengeController.getChallengeById(
+        challengeId,
+    )) as Challenge;
     const codeVersions: CodeVersion[] =
         await CodeVersionController.getCodeVersionsByChallengeId(challengeId);
     const userRoles = await AuthController.getUserRoles();

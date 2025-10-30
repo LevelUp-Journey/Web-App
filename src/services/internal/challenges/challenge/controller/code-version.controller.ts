@@ -3,6 +3,7 @@ import {
     createCodeVersionAction,
     deleteCodeVersionAction,
     getCodeVersionByIdAction,
+    getCodeVersionsBatchAction,
     getCodeVersionsByChallengeIdAction,
     updateCodeVersionAction,
 } from "../server/code-version.actions";
@@ -10,6 +11,7 @@ import { CodeVersionAssembler } from "./code-version.assembler";
 import type {
     CodeVersionResponse,
     CreateCodeVersionRequest,
+    GetCodeVersionsBatchResponse,
     UpdateCodeVersionRequest,
 } from "./code-version.response";
 
@@ -216,6 +218,30 @@ export class CodeVersionController {
                 error,
             );
             return false;
+        }
+    }
+
+    public static async getCodeVersionsBatchByChallengesId(
+        challengeIds: string[],
+    ): Promise<GetCodeVersionsBatchResponse[]> {
+        try {
+            const response = await getCodeVersionsBatchAction(challengeIds);
+
+            if (response.status === 200) {
+                return response.data as GetCodeVersionsBatchResponse[];
+            }
+
+            console.error(
+                `Failed to fetch code versions for challenges ${challengeIds}:`,
+                response,
+            );
+            return [];
+        } catch (error) {
+            console.error(
+                `Error fetching code versions for challenges ${challengeIds}:`,
+                error,
+            );
+            return [];
         }
     }
 }

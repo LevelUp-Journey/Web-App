@@ -2,22 +2,23 @@ import { Code2, Trophy } from "lucide-react";
 import ChallengeCard from "@/components/cards/challenge-card";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
-import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 export default async function ChallengesPage() {
     // Fetch challenges
     const challenges = await ChallengeController.getPublicChallenges();
 
-    // Fetch code versions for each challenge
-    const codeVersionsMap = new Map<string, CodeVersion[]>();
-    await Promise.all(
-        challenges.map(async (challenge) => {
-            const versions =
-                await CodeVersionController.getCodeVersionsByChallengeId(
-                    challenge.id,
-                );
-            codeVersionsMap.set(challenge.id, versions);
-        }),
+    // Get all challenge IDs
+    const challengeIds = challenges.map((challenge) => challenge.id);
+
+    // Fetch all code versions in a single batch request
+    const codeVersionsBatch =
+        await CodeVersionController.getCodeVersionsBatchByChallengesId(
+            challengeIds,
+        );
+
+    // Create a map for easy lookup: challengeId -> codeVersions
+    const codeVersionsMap = new Map(
+        codeVersionsBatch.map((item) => [item.challengeId, item.codeVersions]),
     );
 
     return (
