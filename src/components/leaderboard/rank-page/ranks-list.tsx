@@ -23,18 +23,20 @@ export function RanksList({ className = "" }: { className?: string }) {
         Ranking System
       </h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 items-end">
-        {RANKS.map((rank) => (
-          <div key={rank.id} className="flex flex-col items-center text-center">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 p-2 rounded-md bg-muted/10 flex items-center justify-center">
-              {/* Using plain img so Next.js will serve from /public */}
-              <img src={rank.file} alt={`${rank.name} trophy`} className="max-w-full max-h-full" />
+      <div className="p-4 rounded-lg bg-muted/20 border border-muted">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 items-end">
+          {RANKS.map((rank) => (
+            <div key={rank.id} className="flex flex-col items-center text-center">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 p-2 flex items-center justify-center">
+                {/* Using plain img so Next.js will serve from /public */}
+                <img src={rank.file} alt={`${rank.name} trophy`} className="max-w-full max-h-full" />
+              </div>
+              <span className="mt-2 text-xs sm:text-sm font-medium uppercase tracking-wider">
+                {rank.name}
+              </span>
             </div>
-            <span className="mt-2 text-xs sm:text-sm font-medium uppercase tracking-wider">
-              {rank.name}
-            </span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
