@@ -28,27 +28,18 @@ export default function ProfileImageUpload({
         setIsUploading(true);
 
         try {
-            const reader = new FileReader();
-            reader.onload = async () => {
-                const base64 = reader.result as string;
-                try {
-                    const imageUrl =
-                        await CloudinaryController.uploadImage(base64);
-                    if (imageUrl) {
-                        onChange(imageUrl);
-                    } else {
-                        console.warn("Image upload failed - no URL returned");
-                    }
-                } catch (error) {
-                    console.error("Error uploading image:", error);
-                    // Don't change the value if upload fails
-                } finally {
-                    setIsUploading(false);
-                }
-            };
-            reader.readAsDataURL(file);
+            // Upload to Cloudinary using signed upload
+            const imageUrl = await CloudinaryController.uploadImage(
+                file,
+                "profile-images",
+            );
+            onChange(imageUrl);
         } catch (error) {
-            console.error("Error reading file:", error);
+            console.error("Error uploading image:", error);
+            alert(
+                `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"}`,
+            );
+        } finally {
             setIsUploading(false);
         }
 

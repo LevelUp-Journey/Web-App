@@ -8,6 +8,7 @@ import {
 import type {
     CodeVersionResponse,
     CreateCodeVersionRequest,
+    GetCodeVersionsBatchResponse,
     UpdateCodeVersionRequest,
 } from "../controller/code-version.response";
 
@@ -107,6 +108,34 @@ export async function deleteCodeVersionAction(
         const response = await CHALLENGES_HTTP.delete(
             `/challenges/${challengeId}/code-versions/${codeVersionId}`,
         );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function getCodeVersionsBatchAction(challengeIds: string[]) {
+    try {
+        const response = await CHALLENGES_HTTP.post<
+            GetCodeVersionsBatchResponse[]
+        >(`/challenges/code-versions/batch`, { challengeIds });
+
+        console.log("ACTION RESPONSE", response);
 
         return {
             data: response.data,

@@ -5,6 +5,9 @@ const nextConfig = {
     reactCompiler: true,
     // Configure `pageExtensions` to include MDX files for imports
     pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+    images: {
+        remotePatterns: [new URL("https://res.cloudinary.com/dkkfv72vo/**")],
+    },
 };
 
 const withMDX = createMDX({

@@ -35,27 +35,28 @@ export function useLeaderboardByRank(rank: string | null) {
                 if (rank && rank !== "TOP") {
                     // Fetch users by specific rank from Competitive profiles
                     const rankResponse = await CompetitiveController.getUsersByRank(rank);
-                    leaderboardEntries = rankResponse.profiles.map(profile => ({
+                    leaderboardEntries = rankResponse.profiles.map((profile: any) => ({
                         id: profile.id,
                         userId: profile.userId,
                         totalPoints: profile.totalPoints,
                         position: 0, // Position not provided by competitive endpoint
                         isTop500: false,
-                        currentRank: profile.currentRank,
+                        currentRank: profile.currentRank || "BRONZE",
                     }));
                     total = rankResponse.totalUsers;
                 } else {
                     // Fetch top 500 (all ranks) - used for null rank or "TOP" rank
                     const response = await LeaderboardController.getTop500();
-                    leaderboardEntries = response.entries;
-                    total = response.totalUsers;
+                    // TOP500 API returns array directly
+                    leaderboardEntries = Array.isArray(response) ? response : [];
+                    total = 500; // API doesn't provide totalUsers for TOP500
                 }
 
                 setTotalUsers(total);
 
                 // Fetch user profiles for each leaderboard entry
                 const entriesWithUsers = await Promise.all(
-                    leaderboardEntries.map(async (entry) => {
+                    leaderboardEntries.map(async (entry: any) => {
                         try {
                             const profile =
                                 await ProfileController.getProfileByUserId(
@@ -67,6 +68,7 @@ export function useLeaderboardByRank(rank: string | null) {
                                 firstName: profile.firstName,
                                 lastName: profile.lastName,
                                 profileImageUrl: profile.profileUrl,
+                                currentRank: entry.currentRank || "BRONZE",
                             };
                         } catch (err) {
                             console.error(
@@ -77,6 +79,7 @@ export function useLeaderboardByRank(rank: string | null) {
                             return {
                                 ...entry,
                                 username: entry.userId.substring(0, 20),
+                                currentRank: entry.currentRank || "BRONZE",
                             };
                         }
                     }),

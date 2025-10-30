@@ -16,3 +16,8 @@ export interface UpdateCodeVersionRequest {
     code: string;
     functionName: string | null;
 }
+
+export interface GetCodeVersionsBatchResponse {
+    challengeId: string;
+    codeVersions: CodeVersionResponse[];
+}

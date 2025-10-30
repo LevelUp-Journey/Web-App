@@ -25,25 +25,18 @@ export default function ImageUpload({
         if (!file) return;
 
         try {
-            // Convert file to base64
-            const reader = new FileReader();
-            reader.onload = async () => {
-                const base64 = reader.result as string;
-
-                try {
-                    // Upload to Cloudinary
-                    const imageUrl =
-                        await CloudinaryController.uploadImage(base64);
-                    onChange(imageUrl);
-                } catch (error) {
-                    console.error("Error uploading image:", error);
-                    // TODO: Show error toast
-                }
-            };
-
-            reader.readAsDataURL(file);
+            // Upload to Cloudinary using signed upload
+            const imageUrl = await CloudinaryController.uploadImage(
+                file,
+                "uploads",
+            );
+            setPreviewUrl(imageUrl);
+            onChange(imageUrl);
         } catch (error) {
-            console.error("Error reading file:", error);
+            console.error("Error uploading image:", error);
+            // TODO: Show error toast
+        } finally {
+            setIsUploading(false);
         }
     };
 

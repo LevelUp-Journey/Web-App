@@ -276,7 +276,7 @@ export default function StudentCodeEditor({
                                         <h3 className="text-lg font-semibold mb-2">
                                             Challenge Description
                                         </h3>
-                                        <div className="bg-muted p-4 rounded-md prose prose-sm dark:prose-invert max-w-none">
+                                        <div className="p-4 rounded-md prose prose-sm dark:prose-invert max-w-none">
                                             {serializedDescription ? (
                                                 <MdxRenderer
                                                     serializedSource={
@@ -288,36 +288,6 @@ export default function StudentCodeEditor({
                                                     No description available.
                                                 </p>
                                             )}
-                                        </div>
-                                    </div>
-
-                                    <div className="border-t pt-4">
-                                        <h3 className="text-lg font-semibold mb-2">
-                                            Details
-                                        </h3>
-                                        <div className="space-y-2 text-sm">
-                                            <div className="flex justify-between">
-                                                <strong>
-                                                    Experience Points:
-                                                </strong>
-                                                <span>
-                                                    {challenge.experiencePoints}{" "}
-                                                    XP
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <strong>Function Name:</strong>
-                                                <span className="font-mono">
-                                                    {codeVersion.functionName ||
-                                                        "N/A"}
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <strong>Language:</strong>
-                                                <span>
-                                                    {codeVersion.language}
-                                                </span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

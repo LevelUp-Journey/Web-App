@@ -51,12 +51,12 @@ export function useMDXComponents(
             </blockquote>
         ),
         code: ({ children }) => (
-            <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5 text-sm">
+            <code className="bg-muted rounded px-1 py-0.5 text-sm">
                 {children}
             </code>
         ),
         pre: ({ children }) => (
-            <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 overflow-x-auto mb-4">
+            <pre className="bg-muted rounded p-4 overflow-x-auto mb-4">
                 {children}
             </pre>
         ),

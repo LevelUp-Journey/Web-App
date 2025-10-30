@@ -58,6 +58,8 @@ export function getLocalizedPaths(locale: string) {
                 COURSES: {
                     ROOT: `/${locale}/dashboard/admin/courses`,
                     CREATE: `/${locale}/dashboard/admin/courses/create`,
+                    EDIT: (id: string) =>
+                        `/${locale}/dashboard/admin/courses/edit/${id}`,
                 },
                 GUIDES: {
                     ROOT: `/${locale}/dashboard/admin/guides`,
@@ -80,6 +82,13 @@ export function getLocalizedPaths(locale: string) {
                     VIEW: (courseId: string, guideId: string) =>
                         `/${locale}/dashboard/courses/${courseId}/guides/${guideId}`,
                 },
+            },
+            GUIDES: {
+                ROOT: `/${locale}/dashboard/guides`,
+                CREATE: `/${locale}/dashboard/guides/create`,
+                EDIT: (id: string) =>
+                    `/${locale}/dashboard/guides/edit?id=${id}`,
+                VIEW: (id: string) => `/${locale}/dashboard/guides/${id}`,
             },
         },
         AUTH: {

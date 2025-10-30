@@ -29,6 +29,10 @@ export default async function AdminLayout({
             label: "Guides",
             href: PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
         },
+        {
+            label: "Communities",
+            href: PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
+        },
     ];
 
     return (

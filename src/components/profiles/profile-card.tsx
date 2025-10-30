@@ -9,7 +9,6 @@ import { AuthController } from "@/services/internal/iam/controller/auth.controll
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 import { Skeleton } from "../ui/skeleton";
-import { GithubDark } from "../ui/svgs/githubDark";
 
 interface ProfileCardProps {
     showEditButton?: boolean;
@@ -108,21 +107,6 @@ export default function ProfileCard({
                         </p>
                     </div>
                 </div>
-
-                {profile.profileUrl &&
-                    !profile.profileUrl.includes("cloudinary.com") && (
-                        <div className="flex items-center gap-2">
-                            <GithubDark className="h-4 w-4 text-muted-foreground" />
-                            <a
-                                href={profile.profileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
-                            >
-                                {profile.profileUrl}
-                            </a>
-                        </div>
-                    )}
             </CardContent>
         </Card>
     );
