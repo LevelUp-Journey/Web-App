@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PostForm } from "@/components/community/post-form";
-import { CommunitySelector } from "@/components/community/community-selector";
 import { useCreatePostData } from "@/hooks/use-create-post-data";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
@@ -132,15 +131,44 @@ export default function CreatePostPage() {
                         <div className="text-center space-y-3">
                             <h2 className="text-2xl font-bold">Create Post</h2>
                             <p className="text-muted-foreground text-base">
-                                Select a community to share your post
+                                Choose a community to share your post
                             </p>
                         </div>
 
-                        <CommunitySelector
-                            communities={communities}
-                            usernames={usernames}
-                            onSelectCommunity={setSelectedCommunity}
-                        />
+                        {/* Teacher Flow: Direct community selection with create buttons */}
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            {communities.map((community) => (
+                                <div
+                                    key={community.id}
+                                    className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                                    onClick={() => setSelectedCommunity(community)}
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold text-lg mb-2">
+                                                {community.name}
+                                            </h3>
+                                            <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
+                                                {community.description}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                by {usernames[community.ownerId] || "Unknown"}
+                                            </p>
+                                        </div>
+                                        <Button
+                                            size="sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedCommunity(community);
+                                            }}
+                                            className="ml-3"
+                                        >
+                                            Create Post
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-4">
