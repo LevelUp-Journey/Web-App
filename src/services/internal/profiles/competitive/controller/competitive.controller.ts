@@ -46,8 +46,9 @@ export class CompetitiveController {
 
     public static async getUsersByRank(
         rank: string,
+        offset: number = 0,
     ): Promise<UsersByRankResponse> {
-        const response = await getUsersByRankAction(rank);
+        const response = await getUsersByRankAction(rank, offset);
         if (response.status === 200) {
             return response.data as UsersByRankResponse;
         }

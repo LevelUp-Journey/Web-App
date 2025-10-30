@@ -57,10 +57,14 @@ export async function syncCompetitiveProfileAction(
 
 export async function getUsersByRankAction(
     rank: string,
+    offset: number = 0,
 ): Promise<RequestSuccess<UsersByRankResponse> | RequestFailure> {
     try {
         const response = await PROFILES_HTTP.get<UsersByRankResponse>(
             `/competitive/profiles/rank/${rank}`,
+            {
+                params: { offset },
+            },
         );
         return { data: response.data, status: response.status };
     } catch (error: unknown) {

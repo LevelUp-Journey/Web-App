@@ -14,6 +14,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 interface LeaderboardTableProps {
     selectedRank: string;
@@ -38,16 +40,25 @@ const RANK_ICONS: Record<string, string> = {
     GRANDMASTER: "/ranks-trophies/trophy-grandmaster.svg",
 };
 
+const ITEMS_PER_PAGE = 20;
+
 export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
     const [usersData, setUsersData] = useState<UsersByRankResponse | null>(null);
     const [usersWithProfiles, setUsersWithProfiles] = useState<UserWithProfile[]>([]);
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        // Reset to first page when rank changes
+        setCurrentPage(0);
+    }, [selectedRank]);
 
     useEffect(() => {
         const fetchUsers = async () => {
             setLoading(true);
             try {
-                const data = await CompetitiveController.getUsersByRank(selectedRank);
+                const offset = currentPage * ITEMS_PER_PAGE;
+                const data = await CompetitiveController.getUsersByRank(selectedRank, offset);
                 setUsersData(data);
 
                 // Fetch profiles for each user
@@ -71,13 +82,31 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                 setUsersWithProfiles(usersWithProfilesData);
             } catch (error) {
                 console.error("Failed to fetch users by rank:", error);
+                setUsersData(null);
+                setUsersWithProfiles([]);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchUsers();
-    }, [selectedRank]);
+    }, [selectedRank, currentPage]);
+
+    const totalPages = usersData ? Math.ceil(usersData.totalUsers / ITEMS_PER_PAGE) : 0;
+    const hasNextPage = (currentPage + 1) * ITEMS_PER_PAGE < (usersData?.totalUsers || 0);
+    const hasPrevPage = currentPage > 0;
+
+    const handlePrevPage = () => {
+        if (hasPrevPage) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (hasNextPage) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
 
     if (loading) {
         return <div className="text-center py-8">Loading...</div>;
@@ -128,6 +157,38 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                     </TableBody>
                 </Table>
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+                <div className="flex items-center justify-between">
+                    <div className="text-sm text-muted-foreground">
+                        Showing {currentPage * ITEMS_PER_PAGE + 1} to {Math.min((currentPage + 1) * ITEMS_PER_PAGE, usersData.totalUsers)} of {usersData.totalUsers} users
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handlePrevPage}
+                            disabled={!hasPrevPage}
+                        >
+                            <ChevronLeftIcon className="h-4 w-4 mr-1" />
+                            Previous
+                        </Button>
+                        <span className="text-sm text-muted-foreground">
+                            Page {currentPage + 1} of {totalPages}
+                        </span>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleNextPage}
+                            disabled={!hasNextPage}
+                        >
+                            Next
+                            <ChevronRightIcon className="h-4 w-4 ml-1" />
+                        </Button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
