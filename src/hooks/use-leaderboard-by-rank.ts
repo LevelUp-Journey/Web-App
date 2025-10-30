@@ -34,21 +34,26 @@ export function useLeaderboardByRank(rank: string | null) {
 
                 if (rank && rank !== "TOP") {
                     // Fetch users by specific rank from Competitive profiles
-                    const rankResponse = await CompetitiveController.getUsersByRank(rank);
-                    leaderboardEntries = rankResponse.profiles.map((profile: any) => ({
-                        id: profile.id,
-                        userId: profile.userId,
-                        totalPoints: profile.totalPoints,
-                        position: 0, // Position not provided by competitive endpoint
-                        isTop500: false,
-                        currentRank: profile.currentRank || "BRONZE",
-                    }));
+                    const rankResponse =
+                        await CompetitiveController.getUsersByRank(rank);
+                    leaderboardEntries = rankResponse.profiles.map(
+                        (profile: any) => ({
+                            id: profile.id,
+                            userId: profile.userId,
+                            totalPoints: profile.totalPoints,
+                            position: 0, // Position not provided by competitive endpoint
+                            isTop500: false,
+                            currentRank: profile.currentRank || "BRONZE",
+                        }),
+                    );
                     total = rankResponse.totalUsers;
                 } else {
                     // Fetch top 500 (all ranks) - used for null rank or "TOP" rank
                     const response = await LeaderboardController.getTop500();
                     // TOP500 API returns array directly
-                    leaderboardEntries = Array.isArray(response) ? response : [];
+                    leaderboardEntries = Array.isArray(response)
+                        ? response
+                        : [];
                     total = 500; // API doesn't provide totalUsers for TOP500
                 }
 

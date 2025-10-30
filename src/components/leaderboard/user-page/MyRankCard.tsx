@@ -20,37 +20,21 @@ const RANK_ICONS: Record<string, string> = {
 function rankDescription(rank: string) {
     switch (rank) {
         case "BRONZE":
-            return (
-                "The Bronze rank marks the beginning of your coding journey. As a dedicated learner, you're building foundational skills and tackling your first challenges with enthusiasm."
-            );
+            return "The Bronze rank marks the beginning of your coding journey. As a dedicated learner, you're building foundational skills and tackling your first challenges with enthusiasm.";
         case "SILVER":
-            return (
-                "Silver-ranked coders demonstrate growing proficiency. You've mastered basic concepts and are now solving more complex problems with increasing confidence and efficiency."
-            );
+            return "Silver-ranked coders demonstrate growing proficiency. You've mastered basic concepts and are now solving more complex problems with increasing confidence and efficiency.";
         case "GOLD":
-            return (
-                "Gold rank signifies advanced coding abilities. You consistently deliver solid solutions, understand algorithmic principles, and are ready for more challenging technical puzzles."
-            );
+            return "Gold rank signifies advanced coding abilities. You consistently deliver solid solutions, understand algorithmic principles, and are ready for more challenging technical puzzles.";
         case "PLATINUM":
-            return (
-                "Platinum coders excel in problem-solving and code quality. Your solutions are not only correct but optimized, showing deep understanding of data structures and algorithms."
-            );
+            return "Platinum coders excel in problem-solving and code quality. Your solutions are not only correct but optimized, showing deep understanding of data structures and algorithms.";
         case "DIAMOND":
-            return (
-                "An elite problem-solver. Diamond-ranked coders consistently deliver high-quality solutions and deep algorithmic knowledge."
-            );
+            return "An elite problem-solver. Diamond-ranked coders consistently deliver high-quality solutions and deep algorithmic knowledge.";
         case "MASTER":
-            return (
-                "A true architect of logic and precision. The Master Coder has conquered every challenge with elegance and consistency, demonstrating not just technical skill but creative problem-solving and deep understanding of algorithms."
-            );
+            return "A true architect of logic and precision. The Master Coder has conquered every challenge with elegance and consistency, demonstrating not just technical skill but creative problem-solving and deep understanding of algorithms.";
         case "GRANDMASTER":
-            return (
-                "A rare virtuoso — Grandmaster developers lead innovations, solve the hardest problems and inspire the community with creative, reliable solutions."
-            );
+            return "A rare virtuoso — Grandmaster developers lead innovations, solve the hardest problems and inspire the community with creative, reliable solutions.";
         default:
-            return (
-                "A dedicated coder steadily climbing the ranks. Keep solving challenges to unlock the next tier and climb the leaderboard."
-            );
+            return "A dedicated coder steadily climbing the ranks. Keep solving challenges to unlock the next tier and climb the leaderboard.";
     }
 }
 
@@ -68,7 +52,8 @@ export default function MyRankCard() {
                     return;
                 }
 
-                const data = await CompetitiveController.getCompetitiveProfile(userId);
+                const data =
+                    await CompetitiveController.getCompetitiveProfile(userId);
                 setProfile(data);
             } catch (error) {
                 console.error("Failed to load competitive profile:", error);
@@ -86,7 +71,11 @@ export default function MyRankCard() {
     }
 
     if (!profile) {
-        return <div className="text-center py-8">No rank information available</div>;
+        return (
+            <div className="text-center py-8">
+                No rank information available
+            </div>
+        );
     }
 
     const icon = RANK_ICONS[profile.currentRank] || RANK_ICONS.BRONZE;
@@ -95,7 +84,9 @@ export default function MyRankCard() {
         <div className="max-w-md mx-auto">
             <Card className="bg-transparent border-none">
                 <CardContent className="flex flex-col items-center gap-6 py-8">
-                    <div className="text-2xl text-muted-foreground">My Current Rank</div>
+                    <div className="text-2xl text-muted-foreground">
+                        My Current Rank
+                    </div>
 
                     <Image
                         src={icon}
@@ -106,7 +97,9 @@ export default function MyRankCard() {
                         unoptimized
                     />
 
-                    <div className="text-2xl font-bold tracking-wide text-center">{profile.currentRank}</div>
+                    <div className="text-2xl font-bold tracking-wide text-center">
+                        {profile.currentRank}
+                    </div>
 
                     <div className="flex items-center gap-3 text-sm text-muted-foreground">
                         <svg
@@ -117,14 +110,20 @@ export default function MyRankCard() {
                         >
                             <path d="M12 2l2.39 4.85L19 8.25l-3.5 3.42L16.18 18 12 15.27 7.82 18l.68-6.33L4.99 8.25l4.61-.4L12 2z" />
                         </svg>
-                        <div className="font-semibold">{profile.totalPoints.toLocaleString()}</div>
+                        <div className="font-semibold">
+                            {profile.totalPoints.toLocaleString()}
+                        </div>
 
                         {typeof profile.leaderboardPosition !== "undefined" && (
-                            <div className="text-muted-foreground">• #{profile.leaderboardPosition}</div>
+                            <div className="text-muted-foreground">
+                                • #{profile.leaderboardPosition}
+                            </div>
                         )}
                     </div>
 
-                    <p className="text-sm text-muted-foreground max-w-[46ch] text-center">{rankDescription(profile.currentRank)}</p>
+                    <p className="text-sm text-muted-foreground max-w-[46ch] text-center">
+                        {rankDescription(profile.currentRank)}
+                    </p>
                 </CardContent>
             </Card>
         </div>

@@ -20,8 +20,12 @@ export interface UserWithProfile {
 const ITEMS_PER_PAGE = 20;
 
 export function useLeaderboardData(selectedRank: string) {
-    const [usersData, setUsersData] = useState<UsersByRankResponse | LeaderboardResponse | null>(null);
-    const [usersWithProfiles, setUsersWithProfiles] = useState<UserWithProfile[]>([]);
+    const [usersData, setUsersData] = useState<
+        UsersByRankResponse | LeaderboardResponse | null
+    >(null);
+    const [usersWithProfiles, setUsersWithProfiles] = useState<
+        UserWithProfile[]
+    >([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -41,12 +45,17 @@ export function useLeaderboardData(selectedRank: string) {
                 let totalCount: number;
 
                 if (selectedRank === "TOP500") {
-                    const leaderboardResponse = await LeaderboardController.getTop500(offset);
+                    const leaderboardResponse =
+                        await LeaderboardController.getTop500(offset);
                     data = leaderboardResponse;
                     userEntries = leaderboardResponse.entries || [];
                     totalCount = leaderboardResponse.totalUsers || 0;
                 } else {
-                    const rankResponse = await CompetitiveController.getUsersByRank(selectedRank, offset);
+                    const rankResponse =
+                        await CompetitiveController.getUsersByRank(
+                            selectedRank,
+                            offset,
+                        );
                     data = rankResponse;
                     userEntries = rankResponse.profiles || [];
                     totalCount = rankResponse.totalUsers || 0;
@@ -65,13 +74,19 @@ export function useLeaderboardData(selectedRank: string) {
                 if (selectedRank === "TOP500") {
                     const rankPromises = userEntries.map(async (entry) => {
                         try {
-                            const competitiveProfile = await CompetitiveController.getCompetitiveProfile(entry.userId);
+                            const competitiveProfile =
+                                await CompetitiveController.getCompetitiveProfile(
+                                    entry.userId,
+                                );
                             return {
                                 ...entry,
                                 currentRank: competitiveProfile.currentRank,
                             };
                         } catch (error) {
-                            console.error(`Failed to fetch competitive profile for user ${entry.userId}:`, error);
+                            console.error(
+                                `Failed to fetch competitive profile for user ${entry.userId}:`,
+                                error,
+                            );
                             return {
                                 ...entry,
                                 currentRank: "BRONZE", // Default fallback
@@ -84,13 +99,19 @@ export function useLeaderboardData(selectedRank: string) {
                 // Fetch user profiles for each entry
                 const profilePromises = entriesWithRank.map(async (entry) => {
                     try {
-                        const userProfile = await ProfileController.getProfileByUserId(entry.userId);
+                        const userProfile =
+                            await ProfileController.getProfileByUserId(
+                                entry.userId,
+                            );
                         return {
                             ...entry,
                             profile: userProfile,
                         };
                     } catch (error) {
-                        console.error(`Failed to fetch profile for user ${entry.userId}:`, error);
+                        console.error(
+                            `Failed to fetch profile for user ${entry.userId}:`,
+                            error,
+                        );
                         return {
                             ...entry,
                             profile: undefined,
@@ -98,7 +119,8 @@ export function useLeaderboardData(selectedRank: string) {
                     }
                 });
 
-                const usersWithProfilesData = await Promise.all(profilePromises);
+                const usersWithProfilesData =
+                    await Promise.all(profilePromises);
                 setUsersWithProfiles(usersWithProfilesData);
             } catch (error) {
                 console.error("Failed to fetch users:", error);
@@ -113,7 +135,9 @@ export function useLeaderboardData(selectedRank: string) {
     }, [selectedRank, currentPage]);
 
     const totalUsers = usersData
-        ? ('entries' in usersData ? usersData.totalUsers : usersData.totalUsers)
+        ? "entries" in usersData
+            ? usersData.totalUsers
+            : usersData.totalUsers
         : 0;
     const totalPages = Math.ceil(totalUsers / ITEMS_PER_PAGE);
     const hasNextPage = (currentPage + 1) * ITEMS_PER_PAGE < totalUsers;

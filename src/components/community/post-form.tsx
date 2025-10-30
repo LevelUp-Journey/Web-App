@@ -41,9 +41,9 @@ export function PostForm({
         setIsSubmitting(true);
 
         try {
-            const lines = content.split('\n');
+            const lines = content.split("\n");
             const title = lines[0]?.trim();
-            const postContent = lines.slice(1).join('\n').trim();
+            const postContent = lines.slice(1).join("\n").trim();
 
             if (!title) {
                 toast.error("Please add a title");
@@ -96,17 +96,18 @@ export function PostForm({
                     <Avatar className="h-10 w-10 flex-shrink-0 mt-1">
                         <AvatarImage src={authorProfile?.profileUrl} />
                         <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                            {authorProfile?.username?.charAt(0).toUpperCase() || "U"}
+                            {authorProfile?.username?.charAt(0).toUpperCase() ||
+                                "U"}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                         <input
                             type="text"
-                            value={content.split('\n')[0] || ""}
+                            value={content.split("\n")[0] || ""}
                             onChange={(e) => {
-                                const lines = content.split('\n');
+                                const lines = content.split("\n");
                                 lines[0] = e.target.value;
-                                setContent(lines.join('\n'));
+                                setContent(lines.join("\n"));
                             }}
                             placeholder="What's the title?"
                             className="w-full px-0 py-2 bg-transparent border-0 focus-visible:ring-0 text-lg font-semibold placeholder:text-muted-foreground/60 resize-none outline-none"
@@ -114,10 +115,10 @@ export function PostForm({
                         />
 
                         <Textarea
-                            value={content.split('\n').slice(1).join('\n')}
+                            value={content.split("\n").slice(1).join("\n")}
                             onChange={(e) => {
-                                const title = content.split('\n')[0] || "";
-                                setContent(title + '\n' + e.target.value);
+                                const title = content.split("\n")[0] || "";
+                                setContent(title + "\n" + e.target.value);
                             }}
                             placeholder="Share your thoughts..."
                             className="w-full min-h-[100px] resize-none border-0 focus-visible:ring-0 bg-transparent text-base leading-relaxed placeholder:text-muted-foreground/60 outline-none"
@@ -175,7 +176,9 @@ export function PostForm({
                         )}
                         <Button
                             type="submit"
-                            disabled={isSubmitting || !content.trim() || !authorId}
+                            disabled={
+                                isSubmitting || !content.trim() || !authorId
+                            }
                             size="sm"
                             className="rounded-full px-4 bg-primary hover:bg-primary/90"
                         >

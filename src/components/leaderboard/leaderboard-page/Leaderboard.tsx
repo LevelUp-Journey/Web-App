@@ -14,7 +14,11 @@ import { ChevronDownIcon } from "lucide-react";
 
 const RANKS = [
     { key: "TOP500", name: "Top 500" }, // No icon for Top 500
-    { key: "GRANDMASTER", name: "Grandmaster", icon: "/ranks/rank-grandmaster.svg" },
+    {
+        key: "GRANDMASTER",
+        name: "Grandmaster",
+        icon: "/ranks/rank-grandmaster.svg",
+    },
     { key: "MASTER", name: "Master", icon: "/ranks/rank-master.svg" },
     { key: "DIAMOND", name: "Diamond", icon: "/ranks/rank-diamond.svg" },
     { key: "PLATINUM", name: "Platinum", icon: "/ranks/rank-platinum.svg" },
@@ -26,15 +30,18 @@ const RANKS = [
 export function LeaderboardPage() {
     const [selectedRank, setSelectedRank] = useState("TOP500");
 
-    const selectedRankData = RANKS.find(rank => rank.key === selectedRank) || RANKS[0];
+    const selectedRankData =
+        RANKS.find((rank) => rank.key === selectedRank) || RANKS[0];
 
     return (
         <div className="container mx-auto p-6">
             <div className="flex items-center justify-between mb-6">
-
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            className="flex items-center gap-2"
+                        >
                             {selectedRankData.icon && (
                                 <Image
                                     src={selectedRankData.icon}

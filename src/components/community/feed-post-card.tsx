@@ -102,7 +102,10 @@ function ImageGrid({ images, title }: { images: string[]; title: string }) {
                         onClick={handleImageClick}
                     />
                     {index === 3 && images.length > 4 && (
-                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity" onClick={handleImageClick}>
+                        <div
+                            className="absolute inset-0 bg-black/60 flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity"
+                            onClick={handleImageClick}
+                        >
                             <span className="text-white font-semibold text-lg">
                                 +{images.length - 4}
                             </span>
@@ -138,7 +141,10 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
     };
 
     return (
-        <Card className="overflow-hidden w-full hover:bg-muted/30 transition-colors cursor-pointer border-0 shadow-sm" onClick={handleCommentsClick}>
+        <Card
+            className="overflow-hidden w-full hover:bg-muted/30 transition-colors cursor-pointer border-0 shadow-sm"
+            onClick={handleCommentsClick}
+        >
             <CardContent className="p-4">
                 {/* Post Header */}
                 <div className="flex items-start space-x-3 mb-3">
@@ -161,7 +167,9 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                             >
                                 {post.authorProfile?.username || "Unknown User"}
                             </span>
-                            <span className="text-muted-foreground text-xs">·</span>
+                            <span className="text-muted-foreground text-xs">
+                                ·
+                            </span>
                             <Badge
                                 variant="outline"
                                 className="text-xs cursor-pointer h-5"
@@ -169,7 +177,9 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                             >
                                 {post.community?.name || "Unknown Community"}
                             </Badge>
-                            <span className="text-muted-foreground text-xs">·</span>
+                            <span className="text-muted-foreground text-xs">
+                                ·
+                            </span>
                             <span className="text-xs text-muted-foreground">
                                 {new Date(post.createdAt).toLocaleDateString()}
                             </span>
@@ -179,18 +189,27 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
 
                 {/* Post Content */}
                 <div className="space-y-3 ml-11">
-                    <h3 className="text-base font-semibold leading-tight">{post.title}</h3>
+                    <h3 className="text-base font-semibold leading-tight">
+                        {post.title}
+                    </h3>
                     <p className="text-sm text-muted-foreground leading-snug line-clamp-3">
-                        {post.content.length > 150 
-                            ? `${post.content.slice(0, 150)}...` 
+                        {post.content.length > 150
+                            ? `${post.content.slice(0, 150)}...`
                             : post.content}
                     </p>
 
                     {/* Images - Facebook-like grid */}
-                    {(post.imageUrl || (post.imageUrls && post.imageUrls.length > 0)) && (
+                    {(post.imageUrl ||
+                        (post.imageUrls && post.imageUrls.length > 0)) && (
                         <div className="mt-3">
                             <ImageGrid
-                                images={post.imageUrls && post.imageUrls.length > 0 ? post.imageUrls : (post.imageUrl ? [post.imageUrl] : [])}
+                                images={
+                                    post.imageUrls && post.imageUrls.length > 0
+                                        ? post.imageUrls
+                                        : post.imageUrl
+                                          ? [post.imageUrl]
+                                          : []
+                                }
                                 title={post.title}
                             />
                         </div>

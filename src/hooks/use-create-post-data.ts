@@ -23,7 +23,7 @@ export function useCreatePostData() {
                     AuthController.getUserId(),
                     AuthController.getUserRoles(),
                 ]);
-                
+
                 setAuthorId(userId);
 
                 // Check if user can create posts (only TEACHER and ADMIN)

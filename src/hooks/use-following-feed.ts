@@ -68,9 +68,7 @@ export function useFollowingFeed() {
                 const communities = (
                     await Promise.all(communityPromises)
                 ).filter((c): c is Community => c !== null);
-                const communityMap = new Map(
-                    communities.map((c) => [c.id, c]),
-                );
+                const communityMap = new Map(communities.map((c) => [c.id, c]));
 
                 // Get unique author IDs
                 const authorIds = [
