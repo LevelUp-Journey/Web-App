@@ -3,7 +3,7 @@ import { RankingOverview } from "@/components/leaderboard/rank-page/ranking-over
 import { RanksByScore } from "@/components/leaderboard/rank-page/ranks-by-score";
 import { GeneralRules } from "@/components/leaderboard/rank-page/general-rules";
 import { Penalization } from "@/components/leaderboard/rank-page/penalization";
-import { LeaderboardContent } from "@/components/leaderboard/leaderboard-content";
+import { LeaderboardPage as LeaderboardContent } from "@/components/leaderboard/leaderboard-page/Leaderboard";
 import { MyRankContent } from "@/components/leaderboard/my-rank-content";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
