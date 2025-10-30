@@ -1,4 +1,8 @@
-import { RankIconsTable } from "@/components/leaderboard/rank-icons-table";
+import { RanksList } from "@/components/leaderboard/rank-page/ranks-list";
+import { RankingOverview } from "@/components/leaderboard/rank-page/ranking-overview";
+import { RanksByScore } from "@/components/leaderboard/rank-page/ranks-by-score";
+import { GeneralRules } from "@/components/leaderboard/rank-page/general-rules";
+import { Penalization } from "@/components/leaderboard/rank-page/penalization";
 import { LeaderboardContent } from "@/components/leaderboard/leaderboard-content";
 import { MyRankContent } from "@/components/leaderboard/my-rank-content";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,7 +20,13 @@ export default function LeaderboardPage() {
                 </TabsList>
 
                 <TabsContent value="ranks" className="mt-6">
-                    <RankIconsTable />
+                    <div className="space-y-8">
+                        <RanksList />
+                        <RankingOverview />
+                        <RanksByScore />
+                        <GeneralRules />
+                        <Penalization />
+                    </div>
                 </TabsContent>
 
                 <TabsContent value="leaderboard" className="mt-6">

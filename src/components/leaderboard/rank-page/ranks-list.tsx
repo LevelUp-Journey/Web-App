@@ -7,13 +7,13 @@ type Rank = {
 };
 
 const RANKS: Rank[] = [
-  { id: 1, name: "Bronze", file: "/ranks-trophy/1Bronze.svg" },
-  { id: 2, name: "Silver", file: "/ranks-trophy/2Silver.svg" },
-  { id: 3, name: "Gold", file: "/ranks-trophy/3Gold.svg" },
-  { id: 4, name: "Platinium", file: "/ranks-trophy/4Platinium.svg" },
-  { id: 5, name: "Diamond", file: "/ranks-trophy/5Diamond.svg" },
-  { id: 6, name: "Master", file: "/ranks-trophy/6Master.svg" },
-  { id: 7, name: "Grandmaster", file: "/ranks-trophy/7Grandmaster.svg" },
+  { id: 1, name: "Bronze", file: "/ranks-trophies/trophy-bronze.svg" },
+  { id: 2, name: "Silver", file: "/ranks-trophies/trophy-silver.svg" },
+  { id: 3, name: "Gold", file: "/ranks-trophies/trophy-gold.svg" },
+  { id: 4, name: "Platinium", file: "/ranks-trophies/trophy-platinium.svg" },
+  { id: 5, name: "Diamond", file: "/ranks-trophies/trophy-diamond.svg" },
+  { id: 6, name: "Master", file: "/ranks-trophies/trophy-master.svg" },
+  { id: 7, name: "Grandmaster", file: "/ranks-trophies/trophy-grandmaster.svg" },
 ];
 
 export function RanksList({ className = "" }: { className?: string }) {
