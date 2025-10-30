@@ -34,36 +34,19 @@ export function CoverDropzone({
         async (file: File) => {
             setIsUploading(true);
             try {
-                const reader = new FileReader();
+                // Upload directly to Cloudinary using signed upload
+                const uploadedUrl = await CloudinaryController.uploadImage(
+                    file,
+                    "cover-images",
+                );
 
-                reader.onload = async (e) => {
-                    try {
-                        const base64 = e.target?.result as string;
-                        const uploadedUrl =
-                            await CloudinaryController.uploadImage(base64);
-
-                        setImageUrl(uploadedUrl);
-                        onImageUrlChange(uploadedUrl);
-                        toast.success("Cover image uploaded successfully!");
-                        setIsUploading(false);
-                    } catch (error) {
-                        console.error("Cloudinary upload error:", error);
-                        toast.error(
-                            "Failed to upload image. Please try again.",
-                        );
-                        setIsUploading(false);
-                    }
-                };
-
-                reader.onerror = () => {
-                    toast.error("Failed to read file");
-                    setIsUploading(false);
-                };
-
-                reader.readAsDataURL(file);
+                setImageUrl(uploadedUrl);
+                onImageUrlChange(uploadedUrl);
+                toast.success("Cover image uploaded successfully!");
             } catch (error) {
-                console.error("Upload error:", error);
+                console.error("Cloudinary upload error:", error);
                 toast.error("Failed to upload image. Please try again.");
+            } finally {
                 setIsUploading(false);
             }
         },
