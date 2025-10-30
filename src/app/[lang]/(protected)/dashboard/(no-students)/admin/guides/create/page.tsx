@@ -24,7 +24,6 @@ import type { CreateGuideRequest } from "@/services/internal/learning/guides/con
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
     cover: z.string().optional(),
 });
 
@@ -40,7 +39,6 @@ export default function CreateGuidePage() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            description: "",
             cover: "",
         },
     });
@@ -58,7 +56,6 @@ export default function CreateGuidePage() {
 
             const request: CreateGuideRequest = {
                 title: data.title,
-                description: data.description || "",
                 markdownContent,
                 cover: data.cover || "",
             };
@@ -77,18 +74,9 @@ export default function CreateGuidePage() {
 
     return (
         <section className="flex flex-col h-full">
-            <header className="flex items-center justify-between p-4 border-b">
-                <div>
-                    <h1 className="text-2xl font-semibold">Create Guide</h1>
-                    <p className="text-muted-foreground">
-                        Create a new guide for your course.
-                    </p>
-                </div>
-            </header>
-
             <ResizablePanelGroup direction="horizontal" className="flex-1">
                 <ResizablePanel defaultSize={40} minSize={30}>
-                    <div className="h-full overflow-y-auto p-6">
+                    <div className="h-full overflow-y-auto p-3">
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-6"
@@ -112,22 +100,6 @@ export default function CreateGuidePage() {
                                         {form.formState.errors.title.message}
                                     </p>
                                 )}
-                            </div>
-
-                            {/* Description */}
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor="description"
-                                    className="text-sm font-medium"
-                                >
-                                    Description
-                                </Label>
-                                <Input
-                                    id="description"
-                                    {...form.register("description")}
-                                    placeholder="Enter guide description"
-                                    className="w-full"
-                                />
                             </div>
 
                             {/* Cover Image */}

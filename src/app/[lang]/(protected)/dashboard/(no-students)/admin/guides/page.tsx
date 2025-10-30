@@ -2,23 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import GuideCard from "@/components/cards/guide-card";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
+import type { Guide } from "@/services/internal/learning/guides/domain/guide.entity";
 
 export default function GuidesPage() {
     const [userRole, setUserRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [guides, setGuides] = useState<GuideResponse[]>([]);
+    const [guides, setGuides] = useState<Guide[]>([]);
     const [error, setError] = useState<string | null>(null);
     const PATHS = useLocalizedPaths();
 
@@ -96,70 +90,7 @@ export default function GuidesPage() {
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {guides.map((guide) => (
-                        <Card key={guide.id}>
-                            <CardHeader>
-                                <CardTitle>{guide.title}</CardTitle>
-                                <CardDescription>
-                                    {guide.description || "No description"}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">
-                                            Status:
-                                        </span>
-                                        <span
-                                            className={`px-2 py-1 rounded text-xs ${
-                                                guide.status === "PUBLISHED"
-                                                    ? "bg-green-100 text-green-800"
-                                                    : guide.status === "DRAFT"
-                                                      ? "bg-yellow-100 text-yellow-800"
-                                                      : "bg-blue-100 text-blue-800"
-                                            }`}
-                                        >
-                                            {guide.status}
-                                        </span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">
-                                        Likes: {guide.totalLikes}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        Author: {guide.authorId}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        Created:{" "}
-                                        {new Date(
-                                            guide.createdAt,
-                                        ).toLocaleDateString()}
-                                    </p>
-                                    <div className="flex gap-2 pt-2">
-                                        <Button
-                                            asChild
-                                            variant="outline"
-                                            size="sm"
-                                        >
-                                            <Link
-                                                href={PATHS.DASHBOARD.ADMINISTRATION.GUIDES.VIEW(
-                                                    guide.id,
-                                                )}
-                                            >
-                                                View
-                                            </Link>
-                                        </Button>
-                                        <Button asChild size="sm">
-                                            <Link
-                                                href={PATHS.DASHBOARD.ADMINISTRATION.GUIDES.EDIT(
-                                                    guide.id,
-                                                )}
-                                            >
-                                                Edit
-                                            </Link>
-                                        </Button>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <GuideCard key={guide.id} guide={guide} adminMode />
                     ))}
                 </div>
             )}
