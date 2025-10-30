@@ -48,10 +48,10 @@ export class LeaderboardController {
 
     public static async getTop500(
         offset: number = 0,
-    ): Promise<LeaderboardEntry[]> {
+    ): Promise<LeaderboardResponse> {
         const response = await getTop500Action(offset);
         if (response.status === 200) {
-            return response.data as unknown as LeaderboardEntry[];
+            return response.data as LeaderboardResponse;
         }
 
         if (response.status === 403) {
