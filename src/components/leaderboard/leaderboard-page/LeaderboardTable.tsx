@@ -31,7 +31,7 @@ const RANK_ICONS: Record<string, string> = {
     BRONZE: "/ranks-trophies/trophy-bronze.svg",
     SILVER: "/ranks-trophies/trophy-silver.svg",
     GOLD: "/ranks-trophies/trophy-gold.svg",
-    PLATINIUM: "/ranks-trophies/trophy-platinium.svg",
+    PLATINUM: "/ranks-trophies/trophy-platinum.svg",
     DIAMOND: "/ranks-trophies/trophy-diamond.svg",
     MASTER: "/ranks-trophies/trophy-master.svg",
     GRANDMASTER: "/ranks-trophies/trophy-grandmaster.svg",
@@ -88,11 +88,11 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
 
     return (
         <div className="space-y-4">
-
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead className="w-[80px]">Position</TableHead>
                             <TableHead className="w-[100px]">Rank</TableHead>
                             <TableHead>Username</TableHead>
                             <TableHead className="text-right">Points</TableHead>
@@ -101,6 +101,9 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                     <TableBody>
                         {usersWithProfiles.map((user) => (
                             <TableRow key={user.id}>
+                                <TableCell className="font-bold text-lg">
+                                    #{user.leaderboardPosition || "-"}
+                                </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
                                         <img
