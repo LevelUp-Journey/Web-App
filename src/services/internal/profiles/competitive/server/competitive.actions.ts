@@ -5,7 +5,7 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { CompetitiveProfile } from "../entities/competitive-profile.entity";
+import type { CompetitiveProfile, UsersByRankResponse } from "../entities/competitive-profile.entity";
 
 export async function getCompetitiveProfileAction(
     userId: string,
@@ -31,11 +31,35 @@ export async function getCompetitiveProfileAction(
     }
 }
 
+export async function syncCompetitiveProfileAction(
+    userId: string,
+): Promise<RequestSuccess<CompetitiveProfile> | RequestFailure> {
+    try {
+        const response = await PROFILES_HTTP.post<CompetitiveProfile>(
+            `/competitive/profiles/user/${userId}/sync`,
+        );
+        return { data: response.data, status: response.status };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
 export async function getUsersByRankAction(
     rank: string,
-): Promise<RequestSuccess<CompetitiveProfile[]> | RequestFailure> {
+): Promise<RequestSuccess<UsersByRankResponse> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<CompetitiveProfile[]>(
+        const response = await PROFILES_HTTP.get<UsersByRankResponse>(
             `/competitive/profiles/rank/${rank}`,
         );
         return { data: response.data, status: response.status };

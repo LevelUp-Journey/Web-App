@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
@@ -32,9 +33,17 @@ export function useLeaderboardByRank(rank: string | null) {
                 let total = 0;
 
                 if (rank && rank !== "TOP") {
-                    // Fetch users by specific rank
-                    leaderboardEntries = await LeaderboardController.getUsersByRank(rank);
-                    total = leaderboardEntries.length;
+                    // Fetch users by specific rank from Competitive profiles
+                    const rankResponse = await CompetitiveController.getUsersByRank(rank);
+                    leaderboardEntries = rankResponse.profiles.map(profile => ({
+                        id: profile.id,
+                        userId: profile.userId,
+                        totalPoints: profile.totalPoints,
+                        position: 0, // Position not provided by competitive endpoint
+                        isTop500: false,
+                        currentRank: profile.currentRank,
+                    }));
+                    total = rankResponse.totalUsers;
                 } else {
                     // Fetch top 500 (all ranks) - used for null rank or "TOP" rank
                     const response = await LeaderboardController.getTop500();

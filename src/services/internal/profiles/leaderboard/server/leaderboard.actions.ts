@@ -10,9 +10,9 @@ import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderbo
 export async function getLeaderboardAction(
     limit: number = 50,
     offset: number = 0,
-): Promise<RequestSuccess<LeaderboardEntry[]> | RequestFailure> {
+): Promise<RequestSuccess<LeaderboardResponse> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<LeaderboardEntry[]>(
+        const response = await PROFILES_HTTP.get<LeaderboardResponse>(
             `/leaderboard?limit=${limit}&offset=${offset}`,
         );
         return { data: response.data, status: response.status };
@@ -69,30 +69,6 @@ export async function getTop500Action(): Promise<
     try {
         const response =
             await PROFILES_HTTP.get<LeaderboardResponse>(`/leaderboard/top500`);
-        return { data: response.data, status: response.status };
-    } catch (error: unknown) {
-        const axiosError = error as {
-            response?: { data?: unknown; status?: number };
-            message?: string;
-        };
-        return {
-            data: String(
-                axiosError.response?.data ||
-                    axiosError.message ||
-                    "Unknown error",
-            ),
-            status: axiosError.response?.status || 500,
-        };
-    }
-}
-
-export async function getUsersByRankAction(
-    rank: string,
-): Promise<RequestSuccess<LeaderboardEntry[]> | RequestFailure> {
-    try {
-        const response = await PROFILES_HTTP.get<LeaderboardEntry[]>(
-            `/competitive/profiles/rank/${rank.toUpperCase()}`,
-        );
         return { data: response.data, status: response.status };
     } catch (error: unknown) {
         const axiosError = error as {

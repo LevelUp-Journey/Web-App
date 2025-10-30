@@ -7,6 +7,11 @@ export interface CompetitiveProfile {
     pointsNeededForNextRank: number;
 }
 
+export interface UsersByRankResponse {
+    profiles: CompetitiveProfile[];
+    totalUsers: number;
+}
+
 export interface LeaderboardEntry {
     id: string;
     userId: string;
