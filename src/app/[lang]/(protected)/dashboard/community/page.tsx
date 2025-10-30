@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon, MessageSquareIcon, ArrowLeft, Plus } from "lucide-react";
+import { SearchIcon, MessageSquareIcon, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -10,7 +10,6 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import { EmptyFeed } from "@/components/community/empty-feed";
 import { useCommunityFeed } from "@/hooks/use-community-feed";
@@ -86,38 +85,45 @@ export default function CommunityFeedPage() {
     }
 
     return (
-        <div className="space-y-4 w-full h-full overflow-y-auto">
-            {/* Back Button - Outside Feed Layout */}
-            <div className="container mx-auto px-4 pt-4">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.back()}
-                    className="flex items-center gap-2"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back
-                </Button>
-            </div>
-
+        <div className="space-y-4 w-full h-full overflow-y-auto bg-muted/20">
             {/* Feed Content */}
-            <div className="container mx-auto px-4 py-4">
-                
-                <div className="max-w-2xl mx-auto space-y-4">
-                    {/* Header with Tabs */}
-                    <div className="flex justify-center gap-4">
-                        {/* Tabs */}
-                        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "feed" | "following")}>
-                            <TabsList>
-                                <TabsTrigger value="feed">Feed</TabsTrigger>
-                                <TabsTrigger value="following">Following</TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+            <div className="container mx-auto px-4 pb-4">
+                <div className="max-w-2xl mx-auto bg-background rounded-lg shadow-sm p-6">
+                    {/* Twitter-style Tabs */}
+                    <div className="flex justify-center">
+                        <div className="flex w-full">
+                            <button
+                                onClick={() => setActiveTab("feed")}
+                                className={`flex-1 py-4 px-6 text-center font-semibold transition-colors relative ${
+                                    activeTab === "feed"
+                                        ? "text-foreground"
+                                        : "text-muted-foreground hover:text-foreground"
+                                }`}
+                            >
+                                Feed
+                                {activeTab === "feed" && (
+                                    <div className="absolute bottom-0 left-0 right-0 w-full h-1 bg-primary"></div>
+                                )}
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("following")}
+                                className={`flex-1 py-4 px-6 text-center font-semibold transition-colors relative ${
+                                    activeTab === "following"
+                                        ? "text-foreground"
+                                        : "text-muted-foreground hover:text-foreground"
+                                }`}
+                            >
+                                Following
+                                {activeTab === "following" && (
+                                    <div className="absolute bottom-0 left-0 right-0 w-full h-1 bg-primary"></div>
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                 {/* Search Results */}
                 {searchTerm.trim() && (
-                    <div className="space-y-6">
+                    <div className="space-y-6 mt-6">
                         {/* Posts Section */}
                         {filteredPosts.length > 0 && (
                             <div className="space-y-4">
@@ -163,7 +169,7 @@ export default function CommunityFeedPage() {
 
                 {/* Default Feed (when no search) */}
                 {!searchTerm.trim() && (
-                    <div className="space-y-4">
+                    <div className="space-y-4 mt-6">
                         {posts.length === 0 ? (
                             <EmptyFeed />
                         ) : (
