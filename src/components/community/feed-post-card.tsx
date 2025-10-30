@@ -38,11 +38,11 @@ function ImageGrid({ images, title }: { images: string[]; title: string }) {
     // Single image - Twitter rounded style
     if (images.length === 1) {
         return (
-            <div className="relative overflow-hidden rounded-xl border shadow-sm">
+            <div className="relative overflow-hidden rounded-xl border shadow-sm w-full">
                 <img
                     src={images[0]}
                     alt={title}
-                    className="w-full h-auto max-h-64 object-cover cursor-pointer hover:opacity-95 transition-opacity"
+                    className="w-full h-auto max-h-80 object-cover cursor-pointer hover:opacity-95 transition-opacity"
                     onClick={handleImageClick}
                 />
             </div>
@@ -51,14 +51,14 @@ function ImageGrid({ images, title }: { images: string[]; title: string }) {
 
     // Multiple images - Twitter horizontal scroll style
     return (
-        <div className="relative flex transform-gpu snap-x snap-mandatory gap-4 overflow-x-auto">
+        <div className="relative flex transform-gpu snap-x snap-mandatory gap-4 overflow-x-auto w-full">
             <div className="shrink-0 snap-center w-2" />
             {images.map((image, index) => (
                 <img
                     key={index}
                     src={image}
                     alt={`${title} ${index + 1}`}
-                    className="h-64 w-5/6 shrink-0 snap-center snap-always rounded-xl border object-cover shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
+                    className="h-72 w-4/5 shrink-0 snap-center snap-always rounded-xl border object-cover shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
                     onClick={handleImageClick}
                 />
             ))}
