@@ -6,18 +6,12 @@ import { CompetitiveController } from "@/services/internal/profiles/competitive/
 import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { UsersByRankResponse } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
-import type { LeaderboardResponse } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
+import type { LeaderboardResponse, LeaderboardEntry } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
 
 interface LeaderboardTableProps {
     selectedRank: string;
@@ -44,8 +38,53 @@ const RANK_ICONS: Record<string, string> = {
 
 const ITEMS_PER_PAGE = 20;
 
+const getColumns = (selectedRank: string): ColumnDef<UserWithProfile>[] => [
+    {
+        accessorKey: "position",
+        header: "Position",
+        cell: ({ row }) => {
+            const position = selectedRank === "TOP500" ? (row.original as any).position : row.original.leaderboardPosition || "-";
+            return <div className="font-bold text-lg">#{position}</div>;
+        },
+    },
+    {
+        accessorKey: "currentRank",
+        header: "Rank",
+        cell: ({ row }) => {
+            const rank = row.original.currentRank || "BRONZE";
+            return (
+                <div className="flex items-center gap-2">
+                    <Image
+                        src={RANK_ICONS[rank]}
+                        alt={rank}
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 object-contain"
+                        unoptimized
+                    />
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: "username",
+        header: "Username",
+        cell: ({ row }) => {
+            const username = row.original.profile?.username || row.original.userId.substring(0, 20);
+            return <div className="font-medium">{username}</div>;
+        },
+    },
+    {
+        accessorKey: "totalPoints",
+        header: "Points",
+        cell: ({ row }) => {
+            return <div className="text-right font-semibold">{row.original.totalPoints.toLocaleString()}</div>;
+        },
+    },
+];
+
 export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
-    const [usersData, setUsersData] = useState<UsersByRankResponse | LeaderboardResponse | null>(null);
+    const [usersData, setUsersData] = useState<UsersByRankResponse | LeaderboardEntry[] | null>(null);
     const [usersWithProfiles, setUsersWithProfiles] = useState<UserWithProfile[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -61,7 +100,7 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
             try {
                 const offset = currentPage * ITEMS_PER_PAGE;
                 
-                let data: UsersByRankResponse | LeaderboardResponse;
+                let data: UsersByRankResponse | LeaderboardEntry[];
                 if (selectedRank === "TOP500") {
                     data = await LeaderboardController.getTop500(offset);
                 } else {
@@ -70,9 +109,27 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                 setUsersData(data);
 
                 // Handle different response structures
-                const userEntries = selectedRank === "TOP500" 
-                    ? (data as LeaderboardResponse).entries 
-                    : (data as UsersByRankResponse).profiles;
+                let userEntries: any[];
+                let totalUsers: number;
+                
+                if (selectedRank === "TOP500") {
+                    // TOP500 API returns array directly
+                    userEntries = Array.isArray(data) ? data : [];
+                    // For TOP500, we assume 500 total users, but API might not provide this
+                    totalUsers = 500; // This should be provided by API ideally
+                } else {
+                    // Other ranks return object with profiles and totalUsers
+                    const responseData = data as UsersByRankResponse;
+                    userEntries = responseData.profiles || [];
+                    totalUsers = responseData.totalUsers || 0;
+                }
+
+                // Validate that userEntries is an array
+                if (!Array.isArray(userEntries)) {
+                    console.error("userEntries is not an array:", userEntries);
+                    setUsersWithProfiles([]);
+                    return;
+                }
 
                 // For TOP500, fetch competitive profiles to get currentRank
                 let entriesWithRank = [...userEntries];
@@ -126,7 +183,7 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
         fetchUsers();
     }, [selectedRank, currentPage]);
 
-    const totalUsers = usersData?.totalUsers || 0;
+    const totalUsers = selectedRank === "TOP500" ? 500 : (usersData as UsersByRankResponse)?.totalUsers || 0;
     const totalPages = Math.ceil(totalUsers / ITEMS_PER_PAGE);
     const hasNextPage = (currentPage + 1) * ITEMS_PER_PAGE < totalUsers;
     const hasPrevPage = currentPage > 0;
@@ -153,77 +210,14 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
 
     return (
         <div className="space-y-4">
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[80px]">Position</TableHead>
-                            <TableHead className="w-[100px]">Rank</TableHead>
-                            <TableHead>Username</TableHead>
-                            <TableHead className="text-right">Points</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {usersWithProfiles.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell className="font-bold text-lg">
-                                    #{selectedRank === "TOP500" ? (user as any).position : user.leaderboardPosition || "-"}
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <Image
-                                            src={RANK_ICONS[user.currentRank || "BRONZE"]}
-                                            alt={user.currentRank || "Bronze"}
-                                            width={32}
-                                            height={32}
-                                            className="w-8 h-8 object-contain"
-                                            unoptimized
-                                        />
-                                    </div>
-                                </TableCell>
-                                <TableCell className="font-medium">
-                                    {user.profile?.username || user.userId.substring(0, 20)}
-                                </TableCell>
-                                <TableCell className="text-right font-semibold">
-                                    {user.totalPoints.toLocaleString()}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+            <DataTable
+                columns={getColumns(selectedRank)}
+                data={usersWithProfiles}
+                loading={loading}
+                emptyMessage="No users found for this rank"
+            />
 
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-                <div className="flex items-center justify-between">
-                    <div className="text-sm text-muted-foreground">
-                        Showing {currentPage * ITEMS_PER_PAGE + 1} to {Math.min((currentPage + 1) * ITEMS_PER_PAGE, usersData.totalUsers)} of {usersData.totalUsers} users
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handlePrevPage}
-                            disabled={!hasPrevPage}
-                        >
-                            <ChevronLeftIcon className="h-4 w-4 mr-1" />
-                            Previous
-                        </Button>
-                        <span className="text-sm text-muted-foreground">
-                            Page {currentPage + 1} of {totalPages}
-                        </span>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleNextPage}
-                            disabled={!hasNextPage}
-                        >
-                            Next
-                            <ChevronRightIcon className="h-4 w-4 ml-1" />
-                        </Button>
-                    </div>
-                </div>
-            )}
+            {/* Pagination Controls removed */}
         </div>
     );
 }
