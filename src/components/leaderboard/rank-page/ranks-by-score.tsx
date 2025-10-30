@@ -1,4 +1,4 @@
-import React from "react";
+import Image from "next/image";
 
 type RankItem = {
   key: string;
@@ -25,7 +25,7 @@ export function RanksByScore({ className = "" }: { className?: string }) {
         {RANKS.map((r) => (
           <div key={r.key} className="flex flex-col items-center text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 p-1 rounded-md flex items-center justify-center">
-              <img src={r.file} alt={`${r.name} rank`} className="max-w-full max-h-full" />
+              <Image src={r.file} alt={`${r.name} rank`} width={96} height={96} className="max-w-full max-h-full" unoptimized />
             </div>
             <div className="mt-2 text-sm font-medium">{r.name}</div>
             <div className="text-xs text-muted-foreground mt-1">{r.range}</div>

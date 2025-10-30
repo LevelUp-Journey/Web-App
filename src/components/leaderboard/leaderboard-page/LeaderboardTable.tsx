@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { UsersByRankResponse } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
@@ -28,12 +29,12 @@ interface UserWithProfile {
 }
 
 const RANK_ICONS: Record<string, string> = {
-    BRONZE: "/ranks-trophies/trophy-bronze.svg",
-    SILVER: "/ranks-trophies/trophy-silver.svg",
-    GOLD: "/ranks-trophies/trophy-gold.svg",
-    PLATINUM: "/ranks-trophies/trophy-platinum.svg",
-    DIAMOND: "/ranks-trophies/trophy-diamond.svg",
-    MASTER: "/ranks-trophies/trophy-master.svg",
+    BRONZE: "/ranks/rank-bronze.svg",
+    SILVER: "/ranks/rank-silver.svg",
+    GOLD: "/ranks/rank-gold.svg",
+    PLATINUM: "/ranks/rank-platinum.svg",
+    DIAMOND: "/ranks/rank-diamond.svg",
+    MASTER: "/ranks/rank-master.svg",
     GRANDMASTER: "/ranks-trophies/trophy-grandmaster.svg",
 };
 
@@ -106,10 +107,13 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        <img
+                                        <Image
                                             src={RANK_ICONS[user.currentRank]}
                                             alt={user.currentRank}
+                                            width={32}
+                                            height={32}
                                             className="w-8 h-8 object-contain"
+                                            unoptimized
                                         />
                                     </div>
                                 </TableCell>

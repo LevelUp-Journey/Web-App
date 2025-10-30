@@ -1,5 +1,3 @@
-import React from "react";
-
 export function Penalization({ className = "" }: { className?: string }) {
   return (
     <section className={`w-full ${className}`} aria-labelledby="penalization-heading">

@@ -1,5 +1,3 @@
-import React from "react";
-
 export function GeneralRules({ className = "" }: { className?: string }) {
   return (
     <section className={`w-full ${className}`} aria-labelledby="general-rules-heading">

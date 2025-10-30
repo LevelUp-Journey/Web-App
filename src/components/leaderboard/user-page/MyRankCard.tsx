@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { CompetitiveProfile } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
@@ -96,10 +97,13 @@ export default function MyRankCard() {
                 <CardContent className="flex flex-col items-center gap-6 py-8">
                     <div className="text-2xl text-muted-foreground">My Current Rank</div>
 
-                    <img
+                    <Image
                         src={icon}
                         alt={profile.currentRank}
+                        width={144}
+                        height={144}
                         className="w-36 h-36 object-contain drop-shadow-[0_20px_40px_rgba(255,255,255,0.5)]"
+                        unoptimized
                     />
 
                     <div className="text-2xl font-bold tracking-wide text-center">{profile.currentRank}</div>
