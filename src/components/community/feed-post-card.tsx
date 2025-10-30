@@ -113,7 +113,9 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                             className="flex items-center font-semibold whitespace-nowrap cursor-pointer hover:underline"
                             onClick={handleAuthorClick}
                         >
-                            {post.authorProfile?.username || "Unknown User"}
+                            {post.authorProfile?.firstName && post.authorProfile?.lastName
+                                ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}`
+                                : post.authorProfile?.username || "Unknown User"}
                         </div>
                         <div className="flex items-center space-x-1">
                             <span className="text-sm text-gray-500 transition-all duration-75">
@@ -159,7 +161,7 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
             )}
 
             {/* Action Buttons - Twitter style */}
-            <div className="flex items-center justify-between max-w-md pt-2 border-t">
+            <div className="flex items-center justify-between w-full pt-2 border-t">
                 <Button
                     variant="ghost"
                     size="sm"
