@@ -121,17 +121,23 @@ export default function PostPage() {
     });
 
     return (
-        <div className="w-full h-full overflow-y-auto">
-            <div className="container mx-auto p-6">
-                <div className="space-y-6">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => router.back()}
-                        className="mb-4"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" /> Back
-                    </Button>
+        <div className="space-y-4 w-full h-full overflow-y-auto">
+            {/* Back Button - Outside Feed Layout */}
+            <div className="container mx-auto px-4 pt-4">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                </Button>
+            </div>
+
+            {/* Content */}
+            <div className="container mx-auto px-4 py-4">
+                <div className="max-w-2xl mx-auto space-y-6">
 
                     {/* Post Header */}
                     <Card>
