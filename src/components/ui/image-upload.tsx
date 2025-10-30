@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CloudinaryController } from "@/services/external/cloudinary/cloudinary.controller";
@@ -19,11 +19,14 @@ export default function ImageUpload({
     label = "Image",
 }: ImageUploadProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | undefined>(value);
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        setIsUploading(true);
         try {
             // Upload to Cloudinary using signed upload
             const imageUrl = await CloudinaryController.uploadImage(

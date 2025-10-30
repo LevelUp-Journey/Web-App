@@ -63,7 +63,7 @@ export default function CommunityPage() {
 
     return (
         <div className="space-y-4 w-full h-full overflow-y-auto bg-muted/20">
-            {/* Back Button - Outside Main Layout */}
+            {/* Back Button */}
             <div className="container mx-auto px-4 pt-4">
                 <Button
                     variant="ghost"
@@ -76,13 +76,13 @@ export default function CommunityPage() {
                 </Button>
             </div>
 
-            {/* Main Content */}
-            <div className="container mx-auto px-4 py-4">
-                <div className="max-w-2xl mx-auto space-y-8">
-                    {/* Community Header - Full Width Banner */}
-                    <Card className="overflow-hidden border-0 shadow-lg">
+            {/* Community Content */}
+            <div className="container mx-auto px-4 pb-4">
+                <div className="max-w-2xl mx-auto bg-background rounded-lg shadow-sm p-6">
+                    {/* Community Header */}
+                    <Card className="overflow-hidden border-0 shadow-none bg-transparent">
                         <div className="relative">
-                            <div className="w-full h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5">
+                            <div className="w-full h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg">
                                 {community.imageUrl ? (
                                     <img
                                         src={community.imageUrl}
@@ -91,7 +91,7 @@ export default function CommunityPage() {
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
-                                        <span className="text-8xl font-bold text-primary/20">
+                                        <span className="text-6xl font-bold text-primary/20">
                                             {community.name
                                                 .charAt(0)
                                                 .toUpperCase()}
@@ -100,26 +100,26 @@ export default function CommunityPage() {
                                 )}
                             </div>
 
-                            <CardContent className="pt-8 pb-6">
+                            <CardContent className="pt-6 pb-4">
                                 <div className="flex items-start justify-between">
                                     <div className="space-y-4 flex-1">
                                         <div>
-                                            <h1 className="text-4xl font-bold mb-2">
+                                            <h1 className="text-3xl font-bold mb-2">
                                                 {community.name}
                                             </h1>
-                                            <p className="text-muted-foreground text-lg leading-relaxed">
+                                            <p className="text-muted-foreground text-base leading-relaxed">
                                                 {community.description}
                                             </p>
                                         </div>
 
-                                        <div className="flex items-center space-x-4">
-                                            <Avatar className="h-12 w-12">
+                                        <div className="flex items-center space-x-3">
+                                            <Avatar className="h-10 w-10">
                                                 <AvatarImage
                                                     src={
                                                         ownerProfile?.profileUrl
                                                     }
                                                 />
-                                                <AvatarFallback className="text-lg">
+                                                <AvatarFallback className="text-sm">
                                                     {ownerProfile?.username
                                                         ?.charAt(0)
                                                         .toUpperCase() || "U"}
@@ -140,7 +140,7 @@ export default function CommunityPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-3 ml-6">
+                                    <div className="flex flex-col gap-3 ml-4">
                                         {isOwner && (
                                             <Button
                                                 variant="outline"
@@ -176,7 +176,7 @@ export default function CommunityPage() {
                     </Card>
 
                     {/* Posts Feed */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 mt-6">
                         {posts.map((post) => (
                             <FeedPostCard key={post.id} post={post} />
                         ))}

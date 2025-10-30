@@ -21,11 +21,7 @@ export function CommunityCard({
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
-        router.push(
-            adminMode
-                ? `/dashboard/admin/community/edit?id=${community.id}`
-                : `/dashboard/community/edit?id=${community.id}`,
-        );
+        router.push(`/dashboard/community/edit?id=${community.id}${adminMode ? '&admin=true' : ''}`);
     };
 
     const handleCreatePost = (e: React.MouseEvent) => {
@@ -53,11 +49,6 @@ export function CommunityCard({
             </div>
 
             <CardContent className="p-6 space-y-4 flex-1 flex flex-col">
-                {/* Nombre de la comunidad */}
-                <h3 className="font-bold text-xl group-hover:text-primary transition-colors">
-                    {community.name}
-                </h3>
-
                 {/* Descripción */}
                 <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed flex-1">
                     {community.description}
