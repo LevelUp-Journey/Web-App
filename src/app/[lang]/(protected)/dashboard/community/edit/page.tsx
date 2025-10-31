@@ -12,6 +12,7 @@ export default function EditCommunityPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const communityId = searchParams.get("id");
+    const adminMode = searchParams.get("admin") === "true";
 
     const [community, setCommunity] = useState<Community | null>(null);
     const [loading, setLoading] = useState(true);
@@ -44,20 +45,31 @@ export default function EditCommunityPage() {
     };
 
     const handleSuccess = () => {
-        router.push("/dashboard/communities");
+        if (adminMode) {
+            router.push("/dashboard/admin/community");
+        } else {
+            router.push("/dashboard/communities");
+        }
     };
 
     const handleCancel = () => {
-        router.back();
+        if (adminMode) {
+            router.push("/dashboard/admin/community");
+        } else {
+            router.back();
+        }
     };
 
     if (loading) {
         return (
-            <div className="container mx-auto p-6">
+            <div className="min-h-screen bg-background">
+                <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                    <div className="flex items-center justify-center px-4 py-3">
+                        <div className="w-16" />
+                    </div>
+                </div>
                 <div className="flex items-center justify-center min-h-[400px]">
-                    <p className="text-muted-foreground">
-                        Loading community...
-                    </p>
+                    <p className="text-muted-foreground">Loading community...</p>
                 </div>
             </div>
         );
@@ -65,43 +77,68 @@ export default function EditCommunityPage() {
 
     if (error || !community) {
         return (
-            <div className="container mx-auto p-6">
-                <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-                    <p className="text-destructive">
-                        {error || "Community not found"}
-                    </p>
-                    <Button
-                        size="sm"
-                        onClick={() => router.push("/dashboard/communities")}
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Communities
-                    </Button>
+            <div className="min-h-screen bg-background">
+                <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                    <div className="flex items-center justify-between px-4 py-3">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => router.back()} // Use router.back() like create post page
+                            className="flex items-center gap-2 -ml-2"
+                        >
+                            <ArrowLeft className="h-5 w-5" />
+                            <span className="font-medium">Back</span>
+                        </Button>
+                        <div className="w-16" />
+                    </div>
+                </div>
+                <div className="px-4 py-6">
+                    <div className="text-center space-y-4">
+                        <h2 className="text-xl font-semibold">Error</h2>
+                        <p className="text-muted-foreground">{error || "Community not found"}</p>
+                        <Button
+                            size="sm"
+                            onClick={() => router.back()} // Use router.back() like create post page
+                        >
+                            <ArrowLeft className="h-4 w-4 mr-2" />
+                            Back
+                        </Button>
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="space-y-6">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.back()}
-                    className="mb-4"
-                >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
-                </Button>
+        <div className="min-h-screen bg-background">
+            {/* Unified Header - same as create post page */}
+            <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="flex items-center justify-between px-4 py-3">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.back()} // Always use router.back() like create post page
+                        className="flex items-center gap-2 -ml-2"
+                    >
+                        <ArrowLeft className="h-5 w-5" />
+                        <span className="font-medium">Back</span>
+                    </Button>
 
-                <CommunityForm
-                    mode="edit"
-                    communityId={communityId || undefined}
-                    initialData={community}
-                    onSuccess={handleSuccess}
-                    onCancel={handleCancel}
-                />
+                    <div className="w-16" /> {/* Spacer for centering */}
+                </div>
+            </div>
+
+            {/* Unified Content - same padding as create post page */}
+            <div className="px-4 py-6 pb-24">
+                <div className="max-w-2xl mx-auto">
+                    <CommunityForm
+                        mode="edit"
+                        communityId={communityId || undefined}
+                        initialData={community}
+                        onSuccess={handleSuccess}
+                        onCancel={handleCancel}
+                    />
+                </div>
             </div>
         </div>
     );

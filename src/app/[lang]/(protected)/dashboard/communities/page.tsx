@@ -134,7 +134,7 @@ export default function MyCommunitiesPage() {
                     {canCreateCommunity && (
                         <Button
                             onClick={() =>
-                                router.push("/dashboard/community/create")
+                                router.push("/dashboard/community/posts/create")
                             }
                         >
                             <Plus className="h-4 w-4 mr-2" />
@@ -173,7 +173,7 @@ export default function MyCommunitiesPage() {
                         {canCreateCommunity && (
                             <Button
                                 onClick={() =>
-                                    router.push("/dashboard/community/create")
+                                    router.push("/dashboard/community/posts/create")
                                 }
                             >
                                 <Plus className="h-4 w-4 mr-2" />

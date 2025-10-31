@@ -91,8 +91,8 @@ export default function CreatePostInCommunityPage() {
     }
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Simple Header */}
+        <div className="h-screen bg-background flex flex-col overflow-hidden">
+            {/* Simple Header - No border separation */}
             <div className="flex items-center px-4 py-4">
                 <Button
                     variant="ghost"
@@ -105,15 +105,15 @@ export default function CreatePostInCommunityPage() {
                 </Button>
             </div>
 
-            {/* Content */}
-            <div className="px-4 py-6 pb-24">
-                <div className="max-w-2xl mx-auto space-y-6">
-                    {/* Simple Title */}
-                    <h1 className="text-xl font-semibold">
+            {/* Content - Upper center positioning */}
+            <div className="flex-1 flex items-start justify-center px-4 pt-8 overflow-hidden">
+                <div className="w-full max-w-2xl space-y-4">
+                    {/* Title */}
+                    <h1 className="text-2xl font-bold text-center">
                         Create post in {community.name}
                     </h1>
 
-                    {/* Post Form */}
+                    {/* Post Form - Full width within container */}
                     <PostForm
                         communityId={community.id}
                         authorId={authorId}

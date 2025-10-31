@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon, MessageSquareIcon, ArrowLeft, Plus } from "lucide-react";
+import { SearchIcon, MessageSquareIcon, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -10,7 +10,6 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import { EmptyFeed } from "@/components/community/empty-feed";
 import { useCommunityFeed } from "@/hooks/use-community-feed";
@@ -94,20 +93,7 @@ export default function CommunityFeedPage() {
     }
 
     return (
-        <div className="space-y-4 w-full h-full overflow-y-auto">
-            {/* Back Button - Outside Feed Layout */}
-            <div className="container mx-auto px-4 pt-4">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.back()}
-                    className="flex items-center gap-2"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back
-                </Button>
-            </div>
-
+        <div className="space-y-4 w-full h-full overflow-y-auto bg-muted/20">
             {/* Feed Content */}
             <div className="container mx-auto px-4 py-4">
                 <div className="max-w-2xl mx-auto space-y-4">
@@ -175,18 +161,18 @@ export default function CommunityFeedPage() {
                         </div>
                     )}
 
-                    {/* Default Feed (when no search) */}
-                    {!searchTerm.trim() && (
-                        <div className="space-y-4">
-                            {posts.length === 0 ? (
-                                <EmptyFeed />
-                            ) : (
-                                posts.map((post) => (
-                                    <FeedPostCard key={post.id} post={post} />
-                                ))
-                            )}
-                        </div>
-                    )}
+                {/* Default Feed (when no search) */}
+                {!searchTerm.trim() && (
+                    <div className="space-y-4 mt-6">
+                        {posts.length === 0 ? (
+                            <EmptyFeed />
+                        ) : (
+                            posts.map((post) => (
+                                <FeedPostCard key={post.id} post={post} />
+                            ))
+                        )}
+                    </div>
+                )}
                 </div>
             </div>
 
