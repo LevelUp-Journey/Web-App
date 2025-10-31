@@ -3,25 +3,116 @@
 import { LEARNING_HTTP } from "@/services/axios.config";
 import type {
     CreateGuideRequest,
+    CreatePageRequest,
+    DeleteGuideRequest,
+    DeletePageRequest,
+    GetGuidePagesByGuideIdRequest,
+    GetPageByIdRequest,
     GuideResponse,
+    UpdateGuideRequest,
+    UpdateGuideStatusRequest,
+    UpdatePageRequest,
 } from "../controller/guide.response";
 
-export async function createGuideAction(request: CreateGuideRequest) {
+export async function getAllGuidesAction(): Promise<GuideResponse[]> {
+    const response = await LEARNING_HTTP.get<GuideResponse[]>("/guides");
+    return response.data;
+}
+
+export async function createGuideAction(
+    request: CreateGuideRequest,
+): Promise<GuideResponse> {
     const response = await LEARNING_HTTP.post<GuideResponse>(
         "/guides",
         request,
     );
-
-    console.log("CREATING GUIDE RESPONSE", response.data);
     return response.data;
 }
 
-export async function getGuideAction(id: string) {
-    const response = await LEARNING_HTTP.get<GuideResponse>(`/guides/${id}`);
+export async function getGuideByIdAction(
+    guideId: string,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.get<GuideResponse>(
+        `/guides/${guideId}`,
+    );
     return response.data;
 }
 
-export async function getAllGuidesAction() {
-    const response = await LEARNING_HTTP.get<GuideResponse[]>("/guides");
+export async function updateGuideAction(
+    guideId: string,
+    request: UpdateGuideRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.put<GuideResponse>(
+        `/guides/${guideId}`,
+        request,
+    );
+    return response.data;
+}
+
+export async function deleteGuideAction(
+    request: DeleteGuideRequest,
+): Promise<void> {
+    await LEARNING_HTTP.delete(`/guides/${request.id}`);
+}
+
+export async function updateGuideStatusAction(
+    guideId: string,
+    request: UpdateGuideStatusRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.patch<GuideResponse>(
+        `/guides/${guideId}/status`,
+        request,
+    );
+    return response.data;
+}
+
+// Page-related actions
+export async function getGuidePagesByGuideIdAction(
+    request: GetGuidePagesByGuideIdRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.get<GuideResponse>(
+        `/guides/${request.guideId}/pages`,
+    );
+    return response.data;
+}
+
+export async function createPageAction(
+    guideId: string,
+    request: CreatePageRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.post<GuideResponse>(
+        `/guides/${guideId}/pages`,
+        request,
+    );
+    return response.data;
+}
+
+export async function getPageByIdAction(
+    request: GetPageByIdRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.get<GuideResponse>(
+        `/guides/${request.guideId}/pages/${request.pageId}`,
+    );
+    return response.data;
+}
+
+export async function updatePageAction(
+    guideId: string,
+    pageId: string,
+    request: UpdatePageRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.put<GuideResponse>(
+        `/guides/${guideId}/pages/${pageId}`,
+        request,
+    );
+    return response.data;
+}
+
+export async function deletePageAction(
+    request: DeletePageRequest,
+): Promise<GuideResponse> {
+    const response = await LEARNING_HTTP.delete<GuideResponse>(
+        `/guides/${request.guideId}/pages/${request.pageId}`,
+    );
     return response.data;
 }

@@ -41,21 +41,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
-import {
-    CourseDifficulty,
-    type CourseGuideFullResponse,
-    type UpdateCourseRequest,
-} from "@/services/internal/learning/courses/controller/course.response";
+import type { UpdateCourseRequest } from "@/services/internal/learning/courses/controller/course.response";
 import type { Course } from "@/services/internal/learning/courses/domain/course.entity";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 
+// Temporary interface for guide display in course
+interface CourseGuideDisplay {
+    id: string;
+    title: string;
+    totalLikes: number;
+    cover: string;
+    createdAt: string;
+    position: number;
+}
+
 const formSchema = z.object({
     title: z.string().min(5, "Title is required"),
-    description: z.string().optional(),
-    difficulty: z.enum(CourseDifficulty),
-    completionScore: z.number().min(0, "Completion score must be positive"),
-    cover: z.string().optional(),
+    description: z.string().min(1, "Description is required"),
+    coverImage: z.string().min(1, "Cover image is required"),
+    topicIds: z.array(z.string()),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -70,7 +75,7 @@ function SortableGuideItem({
     index,
     onRemove,
 }: {
-    guide: CourseGuideFullResponse;
+    guide: CourseGuideDisplay;
     index: number;
     onRemove: (id: string) => void;
 }) {
@@ -137,9 +142,9 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
     const [guideSearchQuery, setGuideSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState<GuideResponse[]>([]);
     const [searching, setSearching] = useState(false);
-    const [currentGuides, setCurrentGuides] = useState<
-        CourseGuideFullResponse[]
-    >([]);
+    const [currentGuides, setCurrentGuides] = useState<CourseGuideDisplay[]>(
+        [],
+    );
     const [loadingGuides, setLoadingGuides] = useState(true);
     const debouncedSearchQuery = useDebounce(guideSearchQuery, 500);
 
@@ -148,9 +153,8 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
         defaultValues: {
             title: course.title,
             description: course.description,
-            difficulty: course.difficulty,
-            completionScore: course.completionScore,
-            cover: course.cover,
+            coverImage: course.cover,
+            topicIds: [],
         },
     });
 
@@ -202,21 +206,27 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
 
     const handleAddGuide = async (guide: GuideResponse) => {
         try {
-            // Calculate next position
-            const nextPosition =
-                currentGuides.length > 0
-                    ? Math.max(...currentGuides.map((g) => g.position)) + 1
-                    : 0;
-
-            await CourseController.addGuideToCourse(course.id, {
+            await CourseController.addGuideToCourse({
+                courseId: course.id,
                 guideId: guide.id,
-                position: nextPosition,
             });
 
             // Reload guides
-            const updatedGuides =
-                await CourseController.getCourseGuidesFullByCourseId(course.id);
-            setCurrentGuides(updatedGuides);
+            const updatedCourse = await CourseController.getCourseById({
+                courseId: course.id,
+            });
+            if (updatedCourse) {
+                setCurrentGuides(
+                    updatedCourse.guides.map((g, index) => ({
+                        id: g.id,
+                        title: g.title,
+                        totalLikes: g.likesCount,
+                        cover: g.coverImage,
+                        createdAt: g.createdAt.toString(),
+                        position: index,
+                    })),
+                );
+            }
             setGuideSearchQuery("");
             setSearchResults([]);
         } catch (error) {
@@ -225,8 +235,31 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
     };
 
     const handleRemoveGuide = async (guideId: string) => {
-        // TODO: Implement remove guide endpoint
-        console.log("Remove guide:", guideId);
+        try {
+            await CourseController.deleteGuideFromCourse({
+                courseId: course.id,
+                guideId: guideId,
+            });
+
+            // Reload guides
+            const updatedCourse = await CourseController.getCourseById({
+                courseId: course.id,
+            });
+            if (updatedCourse) {
+                setCurrentGuides(
+                    updatedCourse.guides.map((g, index) => ({
+                        id: g.id,
+                        title: g.title,
+                        totalLikes: g.likesCount,
+                        cover: g.coverImage,
+                        createdAt: g.createdAt.toString(),
+                        position: index,
+                    })),
+                );
+            }
+        } catch (error) {
+            console.error("Error removing guide:", error);
+        }
     };
 
     const sensors = useSensors(
@@ -259,10 +292,11 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
 
             // Persist the new position in the backend
             try {
-                await CourseController.reorderCourseGuide(course.id, {
-                    guideId: active.id as string,
-                    newPosition: newIndex,
-                });
+                await CourseController.reorderCourseGuide(
+                    course.id,
+                    active.id as string,
+                    newIndex,
+                );
                 console.log("Guide reordered successfully");
             } catch (error) {
                 console.error("Error updating guide order:", error);
@@ -275,10 +309,7 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
     const onSubmit = async (data: FormData) => {
         setSaving(true);
         try {
-            await CourseController.updateCourse(
-                course.id,
-                data as UpdateCourseRequest,
-            );
+            await CourseController.updateCourse(course.id, data);
             router.push(PATHS.DASHBOARD.COURSES.VIEW(course.id));
         } catch (error) {
             console.error("Error updating course:", error);
@@ -325,9 +356,9 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
                             </div>
                             <CoverDropzone
                                 onImageUrlChange={(url) =>
-                                    form.setValue("cover", url)
+                                    form.setValue("coverImage", url)
                                 }
-                                currentImage={form.watch("cover")}
+                                currentImage={form.watch("coverImage")}
                                 disabled={saving}
                                 aspectRatio="wide"
                             />

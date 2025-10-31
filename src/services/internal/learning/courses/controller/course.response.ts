@@ -1,3 +1,5 @@
+import type { GuideStatus } from "../../guides/controller/guide.response";
+
 export interface CourseResponse {
     id: string;
     title: string;
@@ -33,13 +35,6 @@ export enum CourseStatus {
     DRAFT = "DRAFT",
     PUBLISHED = "PUBLISHED",
     ARCHIVED = "ARCHIVED",
-}
-
-export enum GuideStatus {
-    DRAFT = "DRAFT",
-    PUBLISHED = "PUBLISHED",
-    ARCHIVED = "ARCHIVED",
-    ASSOCIATED_WITH_COURSE = "ASSOCIATED_WITH_COURSE",
 }
 
 export interface CreateCourseRequest {
