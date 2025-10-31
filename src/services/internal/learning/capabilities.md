@@ -88,3 +88,42 @@ GET /guides/{guideId} - Obtener guía individual (PUBLISHED)
 GET /courses - Listar todos los cursos disponibles
 GET /topics/{topicId}/guides - Guías por topic
 GET /topics/{topicId}/courses - Cursos por topic
+
+
+# Flujo 1
+El estudiante revisa un guide y lo completa
+
+- El estudiante obtiene todos los guides disponibles. (El estudiante no esta suscrito a ningun guide o course)
+- El Estudiante selecciona un guide disponible y obtiene todos los datos del guide.
+- El Sistema inicia un proceso de aprendizaje para el estudiante.
+- El sistema hace tracking del progreso del estudiante en el curso. Siguiendo cuando termina cada page del guide. Se registra el tiempo de lectura y el progreso actualizado.
+- El estudiante finaliza el guide
+- El sistema registra que el estudiante ha completado el guide.
+
+
+# Flujo 2
+El estudiante se inscribe a un curso
+
+- El estudiante obtiene todos los cursos disponibles. (El estudiante no esta suscrito a ningun guide o course)
+- El Estudiante selecciona un curso disponible y obtiene todos los datos del curso los basicos (los guides asociados no).
+- El Sistema inicia un proceso de aprendizaje para el estudiante.
+- El sistema hace tracking del progreso del estudiante en el curso. Siguiendo cuando termina cada guide del curso. Se registra el tiempo de lectura y el progreso actualizado.
+- El estudiante finaliza el curso
+- El sistema registra que el estudiante ha completado el curso.
+
+
+# Flujo 3
+El profesor crea un course
+
+- El profesor ingresa los datos basicos del course (sin ningun guide asociado).
+- el profesor agrega otros authores al curso solo mediante su id
+- El profesor hace la request y el sistema crea el curso
+- El profesor busca los guides disponibles (los guides son de todos los authors pertenecientes al curso y son los guides que no esten asociados a ningun curso de esta manera un guide solo esta asociado a un curso)
+- El profesor agrega los guides al curso
+- El profesor publica el curso
+
+# Flujo 4
+El profesor crea un guide 
+
+- El profesor ingresa los datos basicos del guide. Ingresa un autor adicional de ser necesario
+
