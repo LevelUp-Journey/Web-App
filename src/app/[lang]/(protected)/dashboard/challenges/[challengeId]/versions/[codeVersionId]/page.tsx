@@ -31,11 +31,15 @@ export default async function CodeVersionPage({
     }
 
     // Fetch data on the server
-    const codeVersion: CodeVersion =
-        await CodeVersionController.getCodeVersionById(
-            challengeId,
-            codeVersionId,
-        );
+    const codeVersion = await CodeVersionController.getCodeVersionById(
+        challengeId,
+        codeVersionId,
+    );
+
+    if (!codeVersion) {
+        redirect(`/dashboard/challenges/${challengeId}`);
+    }
+
     const tests: VersionTest[] =
         await VersionTestController.getVersionTestsByChallengeIdAndCodeVersionId(
             challengeId,

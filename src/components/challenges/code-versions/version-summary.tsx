@@ -1,5 +1,5 @@
 import { getReadableLanguageName } from "@/lib/consts";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 interface VersionSummaryProps {
     challengeId: string;

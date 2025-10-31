@@ -3,11 +3,12 @@ import { ProfileController } from "@/services/internal/profiles/profiles/control
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { profileId: string } },
+    { params }: { params: Promise<{ profileId: string }> },
 ) {
     try {
+        const { profileId } = await params;
         const profile = await ProfileController.getProfileByUserId(
-            params.profileId,
+            profileId,
         );
 
         return NextResponse.json(profile);
@@ -22,13 +23,14 @@ export async function GET(
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { profileId: string } },
+    { params }: { params: Promise<{ profileId: string }> },
 ) {
     try {
+        const { profileId } = await params;
         const body = await request.json();
 
         const updatedProfile = await ProfileController.updateProfileByUserId(
-            params.profileId,
+            profileId,
             body,
         );
 

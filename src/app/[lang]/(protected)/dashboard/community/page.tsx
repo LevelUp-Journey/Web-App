@@ -10,6 +10,11 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group";
+import {
+    Tabs,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import { EmptyFeed } from "@/components/community/empty-feed";
 import { useCommunityFeed } from "@/hooks/use-community-feed";

@@ -50,33 +50,23 @@ function ImageGrid({ images, title }: { images: string[]; title: string }) {
     }
 
     // Multiple images - Twitter horizontal scroll style
-    return (
-        <div className="relative flex transform-gpu snap-x snap-mandatory gap-4 overflow-x-auto w-full">
-            <div className="shrink-0 snap-center w-2" />
-            {images.map((image, index) => (
-                <img
-                    key={index}
-                    src={image}
-                    alt={`${title} ${index + 1}`}
-                    className="h-72 w-4/5 shrink-0 snap-center snap-always rounded-xl border object-cover shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
-                    onClick={handleImageClick}
-                />
-                <div className="grid grid-cols-2 gap-1">
-                    {images.slice(1).map((image, index) => (
-                        <img
-                            key={index + 1}
-                            src={image}
-                            alt={`${title} ${index + 2}`}
-                            className="w-full h-32 object-cover cursor-pointer hover:opacity-95 transition-opacity"
-                            onClick={handleImageClick}
-                        />
-                    ))}
-                </div>
+    if (images.length === 2) {
+        return (
+            <div className="flex gap-2 w-full rounded-lg overflow-hidden">
+                {images.map((image, index) => (
+                    <img
+                        key={index}
+                        src={image}
+                        alt={`${title} ${index + 1}`}
+                        className="flex-1 h-72 object-cover cursor-pointer hover:opacity-95 transition-opacity rounded-xl border"
+                        onClick={handleImageClick}
+                    />
+                ))}
             </div>
         );
     }
 
-    // Four or more images - 2x2 grid with overlay for extra images
+    // Three or more images - grid layout
     return (
         <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden bg-muted/30 -ml-1 mr-1">
             {images.slice(0, 4).map((image, index) => (
@@ -99,7 +89,6 @@ function ImageGrid({ images, title }: { images: string[]; title: string }) {
                     )}
                 </div>
             ))}
-            <div className="shrink-0 snap-center w-2" />
         </div>
     );
 }
@@ -187,17 +176,16 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 </div>
             </div>
 
-                {/* Post Content */}
-                <div className="space-y-3 ml-11">
-                    <h3 className="text-base font-semibold leading-tight">
-                        {post.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-snug line-clamp-3">
-                        {post.content.length > 150
-                            ? `${post.content.slice(0, 150)}...`
-                            : post.content}
-                    </p>
-                </div>
+            {/* Post Content */}
+            <div className="space-y-3 ml-11">
+                <h3 className="text-base font-semibold leading-tight">
+                    {post.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-snug line-clamp-3">
+                    {post.content.length > 150
+                        ? `${post.content.slice(0, 150)}...`
+                        : post.content}
+                </p>
             </div>
 
             {/* Tweet-like Media - Adapted from Magic UI TweetMedia */}
