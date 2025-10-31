@@ -20,11 +20,24 @@
 - A user can enroll in a course.
 - A user can unenroll from a course.
 
-## Comments
+## Sistema de Comentarios ⚠️
+Faltante:
 
-- course and guide has a comments section.
-- it has sub comments, replies, NO LIKES
-- likes are only for guides and course.
+Estructura completa de comentarios:
+
+commentId, content, authorId, parentCommentId (para replies), entityType (GUIDE/COURSE), entityId, createdAt, updatedAt, isDeleted
+
+
+Endpoints:
+
+POST /guides/{guideId}/comments - Crear comentario
+POST /comments/{commentId}/replies - Crear respuesta
+PUT /comments/{commentId} - Editar comentario
+DELETE /comments/{commentId} - Eliminar comentario (soft delete)
+GET /guides/{guideId}/comments - Listar comentarios con paginación
+Lo mismo para cursos: /courses/{courseId}/comments
+
+Los comentarios no tienen likes
 
 ## Endpoints
 - System has the following roles: 'ROLE_ADMIN', 'ROLE_STUDENT', 'ROLE_TEACHER'
@@ -49,4 +62,29 @@
 - courses and guides needs a delete endpoint. with this endpoint /courses/{courseId} DELETE and /guides/{guideId} DELETE
 - courses and guides needs  a likes endpoints /courses/{courseId}/likes POST and /guides/{guideId}/likes POST
 
--
+- usa un middleware para obtener el id del usuario. y pasarlo al request.
+- Agrega endpoints de tipo crud para los pages de los guides.
+
+- Prevenir likes duplicados
+- Contador actualizado en tiempo real
+
+- Solo autores pueden editar/eliminar sus propias guías/cursos (o ADMIN)
+- Validación de que un usuario no puede enrollarse dos veces
+- Validación de que solo usuarios enrollados pueden comentar en cursos
+- Límite de autores por guía/curso
+- Estado DRAFT solo visible para autores
+
+ Progreso del Usuario 💡
+Considerar agregar:
+
+Tracking de progreso en cursos
+Marcar páginas como completadas
+Porcentaje de avance del curso
+Certificado al completar curso
+
+Faltante:
+
+GET /guides/{guideId} - Obtener guía individual (PUBLISHED)
+GET /courses - Listar todos los cursos disponibles
+GET /topics/{topicId}/guides - Guías por topic
+GET /topics/{topicId}/courses - Cursos por topic
