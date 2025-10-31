@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PATHS } from "@/lib/paths";
-import { CodeVersionController } from "@/services/internal/challenges/controller/code-version.controller";
-import type { CodeVersion } from "@/services/internal/challenges/entities/code-version.entity";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 interface VersionEditingFormProps {
     challengeId: string;
@@ -33,12 +33,12 @@ export default function VersionEditingForm({
                 challengeId,
                 codeVersion.id,
                 {
-                    language,
-                    initialCode,
+                    code: initialCode,
+                    functionName: codeVersion.functionName || null,
                 },
             );
             toast.success("Code version updated successfully");
-            router.push(PATHS.DASHBOARD.CHALLENGES.EDIT(challengeId));
+            router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(challengeId, codeVersion.id));
         } catch (error) {
             console.error("Error updating code version:", error);
             toast.error("Failed to update code version");

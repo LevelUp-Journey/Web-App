@@ -180,97 +180,99 @@ export default function PostPage() {
                                     </Badge>
                                 </div>
                             </div>
-                        </div>
+                        </CardHeader>
 
-                        {/* Post Body */}
-                        <div className="mb-4">
-                            <h1 className="text-xl font-bold mb-3">{post.title}</h1>
-                            <p className="text-foreground leading-relaxed mb-4">
-                                {post.content}
-                            </p>
-                            {post.imageUrl && (
-                                <div className="rounded-2xl overflow-hidden border mb-4 w-full">
-                                    <img
-                                        src={post.imageUrl}
-                                        alt="Post"
-                                        className="w-full h-auto object-cover"
+                        <CardContent>
+                            {/* Post Body */}
+                            <div className="mb-4">
+                                <h1 className="text-xl font-bold mb-3">{post.title}</h1>
+                                <p className="text-foreground leading-relaxed mb-4">
+                                    {post.content}
+                                </p>
+                                {post.imageUrl && (
+                                    <div className="rounded-2xl overflow-hidden border mb-4 w-full">
+                                        <img
+                                            src={post.imageUrl}
+                                            alt="Post"
+                                            className="w-full h-auto object-cover"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Actions - Twitter Style */}
+                            <div className="flex items-center justify-between w-full pt-3 border-t border-border/50">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={toggleReaction}
+                                    disabled={reactionLoading}
+                                    className={`h-9 px-4 text-sm hover:bg-red-50 hover:text-red-500 rounded-full ${postUserReaction ? "text-red-500" : "text-muted-foreground"}`}
+                                >
+                                    <Heart
+                                        className={`h-5 w-5 mr-2 ${postUserReaction ? "fill-current" : ""}`}
                                     />
-                                </div>
-                            )}
-                        </div>
+                                    {reactionCount}
+                                </Button>
 
-                        {/* Actions - Twitter Style */}
-                        <div className="flex items-center justify-between w-full pt-3 border-t border-border/50">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={toggleReaction}
-                                disabled={reactionLoading}
-                                className={`h-9 px-4 text-sm hover:bg-red-50 hover:text-red-500 rounded-full ${postUserReaction ? "text-red-500" : "text-muted-foreground"}`}
-                            >
-                                <Heart
-                                    className={`h-5 w-5 mr-2 ${postUserReaction ? "fill-current" : ""}`}
-                                />
-                                {reactionCount}
-                            </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-9 px-4 text-sm text-muted-foreground hover:bg-blue-50 hover:text-blue-500 rounded-full"
+                                >
+                                    <MessageCircle className="h-5 w-5 mr-2" />
+                                    {post.comments.length}
+                                </Button>
+                            </div>
 
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-9 px-4 text-sm text-muted-foreground hover:bg-blue-50 hover:text-blue-500 rounded-full"
-                            >
-                                <MessageCircle className="h-5 w-5 mr-2" />
-                                {post.comments.length}
-                            </Button>
-                        </div>
+                            {/* Comments Section - Inside Post Container */}
+                            <div className="mt-6 pt-4 border-t border-border/30">
+                                <h3 className="text-lg font-semibold mb-4">
+                                    Comments ({post.comments.length})
+                                </h3>
 
-                        {/* Comments Section - Inside Post Container */}
-                        <div className="mt-6 pt-4 border-t border-border/30">
-                            <h3 className="text-lg font-semibold mb-4">
-                                Comments ({post.comments.length})
-                            </h3>
-
-                            {post.comments.length === 0 ? (
-                                <div className="text-center py-8">
-                                    <MessageCircle className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-                                    <p className="text-muted-foreground text-sm">
-                                        No comments yet. Be the first to comment!
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    {post.comments.map((comment, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex gap-3 py-3 last:pb-0 border-b border-border/20 last:border-b-0"
-                                        >
-                                            <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
-                                                <AvatarFallback className="text-xs">
-                                                    U
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-sm font-medium">
-                                                        Anonymous User
-                                                    </span>
-                                                    <span className="text-muted-foreground">·</span>
-                                                    <span className="text-xs text-muted-foreground">
-                                                        {new Date(
-                                                            comment.createdAt,
-                                                        ).toLocaleDateString()}
-                                                    </span>
+                                {post.comments.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <MessageCircle className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+                                        <p className="text-muted-foreground text-sm">
+                                            No comments yet. Be the first to comment!
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {post.comments.map((comment, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex gap-3 py-3 last:pb-0 border-b border-border/20 last:border-b-0"
+                                            >
+                                                <Avatar className="h-8 w-8 mt-1 flex-shrink-0">
+                                                    <AvatarFallback className="text-xs">
+                                                        U
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <span className="text-sm font-medium">
+                                                            Anonymous User
+                                                        </span>
+                                                        <span className="text-muted-foreground">·</span>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            {new Date(
+                                                                comment.createdAt,
+                                                            ).toLocaleDateString()}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-sm text-foreground leading-relaxed">
+                                                        {comment.content}
+                                                    </p>
                                                 </div>
-                                                <p className="text-sm text-foreground leading-relaxed">
-                                                    {comment.content}
-                                                </p>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </div>

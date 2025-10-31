@@ -64,7 +64,7 @@ export function useMDXComponents(
             <img
                 sizes="100vw"
                 style={{ width: "100%", height: "auto" }}
-                {...(props as ImageProps)}
+                {...props}
             />
         ),
         // Add any custom components here

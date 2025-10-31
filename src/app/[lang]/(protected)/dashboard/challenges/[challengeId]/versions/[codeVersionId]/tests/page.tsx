@@ -15,11 +15,15 @@ export default async function TestsPage({ params, searchParams }: PageProps) {
     const { editing, testId } = await searchParams;
 
     // Fetch data on the server
-    const codeVersion: CodeVersion =
-        await CodeVersionController.getCodeVersionById(
-            challengeId,
-            codeVersionId,
-        );
+    const codeVersion = await CodeVersionController.getCodeVersionById(
+        challengeId,
+        codeVersionId,
+    );
+
+    if (!codeVersion) {
+        throw new Error("Code version not found");
+    }
+
     const tests: VersionTest[] =
         await VersionTestController.getVersionTestsByChallengeIdAndCodeVersionId(
             challengeId,

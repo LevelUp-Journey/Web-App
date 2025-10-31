@@ -196,7 +196,7 @@ export function PostForm({
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Actions */}
                 <div className="flex items-center justify-end pt-3">
