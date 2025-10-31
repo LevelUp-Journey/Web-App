@@ -5,7 +5,10 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { CompetitiveProfile, UsersByRankResponse } from "../entities/competitive-profile.entity";
+import type {
+    CompetitiveProfile,
+    UsersByRankResponse,
+} from "../entities/competitive-profile.entity";
 
 export async function getCompetitiveProfileAction(
     userId: string,

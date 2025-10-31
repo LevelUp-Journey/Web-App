@@ -5,7 +5,10 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderboard.entity";
+import type {
+    LeaderboardEntry,
+    LeaderboardResponse,
+} from "../entities/leaderboard.entity";
 
 export async function getLeaderboardAction(
     limit: number = 50,

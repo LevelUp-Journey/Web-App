@@ -1,4 +1,7 @@
-import type { LeaderboardEntry, LeaderboardResponse } from "../entities/leaderboard.entity";
+import type {
+    LeaderboardEntry,
+    LeaderboardResponse,
+} from "../entities/leaderboard.entity";
 import {
     getLeaderboardAction,
     getTop500Action,

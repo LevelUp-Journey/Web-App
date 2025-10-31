@@ -27,7 +27,9 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
     }
 
     if (usersWithProfiles.length === 0) {
-        return <div className="text-center py-8">No users found for this rank</div>;
+        return (
+            <div className="text-center py-8">No users found for this rank</div>
+        );
     }
 
     return (

@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function LeaderboardPage() {
     return (
         <div className="container mx-auto p-6">
-
             <Tabs defaultValue="leaderboard" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="leaderboard">Ranking</TabsTrigger>

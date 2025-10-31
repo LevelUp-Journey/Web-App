@@ -33,13 +33,10 @@ export default function ImageUpload({
                 file,
                 "uploads",
             );
-            setPreviewUrl(imageUrl);
             onChange(imageUrl);
         } catch (error) {
             console.error("Error uploading image:", error);
             // TODO: Show error toast
-        } finally {
-            setIsUploading(false);
         }
     };
 

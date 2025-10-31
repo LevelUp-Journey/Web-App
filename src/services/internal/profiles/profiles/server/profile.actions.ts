@@ -58,9 +58,8 @@ export async function getAllProfilesAction(): Promise<
     RequestSuccess<ProfileResponse[]> | RequestFailure
 > {
     try {
-        const response = await PROFILES_HTTP.get<ProfileResponse[]>(
-            `/profiles`,
-        );
+        const response =
+            await PROFILES_HTTP.get<ProfileResponse[]>(`/profiles`);
         return { data: response.data, status: response.status };
     } catch (error: unknown) {
         const axiosError = error as {

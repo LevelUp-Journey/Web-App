@@ -61,6 +61,43 @@ function ImageGrid({ images, title }: { images: string[]; title: string }) {
                     className="h-72 w-4/5 shrink-0 snap-center snap-always rounded-xl border object-cover shadow-sm cursor-pointer hover:opacity-95 transition-opacity"
                     onClick={handleImageClick}
                 />
+                <div className="grid grid-cols-2 gap-1">
+                    {images.slice(1).map((image, index) => (
+                        <img
+                            key={index + 1}
+                            src={image}
+                            alt={`${title} ${index + 2}`}
+                            className="w-full h-32 object-cover cursor-pointer hover:opacity-95 transition-opacity"
+                            onClick={handleImageClick}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // Four or more images - 2x2 grid with overlay for extra images
+    return (
+        <div className="grid grid-cols-2 gap-1 rounded-lg overflow-hidden bg-muted/30 -ml-1 mr-1">
+            {images.slice(0, 4).map((image, index) => (
+                <div key={index} className="relative">
+                    <img
+                        src={image}
+                        alt={`${title} ${index + 1}`}
+                        className="w-full h-32 object-cover cursor-pointer hover:opacity-95 transition-opacity"
+                        onClick={handleImageClick}
+                    />
+                    {index === 3 && images.length > 4 && (
+                        <div
+                            className="absolute inset-0 bg-black/60 flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity"
+                            onClick={handleImageClick}
+                        >
+                            <span className="text-white font-semibold text-lg">
+                                +{images.length - 4}
+                            </span>
+                        </div>
+                    )}
+                </div>
             ))}
             <div className="shrink-0 snap-center w-2" />
         </div>
@@ -121,8 +158,20 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                             <span className="text-sm text-gray-500 transition-all duration-75">
                                 @{post.authorProfile?.username || "unknown"}
                             </span>
-                            <span className="text-gray-500">·</span>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-muted-foreground text-xs">
+                                ·
+                            </span>
+                            <Badge
+                                variant="outline"
+                                className="text-xs cursor-pointer h-5"
+                                onClick={handleCommunityClick}
+                            >
+                                {post.community?.name || "Unknown Community"}
+                            </Badge>
+                            <span className="text-muted-foreground text-xs">
+                                ·
+                            </span>
+                            <span className="text-xs text-muted-foreground">
                                 {new Date(post.createdAt).toLocaleDateString()}
                             </span>
                         </div>
@@ -138,13 +187,14 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 </div>
             </div>
 
-            {/* Tweet-like Body - Adapted from Magic UI TweetBody */}
-            <div className="leading-normal tracking-tighter break-words">
-                <div className="space-y-2">
-                    <h3 className="text-sm font-semibold">{post.title}</h3>
-                    <p className="text-sm font-normal text-gray-700 dark:text-gray-300">
-                        {post.content.length > 200
-                            ? `${post.content.slice(0, 200)}...`
+                {/* Post Content */}
+                <div className="space-y-3 ml-11">
+                    <h3 className="text-base font-semibold leading-tight">
+                        {post.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-snug line-clamp-3">
+                        {post.content.length > 150
+                            ? `${post.content.slice(0, 150)}...`
                             : post.content}
                     </p>
                 </div>

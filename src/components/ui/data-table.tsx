@@ -61,14 +61,17 @@ export function DataTable<TData, TValue>({
     const [sorting, setSorting] = React.useState<SortingState>([]);
 
     // Determine if we're using server-side pagination
-    const isServerPagination = onNextPage !== undefined || onPreviousPage !== undefined;
+    const isServerPagination =
+        onNextPage !== undefined || onPreviousPage !== undefined;
 
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         // Only use client-side pagination if server-side is not provided
-        ...(isServerPagination ? {} : { getPaginationRowModel: getPaginationRowModel() }),
+        ...(isServerPagination
+            ? {}
+            : { getPaginationRowModel: getPaginationRowModel() }),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         state: {
@@ -100,7 +103,8 @@ export function DataTable<TData, TValue>({
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                      header.column.columnDef.header,
+                                                      header.column.columnDef
+                                                          .header,
                                                       header.getContext(),
                                                   )}
                                         </TableHead>
@@ -114,7 +118,9 @@ export function DataTable<TData, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
+                                    data-state={
+                                        row.getIsSelected() && "selected"
+                                    }
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
@@ -144,17 +150,28 @@ export function DataTable<TData, TValue>({
                     {/* Removed row selection text */}
                 </div>
                 <div className="flex items-center space-x-6 lg:space-x-8">
-
                     <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-                        Page {isServerPagination ? pageIndex + 1 : table.getState().pagination.pageIndex + 1} of{" "}
+                        Page{" "}
+                        {isServerPagination
+                            ? pageIndex + 1
+                            : table.getState().pagination.pageIndex + 1}{" "}
+                        of{" "}
                         {isServerPagination ? pageCount : table.getPageCount()}
                     </div>
                     <div className="flex items-center space-x-2">
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => isServerPagination ? onFirstPage?.() : table.setPageIndex(0)}
-                            disabled={isServerPagination ? !canPreviousPage : !table.getCanPreviousPage()}
+                            onClick={() =>
+                                isServerPagination
+                                    ? onFirstPage?.()
+                                    : table.setPageIndex(0)
+                            }
+                            disabled={
+                                isServerPagination
+                                    ? !canPreviousPage
+                                    : !table.getCanPreviousPage()
+                            }
                         >
                             <span className="sr-only">Go to first page</span>
                             {"<<"}
@@ -162,8 +179,16 @@ export function DataTable<TData, TValue>({
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => isServerPagination ? onPreviousPage?.() : table.previousPage()}
-                            disabled={isServerPagination ? !canPreviousPage : !table.getCanPreviousPage()}
+                            onClick={() =>
+                                isServerPagination
+                                    ? onPreviousPage?.()
+                                    : table.previousPage()
+                            }
+                            disabled={
+                                isServerPagination
+                                    ? !canPreviousPage
+                                    : !table.getCanPreviousPage()
+                            }
                         >
                             <span className="sr-only">Go to previous page</span>
                             {"<"}
@@ -171,8 +196,16 @@ export function DataTable<TData, TValue>({
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => isServerPagination ? onNextPage?.() : table.nextPage()}
-                            disabled={isServerPagination ? !canNextPage : !table.getCanNextPage()}
+                            onClick={() =>
+                                isServerPagination
+                                    ? onNextPage?.()
+                                    : table.nextPage()
+                            }
+                            disabled={
+                                isServerPagination
+                                    ? !canNextPage
+                                    : !table.getCanNextPage()
+                            }
                         >
                             <span className="sr-only">Go to next page</span>
                             {">"}
@@ -180,8 +213,18 @@ export function DataTable<TData, TValue>({
                         <Button
                             variant="outline"
                             className="h-8 w-8 p-0"
-                            onClick={() => isServerPagination ? onLastPage?.() : table.setPageIndex(table.getPageCount() - 1)}
-                            disabled={isServerPagination ? !canNextPage : !table.getCanNextPage()}
+                            onClick={() =>
+                                isServerPagination
+                                    ? onLastPage?.()
+                                    : table.setPageIndex(
+                                          table.getPageCount() - 1,
+                                      )
+                            }
+                            disabled={
+                                isServerPagination
+                                    ? !canNextPage
+                                    : !table.getCanNextPage()
+                            }
                         >
                             <span className="sr-only">Go to last page</span>
                             {">>"}

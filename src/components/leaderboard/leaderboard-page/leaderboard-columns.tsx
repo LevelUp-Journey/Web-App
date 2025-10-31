@@ -12,12 +12,17 @@ const RANK_ICONS: Record<string, string> = {
     GRANDMASTER: "/ranks/rank-grandmaster.svg",
 };
 
-export const getLeaderboardColumns = (selectedRank: string): ColumnDef<UserWithProfile>[] => [
+export const getLeaderboardColumns = (
+    selectedRank: string,
+): ColumnDef<UserWithProfile>[] => [
     {
         accessorKey: "position",
         header: "Position",
         cell: ({ row }) => {
-            const position = selectedRank === "TOP500" ? (row.original as any).position : row.original.leaderboardPosition || "-";
+            const position =
+                selectedRank === "TOP500"
+                    ? (row.original as any).position
+                    : row.original.leaderboardPosition || "-";
             return <div className="font-bold text-lg">#{position}</div>;
         },
     },
@@ -44,7 +49,9 @@ export const getLeaderboardColumns = (selectedRank: string): ColumnDef<UserWithP
         accessorKey: "username",
         header: "Username",
         cell: ({ row }) => {
-            const username = row.original.profile?.username || row.original.userId.substring(0, 20);
+            const username =
+                row.original.profile?.username ||
+                row.original.userId.substring(0, 20);
             return <div className="font-medium">{username}</div>;
         },
     },
@@ -52,7 +59,11 @@ export const getLeaderboardColumns = (selectedRank: string): ColumnDef<UserWithP
         accessorKey: "totalPoints",
         header: () => <div className="text-center">Points</div>,
         cell: ({ row }) => {
-            return <div className="text-center font-semibold">{row.original.totalPoints.toLocaleString()}</div>;
+            return (
+                <div className="text-center font-semibold">
+                    {row.original.totalPoints.toLocaleString()}
+                </div>
+            );
         },
     },
 ];

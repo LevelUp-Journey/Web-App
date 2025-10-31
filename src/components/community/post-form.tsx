@@ -41,9 +41,9 @@ export function PostForm({
         setIsSubmitting(true);
 
         try {
-            const lines = content.split('\n');
+            const lines = content.split("\n");
             const title = lines[0]?.trim();
-            const postContent = lines.slice(1).join('\n').trim();
+            const postContent = lines.slice(1).join("\n").trim();
 
             if (!title) {
                 toast.error("Please add a title");
@@ -103,11 +103,11 @@ export function PostForm({
                         {/* Title Input */}
                         <input
                             type="text"
-                            value={content.split('\n')[0] || ""}
+                            value={content.split("\n")[0] || ""}
                             onChange={(e) => {
-                                const lines = content.split('\n');
+                                const lines = content.split("\n");
                                 lines[0] = e.target.value;
-                                setContent(lines.join('\n'));
+                                setContent(lines.join("\n"));
                             }}
                             placeholder="What's the title?"
                             className="w-full bg-transparent border-0 focus-visible:ring-0 text-2xl font-bold placeholder:text-muted-foreground/60 outline-none resize-none"
@@ -116,10 +116,10 @@ export function PostForm({
 
                         {/* Content Textarea */}
                         <Textarea
-                            value={content.split('\n').slice(1).join('\n')}
+                            value={content.split("\n").slice(1).join("\n")}
                             onChange={(e) => {
-                                const title = content.split('\n')[0] || "";
-                                setContent(title + '\n' + e.target.value);
+                                const title = content.split("\n")[0] || "";
+                                setContent(title + "\n" + e.target.value);
                             }}
                             placeholder="What's happening?"
                             className="w-full min-h-[100px] resize-none border-0 focus-visible:ring-0 bg-transparent text-xl leading-relaxed placeholder:text-muted-foreground/60 outline-none"
@@ -195,6 +195,34 @@ export function PostForm({
                                 </Button>
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex items-center justify-end pt-3">
+                    <div className="flex gap-2">
+                        {onCancel && (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={onCancel}
+                                disabled={isSubmitting}
+                                size="sm"
+                                className="rounded-full px-4"
+                            >
+                                Cancel
+                            </Button>
+                        )}
+                        <Button
+                            type="submit"
+                            disabled={
+                                isSubmitting || !content.trim() || !authorId
+                            }
+                            size="sm"
+                            className="rounded-full px-4 bg-primary hover:bg-primary/90"
+                        >
+                            {isSubmitting ? "Posting..." : "Post"}
+                        </Button>
                     </div>
                 </div>
             </form>

@@ -136,33 +136,31 @@ export default function PostPage() {
             </div>
 
             {/* Content */}
-            <div className="container mx-auto px-4 pb-4">
-                <div className="max-w-2xl mx-auto">
-
-                    {/* Post Content - Twitter Style */}
-                    <div className="bg-background rounded-lg border p-6">
-                        {/* Post Header */}
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-start gap-3 flex-1">
-                                <Avatar className="h-12 w-12 mt-1 flex-shrink-0">
-                                    <AvatarImage
-                                        src={post.authorProfile?.profileUrl}
-                                        alt={
-                                            post.authorProfile?.username ||
-                                            "User"
-                                        }
-                                    />
-                                    <AvatarFallback>
-                                        {post.authorProfile
-                                            ?.firstName?.[0] ||
-                                            post.authorProfile
-                                                ?.username?.[0] ||
-                                            "U"}
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                        <p className="font-semibold text-base">
+            <div className="container mx-auto px-4 py-4">
+                <div className="max-w-2xl mx-auto space-y-6">
+                    {/* Post Header */}
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Avatar className="h-12 w-12">
+                                        <AvatarImage
+                                            src={post.authorProfile?.profileUrl}
+                                            alt={
+                                                post.authorProfile?.username ||
+                                                "User"
+                                            }
+                                        />
+                                        <AvatarFallback>
+                                            {post.authorProfile
+                                                ?.firstName?.[0] ||
+                                                post.authorProfile
+                                                    ?.username?.[0] ||
+                                                "U"}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-medium">
                                             {post.authorProfile
                                                 ? `${post.authorProfile.firstName} ${post.authorProfile.lastName}`
                                                 : "Unknown User"}

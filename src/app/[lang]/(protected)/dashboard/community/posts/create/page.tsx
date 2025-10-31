@@ -82,12 +82,18 @@ export default function CreatePostPage() {
                 </div>
                 <div className="px-4 py-6">
                     <div className="text-center space-y-6 border-2 border-dashed rounded-xl p-8 mx-4">
-                        <h2 className="text-2xl font-semibold">Cannot Create Posts</h2>
+                        <h2 className="text-2xl font-semibold">
+                            Cannot Create Posts
+                        </h2>
                         <p className="text-muted-foreground text-base max-w-sm mx-auto leading-relaxed">
-                            Only teachers and administrators can create new posts. 
-                            However, you can still comment on existing posts and participate in discussions!
+                            Only teachers and administrators can create new
+                            posts. However, you can still comment on existing
+                            posts and participate in discussions!
                         </p>
-                        <Button onClick={() => router.push("/dashboard/community")} className="rounded-full px-6">
+                        <Button
+                            onClick={() => router.push("/dashboard/community")}
+                            className="rounded-full px-6"
+                        >
                             Browse Communities
                         </Button>
                     </div>
@@ -110,7 +116,6 @@ export default function CreatePostPage() {
                         <ArrowLeft className="h-5 w-5" />
                         <span className="font-medium">Back</span>
                     </Button>
-
                     {!selectedCommunity ? (
                         <h1 className="text-lg font-semibold">Create Post</h1>
                     ) : (
@@ -118,13 +123,12 @@ export default function CreatePostPage() {
                             {selectedCommunity.name}
                         </h1>
                     )}
-
                     <div className="w-16" /> {/* Spacer for centering */}
                 </div>
             </div>
 
             {/* Mobile Content */}
-                        {/* Mobile Content */}
+            {/* Mobile Content */}
             <div className="px-4 py-6 pb-24">
                 {!selectedCommunity ? (
                     <div className="space-y-6">
@@ -141,7 +145,9 @@ export default function CreatePostPage() {
                                 <div
                                     key={community.id}
                                     className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                                    onClick={() => setSelectedCommunity(community)}
+                                    onClick={() =>
+                                        setSelectedCommunity(community)
+                                    }
                                 >
                                     <div className="flex items-start justify-between">
                                         <div className="flex-1">
@@ -152,7 +158,9 @@ export default function CreatePostPage() {
                                                 {community.description}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
-                                                by {usernames[community.ownerId] || "Unknown"}
+                                                by{" "}
+                                                {usernames[community.ownerId] ||
+                                                    "Unknown"}
                                             </p>
                                         </div>
                                         <Button

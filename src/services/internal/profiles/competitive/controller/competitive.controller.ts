@@ -1,4 +1,7 @@
-import type { CompetitiveProfile, UsersByRankResponse } from "../entities/competitive-profile.entity";
+import type {
+    CompetitiveProfile,
+    UsersByRankResponse,
+} from "../entities/competitive-profile.entity";
 import {
     getCompetitiveProfileAction,
     getUsersByRankAction,

@@ -20,8 +20,9 @@ export class CloudinaryController {
     ): Promise<string> {
         try {
             // Get signature from server
-            const { signature, timestamp } =
-                await generateCloudinarySignature({ folder });
+            const { signature, timestamp } = await generateCloudinarySignature({
+                folder,
+            });
 
             // Upload directly to Cloudinary with signature
             const formData = new FormData();
@@ -41,9 +42,7 @@ export class CloudinaryController {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(
-                    errorData.error?.message || "Upload failed",
-                );
+                throw new Error(errorData.error?.message || "Upload failed");
             }
 
             const data = await response.json();

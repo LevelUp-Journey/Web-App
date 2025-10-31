@@ -27,7 +27,7 @@ import type { ProfileResponse } from "@/services/internal/profiles/profiles/cont
 async function getUserRole(): Promise<string | null> {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("session");
-    
+
     if (!sessionCookie?.value) {
         return null;
     }
@@ -35,7 +35,7 @@ async function getUserRole(): Promise<string | null> {
     try {
         // Decode JWT to get role
         const payload = JSON.parse(
-            Buffer.from(sessionCookie.value.split(".")[1], "base64").toString()
+            Buffer.from(sessionCookie.value.split(".")[1], "base64").toString(),
         );
         return payload.role || null;
     } catch {
