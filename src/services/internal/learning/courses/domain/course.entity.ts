@@ -1,23 +1,30 @@
-import type { CourseDifficulty } from "../controller/course.response";
-
-export interface Course {
+export interface CourseResponse {
     id: string;
     title: string;
     description: string;
-    teacherId: string;
-    status: string;
-    difficulty: CourseDifficulty;
-    totalGuides: number;
-    rating: number;
-    totalLikes: number;
-    completionScore: number;
-    cover: string;
-    guides: CourseGuide[];
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface CourseGuide {
-    guideId: string;
-    position: number;
+    coverImage: string;
+    status: CourseStatus;
+    likesCount: number;
+    authorIds: string[];
+    topics: [
+        {
+            id: string;
+            name: string;
+        },
+    ];
+    guides: [
+        {
+            id: string;
+            title: string;
+            description: string;
+            coverImage: string;
+            status: GuideStatus;
+            likesCount: number;
+            pagesCount: number;
+            authorIds: string[];
+            createdAt: Date;
+        },
+    ];
+    createdAt: Date;
+    updatedAt: Date;
 }
