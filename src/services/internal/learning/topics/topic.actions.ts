@@ -10,41 +10,10 @@ import type {
     UpdateTopicRequest,
 } from "./topic.response";
 
-interface GetTopicsResponseFormat {
-    content: TopicResponse[];
-    pageable: {
-        pageNumber: number;
-        pageSize: number;
-        sort: {
-            empty: boolean;
-            sorted: boolean;
-            unsorted: boolean;
-        };
-        offset: number;
-        paged: boolean;
-        unpaged: boolean;
-    };
-    last: boolean;
-    totalElements: number;
-    totalPages: number;
-    size: number;
-    number: number;
-    first: boolean;
-    numberOfElements: number;
-    sort: {
-        empty: boolean;
-        sorted: boolean;
-        unsorted: boolean;
-    };
-    empty: boolean;
-}
-
 export async function getAllTopicsAction(): Promise<TopicResponse[]> {
     const response =
-        await LEARNING_HTTP.get<LearningResponse<GetTopicsResponseFormat>>(
-            "/topics",
-        );
-    return response.data.data.content;
+        await LEARNING_HTTP.get<LearningResponse<TopicResponse[]>>("/topics");
+    return response.data.data;
 }
 
 export async function createTopicAction(
@@ -87,12 +56,14 @@ export async function deleteTopicAction(
 export async function searchTopicsByNameAction(
     request: SearchTopicRequest,
 ): Promise<TopicResponse[]> {
-    const response = await LEARNING_HTTP.get<
-        LearningResponse<GetTopicsResponseFormat>
-    >(`/topics/search`, {
-        params: {
-            name: request.name,
+    const response = await LEARNING_HTTP.get<LearningResponse<TopicResponse[]>>(
+        `/topics/search`,
+        {
+            params: {
+                name: request.name,
+            },
         },
-    });
-    return response.data.data.content;
+    );
+    console.log("RESUTLADOS DE TOPICS action ", response.data.data);
+    return response.data.data;
 }

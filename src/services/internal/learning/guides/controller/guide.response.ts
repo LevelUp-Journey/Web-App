@@ -20,13 +20,15 @@ export interface GuideResponse {
         id: string;
         name: string;
     }[];
-    pages: {
-        id: string;
-        content: string;
-        order: number;
-        createdAt: string;
-        updatedAt: string;
-    }[];
+    pages: PageResponse[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface PageResponse {
+    id: string;
+    content: string;
+    order: number;
     createdAt: string;
     updatedAt: string;
 }
