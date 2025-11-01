@@ -31,6 +31,8 @@ interface BasicInfoFormProps {
     onSubmit: (data: BasicInfoFormData) => void;
     onCancel: () => void;
     isSubmitting: boolean;
+    submitButtonText?: string;
+    submitButtonLoadingText?: string;
 }
 
 export function BasicInfoForm({
@@ -38,6 +40,8 @@ export function BasicInfoForm({
     onSubmit,
     onCancel,
     isSubmitting,
+    submitButtonText = "Create Guide",
+    submitButtonLoadingText = "Creating Guide...",
 }: BasicInfoFormProps) {
     const [topicSearchQuery, setTopicSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState<TopicResponse[]>([]);
@@ -415,10 +419,10 @@ export function BasicInfoForm({
                         {isSubmitting ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Creating Guide...
+                                {submitButtonLoadingText}
                             </>
                         ) : (
-                            "Continue to Pages"
+                            submitButtonText
                         )}
                     </Button>
                 </div>

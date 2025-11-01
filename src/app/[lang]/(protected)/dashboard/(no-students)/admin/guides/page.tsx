@@ -26,7 +26,9 @@ export default function GuidesPage() {
                 setUserRole(role || null);
 
                 if (role) {
-                    const guideList = await GuideController.getAllGuides();
+                    const userId = await AuthController.getUserId();
+                    const guideList =
+                        await GuideController.getTeachersGuides(userId);
                     setGuides(guideList);
                 }
             } catch (err) {

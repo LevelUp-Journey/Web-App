@@ -52,6 +52,15 @@ export async function getAllGuidesAction(): Promise<GuideResponse[]> {
     return response.data.data.content;
 }
 
+export async function getTeachersGuidesAction(
+    teacherId: string,
+): Promise<GuideResponse[]> {
+    const response = await LEARNING_HTTP.get<
+        LearningResponse<GetGuidesResponseFomat>
+    >(`/guides/teachers/${teacherId}`);
+    return response.data.data.content;
+}
+
 export async function createGuideAction(
     request: CreateGuideRequest,
 ): Promise<GuideResponse> {

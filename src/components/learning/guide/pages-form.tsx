@@ -45,7 +45,6 @@ interface PagesFormProps {
     guideId: string;
     initialPages?: PageData[];
     onFinish: () => void;
-    onBack: () => void;
 }
 
 function SortablePageItem({
@@ -139,7 +138,6 @@ export function PagesForm({
     guideId,
     initialPages = [],
     onFinish,
-    onBack,
 }: PagesFormProps) {
     const [pages, setPages] = useState<PageData[]>(initialPages);
     const [showEditor, setShowEditor] = useState(false);
@@ -393,20 +391,9 @@ export function PagesForm({
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-between p-6 border-t">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={onBack}
-                        disabled={saving || deleting}
-                    >
-                        Back
-                    </Button>
-                    <Button
-                        onClick={onFinish}
-                        disabled={pages.length === 0 || saving || deleting}
-                    >
-                        Finish & Publish
+                <div className="flex justify-end p-6 border-t">
+                    <Button onClick={onFinish} disabled={saving || deleting}>
+                        Done
                     </Button>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import {
     getGuideByIdAction,
     getGuidePagesByGuideIdAction,
     getPageByIdAction,
+    getTeachersGuidesAction,
     updateGuideAction,
     updateGuideStatusAction,
     updatePageAction,
@@ -100,6 +101,13 @@ export class GuideController {
         request: DeletePageRequest,
     ): Promise<GuideResponse> {
         const response = await deletePageAction(request);
+        return response;
+    }
+
+    public static async getTeachersGuides(
+        teacherId: string,
+    ): Promise<GuideResponse[]> {
+        const response = await getTeachersGuidesAction(teacherId);
         return response;
     }
 }
