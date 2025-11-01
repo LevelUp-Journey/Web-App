@@ -142,7 +142,7 @@ export async function updateGuideStatusAction(
     guideId: string,
     request: UpdateGuideStatusRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.patch<LearningResponse<GuideResponse>>(
+    const response = await LEARNING_HTTP.put<LearningResponse<GuideResponse>>(
         `/guides/${guideId}/status`,
         request,
     );

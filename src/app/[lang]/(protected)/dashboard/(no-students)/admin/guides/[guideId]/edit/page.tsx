@@ -18,6 +18,7 @@ import type {
     GuideResponse,
     UpdateGuideRequest,
 } from "@/services/internal/learning/guides/controller/guide.response";
+import { GuideStatus } from "@/services/internal/learning/guides/controller/guide.response";
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -40,6 +41,7 @@ export default function EditGuidePage() {
     const [guide, setGuide] = useState<GuideResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [publishing, setPublishing] = useState(false);
     const [activeTab, setActiveTab] = useState<string>("pages");
 
     const form = useForm<FormData>({
@@ -117,6 +119,24 @@ export default function EditGuidePage() {
         }
     };
 
+    const handlePublish = async () => {
+        if (!guide) return;
+
+        setPublishing(true);
+        try {
+            const updatedGuide = await GuideController.updateGuideStatus(guide.id, {
+                status: GuideStatus.PUBLISHED,
+            });
+            setGuide(updatedGuide);
+            router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
+        } catch (error) {
+            console.error("Error publishing guide:", error);
+            alert("Error publishing guide. Please try again.");
+        } finally {
+            setPublishing(false);
+        }
+    };
+
     if (loading) {
         return (
             <section className="flex flex-col h-full items-center justify-center">
@@ -161,16 +181,25 @@ export default function EditGuidePage() {
                                 Edit your guide information and manage pages
                             </p>
                         </div>
-                        <Button
-                            variant="outline"
-                            onClick={() =>
-                                router.push(
-                                    PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
-                                )
-                            }
-                        >
-                            Back to Guides
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button
+                                variant="default"
+                                onClick={handlePublish}
+                                disabled={publishing || guide?.status === GuideStatus.PUBLISHED}
+                            >
+                                {publishing ? "Publishing..." : "Publish"}
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    router.push(
+                                        PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
+                                    )
+                                }
+                            >
+                                Back to Guides
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -204,7 +233,7 @@ export default function EditGuidePage() {
                                 initialPages={guide.pages.map((p) => ({
                                     id: p.id,
                                     content: p.content,
-                                    order: p.order,
+                                    orderNumber: p.orderNumber,
                                     isNew: false,
                                 }))}
                                 onFinish={handleFinish}
