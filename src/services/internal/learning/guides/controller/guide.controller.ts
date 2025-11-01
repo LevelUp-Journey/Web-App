@@ -88,6 +88,8 @@ export class GuideController {
         guideId: string,
         request: CreatePageRequest,
     ): Promise<GuideResponse> {
+        console.log("Request:", request);
+        console.log("Guide ID:", guideId);
         const response = await createPageAction(guideId, request);
         return response;
     }
