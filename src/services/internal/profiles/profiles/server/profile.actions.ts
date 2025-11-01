@@ -7,6 +7,7 @@ import {
 } from "@/services/axios.config";
 import type {
     ProfileResponse,
+    SearchUserResponse,
     UpdateProfileRequest,
 } from "../controller/profile.response";
 
@@ -99,4 +100,14 @@ export async function searchProfilesAction(
             status: axiosError.response?.status || 500,
         };
     }
+}
+
+export async function searchUsersByUsernameAction(
+    username: string,
+): Promise<SearchUserResponse[]> {
+    const response = await PROFILES_HTTP.get<SearchUserResponse[]>(
+        `/profiles/search?username=${username}`,
+    );
+
+    return response.data;
 }

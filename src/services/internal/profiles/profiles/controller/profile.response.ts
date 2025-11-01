@@ -11,3 +11,9 @@ export interface ProfileResponse {
 
 export interface UpdateProfileRequest
     extends Partial<Omit<ProfileResponse, "id">> {}
+
+export interface SearchUserResponse {
+    userId: string;
+    fullName: string;
+    profileUrl: string;
+}

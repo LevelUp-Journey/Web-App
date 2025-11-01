@@ -1,13 +1,19 @@
 import { jwtDecode } from "jwt-decode";
+import { PROFILES_HTTP } from "@/services/axios.config";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
     getAllProfilesAction,
     getProfileAction,
     getProfileByIdAction,
     searchProfilesAction,
+    searchUsersByUsernameAction,
     updateProfileAction,
 } from "../server/profile.actions";
-import type { ProfileResponse, UpdateProfileRequest } from "./profile.response";
+import type {
+    ProfileResponse,
+    SearchUserResponse,
+    UpdateProfileRequest,
+} from "./profile.response";
 
 export class ProfileController {
     public static async getProfileByUserId(userId: string) {
@@ -60,5 +66,12 @@ export class ProfileController {
             return response.data as ProfileResponse[];
         }
         throw new Error("Failed to search profiles");
+    }
+
+    public static async searchUsersByUsername(
+        username: string,
+    ): Promise<SearchUserResponse[]> {
+        const response = await searchUsersByUsernameAction(username);
+        return response;
     }
 }
