@@ -1,9 +1,17 @@
 "use client";
 
-import { Calendar, Heart, ChevronLeft, ChevronRight, BookOpen, ArrowLeft } from "lucide-react";
+import {
+    ArrowLeft,
+    BookOpen,
+    Calendar,
+    ChevronLeft,
+    ChevronRight,
+    Heart,
+} from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { serialize } from "next-mdx-remote-client/serialize";
+import { useEffect, useState } from "react";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import { GuideAuthorCard } from "@/components/learning/guide-author-card";
 import { GuideLikeButton } from "@/components/learning/guide-like-button";
@@ -20,17 +28,26 @@ interface GuideViewerProps {
     author: ProfileResponse;
 }
 
-type ViewMode = "overview" | "pages";
-
 export function GuideViewer({ guide, author }: GuideViewerProps) {
-    const [viewMode, setViewMode] = useState<ViewMode>("overview");
-    const [currentPageIndex, setCurrentPageIndex] = useState(0);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const pageParam = searchParams.get("page");
 
-    const formattedDate = new Date(guide.createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
+    // Determinar el índice de página actual basado en la URL
+    const currentPageIndex = pageParam ? parseInt(pageParam) - 1 : -1;
+
+    // Si hay un parámetro de página válido, estamos en modo lectura, sino en overview
+    const isReadingMode =
+        currentPageIndex >= 0 && currentPageIndex < guide.pages.length;
+
+    const formattedDate = new Date(guide.createdAt).toLocaleDateString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        },
+    );
 
     const totalReadingTime = guide.pages.reduce((total, page) => {
         return total + calculateReadingTime(page.content);
@@ -42,22 +59,48 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
 
     const handleNextPage = () => {
         if (hasNextPage) {
-            setCurrentPageIndex(currentPageIndex + 1);
+            const nextPage = currentPageIndex + 2; // +2 porque el índice es 0-based pero la URL es 1-based
+            router.push(`?page=${nextPage}`, { scroll: false });
         }
     };
 
     const handlePreviousPage = () => {
         if (hasPreviousPage) {
-            setCurrentPageIndex(currentPageIndex - 1);
+            const prevPage = currentPageIndex; // currentPageIndex ya es el anterior en 1-based
+            router.push(`?page=${prevPage}`, { scroll: false });
         }
     };
 
     const handleBackToOverview = () => {
-        setViewMode("overview");
-        setCurrentPageIndex(0);
+        router.push(window.location.pathname, { scroll: false });
     };
 
-    if (viewMode === "pages" && currentPage) {
+    const handleStartReading = () => {
+        router.push(`?page=1`, { scroll: false });
+    };
+
+    const handleGoToPage = (pageIndex: number) => {
+        const pageNumber = pageIndex + 1; // Convertir índice 0-based a número de página 1-based
+        router.push(`?page=${pageNumber}`, { scroll: false });
+    };
+
+    // Si hay un parámetro de página pero no es válido, mostrar el overview
+    if (pageParam && !isReadingMode) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-muted-foreground mb-4">
+                        Invalid page number
+                    </p>
+                    <Button onClick={handleBackToOverview}>
+                        Back to Overview
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    if (isReadingMode && currentPage) {
         return (
             <div className="min-h-screen bg-background">
                 {/* Header with back button */}
@@ -73,7 +116,8 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                                 Back to Overview
                             </Button>
                             <div className="text-sm text-muted-foreground">
-                                Page {currentPageIndex + 1} of {guide.pages.length}
+                                Page {currentPageIndex + 1} of{" "}
+                                {guide.pages.length}
                             </div>
                         </div>
                     </div>
@@ -101,13 +145,14 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             {guide.pages.map((_, index) => (
                                 <button
                                     key={index}
-                                    onClick={() => setCurrentPageIndex(index)}
+                                    onClick={() => handleGoToPage(index)}
                                     className={cn(
                                         "w-2 h-2 rounded-full transition-colors",
                                         index === currentPageIndex
                                             ? "bg-primary"
-                                            : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                                            : "bg-muted-foreground/30 hover:bg-muted-foreground/50",
                                     )}
+                                    aria-label={`Go to page ${index + 1}`}
                                 />
                             ))}
                         </div>
@@ -166,7 +211,8 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             {guide.status}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                            {totalReadingTime} min read • {guide.pagesCount} pages
+                            {totalReadingTime} min read • {guide.pagesCount}{" "}
+                            pages
                         </span>
                     </div>
 
@@ -225,7 +271,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         />
                         {guide.pagesCount > 0 && (
                             <Button
-                                onClick={() => setViewMode("pages")}
+                                onClick={handleStartReading}
                                 className="flex items-center gap-2"
                             >
                                 <BookOpen className="h-4 w-4" />
@@ -266,9 +312,9 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
 function PageContent({ content }: { content: string }) {
     const [serializedContent, setSerializedContent] = useState<any>(null);
 
-    useState(() => {
+    useEffect(() => {
         serialize({ source: content }).then(setSerializedContent);
-    });
+    }, [content]);
 
     if (!serializedContent) {
         return <div className="animate-pulse">Loading content...</div>;
