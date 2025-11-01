@@ -1,6 +1,7 @@
 "use server";
 
 import { LEARNING_HTTP } from "@/services/axios.config";
+import type { LearningResponse } from "../../shared";
 import type {
     AddGuideToCourseRequest,
     CourseResponse,
@@ -14,8 +15,9 @@ import type {
 } from "../controller/course.response";
 
 export async function getCoursesAction(): Promise<CourseResponse[]> {
-    const response = await LEARNING_HTTP.get<CourseResponse[]>("/courses");
-    return response.data;
+    const response =
+        await LEARNING_HTTP.get<LearningResponse<CourseResponse[]>>("/courses");
+    return response.data.data;
 }
 
 export async function createCourseAction(
@@ -66,10 +68,10 @@ export async function addGuideToCourseAction(
 export async function deleteGuideFromCourseAction(
     request: DeleteGuideFromCourseRequest,
 ): Promise<CourseResponse> {
-    const response = await LEARNING_HTTP.delete<CourseResponse>(
-        `/courses/${request.courseId}/guides/${request.guideId}`,
-    );
-    return response.data;
+    const response = await LEARNING_HTTP.delete<
+        LearningResponse<CourseResponse>
+    >(`/courses/${request.courseId}/guides/${request.guideId}`);
+    return response.data.data;
 }
 
 export async function reorderCourseGuideAction(
@@ -77,31 +79,30 @@ export async function reorderCourseGuideAction(
     guideId: string,
     newPosition: number,
 ): Promise<CourseResponse> {
-    const response = await LEARNING_HTTP.put<CourseResponse>(
+    const response = await LEARNING_HTTP.put<LearningResponse<CourseResponse>>(
         `/courses/${courseId}/guides/${guideId}/reorder`,
         { newPosition },
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function updateCourseAuthorsAction(
     courseId: string,
     request: UpdateCourseAuthorsRequest,
 ): Promise<CourseResponse> {
-    const response = await LEARNING_HTTP.put<CourseResponse>(
+    const response = await LEARNING_HTTP.put<LearningResponse<CourseResponse>>(
         `/courses/${courseId}/authors`,
         request,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function updateCourseStatusAction(
     courseId: string,
     request: UpdateCourseStatusRequest,
 ): Promise<CourseResponse> {
-    const response = await LEARNING_HTTP.patch<CourseResponse>(
-        `/courses/${courseId}/status`,
-        request,
-    );
-    return response.data;
+    const response = await LEARNING_HTTP.patch<
+        LearningResponse<CourseResponse>
+    >(`/courses/${courseId}/status`, request);
+    return response.data.data;
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { LEARNING_HTTP } from "@/services/axios.config";
+import type { LearningResponse } from "../../shared";
 import type {
     CreateGuideRequest,
     CreatePageRequest,
@@ -14,9 +15,41 @@ import type {
     UpdatePageRequest,
 } from "../controller/guide.response";
 
+interface GetGuidesResponseFomat {
+    content: GuideResponse[];
+    pageable: {
+        pageNumber: number;
+        pageSize: number;
+        sort: {
+            empty: boolean;
+            sorted: boolean;
+            unsorted: boolean;
+        };
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+    };
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    first: boolean;
+    numberOfElements: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    empty: boolean;
+}
+
 export async function getAllGuidesAction(): Promise<GuideResponse[]> {
-    const response = await LEARNING_HTTP.get<GuideResponse[]>("/guides");
-    return response.data;
+    const response =
+        await LEARNING_HTTP.get<LearningResponse<GetGuidesResponseFomat>>(
+            "/guides",
+        );
+    return response.data.data.content;
 }
 
 export async function createGuideAction(
