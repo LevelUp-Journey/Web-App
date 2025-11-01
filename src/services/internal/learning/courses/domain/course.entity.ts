@@ -1,9 +1,12 @@
-export interface CourseResponse {
+import type { GuideStatus } from "../../guides/controller/guide.response";
+
+export interface Course {
     id: string;
     title: string;
     description: string;
     coverImage: string;
     status: CourseStatus;
+    difficultyLevel: CourseDifficulty;
     likesCount: number;
     authorIds: string[];
     topics: [
@@ -22,9 +25,21 @@ export interface CourseResponse {
             likesCount: number;
             pagesCount: number;
             authorIds: string[];
-            createdAt: Date;
+            createdAt: string;
         },
     ];
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export enum CourseDifficulty {
+    BEGINNER = "BEGINNER",
+    INTERMEDIATE = "INTERMEDIATE",
+    ADVANCED = "ADVANCED",
+    EXPERT = "EXPERT",
+}
+export enum CourseStatus {
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
+    ARCHIVED = "ARCHIVED",
 }

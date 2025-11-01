@@ -1,4 +1,5 @@
 import type { GuideStatus } from "../../guides/controller/guide.response";
+import type { CourseDifficulty, CourseStatus } from "../domain/course.entity";
 
 export interface CourseResponse {
     id: string;
@@ -6,6 +7,7 @@ export interface CourseResponse {
     description: string;
     coverImage: string;
     status: CourseStatus;
+    difficultyLevel: CourseDifficulty;
     likesCount: number;
     authorIds: string[];
     topics: [
@@ -24,23 +26,18 @@ export interface CourseResponse {
             likesCount: number;
             pagesCount: number;
             authorIds: string[];
-            createdAt: Date;
+            createdAt: string;
         },
     ];
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export enum CourseStatus {
-    DRAFT = "DRAFT",
-    PUBLISHED = "PUBLISHED",
-    ARCHIVED = "ARCHIVED",
+    createdAt: "2025-11-01T07:23:48.156Z";
+    updatedAt: "2025-11-01T07:23:48.156Z";
 }
 
 export interface CreateCourseRequest {
     title: string;
     description: string;
     coverImage: string;
+    difficultyLevel: CourseDifficulty;
     authorIds: string[];
     topicIds: string[];
 }
@@ -60,6 +57,7 @@ export interface UpdateCourseRequest {
     title: string;
     description: string;
     coverImage: string;
+    difficultyLevel: CourseDifficulty;
     topicIds: string[];
 }
 

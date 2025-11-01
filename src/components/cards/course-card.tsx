@@ -57,9 +57,9 @@ export default function CourseCard({
                 className="block"
             >
                 <div className="relative w-full aspect-video bg-muted">
-                    {course.cover ? (
+                    {course.coverImage ? (
                         <Image
-                            src={course.cover}
+                            src={course.coverImage}
                             alt={course.title}
                             fill
                             className="object-cover"
@@ -89,7 +89,7 @@ export default function CourseCard({
                         <Button size="icon" variant="ghost">
                             <Star className="text-yellow-400" size={18} />
                         </Button>
-                        {course.rating}
+                        {course.likesCount}
                     </div>
 
                     {adminMode && (
@@ -140,7 +140,9 @@ export default function CourseCard({
                             </span>
                         </div>
                     )}
-                    <CourseDifficultyBadge difficulty={course.difficulty} />
+                    <CourseDifficultyBadge
+                        difficulty={course.difficultyLevel}
+                    />
 
                     <div className="flex items-center gap-1.5">
                         <Calendar className="h-4 w-4" />
