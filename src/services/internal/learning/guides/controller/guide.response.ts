@@ -28,7 +28,7 @@ export interface GuideResponse {
 export interface PageResponse {
     id: string;
     content: string;
-    order: number;
+    orderNumber: number;
     createdAt: string;
     updatedAt: string;
 }
@@ -63,7 +63,7 @@ export interface GetPageByIdRequest {
 
 export interface UpdatePageRequest {
     content: string;
-    order: number;
+    orderNumber: number;
 }
 
 export interface DeletePageRequest {
