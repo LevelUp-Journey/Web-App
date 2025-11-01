@@ -155,7 +155,7 @@ export function PagesForm({
 	onFinish,
 }: PagesFormProps) {
 	// Estado principal: solo páginas REALES guardadas
-	const [pages, setPages] = useState<Page[]>(initialPages);
+	const [pages, setPages] = useState<Page[]>([]);
 
 	// ID de la página actualmente seleccionada
 	const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
@@ -184,15 +184,90 @@ export function PagesForm({
 	const selectedPage = pages.find((p) => p.id === selectedPageId) || null;
 
 	// ========================================================================
+	// HELPER FUNCTIONS
+	// ========================================================================
+
+	/**
+	 * Función centralizada para actualizar páginas garantizando unicidad
+	 * Siempre usa Map para eliminar duplicados por ID
+	 */
+	const updatePagesSafely = useCallback((newPages: Page[]) => {
+		setPages(prevPages => {
+			const pagesMap = new Map<string, Page>();
+			
+			// Agregar páginas existentes
+			prevPages.forEach(p => pagesMap.set(p.id, p));
+			
+			// Agregar o actualizar con nuevas páginas
+			newPages.forEach(p => pagesMap.set(p.id, p));
+			
+			// Convertir a array y ordenar por orderNumber
+			const uniquePages = Array.from(pagesMap.values())
+				.sort((a, b) => a.orderNumber - b.orderNumber);
+			
+			console.log(`🔄 Pages updated: ${prevPages.length} → ${uniquePages.length} (added ${newPages.length})`);
+			
+			// Verificar que no hay duplicados
+			const ids = uniquePages.map(p => p.id);
+			const uniqueIds = new Set(ids);
+			if (ids.length !== uniqueIds.size) {
+				console.error("🚨 DUPLICATE IDs DETECTED!", { ids, uniqueIds });
+			}
+			
+			return uniquePages;
+		});
+	}, []);
+
+	/**
+	 * Reemplaza completamente el estado de páginas
+	 */
+	const replacePagesCompletely = useCallback((newPages: Page[]) => {
+		const pagesMap = new Map<string, Page>();
+		newPages.forEach(p => pagesMap.set(p.id, p));
+		
+		const uniquePages = Array.from(pagesMap.values())
+			.sort((a, b) => a.orderNumber - b.orderNumber);
+		
+		console.log(`🔄 Pages replaced: ${uniquePages.length} pages`);
+		setPages(uniquePages);
+	}, []);
+
+	/**
+	 * Recarga todas las páginas desde el backend
+	 */
+	const reloadPagesFromBackend = useCallback(async () => {
+		try {
+			const response = await GuideController.getGuidePagesByGuideId({ guideId });
+			if ("pages" in response && Array.isArray(response.pages)) {
+				const pagesFromResponse = response.pages.map(p => ({
+					id: p.id,
+					content: p.content,
+					orderNumber: p.order,
+				}));
+				replacePagesCompletely(pagesFromResponse);
+			}
+		} catch (error) {
+			console.error("Error reloading pages:", error);
+		}
+	}, [guideId, replacePagesCompletely]);
+
+	// ========================================================================
 	// EFFECTS
 	// ========================================================================
 
-	// Auto-select first page on mount
+	// Initialize with initial pages
+	useEffect(() => {
+		if (initialPages.length > 0) {
+			replacePagesCompletely(initialPages);
+		}
+	}, []); // Solo una vez al montar
+
+	// Auto-select first page when pages change
 	useEffect(() => {
 		if (pages.length > 0 && !selectedPageId) {
 			setSelectedPageId(pages[0].id);
 		}
-	}, [pages, selectedPageId]);
+	}, [pages.length, selectedPageId]);
 
 	// Load content into editor when selection changes
 	useEffect(() => {
@@ -202,6 +277,19 @@ export function PagesForm({
 			setHasUnsavedChanges(false);
 		}
 	}, [selectedPage, editorMethods]);
+
+	// Debug: Verificar integridad de datos
+	useEffect(() => {
+		const ids = pages.map(p => p.id);
+		const uniqueIds = new Set(ids);
+		if (ids.length !== uniqueIds.size) {
+			console.error("🚨 CRITICAL: Duplicate page IDs detected!", {
+				total: ids.length,
+				unique: uniqueIds.size,
+				duplicates: ids.filter((id, index) => ids.indexOf(id) !== index)
+			});
+		}
+	}, [pages]);
 
 	// ========================================================================
 	// HANDLERS
@@ -248,53 +336,43 @@ export function PagesForm({
 				orderNumber: nextOrderNumber,
 			});
 
-			console.log("Created page response:", response);
+			console.log("📥 Created page response:", response);
 
 			// El backend puede devolver GuideResponse o PageResponse directamente
-			// Manejar ambos casos
-			let newPageData: Page | null = null;
-
 			if ("pages" in response && Array.isArray(response.pages)) {
-				// Es un GuideResponse con array de pages
-				const newPage = response.pages.find(
-					(p) => p.order === nextOrderNumber,
-				);
+				// Es un GuideResponse con array COMPLETO de pages
+				// REEMPLAZAR el estado completo
+				const pagesFromResponse = response.pages.map(p => ({
+					id: p.id,
+					content: p.content,
+					orderNumber: p.order,
+				}));
+				
+				replacePagesCompletely(pagesFromResponse);
+
+				// Seleccionar la página recién creada
+				const newPage = response.pages.find((p) => p.order === nextOrderNumber);
 				if (newPage) {
-					newPageData = {
-						id: newPage.id,
-						content: newPage.content,
-						orderNumber: newPage.order,
-					};
+					setSelectedPageId(newPage.id);
 				}
 			} else if ("id" in response && "content" in response) {
-				// Es un PageResponse directo
+				// Es un PageResponse directo - agregar la nueva página
 				const pageResponse = response as any;
-				newPageData = {
+				const newPageData: Page = {
 					id: pageResponse.id,
 					content: pageResponse.content,
 					orderNumber: pageResponse.orderNumber || pageResponse.order || nextOrderNumber,
 				};
-			}
 
-			if (newPageData) {
-				// Agregar al estado (sin duplicados)
-				setPages((prev) => {
-					// Verificar que no exista ya
-					if (prev.some((p) => p.id === newPageData.id)) {
-						return prev;
-					}
-					return [...prev, newPageData].sort(
-						(a, b) => a.orderNumber - b.orderNumber,
-					);
-				});
-
-				// Seleccionar la nueva página
+				console.log("✅ PageResponse: Adding single page. ID:", newPageData.id);
+				updatePagesSafely([newPageData]);
 				setSelectedPageId(newPageData.id);
-				setHasUnsavedChanges(false);
 			} else {
 				console.error("Could not extract page data from response:", response);
 				alert("Page created but could not be loaded. Please refresh.");
 			}
+
+			setHasUnsavedChanges(false);
 		} catch (error) {
 			console.error("Error creating page:", error);
 			alert("Error creating page. Please try again.");
@@ -404,7 +482,7 @@ export function PagesForm({
 			}
 
 			// Actualizar estado local
-			setPages(remainingPages);
+			replacePagesCompletely(remainingPages);
 
 			// Si la página eliminada estaba seleccionada, seleccionar otra
 			if (selectedPageId === pageId) {
@@ -449,7 +527,7 @@ export function PagesForm({
 			orderNumber: index + 1,
 		}));
 
-		setPages(updatedPages);
+		replacePagesCompletely(updatedPages);
 		setReordering(true);
 
 		try {
@@ -463,8 +541,8 @@ export function PagesForm({
 		} catch (error) {
 			console.error("Error reordering pages:", error);
 			alert("Error reordering pages. Please refresh the page.");
-			// Revertir el cambio local
-			setPages(pages);
+			// Recargar desde backend para revertir cambios
+			await reloadPagesFromBackend();
 		} finally {
 			setReordering(false);
 		}
