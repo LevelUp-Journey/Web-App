@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useGuide } from "@/hooks/use-guide";
 import { cn } from "@/lib/utils";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
@@ -29,18 +30,28 @@ interface GuideViewerProps {
 }
 
 export function GuideViewer({ guide, author }: GuideViewerProps) {
+    console.log("GuideViewer", guide);
     const router = useRouter();
     const searchParams = useSearchParams();
     const pageParam = searchParams.get("page");
 
+    // Usar hook personalizado para manejar el guide
+    const { guide: storedGuide, author: storedAuthor } = useGuide({
+        guideId: guide.id,
+        guide,
+        author,
+    });
+
     // Determinar el índice de página actual basado en la URL
-    const currentPageIndex = pageParam ? parseInt(pageParam) - 1 : -1;
+    const pageNumber = pageParam ? parseInt(pageParam, 10) : null;
+    const currentPageIndex = pageNumber ? pageNumber - 1 : -1;
 
-    // Si hay un parámetro de página válido, estamos en modo lectura, sino en overview
-    const isReadingMode =
-        currentPageIndex >= 0 && currentPageIndex < guide.pages.length;
+    // Validar que la página está en el rango válido
+    const isValidPage =
+        currentPageIndex >= 0 && currentPageIndex < storedGuide.pagesCount;
+    const isReadingMode = pageNumber !== null && isValidPage;
 
-    const formattedDate = new Date(guide.createdAt).toLocaleDateString(
+    const formattedDate = new Date(storedGuide.createdAt).toLocaleDateString(
         "en-US",
         {
             year: "numeric",
@@ -49,13 +60,15 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         },
     );
 
-    const totalReadingTime = guide.pages.reduce((total, page) => {
+    const totalReadingTime = storedGuide.pages.reduce((total, page) => {
         return total + calculateReadingTime(page.content);
     }, 0);
 
-    const currentPage = guide.pages[currentPageIndex];
+    const currentPage = isValidPage
+        ? storedGuide.pages[currentPageIndex]
+        : null;
     const hasPreviousPage = currentPageIndex > 0;
-    const hasNextPage = currentPageIndex < guide.pages.length - 1;
+    const hasNextPage = currentPageIndex < storedGuide.pagesCount - 1;
 
     const handleNextPage = () => {
         if (hasNextPage) {
@@ -80,18 +93,31 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     };
 
     const handleGoToPage = (pageIndex: number) => {
-        const pageNumber = pageIndex + 1; // Convertir índice 0-based a número de página 1-based
-        router.push(`?page=${pageNumber}`, { scroll: false });
+        const pageNum = pageIndex + 1; // Convertir índice 0-based a número de página 1-based
+        // Validar que la página está en el rango
+        if (pageNum >= 1 && pageNum <= storedGuide.pagesCount) {
+            router.push(`?page=${pageNum}`, { scroll: false });
+        }
     };
 
-    // Si hay un parámetro de página pero no es válido, mostrar el overview
-    if (pageParam && !isReadingMode) {
+    // Si hay un parámetro de página pero no es válido, mostrar mensaje de error
+    if (pageNumber !== null && !isValidPage) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-muted-foreground mb-4">
-                        Invalid page number
-                    </p>
+                <div className="text-center space-y-4">
+                    <div>
+                        <h2 className="text-2xl font-bold mb-2">
+                            Page Not Found
+                        </h2>
+                        <p className="text-muted-foreground">
+                            The page number {pageNumber} does not exist in this
+                            guide.
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            This guide has {storedGuide.pagesCount} page
+                            {storedGuide.pagesCount !== 1 ? "s" : ""}.
+                        </p>
+                    </div>
                     <Button onClick={handleBackToOverview}>
                         Back to Overview
                     </Button>
@@ -100,6 +126,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         );
     }
 
+    // Modo lectura: mostrar página específica
     if (isReadingMode && currentPage) {
         return (
             <div className="min-h-screen bg-background">
@@ -117,7 +144,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             </Button>
                             <div className="text-sm text-muted-foreground">
                                 Page {currentPageIndex + 1} of{" "}
-                                {guide.pages.length}
+                                {storedGuide.pagesCount}
                             </div>
                         </div>
                     </div>
@@ -142,19 +169,23 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         </Button>
 
                         <div className="flex items-center gap-2">
-                            {guide.pages.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => handleGoToPage(index)}
-                                    className={cn(
-                                        "w-2 h-2 rounded-full transition-colors",
-                                        index === currentPageIndex
-                                            ? "bg-primary"
-                                            : "bg-muted-foreground/30 hover:bg-muted-foreground/50",
-                                    )}
-                                    aria-label={`Go to page ${index + 1}`}
-                                />
-                            ))}
+                            {Array.from(
+                                { length: storedGuide.pagesCount },
+                                (_, index) => (
+                                    <button
+                                        type="button"
+                                        key={index}
+                                        onClick={() => handleGoToPage(index)}
+                                        className={cn(
+                                            "w-2 h-2 rounded-full transition-colors",
+                                            index === currentPageIndex
+                                                ? "bg-primary"
+                                                : "bg-muted-foreground/30 hover:bg-muted-foreground/50",
+                                        )}
+                                        aria-label={`Go to page ${index + 1}`}
+                                    />
+                                ),
+                            )}
                         </div>
 
                         <Button
@@ -172,15 +203,15 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         );
     }
 
-    // Overview view
+    // Vista de presentación (Overview)
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section with Cover */}
-            {guide.coverImage && (
+            {storedGuide.coverImage && (
                 <div className="relative w-full h-[400px] bg-gradient-to-b from-muted to-background">
                     <Image
-                        src={guide.coverImage}
-                        alt={guide.title}
+                        src={storedGuide.coverImage}
+                        alt={storedGuide.title}
                         fill
                         className="object-cover"
                         priority
@@ -195,36 +226,37 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                 <header
                     className={cn(
                         "py-8 space-y-6",
-                        guide.coverImage && "-mt-32 relative z-10",
+                        storedGuide.coverImage && "-mt-32 relative z-10",
                     )}
                 >
                     {/* Status Badge */}
                     <div className="flex items-center gap-2">
                         <Badge
                             variant={
-                                guide.status === "PUBLISHED"
+                                storedGuide.status === "PUBLISHED"
                                     ? "default"
                                     : "secondary"
                             }
                             className="text-xs uppercase tracking-wider"
                         >
-                            {guide.status}
+                            {storedGuide.status}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                            {totalReadingTime} min read • {guide.pagesCount}{" "}
-                            pages
+                            {totalReadingTime} min read •{" "}
+                            {storedGuide.pagesCount} page
+                            {storedGuide.pagesCount !== 1 ? "s" : ""}
                         </span>
                     </div>
 
                     {/* Title */}
                     <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-                        {guide.title}
+                        {storedGuide.title}
                     </h1>
 
                     {/* Description */}
-                    {guide.description && (
+                    {storedGuide.description && (
                         <p className="text-xl text-muted-foreground leading-relaxed">
-                            {guide.description}
+                            {storedGuide.description}
                         </p>
                     )}
 
@@ -233,14 +265,14 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         {/* Author */}
                         <div className="flex items-center gap-2">
                             <Avatar className="h-8 w-8">
-                                <AvatarImage src={author.profileUrl} />
+                                <AvatarImage src={storedAuthor.profileUrl} />
                                 <AvatarFallback>
-                                    {author.firstName[0]}
-                                    {author.lastName[0]}
+                                    {storedAuthor.firstName[0]}
+                                    {storedAuthor.lastName[0]}
                                 </AvatarFallback>
                             </Avatar>
                             <span className="font-medium text-foreground">
-                                {author.firstName} {author.lastName}
+                                {storedAuthor.firstName} {storedAuthor.lastName}
                             </span>
                         </div>
 
@@ -249,7 +281,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         {/* Date */}
                         <div className="flex items-center gap-1.5">
                             <Calendar className="h-4 w-4" />
-                            <time dateTime={guide.createdAt}>
+                            <time dateTime={storedGuide.createdAt}>
                                 {formattedDate}
                             </time>
                         </div>
@@ -259,23 +291,24 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         {/* Likes */}
                         <div className="flex items-center gap-1.5">
                             <Heart className="h-4 w-4" />
-                            <span>{guide.likesCount} likes</span>
+                            <span>{storedGuide.likesCount} likes</span>
                         </div>
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-3 pt-2">
                         <GuideLikeButton
-                            guideId={guide.id}
-                            initialLikes={guide.likesCount}
+                            guideId={storedGuide.id}
+                            initialLikes={storedGuide.likesCount}
                         />
-                        {guide.pagesCount > 0 && (
+                        {storedGuide.pagesCount > 0 && (
                             <Button
                                 onClick={handleStartReading}
                                 className="flex items-center gap-2"
                             >
                                 <BookOpen className="h-4 w-4" />
-                                Read Guide ({guide.pagesCount} pages)
+                                Read Guide ({storedGuide.pagesCount} page
+                                {storedGuide.pagesCount !== 1 ? "s" : ""})
                             </Button>
                         )}
                     </div>
@@ -284,11 +317,11 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                 <Separator className="my-8" />
 
                 {/* Topics */}
-                {guide.topics && guide.topics.length > 0 && (
+                {storedGuide.topics && storedGuide.topics.length > 0 && (
                     <div className="mb-8">
                         <h2 className="text-lg font-semibold mb-4">Topics</h2>
                         <div className="flex flex-wrap gap-2">
-                            {guide.topics.map((topic) => (
+                            {storedGuide.topics.map((topic) => (
                                 <Badge key={topic.id} variant="outline">
                                     {topic.name}
                                 </Badge>
@@ -301,7 +334,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
 
                 {/* Author Card */}
                 <aside className="py-8">
-                    <GuideAuthorCard author={author} />
+                    <GuideAuthorCard author={storedAuthor} />
                 </aside>
             </div>
         </div>
@@ -310,7 +343,9 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
 
 // Client component for rendering page content with MDX
 function PageContent({ content }: { content: string }) {
-    const [serializedContent, setSerializedContent] = useState<any>(null);
+    const [serializedContent, setSerializedContent] = useState<Awaited<
+        ReturnType<typeof serialize>
+    > | null>(null);
 
     useEffect(() => {
         serialize({ source: content }).then(setSerializedContent);
