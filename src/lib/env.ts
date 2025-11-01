@@ -21,8 +21,7 @@ export const ENV = {
         },
         LEARNING: {
             BASE_URL:
-                process.env.LEARNING_BASE_URL ||
-                "http://192.168.0.118:8085/api/v1",
+                process.env.LEARNING_BASE_URL || "http://localhost:8085/api/v1",
         },
         EXTERNAL: {
             CLOUDINARY: {

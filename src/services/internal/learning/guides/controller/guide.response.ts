@@ -53,7 +53,7 @@ export interface GetGuidePagesByGuideIdRequest {
 
 export interface CreatePageRequest {
     content: string;
-    order: number;
+    orderNumber: number;
 }
 
 export interface GetPageByIdRequest {
