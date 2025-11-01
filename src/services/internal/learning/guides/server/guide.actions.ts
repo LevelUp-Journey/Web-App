@@ -55,31 +55,31 @@ export async function getAllGuidesAction(): Promise<GuideResponse[]> {
 export async function createGuideAction(
     request: CreateGuideRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.post<GuideResponse>(
+    const response = await LEARNING_HTTP.post<LearningResponse<GuideResponse>>(
         "/guides",
         request,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function getGuideByIdAction(
     guideId: string,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.get<GuideResponse>(
+    const response = await LEARNING_HTTP.get<LearningResponse<GuideResponse>>(
         `/guides/${guideId}`,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function updateGuideAction(
     guideId: string,
     request: UpdateGuideRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.put<GuideResponse>(
+    const response = await LEARNING_HTTP.put<LearningResponse<GuideResponse>>(
         `/guides/${guideId}`,
         request,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function deleteGuideAction(
@@ -92,41 +92,41 @@ export async function updateGuideStatusAction(
     guideId: string,
     request: UpdateGuideStatusRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.patch<GuideResponse>(
+    const response = await LEARNING_HTTP.patch<LearningResponse<GuideResponse>>(
         `/guides/${guideId}/status`,
         request,
     );
-    return response.data;
+    return response.data.data;
 }
 
 // Page-related actions
 export async function getGuidePagesByGuideIdAction(
     request: GetGuidePagesByGuideIdRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.get<GuideResponse>(
+    const response = await LEARNING_HTTP.get<LearningResponse<GuideResponse>>(
         `/guides/${request.guideId}/pages`,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function createPageAction(
     guideId: string,
     request: CreatePageRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.post<GuideResponse>(
+    const response = await LEARNING_HTTP.post<LearningResponse<GuideResponse>>(
         `/guides/${guideId}/pages`,
         request,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function getPageByIdAction(
     request: GetPageByIdRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.get<GuideResponse>(
+    const response = await LEARNING_HTTP.get<LearningResponse<GuideResponse>>(
         `/guides/${request.guideId}/pages/${request.pageId}`,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function updatePageAction(
@@ -134,18 +134,18 @@ export async function updatePageAction(
     pageId: string,
     request: UpdatePageRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.put<GuideResponse>(
+    const response = await LEARNING_HTTP.put<LearningResponse<GuideResponse>>(
         `/guides/${guideId}/pages/${pageId}`,
         request,
     );
-    return response.data;
+    return response.data.data;
 }
 
 export async function deletePageAction(
     request: DeletePageRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.delete<GuideResponse>(
-        `/guides/${request.guideId}/pages/${request.pageId}`,
-    );
-    return response.data;
+    const response = await LEARNING_HTTP.delete<
+        LearningResponse<GuideResponse>
+    >(`/guides/${request.guideId}/pages/${request.pageId}`);
+    return response.data.data;
 }
