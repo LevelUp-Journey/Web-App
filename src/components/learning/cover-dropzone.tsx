@@ -1,7 +1,7 @@
 "use client";
 
 import { ImageIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { DropEvent, FileRejection } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
@@ -10,8 +10,10 @@ import { cn } from "@/lib/utils";
 import { CloudinaryController } from "@/services/external/cloudinary/cloudinary.controller";
 
 interface CoverDropzoneProps {
-    onImageUrlChange: (url: string) => void;
+    onImageUrlChange?: (url: string) => void;
+    onChange?: (url: string) => void;
     currentImage?: string | null;
+    value?: string;
     disabled?: boolean;
     className?: string;
     aspectRatio?: "video" | "wide" | "ultrawide"; // 16:9, 21:9, 32:9
@@ -19,7 +21,9 @@ interface CoverDropzoneProps {
 
 export function CoverDropzone({
     onImageUrlChange,
+    onChange,
     currentImage,
+    value,
     disabled = false,
     className,
     aspectRatio = "wide",
@@ -27,8 +31,15 @@ export function CoverDropzone({
     const [isDragActive, setIsDragActive] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | null>(
-        currentImage || null,
+        value || currentImage || null,
     );
+
+    // Sync with external value changes
+    useEffect(() => {
+        if (value !== undefined) {
+            setImageUrl(value);
+        }
+    }, [value]);
 
     const uploadImageToCloudinary = useCallback(
         async (file: File) => {
@@ -41,7 +52,8 @@ export function CoverDropzone({
                 );
 
                 setImageUrl(uploadedUrl);
-                onImageUrlChange(uploadedUrl);
+                onImageUrlChange?.(uploadedUrl);
+                onChange?.(uploadedUrl);
                 toast.success("Cover image uploaded successfully!");
             } catch (error) {
                 console.error("Cloudinary upload error:", error);
@@ -72,7 +84,7 @@ export function CoverDropzone({
             }
             setIsDragActive(false);
         },
-        [uploadImageToCloudinary],
+        [uploadImageToCloudinary, onImageUrlChange, onChange],
     );
 
     const {

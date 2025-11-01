@@ -14,10 +14,12 @@ import {
 import type {
     JWTPayload,
     RefreshTokenResponse,
+    SearchUsersRequest,
     SignInRequest,
     SignInResponse,
     SignUpRequest,
     SignUpResponse,
+    UserSearchResult,
 } from "../controller/auth.response";
 
 export async function signInAction(
@@ -151,4 +153,25 @@ export async function decodeJWT() {
     }
     const decoded = jwtDecode<JWTPayload>(authToken.token);
     return decoded;
+}
+
+export async function searchUsersAction(
+    request: SearchUsersRequest,
+): Promise<UserSearchResult[]> {
+    try {
+        const response = await IAM_HTTP.get<UserSearchResult[]>(
+            "/api/v1/profiles/search",
+            {
+                params: {
+                    username: request.username,
+                },
+            },
+        );
+
+        return response.data;
+    } catch (e) {
+        const error = e as AxiosError;
+        console.error("Error searching users:", error);
+        return [];
+    }
 }

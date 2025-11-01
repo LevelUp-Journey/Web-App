@@ -15,7 +15,13 @@ import type {
     UpdatePageRequest,
 } from "../controller/guide.response";
 
-interface GetGuidesResponseFomat {
+export interface GetGuidesPaginatedRequest {
+    page?: number;
+    size?: number;
+    sort?: string;
+}
+
+export interface GetGuidesResponseFormat {
     content: GuideResponse[];
     pageable: {
         pageNumber: number;
@@ -46,19 +52,54 @@ interface GetGuidesResponseFomat {
 
 export async function getAllGuidesAction(): Promise<GuideResponse[]> {
     const response =
-        await LEARNING_HTTP.get<LearningResponse<GetGuidesResponseFomat>>(
+        await LEARNING_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
             "/guides",
         );
     return response.data.data.content;
+}
+
+export async function getGuidesPaginatedAction(
+    request?: GetGuidesPaginatedRequest,
+): Promise<GetGuidesResponseFormat> {
+    const params = new URLSearchParams();
+    if (request?.page !== undefined)
+        params.append("page", String(request.page));
+    if (request?.size !== undefined)
+        params.append("size", String(request.size));
+    if (request?.sort) params.append("sort", request.sort);
+
+    const response = await LEARNING_HTTP.get<
+        LearningResponse<GetGuidesResponseFormat>
+    >(`/guides${params.toString() ? `?${params.toString()}` : ""}`);
+    return response.data.data;
 }
 
 export async function getTeachersGuidesAction(
     teacherId: string,
 ): Promise<GuideResponse[]> {
     const response = await LEARNING_HTTP.get<
-        LearningResponse<GetGuidesResponseFomat>
+        LearningResponse<GetGuidesResponseFormat>
     >(`/guides/teachers/${teacherId}`);
     return response.data.data.content;
+}
+
+export async function getTeachersGuidesPaginatedAction(
+    teacherId: string,
+    request?: GetGuidesPaginatedRequest,
+): Promise<GetGuidesResponseFormat> {
+    const params = new URLSearchParams();
+    if (request?.page !== undefined)
+        params.append("page", String(request.page));
+    if (request?.size !== undefined)
+        params.append("size", String(request.size));
+    if (request?.sort) params.append("sort", request.sort);
+
+    const response = await LEARNING_HTTP.get<
+        LearningResponse<GetGuidesResponseFormat>
+    >(
+        `/guides/teachers/${teacherId}${params.toString() ? `?${params.toString()}` : ""}`,
+    );
+    return response.data.data;
 }
 
 export async function createGuideAction(

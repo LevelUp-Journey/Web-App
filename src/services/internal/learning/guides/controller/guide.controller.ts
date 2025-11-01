@@ -3,11 +3,15 @@ import {
     createPageAction,
     deleteGuideAction,
     deletePageAction,
+    type GetGuidesPaginatedRequest,
+    type GetGuidesResponseFormat,
     getAllGuidesAction,
     getGuideByIdAction,
     getGuidePagesByGuideIdAction,
+    getGuidesPaginatedAction,
     getPageByIdAction,
     getTeachersGuidesAction,
+    getTeachersGuidesPaginatedAction,
     updateGuideAction,
     updateGuideStatusAction,
     updatePageAction,
@@ -28,6 +32,13 @@ import type {
 export class GuideController {
     public static async getAllGuides(): Promise<GuideResponse[]> {
         const response = await getAllGuidesAction();
+        return response;
+    }
+
+    public static async getGuidesPaginated(
+        request?: GetGuidesPaginatedRequest,
+    ): Promise<GetGuidesResponseFormat> {
+        const response = await getGuidesPaginatedAction(request);
         return response;
     }
 
@@ -108,6 +119,17 @@ export class GuideController {
         teacherId: string,
     ): Promise<GuideResponse[]> {
         const response = await getTeachersGuidesAction(teacherId);
+        return response;
+    }
+
+    public static async getTeachersGuidesPaginated(
+        teacherId: string,
+        request?: GetGuidesPaginatedRequest,
+    ): Promise<GetGuidesResponseFormat> {
+        const response = await getTeachersGuidesPaginatedAction(
+            teacherId,
+            request,
+        );
         return response;
     }
 }

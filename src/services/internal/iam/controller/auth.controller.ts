@@ -5,15 +5,18 @@ import {
     getUserRolesFromTokenAction,
     refreshTokenAction,
     saveAuthTokenAction,
+    searchUsersAction,
     signInAction,
     signOutAction,
     signUpAction,
     validateTokenAction,
 } from "../server/auth.actions";
 import type {
+    SearchUsersRequest,
     SignInRequest,
     SignInResponse,
     SignUpRequest,
+    UserSearchResult,
 } from "./auth.response";
 
 export class AuthController {
@@ -86,5 +89,12 @@ export class AuthController {
     public static async getUserId() {
         const userId = await getUserIdFromTokenAction();
         return userId;
+    }
+
+    public static async searchUsers(
+        request: SearchUsersRequest,
+    ): Promise<UserSearchResult[]> {
+        const users = await searchUsersAction(request);
+        return users;
     }
 }
