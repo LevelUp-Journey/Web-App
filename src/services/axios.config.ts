@@ -24,12 +24,17 @@ export const LEARNING_HTTP = axios.create({
     baseURL: ENV.SERVICES.LEARNING.BASE_URL,
 });
 
+export const API_GATEWAY_HTTP = axios.create({
+    baseURL: ENV.SERVICES.API_GATEWAY.BASE_URL,
+});
+
 [
     IAM_HTTP,
     CHALLENGES_HTTP,
     COMMUNITY_HTTP,
     PROFILES_HTTP,
     LEARNING_HTTP,
+    API_GATEWAY_HTTP,
 ].forEach((httpClient) => {
     httpClient.interceptors.request.use(async (config) => {
         const authTokens = await getAuthTokenAction();

@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { CONSTS, type UserRole } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import {
-    IAM_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "../../../axios.config";
@@ -26,7 +26,10 @@ export async function signInAction(
     request: SignInRequest,
 ): Promise<RequestSuccess<SignInResponse> | RequestFailure> {
     try {
-        const response = await IAM_HTTP.post<SignInResponse>(
+        console.log("Signing in...");
+        console.log("Request:", request);
+        console.log("API_GATEWAY_HTTP:", API_GATEWAY_HTTP);
+        const response = await API_GATEWAY_HTTP.post<SignInResponse>(
             "/authentication/sign-in",
             request,
         );
@@ -46,7 +49,7 @@ export async function signInAction(
 
 export async function signUpAction(request: SignUpRequest) {
     try {
-        const response = await IAM_HTTP.post<SignUpResponse>(
+        const response = await API_GATEWAY_HTTP.post<SignUpResponse>(
             "/authentication/sign-up",
             request,
         );
@@ -90,7 +93,7 @@ export async function saveOAuthTokenAction(
 export async function validateTokenAction() {
     try {
         // auth token already applied in @/src/services/axios.config.ts
-        await IAM_HTTP.get("/authentication/validate");
+        await API_GATEWAY_HTTP.get("/authentication/validate");
 
         return true;
     } catch {
@@ -120,7 +123,7 @@ export async function getUserRolesFromTokenAction(): Promise<UserRole[]> {
 }
 
 export async function refreshTokenAction() {
-    const response = await IAM_HTTP.post<RefreshTokenResponse>(
+    const response = await API_GATEWAY_HTTP.post<RefreshTokenResponse>(
         "/authentication/refresh",
     );
 
@@ -159,7 +162,7 @@ export async function searchUsersAction(
     request: SearchUsersRequest,
 ): Promise<UserSearchResult[]> {
     try {
-        const response = await IAM_HTTP.get<UserSearchResult[]>(
+        const response = await API_GATEWAY_HTTP.get<UserSearchResult[]>(
             "/api/v1/profiles/search",
             {
                 params: {
