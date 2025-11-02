@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    CHALLENGES_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -29,7 +29,7 @@ export async function getVersionTestByIdAction(
     codeVersionId: string,
     testId: string,
 ): Promise<RequestSuccess<VersionTestResponse> | RequestFailure> {
-    const data = await CHALLENGES_HTTP.get<VersionTestResponse>(
+    const data = await API_GATEWAY_HTTP.get<VersionTestResponse>(
         `/challenges/${challengeId}/code-versions/${codeVersionId}/tests/${testId}`,
     );
 
@@ -43,7 +43,7 @@ export async function getVersionTestsByChallengeIdAndCodeVersionIdAction(
     challengeId: string,
     codeVersionId: string,
 ): Promise<RequestSuccess<VersionTestResponse[]> | RequestFailure> {
-    const data = await CHALLENGES_HTTP.get<VersionTestResponse[]>(
+    const data = await API_GATEWAY_HTTP.get<VersionTestResponse[]>(
         `/challenges/${challengeId}/code-versions/${codeVersionId}/tests`,
     );
 
@@ -59,7 +59,7 @@ export async function createVersionTestAction(
     request: CreateVersionTestRequest,
 ): Promise<RequestSuccess<VersionTestResponse> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.post<VersionTestResponse>(
+        const response = await API_GATEWAY_HTTP.post<VersionTestResponse>(
             `/challenges/${challengeId}/code-versions/${codeVersionId}/tests`,
             request,
         );
@@ -91,7 +91,7 @@ export async function updateVersionTestAction(
     request: UpdateVersionTestRequest,
 ): Promise<RequestSuccess<VersionTestResponse> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.put<VersionTestResponse>(
+        const response = await API_GATEWAY_HTTP.put<VersionTestResponse>(
             `/challenges/${challengeId}/code-versions/${codeVersionId}/tests/${testId}`,
             request,
         );
@@ -122,7 +122,7 @@ export async function deleteVersionTestAction(
     testId: string,
 ): Promise<RequestSuccess<void> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.delete(
+        const response = await API_GATEWAY_HTTP.delete(
             `/challenges/${challengeId}/code-versions/${codeVersionId}/tests/${testId}`,
         );
 

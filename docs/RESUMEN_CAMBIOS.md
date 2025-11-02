@@ -17,7 +17,7 @@ Se ha implementado un sistema completo de gestión de guías y cursos con las si
 ### 1. Badge de Dificultad (`difficulty-badge.tsx`)
 Muestra niveles de dificultad con códigos de color:
 - 🟢 **BEGINNER** - Verde
-- 🔵 **INTERMEDIATE** - Azul  
+- 🔵 **INTERMEDIATE** - Azul
 - 🟠 **ADVANCED** - Naranja
 - 🔴 **EXPERT** - Rojo
 
@@ -31,9 +31,9 @@ Muestra tópicos con estilo morado y opción de remover:
 
 **Uso:**
 ```tsx
-<TopicBadge 
-  topic={{ id: "1", name: "React" }} 
-  onRemove={() => handleRemove("1")} 
+<TopicBadge
+  topic={{ id: "1", name: "React" }}
+  onRemove={() => handleRemove("1")}
 />
 ```
 
@@ -48,17 +48,17 @@ Muestra tópicos con estilo morado y opción de remover:
 - **Título**: Validación mínima de 5 caracteres
 - **Descripción**: Validación mínima de 10 caracteres
 - **Nivel de Dificultad**: Selector con previsualizaciones visuales
-- **Tópicos**: 
+- **Tópicos**:
   - Búsqueda en tiempo real (debounce 300ms)
   - Crear nuevos tópicos desde el formulario
   - Agregar/remover tópicos con badges visuales
 
 #### 📚 Pestaña 2: Gestión de Guías
-- **Búsqueda de guías**: 
+- **Búsqueda de guías**:
   - Búsqueda en tiempo real (debounce 500ms)
   - Filtrado automático (solo guías publicadas y no agregadas)
   - Vista previa con imagen, título y páginas
-  
+
 - **Lista de guías actuales**:
   - Reordenamiento con drag-and-drop (@dnd-kit)
   - Indicador de posición visual
@@ -70,7 +70,7 @@ Muestra tópicos con estilo morado y opción de remover:
   - Búsqueda por username (debounce 300ms)
   - Integración con `/api/v1/profiles/search`
   - Vista de perfiles con avatar y datos completos
-  
+
 - **Lista de profesores seleccionados**:
   - Tarjetas con avatar, nombre y email
   - Opción de remover profesores
@@ -187,8 +187,8 @@ interface UserSearchResult {
 
 ```typescript
 // Búsqueda de usuarios
-const users = await AuthController.searchUsers({ 
-  username: "john" 
+const users = await AuthController.searchUsers({
+  username: "john"
 });
 
 // Agregar como profesores al curso
@@ -467,7 +467,7 @@ GuideController.getGuidesPaginated({ page: 0, size: 10 })
 getGuidesPaginatedAction(request)
        ↓
 // HTTP client
-LEARNING_HTTP.get('/guides?page=0&size=10')
+API_GATEWAY_HTTP.get('/guides?page=0&size=10')
 ```
 
 ### 3. Repository Pattern
@@ -500,12 +500,12 @@ const debouncedSearch = useDebounce(searchQuery, 300);
 // 2. Effect para búsqueda
 useEffect(() => {
   if (!debouncedSearch) return;
-  
+
   const search = async () => {
     const data = await Controller.search(debouncedSearch);
     setResults(data);
   };
-  
+
   search();
 }, [debouncedSearch]);
 

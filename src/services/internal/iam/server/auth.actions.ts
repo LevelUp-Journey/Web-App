@@ -26,9 +26,6 @@ export async function signInAction(
     request: SignInRequest,
 ): Promise<RequestSuccess<SignInResponse> | RequestFailure> {
     try {
-        console.log("Signing in...");
-        console.log("Request:", request);
-        console.log("API_GATEWAY_HTTP:", API_GATEWAY_HTTP);
         const response = await API_GATEWAY_HTTP.post<SignInResponse>(
             "/authentication/sign-in",
             request,
@@ -40,6 +37,8 @@ export async function signInAction(
         } as RequestSuccess<SignInResponse>;
     } catch (e) {
         const error = e as AxiosError;
+
+        console.log(e);
         return {
             data: error.message,
             status: error.status,

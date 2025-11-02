@@ -1,6 +1,6 @@
 "use server";
 
-import { LEARNING_HTTP } from "@/services/axios.config";
+import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import type { LearningResponse } from "../../shared";
 import type {
     CreateGuideRequest,
@@ -51,8 +51,9 @@ export interface GetGuidesResponseFormat {
 }
 
 export async function getAllGuidesAction(): Promise<GuideResponse[]> {
+    console.log(API_GATEWAY_HTTP);
     const response =
-        await LEARNING_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
+        await API_GATEWAY_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
             "/guides",
         );
     return response.data.data.content;
@@ -68,7 +69,7 @@ export async function getGuidesPaginatedAction(
         params.append("size", String(request.size));
     if (request?.sort) params.append("sort", request.sort);
 
-    const response = await LEARNING_HTTP.get<
+    const response = await API_GATEWAY_HTTP.get<
         LearningResponse<GetGuidesResponseFormat>
     >(`/guides${params.toString() ? `?${params.toString()}` : ""}`);
     return response.data.data;
@@ -77,7 +78,7 @@ export async function getGuidesPaginatedAction(
 export async function getTeachersGuidesAction(
     teacherId: string,
 ): Promise<GuideResponse[]> {
-    const response = await LEARNING_HTTP.get<
+    const response = await API_GATEWAY_HTTP.get<
         LearningResponse<GetGuidesResponseFormat>
     >(`/guides/teachers/${teacherId}`);
     return response.data.data.content;
@@ -94,7 +95,7 @@ export async function getTeachersGuidesPaginatedAction(
         params.append("size", String(request.size));
     if (request?.sort) params.append("sort", request.sort);
 
-    const response = await LEARNING_HTTP.get<
+    const response = await API_GATEWAY_HTTP.get<
         LearningResponse<GetGuidesResponseFormat>
     >(
         `/guides/teachers/${teacherId}${params.toString() ? `?${params.toString()}` : ""}`,
@@ -105,19 +106,18 @@ export async function getTeachersGuidesPaginatedAction(
 export async function createGuideAction(
     request: CreateGuideRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.post<LearningResponse<GuideResponse>>(
-        "/guides",
-        request,
-    );
+    const response = await API_GATEWAY_HTTP.post<
+        LearningResponse<GuideResponse>
+    >("/guides", request);
     return response.data.data;
 }
 
 export async function getGuideByIdAction(
     guideId: string,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.get<LearningResponse<GuideResponse>>(
-        `/guides/${guideId}`,
-    );
+    const response = await API_GATEWAY_HTTP.get<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}`);
     return response.data.data;
 }
 
@@ -125,27 +125,25 @@ export async function updateGuideAction(
     guideId: string,
     request: UpdateGuideRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.put<LearningResponse<GuideResponse>>(
-        `/guides/${guideId}`,
-        request,
-    );
+    const response = await API_GATEWAY_HTTP.put<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}`, request);
     return response.data.data;
 }
 
 export async function deleteGuideAction(
     request: DeleteGuideRequest,
 ): Promise<void> {
-    await LEARNING_HTTP.delete(`/guides/${request.id}`);
+    await API_GATEWAY_HTTP.delete(`/guides/${request.id}`);
 }
 
 export async function updateGuideStatusAction(
     guideId: string,
     request: UpdateGuideStatusRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.put<LearningResponse<GuideResponse>>(
-        `/guides/${guideId}/status`,
-        request,
-    );
+    const response = await API_GATEWAY_HTTP.put<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}/status`, request);
     return response.data.data;
 }
 
@@ -153,9 +151,9 @@ export async function updateGuideStatusAction(
 export async function getGuidePagesByGuideIdAction(
     request: GetGuidePagesByGuideIdRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.get<LearningResponse<GuideResponse>>(
-        `/guides/${request.guideId}/pages`,
-    );
+    const response = await API_GATEWAY_HTTP.get<
+        LearningResponse<GuideResponse>
+    >(`/guides/${request.guideId}/pages`);
     return response.data.data;
 }
 
@@ -163,19 +161,18 @@ export async function createPageAction(
     guideId: string,
     request: CreatePageRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.post<LearningResponse<GuideResponse>>(
-        `/guides/${guideId}/pages`,
-        request,
-    );
+    const response = await API_GATEWAY_HTTP.post<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}/pages`, request);
     return response.data.data;
 }
 
 export async function getPageByIdAction(
     request: GetPageByIdRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.get<LearningResponse<GuideResponse>>(
-        `/guides/${request.guideId}/pages/${request.pageId}`,
-    );
+    const response = await API_GATEWAY_HTTP.get<
+        LearningResponse<GuideResponse>
+    >(`/guides/${request.guideId}/pages/${request.pageId}`);
     return response.data.data;
 }
 
@@ -184,17 +181,16 @@ export async function updatePageAction(
     pageId: string,
     request: UpdatePageRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.put<LearningResponse<GuideResponse>>(
-        `/guides/${guideId}/pages/${pageId}`,
-        request,
-    );
+    const response = await API_GATEWAY_HTTP.put<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}/pages/${pageId}`, request);
     return response.data.data;
 }
 
 export async function deletePageAction(
     request: DeletePageRequest,
 ): Promise<GuideResponse> {
-    const response = await LEARNING_HTTP.delete<
+    const response = await API_GATEWAY_HTTP.delete<
         LearningResponse<GuideResponse>
     >(`/guides/${request.guideId}/pages/${request.pageId}`);
     return response.data.data;

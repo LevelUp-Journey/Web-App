@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    COMMUNITY_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -11,7 +11,7 @@ export async function getAllPostsAction(): Promise<
     RequestSuccess<PostResponse[]> | RequestFailure
 > {
     try {
-        const response = await COMMUNITY_HTTP.get("/posts");
+        const response = await API_GATEWAY_HTTP.get("/posts");
 
         return {
             data: response.data,
@@ -39,7 +39,7 @@ export async function getPostsByUserIdAction(
     try {
         // For now, get all posts and filter by authorId
         // TODO: Replace with specific endpoint when available
-        const response = await COMMUNITY_HTTP.get("/posts");
+        const response = await API_GATEWAY_HTTP.get("/posts");
         const allPosts = response.data as PostResponse[];
         const userPosts = allPosts.filter((post) => post.authorId === userId);
 
@@ -76,7 +76,7 @@ export async function createPostAction(
     request: CreatePostRequest,
 ): Promise<RequestSuccess<PostResponse> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.post("/posts", request);
+        const response = await API_GATEWAY_HTTP.post("/posts", request);
 
         return {
             data: response.data,

@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    PROFILES_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -14,7 +14,7 @@ export async function getCompetitiveProfileAction(
     userId: string,
 ): Promise<RequestSuccess<CompetitiveProfile> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<CompetitiveProfile>(
+        const response = await API_GATEWAY_HTTP.get<CompetitiveProfile>(
             `/competitive/profiles/user/${userId}`,
         );
         return { data: response.data, status: response.status };
@@ -38,7 +38,7 @@ export async function syncCompetitiveProfileAction(
     userId: string,
 ): Promise<RequestSuccess<CompetitiveProfile> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.post<CompetitiveProfile>(
+        const response = await API_GATEWAY_HTTP.post<CompetitiveProfile>(
             `/competitive/profiles/user/${userId}/sync`,
         );
         return { data: response.data, status: response.status };
@@ -63,7 +63,7 @@ export async function getUsersByRankAction(
     offset: number = 0,
 ): Promise<RequestSuccess<UsersByRankResponse> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<UsersByRankResponse>(
+        const response = await API_GATEWAY_HTTP.get<UsersByRankResponse>(
             `/competitive/profiles/rank/${rank}`,
             {
                 params: { offset },

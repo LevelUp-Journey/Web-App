@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    CHALLENGES_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -16,7 +16,7 @@ export async function getCodeVersionByIdAction(
     challengeId: string,
     codeVersionId: string,
 ): Promise<RequestSuccess<CodeVersionResponse> | RequestFailure> {
-    const data = await CHALLENGES_HTTP.get<CodeVersionResponse>(
+    const data = await API_GATEWAY_HTTP.get<CodeVersionResponse>(
         `/challenges/${challengeId}/code-versions/${codeVersionId}`,
     );
 
@@ -29,7 +29,7 @@ export async function getCodeVersionByIdAction(
 export async function getCodeVersionsByChallengeIdAction(
     challengeId: string,
 ): Promise<RequestSuccess<CodeVersionResponse[]> | RequestFailure> {
-    const data = await CHALLENGES_HTTP.get<CodeVersionResponse[]>(
+    const data = await API_GATEWAY_HTTP.get<CodeVersionResponse[]>(
         `/challenges/${challengeId}/code-versions`,
     );
 
@@ -44,7 +44,7 @@ export async function createCodeVersionAction(
     request: CreateCodeVersionRequest,
 ): Promise<RequestSuccess<CodeVersionResponse> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.post<CodeVersionResponse>(
+        const response = await API_GATEWAY_HTTP.post<CodeVersionResponse>(
             `/challenges/${challengeId}/code-versions`,
             request,
         );
@@ -75,7 +75,7 @@ export async function updateCodeVersionAction(
     request: UpdateCodeVersionRequest,
 ): Promise<RequestSuccess<CodeVersionResponse> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.put<CodeVersionResponse>(
+        const response = await API_GATEWAY_HTTP.put<CodeVersionResponse>(
             `/challenges/${challengeId}/code-versions/${codeVersionId}`,
             request,
         );
@@ -105,7 +105,7 @@ export async function deleteCodeVersionAction(
     codeVersionId: string,
 ): Promise<RequestSuccess<void> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.delete(
+        const response = await API_GATEWAY_HTTP.delete(
             `/challenges/${challengeId}/code-versions/${codeVersionId}`,
         );
 
@@ -131,7 +131,7 @@ export async function deleteCodeVersionAction(
 
 export async function getCodeVersionsBatchAction(challengeIds: string[]) {
     try {
-        const response = await CHALLENGES_HTTP.post<
+        const response = await API_GATEWAY_HTTP.post<
             GetCodeVersionsBatchResponse[]
         >(`/challenges/code-versions/batch`, { challengeIds });
 

@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { PROFILES_HTTP } from "@/services/axios.config";
+import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
     getAllProfilesAction,

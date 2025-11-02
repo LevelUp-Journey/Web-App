@@ -1,6 +1,6 @@
 "use server";
 
-import { CHALLENGES_HTTP } from "@/services/axios.config";
+import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import type {
     CreateSolutionRequest,
     SolutionResponse,
@@ -12,7 +12,7 @@ export async function createSolutionAction({
     challengeId,
     codeVersionId,
 }: CreateSolutionRequest) {
-    const response = await CHALLENGES_HTTP.post(
+    const response = await API_GATEWAY_HTTP.post(
         `/challenges/${challengeId}/code-versions/${codeVersionId}/solutions`,
     );
 
@@ -23,7 +23,7 @@ export async function updateSolutionAction({
     solutionId,
     code,
 }: UpdateSolutionRequest) {
-    const response = await CHALLENGES_HTTP.put(`/solutions/${solutionId}`, {
+    const response = await API_GATEWAY_HTTP.put(`/solutions/${solutionId}`, {
         code,
     });
 
@@ -37,7 +37,7 @@ export async function getSolutionByIdAction({
 }: {
     solutionId: string;
 }) {
-    const response = await CHALLENGES_HTTP.get<SolutionResponse>(
+    const response = await API_GATEWAY_HTTP.get<SolutionResponse>(
         `/solutions/${solutionId}`,
     );
 
@@ -52,7 +52,7 @@ export async function getSolutionByChallengeIdAndCodeVersionIdAction({
     challengeId: string;
     codeVersionId: string;
 }) {
-    const response = await CHALLENGES_HTTP.get<SolutionResponse>(
+    const response = await API_GATEWAY_HTTP.get<SolutionResponse>(
         `/challenges/${challengeId}/code-versions/${codeVersionId}/solutions`,
     );
 
@@ -60,7 +60,7 @@ export async function getSolutionByChallengeIdAndCodeVersionIdAction({
 }
 
 export async function submitSolutionAction(solutionId: string) {
-    const response = await CHALLENGES_HTTP.put<SubmitSolutionResponse>(
+    const response = await API_GATEWAY_HTTP.put<SubmitSolutionResponse>(
         `/solutions/${solutionId}/submissions`,
     );
 
