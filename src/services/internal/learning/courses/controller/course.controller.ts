@@ -1,20 +1,25 @@
 import {
     addGuideToCourseAction,
     createCourseAction,
+    deleteCourseAction,
+    deleteGuideFromCourseAction,
     getCourseByIdAction,
-    getCourseGuidesFullByCourseIdAction,
     getCoursesAction,
     reorderCourseGuideAction,
-    searchCoursesAction,
-    updateCourseByIdAction,
+    updateCourseAction,
+    updateCourseAuthorsAction,
+    updateCourseStatusAction,
 } from "../server/course.actions";
 import type {
     AddGuideToCourseRequest,
-    CourseGuideFullResponse,
     CourseResponse,
     CreateCourseRequest,
-    ReorderCourseRequest,
+    DeleteCourseRequest,
+    DeleteGuideFromCourseRequest,
+    GetCourseById,
+    UpdateCourseAuthorsRequest,
     UpdateCourseRequest,
+    UpdateCourseStatusRequest,
 } from "./course.response";
 
 export class CourseController {
@@ -31,50 +36,66 @@ export class CourseController {
     }
 
     public static async getCourseById(
-        id: string,
-    ): Promise<CourseResponse | null> {
-        const response = await getCourseByIdAction(id);
+        request: GetCourseById,
+    ): Promise<CourseResponse> {
+        const response = await getCourseByIdAction(request);
         return response;
     }
 
     public static async updateCourse(
-        id: string,
+        courseId: string,
         request: UpdateCourseRequest,
     ): Promise<CourseResponse> {
-        const response = (await updateCourseByIdAction(
-            id,
-            request,
-        )) as CourseResponse;
+        const response = await updateCourseAction(courseId, request);
         return response;
     }
 
-    public static async getCourseGuidesFullByCourseId(
-        courseId: string,
-    ): Promise<CourseGuideFullResponse[]> {
-        const response = await getCourseGuidesFullByCourseIdAction(courseId);
-        return response;
-    }
-
-    public static async searchCourses(
-        name: string,
-    ): Promise<CourseGuideFullResponse[]> {
-        const response = await searchCoursesAction(name);
-        return response;
+    public static async deleteCourse(
+        request: DeleteCourseRequest,
+    ): Promise<void> {
+        await deleteCourseAction(request);
     }
 
     public static async addGuideToCourse(
-        courseId: string,
         request: AddGuideToCourseRequest,
     ): Promise<CourseResponse> {
-        const response = await addGuideToCourseAction(courseId, request);
+        const response = await addGuideToCourseAction(request);
+        return response;
+    }
+
+    public static async deleteGuideFromCourse(
+        request: DeleteGuideFromCourseRequest,
+    ): Promise<CourseResponse> {
+        const response = await deleteGuideFromCourseAction(request);
         return response;
     }
 
     public static async reorderCourseGuide(
         courseId: string,
-        request: ReorderCourseRequest,
-    ) {
-        const response = await reorderCourseGuideAction(courseId, request);
+        guideId: string,
+        newPosition: number,
+    ): Promise<CourseResponse> {
+        const response = await reorderCourseGuideAction(
+            courseId,
+            guideId,
+            newPosition,
+        );
+        return response;
+    }
+
+    public static async updateCourseAuthors(
+        courseId: string,
+        request: UpdateCourseAuthorsRequest,
+    ): Promise<CourseResponse> {
+        const response = await updateCourseAuthorsAction(courseId, request);
+        return response;
+    }
+
+    public static async updateCourseStatus(
+        courseId: string,
+        request: UpdateCourseStatusRequest,
+    ): Promise<CourseResponse> {
+        const response = await updateCourseStatusAction(courseId, request);
         return response;
     }
 }

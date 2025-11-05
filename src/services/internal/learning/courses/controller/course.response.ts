@@ -1,63 +1,75 @@
+import type { GuideStatus } from "../../guides/controller/guide.response";
+import type { CourseDifficulty, CourseStatus } from "../domain/course.entity";
+
 export interface CourseResponse {
     id: string;
     title: string;
     description: string;
-    teacherId: string;
-    status: string;
-    difficulty: string;
-    totalGuides: number;
-    rating: number;
-    totalLikes: number;
-    completionScore: number;
-    cover: string;
-    guides: CourseGuideResponse[];
-    createdAt: string;
-    updatedAt: string;
+    coverImage: string;
+    status: CourseStatus;
+    difficultyLevel: CourseDifficulty;
+    likesCount: number;
+    authorIds: string[];
+    topics: [
+        {
+            id: string;
+            name: string;
+        },
+    ];
+    guides: [
+        {
+            id: string;
+            title: string;
+            description: string;
+            coverImage: string;
+            status: GuideStatus;
+            likesCount: number;
+            pagesCount: number;
+            authorIds: string[];
+            createdAt: string;
+        },
+    ];
+    createdAt: "2025-11-01T07:23:48.156Z";
+    updatedAt: "2025-11-01T07:23:48.156Z";
 }
 
 export interface CreateCourseRequest {
     title: string;
     description: string;
-    difficulty: CourseDifficulty;
-    completionScore: number;
-    cover: string;
+    coverImage: string;
+    difficultyLevel: CourseDifficulty;
+    authorIds: string[];
+    topicIds: string[];
 }
 
-export enum CourseDifficulty {
-    BEGINNER = "BEGINNER",
-    INTERMEDIATE = "INTERMEDIATE",
-    ADVANCED = "ADVANCED",
-    EXPERT = "EXPERT",
+export interface AddGuideToCourseRequest {
+    guideId: string;
+    courseId: string;
+}
+
+export interface DeleteGuideFromCourseRequest extends AddGuideToCourseRequest {}
+
+export interface GetCourseById {
+    courseId: string;
 }
 
 export interface UpdateCourseRequest {
     title: string;
     description: string;
-    difficulty: CourseDifficulty;
-    completionScore: number;
-    cover: string;
+    coverImage: string;
+    difficultyLevel: CourseDifficulty;
+    topicIds: string[];
 }
 
-export interface CourseGuideResponse {
-    guideId: string;
-    position: number;
+export interface DeleteCourseRequest {
+    courseId: string;
 }
 
-export interface CourseGuideFullResponse {
-    id: string;
-    title: string;
-    totalLikes: number;
-    cover: string;
-    createdAt: string;
-    position: number;
+// Replace entire list of authors
+export interface UpdateCourseAuthorsRequest {
+    authorIds: string[];
 }
 
-export interface AddGuideToCourseRequest {
-    guideId: string;
-    position: number;
-}
-
-export interface ReorderCourseRequest {
-    guideId: string;
-    newPosition: number;
+export interface UpdateCourseStatusRequest {
+    status: CourseStatus;
 }

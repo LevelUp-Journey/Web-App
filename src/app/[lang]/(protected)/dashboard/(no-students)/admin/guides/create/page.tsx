@@ -2,156 +2,103 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
-    ShadcnTemplate,
-    type ShadcnTemplateRef,
-} from "@/components/challenges/editor/lexkitEditor";
-import { CoverDropzone } from "@/components/learning/cover-dropzone";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "@/components/ui/resizable";
+    BasicInfoForm,
+    type BasicInfoFormData,
+} from "@/components/learning/guide/basic-info-form";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { CreateGuideRequest } from "@/services/internal/learning/guides/controller/guide.response";
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
+    description: z
+        .string()
+        .min(10, "Description must be at least 10 characters")
+        .max(1000, "Description must not exceed 1000 characters"),
     cover: z.string().optional(),
+    topicIds: z.array(z.string()).min(1, "At least one topic is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 export default function CreateGuidePage() {
     const router = useRouter();
-    const [saving, setSaving] = useState(false);
-    const editorRef = useRef<ShadcnTemplateRef>(null);
     const PATHS = useLocalizedPaths();
+    const [saving, setSaving] = useState(false);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
+            description: "",
             cover: "",
+            topicIds: [],
         },
     });
 
-    const onSubmit = async (data: FormData) => {
+    const handleBasicInfoSubmit = async (data: BasicInfoFormData) => {
         setSaving(true);
         try {
-            const editor = editorRef.current;
-            if (!editor) throw new Error("Editor not initialized");
-
-            const markdownContent = editor.getMarkdown();
-            if (!markdownContent || markdownContent.trim() === "") {
-                throw new Error("Content cannot be empty");
-            }
+            const userId = await AuthController.getUserId();
 
             const request: CreateGuideRequest = {
                 title: data.title,
-                markdownContent,
-                cover: data.cover || "",
+                description: data.description,
+                coverImage: data.cover || "",
+                authorIds: [userId],
+                topicIds: data.topicIds,
             };
 
-            console.log("CREATING GUIDE REQUEST", request);
             const response = await GuideController.createGuide(request);
 
-            console.log("GUIDE CREATED:", response);
-            router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
+            // Redirect to edit page where user can add pages
+            router.push(
+                `${PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT}/${response.id}/edit`,
+            );
         } catch (error) {
             console.error("Error creating guide:", error);
+            alert("Error creating guide. Please try again.");
         } finally {
             setSaving(false);
         }
     };
 
+    const handleCancel = () => {
+        if (
+            confirm(
+                "Are you sure you want to cancel? All progress will be lost.",
+            )
+        ) {
+            router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
+        }
+    };
+
     return (
         <section className="flex flex-col h-full">
-            <ResizablePanelGroup direction="horizontal" className="flex-1">
-                <ResizablePanel defaultSize={40} minSize={30}>
-                    <div className="h-full overflow-y-auto p-3">
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-6"
-                        >
-                            {/* Title */}
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor="title"
-                                    className="text-sm font-medium"
-                                >
-                                    Title *
-                                </Label>
-                                <Input
-                                    id="title"
-                                    {...form.register("title")}
-                                    placeholder="Enter guide title"
-                                    className="w-full"
-                                />
-                                {form.formState.errors.title && (
-                                    <p className="text-sm text-red-500">
-                                        {form.formState.errors.title.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Cover Image */}
-                            <div className="space-y-2">
-                                <Label className="text-sm font-medium">
-                                    Cover Image
-                                </Label>
-                                <CoverDropzone
-                                    onImageUrlChange={(url) =>
-                                        form.setValue("cover", url)
-                                    }
-                                    currentImage={form.watch("cover")}
-                                    disabled={saving}
-                                    aspectRatio="wide"
-                                />
-                                {form.formState.errors.cover && (
-                                    <p className="text-sm text-red-500">
-                                        {form.formState.errors.cover.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Buttons */}
-                            <div className="flex justify-end space-x-2 pt-4">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() =>
-                                        router.push(
-                                            PATHS.DASHBOARD.ADMINISTRATION
-                                                .GUIDES.ROOT,
-                                        )
-                                    }
-                                >
-                                    Cancel
-                                </Button>
-                                <Button type="submit" disabled={saving}>
-                                    {saving ? "Creating..." : "Create Guide"}
-                                </Button>
-                            </div>
-                        </form>
+            <div className="flex-1 overflow-y-auto">
+                <div className="container max-w-3xl mx-auto p-6">
+                    <div className="mb-6">
+                        <h1 className="text-3xl font-bold">
+                            Create a New Guide
+                        </h1>
+                        <p className="text-muted-foreground mt-2">
+                            Provide basic information about your guide. You can
+                            add pages after creation.
+                        </p>
                     </div>
-                </ResizablePanel>
-
-                <ResizableHandle withHandle />
-
-                <ResizablePanel defaultSize={60} maxSize={70} minSize={30}>
-                    <div className="h-full overflow-y-auto border-l">
-                        <ShadcnTemplate ref={editorRef} />
-                    </div>
-                </ResizablePanel>
-            </ResizablePanelGroup>
+                    <BasicInfoForm
+                        form={form}
+                        onSubmit={handleBasicInfoSubmit}
+                        onCancel={handleCancel}
+                        isSubmitting={saving}
+                    />
+                </div>
+            </div>
         </section>
     );
 }

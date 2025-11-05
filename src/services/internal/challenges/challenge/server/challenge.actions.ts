@@ -2,7 +2,7 @@
 
 import type { AxiosError } from "axios";
 import {
-    CHALLENGES_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -16,7 +16,7 @@ export async function getPublicChallengesAction(): Promise<
     RequestSuccess<ChallengeResponse[]> | RequestFailure
 > {
     const challenges =
-        await CHALLENGES_HTTP.get<ChallengeResponse[]>("/challenges");
+        await API_GATEWAY_HTTP.get<ChallengeResponse[]>("/challenges");
 
     return {
         data: challenges.data,
@@ -28,7 +28,7 @@ export async function getChallengeByIdAction(
     challengeId: string,
 ): Promise<RequestSuccess<ChallengeResponse> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.get<ChallengeResponse>(
+        const response = await API_GATEWAY_HTTP.get<ChallengeResponse>(
             `/challenges/${challengeId}`,
         );
 
@@ -57,7 +57,7 @@ export async function createChallengeAction(
 ): Promise<RequestSuccess<ChallengeResponse> | RequestFailure> {
     try {
         console.log("Request DE CREATION ACTION", request);
-        const response = await CHALLENGES_HTTP.post<ChallengeResponse>(
+        const response = await API_GATEWAY_HTTP.post<ChallengeResponse>(
             "/challenges",
             request,
         );
@@ -83,7 +83,7 @@ export async function getChallengesByTeacherIdAction(
     teacherId: string,
 ): Promise<RequestSuccess<ChallengeResponse[]> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.get<ChallengeResponse[]>(
+        const response = await API_GATEWAY_HTTP.get<ChallengeResponse[]>(
             `/challenges/teachers/${teacherId}`,
         );
 
@@ -112,7 +112,7 @@ export async function updateChallengeAction(
     request: UpdateChallengeRequest,
 ): Promise<RequestSuccess<ChallengeResponse> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.patch<ChallengeResponse>(
+        const response = await API_GATEWAY_HTTP.patch<ChallengeResponse>(
             `/challenges/${challengeId}`,
             request,
         );
@@ -137,7 +137,7 @@ export async function deleteChallengeAction(
     challengeId: string,
 ): Promise<RequestSuccess<true> | RequestFailure> {
     try {
-        const response = await CHALLENGES_HTTP.delete(
+        const response = await API_GATEWAY_HTTP.delete(
             `/challenges/${challengeId}`,
         );
 

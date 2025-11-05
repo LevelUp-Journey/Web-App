@@ -34,3 +34,16 @@ export interface JWTPayload {
     iat: number;
     exp: number;
 }
+
+export interface SearchUsersRequest {
+    username: string;
+}
+
+export interface UserSearchResult {
+    id: string;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+}

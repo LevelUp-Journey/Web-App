@@ -1,6 +1,6 @@
 import type React from "react";
 import { cn } from "@/lib/utils"; // si no tienes esta función, te explico cómo hacerla abajo
-import { CourseDifficulty } from "@/services/internal/learning/courses/controller/course.response";
+import { CourseDifficulty } from "@/services/internal/learning/courses/domain/course.entity";
 
 interface CourseDifficultyBadgeProps {
     difficulty: CourseDifficulty;

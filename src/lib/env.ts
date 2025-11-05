@@ -31,6 +31,11 @@ export const ENV = {
                 API_SECRET: process.env.CLOUDINARY_API_SECRET,
             },
         },
+        API_GATEWAY: {
+            BASE_URL:
+                process.env.API_GATEWAY_BASE_URL ||
+                "http://localhost:8080/api/v1",
+        },
     },
     OAUTH: {
         GOOGLE: {

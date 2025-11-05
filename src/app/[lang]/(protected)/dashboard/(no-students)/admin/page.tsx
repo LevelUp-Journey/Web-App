@@ -1,11 +1,10 @@
+import ChallengeCard from "@/components/cards/challenge-card";
+import CourseCard from "@/components/cards/course-card";
+import GuideCard from "@/components/cards/guide-card";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
-
-import ChallengeCard from "@/components/cards/challenge-card";
-import GuideCard from "@/components/cards/guide-card";
-import CourseCard from "@/components/cards/course-card";
 
 export default async function AdminPage() {
     const userId = await AuthController.getUserId();
@@ -23,6 +22,9 @@ export default async function AdminPage() {
                 new Date(b.updatedAt ?? 0).getTime() -
                 new Date(a.updatedAt ?? 0).getTime(),
         );
+    console.log("CHALLENGES", challenges);
+    console.log("GUIDES", guides);
+    console.log("COURSES", courses);
 
     const sortedChallenges = sortByUpdated(challenges);
     const sortedGuides = sortByUpdated(guides);

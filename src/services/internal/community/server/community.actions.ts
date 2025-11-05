@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    COMMUNITY_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -34,7 +34,7 @@ export async function createCommunityAction(
     request: CreateCommunityRequest,
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.post("/communities", request);
+        const response = await API_GATEWAY_HTTP.post("/communities", request);
 
         return {
             data: response.data,
@@ -60,7 +60,7 @@ export async function getCommunitiesAction(): Promise<
     RequestSuccess<CommunityResponse[]> | RequestFailure
 > {
     try {
-        const response = await COMMUNITY_HTTP.get("/communities");
+        const response = await API_GATEWAY_HTTP.get("/communities");
 
         return {
             data: response.data,
@@ -86,7 +86,7 @@ export async function getCommunityByIdAction(
     communityId: string,
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.get(
+        const response = await API_GATEWAY_HTTP.get(
             `/communities/${communityId}`,
         );
 
@@ -115,7 +115,7 @@ export async function updateCommunityAction(
     request: UpdateCommunityRequest,
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
-        const response = await COMMUNITY_HTTP.put(
+        const response = await API_GATEWAY_HTTP.put(
             `/communities/${communityId}`,
             request,
         );

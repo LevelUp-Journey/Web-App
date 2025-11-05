@@ -1,7 +1,7 @@
 "use server";
 
 import {
-    PROFILES_HTTP,
+    API_GATEWAY_HTTP,
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
@@ -15,7 +15,7 @@ export async function getLeaderboardAction(
     offset: number = 0,
 ): Promise<RequestSuccess<LeaderboardResponse> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<LeaderboardResponse>(
+        const response = await API_GATEWAY_HTTP.get<LeaderboardResponse>(
             `/leaderboard?limit=${limit}&offset=${offset}`,
         );
         return { data: response.data, status: response.status };
@@ -46,7 +46,7 @@ export async function getUserPositionAction(
     userId: string,
 ): Promise<RequestSuccess<LeaderboardEntry> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<LeaderboardEntry>(
+        const response = await API_GATEWAY_HTTP.get<LeaderboardEntry>(
             `/leaderboard/user/${userId}`,
         );
         return { data: response.data, status: response.status };
@@ -70,7 +70,7 @@ export async function getTop500Action(
     offset: number = 0,
 ): Promise<RequestSuccess<LeaderboardResponse> | RequestFailure> {
     try {
-        const response = await PROFILES_HTTP.get<LeaderboardResponse>(
+        const response = await API_GATEWAY_HTTP.get<LeaderboardResponse>(
             `/leaderboard/top500`,
             {
                 params: { offset },
@@ -97,7 +97,7 @@ export async function recalculateLeaderboardAction(): Promise<
     RequestSuccess<void> | RequestFailure
 > {
     try {
-        const response = await PROFILES_HTTP.post<void>(
+        const response = await API_GATEWAY_HTTP.post<void>(
             `/leaderboard/recalculate`,
         );
         return { data: response.data, status: response.status };

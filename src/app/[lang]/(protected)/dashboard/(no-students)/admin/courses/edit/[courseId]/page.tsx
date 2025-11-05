@@ -27,7 +27,9 @@ export default async function EditCoursePage({
     const courseId = variables.courseId;
 
     // Fetch course data
-    const course = (await CourseController.getCourseById(courseId)) as Course;
+    const course = (await CourseController.getCourseById({
+        courseId: courseId,
+    })) as Course;
 
     if (!course) {
         notFound();
