@@ -15,13 +15,28 @@ import type {
 export async function getPublicChallengesAction(): Promise<
     RequestSuccess<ChallengeResponse[]> | RequestFailure
 > {
-    const challenges =
-        await API_GATEWAY_HTTP.get<ChallengeResponse[]>("/challenges");
+    try {
+        const challenges =
+            await API_GATEWAY_HTTP.get<ChallengeResponse[]>("/challenges");
 
-    return {
-        data: challenges.data,
-        status: challenges.status,
-    };
+        return {
+            data: challenges.data,
+            status: challenges.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Service unavailable",
+            ),
+            status: axiosError.response?.status || 503,
+        };
+    }
 }
 
 export async function getChallengeByIdAction(
