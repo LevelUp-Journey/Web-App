@@ -24,10 +24,8 @@ export class ProfileController {
             if (response.status === 200) {
                 return response.data as ProfileResponse;
             }
-            console.error("Failed to fetch profile:", response);
             return null;
         } catch (error) {
-            console.error("Error fetching profile by user ID:", error);
             return null;
         }
     }
@@ -37,15 +35,12 @@ export class ProfileController {
         data: UpdateProfileRequest,
     ): Promise<ProfileResponse | null> {
         try {
-            console.log("Updating profile", data);
             const response = await updateProfileAction(userId, data);
             if (response.status === 200) {
                 return response.data as ProfileResponse;
             }
-            console.error("Failed to update profile:", response);
             return null;
         } catch (error) {
-            console.error("Error updating profile:", error);
             return null;
         }
     }
@@ -59,10 +54,8 @@ export class ProfileController {
             if (response.status === 200) {
                 return response.data as ProfileResponse;
             }
-            console.error("Failed to fetch current user profile:", response);
             return null;
         } catch (error) {
-            console.error("Error fetching current user profile:", error);
             return null;
         }
     }
@@ -75,10 +68,8 @@ export class ProfileController {
             if (response.status === 200) {
                 return response.data as ProfileResponse;
             }
-            console.error("Failed to fetch profile by ID:", response);
             return null;
         } catch (error) {
-            console.error("Error fetching profile by ID:", error);
             return null;
         }
     }
@@ -89,10 +80,8 @@ export class ProfileController {
             if (response.status === 200) {
                 return response.data as ProfileResponse[];
             }
-            console.error("Failed to fetch all profiles:", response);
             return [];
         } catch (error) {
-            console.error("Error fetching all profiles:", error);
             return [];
         }
     }
@@ -105,10 +94,8 @@ export class ProfileController {
             if (response.status === 200) {
                 return response.data as ProfileResponse[];
             }
-            console.error("Failed to search profiles:", response);
             return [];
         } catch (error) {
-            console.error("Error searching profiles:", error);
             return [];
         }
     }
@@ -120,7 +107,6 @@ export class ProfileController {
             const response = await searchUsersByUsernameAction(username);
             return response;
         } catch (error) {
-            console.error("Error searching users by username:", error);
             return [];
         }
     }

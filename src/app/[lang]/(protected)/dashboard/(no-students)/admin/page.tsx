@@ -1,19 +1,89 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { AlertCircle, RefreshCw } from "lucide-react";
 import ChallengeCard from "@/components/cards/challenge-card";
 import CourseCard from "@/components/cards/course-card";
 import GuideCard from "@/components/cards/guide-card";
+import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
-export default async function AdminPage() {
-    const userId = await AuthController.getUserId();
+export default function AdminPage() {
+    const [challenges, setChallenges] = useState<any[]>([]);
+    const [guides, setGuides] = useState<any[]>([]);
+    const [courses, setCourses] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    const [challenges, guides, courses] = await Promise.all([
-        ChallengeController.getChallengesByTeacherId(userId),
-        GuideController.getAllGuides(),
-        CourseController.getCourses(),
-    ]);
+    const loadData = async () => {
+        try {
+            setLoading(true);
+            setError(false);
+
+            const userId = await AuthController.getUserId();
+
+            const [challengesData, guidesData, coursesData] = await Promise.all([
+                ChallengeController.getChallengesByTeacherId(userId),
+                GuideController.getAllGuides(),
+                CourseController.getCourses(),
+            ]);
+
+            setChallenges(challengesData);
+            setGuides(guidesData);
+            setCourses(coursesData);
+        } catch (err) {
+            setError(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[400px]">
+                <Spinner className="size-8 mb-4" />
+                <p className="text-muted-foreground">Loading dashboard...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <AlertCircle />
+                    </EmptyMedia>
+                    <EmptyTitle>Error loading dashboard</EmptyTitle>
+                    <EmptyDescription>
+                        Could not load admin dashboard data. Please try again.
+                    </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                    <Button onClick={loadData} variant="outline">
+                        <RefreshCw className="mr-2 h-4 w-4" />
+                        Retry
+                    </Button>
+                </EmptyContent>
+            </Empty>
+        );
+    }
 
     // Ordenar cada tipo por fecha de actualización (más reciente primero)
     const sortByUpdated = (arr: any[]) =>
@@ -22,13 +92,10 @@ export default async function AdminPage() {
                 new Date(b.updatedAt ?? 0).getTime() -
                 new Date(a.updatedAt ?? 0).getTime(),
         );
-    console.log("CHALLENGES", challenges);
-    console.log("GUIDES", guides);
-    console.log("COURSES", courses);
 
-    const sortedChallenges = sortByUpdated(challenges);
-    const sortedGuides = sortByUpdated(guides);
-    const sortedCourses = sortByUpdated(courses);
+    const sortedChallenges = sortByUpdated([...challenges]);
+    const sortedGuides = sortByUpdated([...guides]);
+    const sortedCourses = sortByUpdated([...courses]);
 
     return (
         <div className="space-y-8">
