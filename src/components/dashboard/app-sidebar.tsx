@@ -3,6 +3,7 @@ import {
     Code2,
     HelpCircle,
     Home,
+    LayoutDashboard,
     Library,
     Settings,
     ShieldUser,
@@ -33,7 +34,7 @@ const topItems = [
     {
         title: "Dashboard",
         url: PATHS.DASHBOARD.ROOT,
-        icon: Home,
+        icon: LayoutDashboard,
     },
     {
         title: "Challenges",
