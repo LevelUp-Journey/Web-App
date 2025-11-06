@@ -66,9 +66,13 @@ export default function GuidesPage() {
                     sort: "createdAt,desc",
                 });
 
-                setGuides(response.content);
-                setTotalPages(response.totalPages);
-                setTotalElements(response.totalElements);
+                if (response) {
+                    setGuides(response.content);
+                    setTotalPages(response.totalPages);
+                    setTotalElements(response.totalElements);
+                } else {
+                    setError("Error loading guides");
+                }
             } catch (err) {
                 console.error("Error loading guides:", err);
                 setError("Error loading guides");

@@ -13,7 +13,24 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
     // Fetch guide and author in parallel
     const guide = await GuideController.getGuideById(guideId);
+
+    if (!guide) {
+        return (
+            <div className="container mx-auto px-4 py-8">
+                <p>Guide not found</p>
+            </div>
+        );
+    }
+
     const author = await ProfileController.getProfileByUserId(guide.authorIds[0]); // Get first author
+
+    if (!author) {
+        return (
+            <div className="container mx-auto px-4 py-8">
+                <p>Author profile not available</p>
+            </div>
+        );
+    }
 
     return (
         <GuideViewer

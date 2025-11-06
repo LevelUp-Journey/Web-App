@@ -58,15 +58,21 @@ export default function EditGuidePage() {
         const loadGuide = async () => {
             try {
                 const response = await GuideController.getGuideById(guideId);
-                setGuide(response);
 
-                // Set form values
-                form.reset({
-                    title: response.title,
-                    description: response.description,
-                    cover: response.coverImage || "",
-                    topicIds: response.topics.map((t) => t.id),
-                });
+                if (response) {
+                    setGuide(response);
+
+                    // Set form values
+                    form.reset({
+                        title: response.title,
+                        description: response.description,
+                        cover: response.coverImage || "",
+                        topicIds: response.topics.map((t) => t.id),
+                    });
+                } else {
+                    alert("Guide not found. Please try again.");
+                    router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
+                }
             } catch (error) {
                 console.error("Error loading guide:", error);
                 alert("Error loading guide. Please try again.");

@@ -24,6 +24,13 @@ export async function POST(request: Request) {
         // Get the user's profile
         const profile = await ProfileController.getProfileByUserId(userId);
 
+        if (!profile) {
+            return NextResponse.json(
+                { error: "Profile not found" },
+                { status: 404 },
+            );
+        }
+
         // Override authorId with authenticated user's ID and add authorProfileId
         const postData: CreatePostRequest = {
             ...body,

@@ -70,6 +70,11 @@ export function CommunityForm({
                     AuthController.getUserId(),
                 ]);
 
+                if (!currentProfile) {
+                    toast.error("Profile not found. Please complete your profile first.");
+                    return;
+                }
+
                 await CommunityController.createCommunity({
                     ownerId: userId,
                     ownerProfileId: currentProfile.id,

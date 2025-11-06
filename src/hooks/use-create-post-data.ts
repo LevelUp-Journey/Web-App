@@ -46,7 +46,8 @@ export function useCreatePostData() {
                                 await ProfileController.getProfileById(
                                     community.ownerProfileId,
                                 );
-                            usernameMap[community.ownerId] = profile.username;
+                            usernameMap[community.ownerId] =
+                                profile?.username ?? "Unknown User";
                         } catch (error) {
                             console.error(
                                 `Error loading profile for ${community.ownerProfileId}:`,
