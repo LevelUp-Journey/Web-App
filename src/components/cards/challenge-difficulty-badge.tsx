@@ -23,27 +23,24 @@ const COLOR_SCHEMES: Record<
     { default: string; hover: string; selected: string }
 > = {
     [ChallengeDifficulty.EASY]: {
-        default: DEFAULT_COLOR,
-        hover: "hover:bg-green-100 hover:text-green-700 dark:hover:bg-green-900 dark:hover:text-green-300",
-        selected:
-            "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+        default: "bg-[#CDFFC4] text-[#0F6B00]",
+        hover: "hover:bg-[#CDFFC4] hover:text-[#0F6B00]",
+        selected: "bg-[#CDFFC4] text-[#0F6B00]",
     },
     [ChallengeDifficulty.MEDIUM]: {
-        default: DEFAULT_COLOR,
-        hover: "hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-900 dark:hover:text-blue-300",
-        selected:
-            "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+        default: "bg-[#FFFCB1] text-[#B17300]",
+        hover: "hover:bg-[#FFFCB1] hover:text-[#B17300]",
+        selected: "bg-[#FFFCB1] text-[#B17300]",
     },
     [ChallengeDifficulty.HARD]: {
-        default: DEFAULT_COLOR,
-        hover: "hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-900 dark:hover:text-orange-300",
-        selected:
-            "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
+        default: "bg-[#FFC78E] text-[#944B00]",
+        hover: "hover:bg-[#FFC78E] hover:text-[#944B00]",
+        selected: "bg-[#FFC78E] text-[#944B00]",
     },
     [ChallengeDifficulty.EXPERT]: {
-        default: DEFAULT_COLOR,
-        hover: "hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900 dark:hover:text-red-300",
-        selected: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+        default: "bg-[#FFC9C9] text-[#940000]",
+        hover: "hover:bg-[#FFC9C9] hover:text-[#940000]",
+        selected: "bg-[#FFC9C9] text-[#940000]",
     },
 };
 

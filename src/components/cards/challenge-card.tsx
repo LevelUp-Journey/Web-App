@@ -5,7 +5,7 @@ import Link from "next/link";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import type { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { cn } from "@/lib/utils";
@@ -34,55 +34,13 @@ export default function ChallengeCard({
     return (
         <Card
             key={challenge.id}
-            className={cn("hover:shadow-lg transition-shadow gap-4", className)}
+            className={cn("hover:shadow-lg transition-shadow flex flex-col my-6 mx-6 max-w-xs", className)}
             {...props}
         >
-            <CardHeader className="flex items-center justify-between flex-row">
-                <CardTitle className="flex items-center justify-between">
-                    <Link
-                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}
-                        className="hover:underline"
-                    >
-                        {challenge.name}
-                    </Link>
-                </CardTitle>
-                <div className="flex gap-2">
-                    <div className="flex items-center gap-2">
-                        <Button size={"icon"} variant={"ghost"}>
-                            <Star className="text-yellow-400" size={18} />
-                        </Button>
-                        {challenge.stars.length}
-                    </div>
-                    {adminMode && (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button size={"icon"} variant={"ghost"}>
-                                    <EllipsisVertical />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(
-                                            challenge.id,
-                                        )}
-                                    >
-                                        Edit Challenge
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    Delete Challenge
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    )}
-                </div>
-            </CardHeader>
-            <CardContent>
-                <div className="flex flex-wrap gap-2 mb-2">
+            {/* Badges at the top */}
+            <div className="px-3 py-1 pb-0.5">
+                <div className="flex flex-wrap gap-1">
                     <ChallengeDifficultyBadge difficulty={challenge.difficulty} />
-                </div>
-                <div className="flex flex-wrap gap-2">
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
                             key={version.id}
@@ -90,7 +48,52 @@ export default function ChallengeCard({
                         />
                     ))}
                 </div>
-            </CardContent>
+            </div>
+
+            {/* Title in the middle */}
+            <div className="flex-1 flex items-center px-3 py-0.5">
+                <CardTitle className="text-base font-bold">
+                    <Link
+                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}
+                        className="hover:underline"
+                    >
+                        {challenge.name}
+                    </Link>
+                </CardTitle>
+            </div>
+
+            {/* Stars at the bottom */}
+            <div className="px-3 py-1 pt-0.5 flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                        <Star className="text-yellow-400" size={14} />
+                    </Button>
+                    <span className="text-xs">{challenge.stars.length}</span>
+                </div>
+                {adminMode && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                                <EllipsisVertical size={14} />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem asChild>
+                                <Link
+                                    href={PATHS.DASHBOARD.CHALLENGES.VIEW(
+                                        challenge.id,
+                                    )}
+                                >
+                                    Edit Challenge
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Delete Challenge
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
+            </div>
         </Card>
     );
 }
