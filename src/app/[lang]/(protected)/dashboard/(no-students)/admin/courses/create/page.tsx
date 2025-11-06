@@ -31,6 +31,7 @@ import type {
   CreateTopicRequest,
   TopicResponse,
 } from "@/services/internal/learning/topics/topic.response";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -107,17 +108,19 @@ export default function CreateCoursePage() {
 
         if (role) {
           // Get current user and add as default author
-          const user = await AuthController.me();
-          setCurrentUserId(user.id);
+          const userId = await AuthController.getUserId();
+          const userEmail = await AuthController.getUserEmail();
+          const userProfile = await ProfileController.getCurrentUserProfile();
+          setCurrentUserId(userId);
           setSelectedAuthors([
             {
-              id: user.id,
-              username: user.username,
-              fullName: user.fullName || user.username,
-              profilePicture: user.profilePicture || "",
+              id: userId,
+              email: userEmail,
+              username: userProfile.username || "",
+              profilePicture: userProfile.profileUrl || "",
             },
           ]);
-          form.setValue("authorIds", [user.id]);
+          form.setValue("authorIds", [userId]);
         }
       } catch (error) {
         console.error("Error checking permissions:", error);
@@ -516,7 +519,7 @@ export default function CreateCoursePage() {
                 <div className="flex flex-wrap gap-2">
                   {selectedAuthors.map((author) => (
                     <Badge key={author.id} variant="secondary">
-                      {author.fullName || author.username}
+                      {author.username}
                       {author.id !== currentUserId ||
                       selectedAuthors.length > 1 ? (
                         <button
@@ -554,8 +557,7 @@ export default function CreateCoursePage() {
                           onClick={() => handleAddAuthor(author)}
                           className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
                         >
-                          {author.fullName || author.username} (@
-                          {author.username})
+                          @{author.username} ({author.email})
                         </button>
                       ))
                     ) : (
