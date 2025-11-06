@@ -51,37 +51,52 @@ export interface GetGuidesResponseFormat {
 }
 
 export async function getAllGuidesAction(): Promise<GuideResponse[]> {
-    console.log(API_GATEWAY_HTTP);
-    const response =
-        await API_GATEWAY_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
-            "/guides",
-        );
-    return response.data.data.content;
+    try {
+        console.log(API_GATEWAY_HTTP);
+        const response =
+            await API_GATEWAY_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
+                "/guides",
+            );
+        return response.data.data.content;
+    } catch (error) {
+        console.error("Error fetching all guides:", error);
+        return [];
+    }
 }
 
 export async function getGuidesPaginatedAction(
     request?: GetGuidesPaginatedRequest,
-): Promise<GetGuidesResponseFormat> {
-    const params = new URLSearchParams();
-    if (request?.page !== undefined)
-        params.append("page", String(request.page));
-    if (request?.size !== undefined)
-        params.append("size", String(request.size));
-    if (request?.sort) params.append("sort", request.sort);
+): Promise<GetGuidesResponseFormat | null> {
+    try {
+        const params = new URLSearchParams();
+        if (request?.page !== undefined)
+            params.append("page", String(request.page));
+        if (request?.size !== undefined)
+            params.append("size", String(request.size));
+        if (request?.sort) params.append("sort", request.sort);
 
-    const response = await API_GATEWAY_HTTP.get<
-        LearningResponse<GetGuidesResponseFormat>
-    >(`/guides${params.toString() ? `?${params.toString()}` : ""}`);
-    return response.data.data;
+        const response = await API_GATEWAY_HTTP.get<
+            LearningResponse<GetGuidesResponseFormat>
+        >(`/guides${params.toString() ? `?${params.toString()}` : ""}`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error fetching paginated guides:", error);
+        return null;
+    }
 }
 
 export async function getTeachersGuidesAction(
     teacherId: string,
 ): Promise<GuideResponse[]> {
-    const response = await API_GATEWAY_HTTP.get<
-        LearningResponse<GetGuidesResponseFormat>
-    >(`/guides/teachers/${teacherId}`);
-    return response.data.data.content;
+    try {
+        const response = await API_GATEWAY_HTTP.get<
+            LearningResponse<GetGuidesResponseFormat>
+        >(`/guides/teachers/${teacherId}`);
+        return response.data.data.content;
+    } catch (error) {
+        console.error("Error fetching teacher's guides:", error);
+        return [];
+    }
 }
 
 export async function getTeachersGuidesPaginatedAction(
@@ -114,11 +129,16 @@ export async function createGuideAction(
 
 export async function getGuideByIdAction(
     guideId: string,
-): Promise<GuideResponse> {
-    const response = await API_GATEWAY_HTTP.get<
-        LearningResponse<GuideResponse>
-    >(`/guides/${guideId}`);
-    return response.data.data;
+): Promise<GuideResponse | null> {
+    try {
+        const response = await API_GATEWAY_HTTP.get<
+            LearningResponse<GuideResponse>
+        >(`/guides/${guideId}`);
+        return response.data.data;
+    } catch (error) {
+        console.error(`Error fetching guide ${guideId}:`, error);
+        return null;
+    }
 }
 
 export async function updateGuideAction(
