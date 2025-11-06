@@ -1,5 +1,12 @@
-import { BookOpen, Library } from "lucide-react";
+import { AlertCircle, Library } from "lucide-react";
 import GuideCard from "@/components/cards/guide-card";
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
 export default async function GuidesPage() {
@@ -31,15 +38,18 @@ export default async function GuidesPage() {
                     ))}
                 </section>
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <BookOpen className="h-16 w-16 text-muted-foreground/50 mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">
-                        No guides available
-                    </h3>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                        Check back soon for new learning content and guides
-                    </p>
-                </div>
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <AlertCircle />
+                        </EmptyMedia>
+                        <EmptyTitle>No guides available</EmptyTitle>
+                        <EmptyDescription>
+                            The guides service is temporarily unavailable. Please
+                            try again later.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             )}
         </div>
     );
