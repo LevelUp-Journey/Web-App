@@ -31,27 +31,49 @@ import type {
 
 export class GuideController {
     public static async getAllGuides(): Promise<GuideResponse[]> {
-        const response = await getAllGuidesAction();
-        return response;
+        try {
+            const response = await getAllGuidesAction();
+            return response;
+        } catch (error) {
+            console.error("Error in GuideController.getAllGuides:", error);
+            return [];
+        }
     }
 
     public static async getGuidesPaginated(
         request?: GetGuidesPaginatedRequest,
-    ): Promise<GetGuidesResponseFormat> {
-        const response = await getGuidesPaginatedAction(request);
-        return response;
+    ): Promise<GetGuidesResponseFormat | null> {
+        try {
+            const response = await getGuidesPaginatedAction(request);
+            return response;
+        } catch (error) {
+            console.error("Error in GuideController.getGuidesPaginated:", error);
+            return null;
+        }
     }
 
     public static async createGuide(
         request: CreateGuideRequest,
-    ): Promise<GuideResponse> {
-        const response = await createGuideAction(request);
-        return response;
+    ): Promise<GuideResponse | null> {
+        try {
+            const response = await createGuideAction(request);
+            return response;
+        } catch (error) {
+            console.error("Error in GuideController.createGuide:", error);
+            return null;
+        }
     }
 
-    public static async getGuideById(guideId: string): Promise<GuideResponse> {
-        const response = await getGuideByIdAction(guideId);
-        return response;
+    public static async getGuideById(
+        guideId: string,
+    ): Promise<GuideResponse | null> {
+        try {
+            const response = await getGuideByIdAction(guideId);
+            return response;
+        } catch (error) {
+            console.error("Error in GuideController.getGuideById:", error);
+            return null;
+        }
     }
 
     public static async updateGuide(
@@ -120,18 +142,31 @@ export class GuideController {
     public static async getTeachersGuides(
         teacherId: string,
     ): Promise<GuideResponse[]> {
-        const response = await getTeachersGuidesAction(teacherId);
-        return response;
+        try {
+            const response = await getTeachersGuidesAction(teacherId);
+            return response;
+        } catch (error) {
+            console.error("Error in GuideController.getTeachersGuides:", error);
+            return [];
+        }
     }
 
     public static async getTeachersGuidesPaginated(
         teacherId: string,
         request?: GetGuidesPaginatedRequest,
-    ): Promise<GetGuidesResponseFormat> {
-        const response = await getTeachersGuidesPaginatedAction(
-            teacherId,
-            request,
-        );
-        return response;
+    ): Promise<GetGuidesResponseFormat | null> {
+        try {
+            const response = await getTeachersGuidesPaginatedAction(
+                teacherId,
+                request,
+            );
+            return response;
+        } catch (error) {
+            console.error(
+                "Error in GuideController.getTeachersGuidesPaginated:",
+                error,
+            );
+            return null;
+        }
     }
 }
