@@ -82,7 +82,13 @@ export function useFollowingFeed() {
                             await ProfileController.getProfileByUserId(
                                 authorId,
                             );
-                        return { authorId, profile };
+                        return {
+                            authorId,
+                            profile:
+                                profile ?? {
+                                    username: "Unknown User",
+                                },
+                        };
                     } catch (error) {
                         return {
                             authorId,
@@ -100,7 +106,10 @@ export function useFollowingFeed() {
                 const postsWithDetails: PostWithDetails[] = followingPosts.map(
                     (post) => ({
                         ...post,
-                        authorProfile: profileMap.get(post.authorId),
+                        authorProfile:
+                            profileMap.get(post.authorId) ?? {
+                                username: "Unknown User",
+                            },
                         community: communityMap.get(post.communityId),
                     }),
                 );

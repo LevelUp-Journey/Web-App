@@ -68,7 +68,13 @@ export function useCommunityData(communityId: string) {
                             await ProfileController.getProfileByUserId(
                                 authorId,
                             );
-                        return { authorId, profile };
+                        return {
+                            authorId,
+                            profile:
+                                profile ?? {
+                                    username: "Unknown User",
+                                },
+                        };
                     } catch (error) {
                         console.error(
                             `Error loading profile for ${authorId}:`,
@@ -90,7 +96,10 @@ export function useCommunityData(communityId: string) {
                 const postsWithDetails: PostWithDetails[] = communityPosts.map(
                     (post) => ({
                         ...post,
-                        authorProfile: profileMap.get(post.authorId),
+                        authorProfile:
+                            profileMap.get(post.authorId) ?? {
+                                username: "Unknown User",
+                            },
                         community: communityData,
                     }),
                 );
