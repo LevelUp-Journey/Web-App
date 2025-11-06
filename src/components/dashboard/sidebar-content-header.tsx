@@ -4,6 +4,8 @@ import { Separator } from "../ui/separator";
 import { NavUser } from "./nav-user";
 import { NavigationIndicator } from "./navigation-indicator";
 import { SidebarTrigger } from "../ui/sidebar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserCircle2Icon } from "lucide-react";
 
 export async function SidebarContentHeader() {
     const profile = await ProfileController.getCurrentUserProfile();
@@ -21,9 +23,11 @@ export async function SidebarContentHeader() {
                     <div className="h-8">
                         <Separator orientation="vertical" className="h-6" />
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                        Profile unavailable
-                    </div>
+                    <Avatar className="h-8 w-8 rounded-lg">
+                        <AvatarFallback className="rounded-lg">
+                            <UserCircle2Icon className="h-5 w-5 text-muted-foreground" />
+                        </AvatarFallback>
+                    </Avatar>
                 </div>
             </header>
         );
