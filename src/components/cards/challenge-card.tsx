@@ -1,6 +1,6 @@
 "use client";
 
-import { EllipsisVertical, Star } from "lucide-react";
+import { ChevronRight, EllipsisVertical, Star } from "lucide-react";
 import Link from "next/link";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
@@ -53,12 +53,7 @@ export default function ChallengeCard({
             {/* Title in the middle */}
             <div className="flex-1 flex items-center px-3 py-0.5">
                 <CardTitle className="text-base font-bold">
-                    <Link
-                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}
-                        className="hover:underline"
-                    >
-                        {challenge.name}
-                    </Link>
+                    {challenge.name}
                 </CardTitle>
             </div>
 
@@ -70,29 +65,36 @@ export default function ChallengeCard({
                     </Button>
                     <span className="text-xs">{challenge.stars.length}</span>
                 </div>
-                {adminMode && (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
-                                <EllipsisVertical size={14} />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem asChild>
-                                <Link
-                                    href={PATHS.DASHBOARD.CHALLENGES.VIEW(
-                                        challenge.id,
-                                    )}
-                                >
-                                    Edit Challenge
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                Delete Challenge
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )}
+                <div className="flex items-center gap-1">
+                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0" asChild>
+                        <Link href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}>
+                            <ChevronRight size={14} />
+                        </Link>
+                    </Button>
+                    {adminMode && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                                    <EllipsisVertical size={14} />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(
+                                            challenge.id,
+                                        )}
+                                    >
+                                        Edit Challenge
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    Delete Challenge
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+                </div>
             </div>
         </Card>
     );

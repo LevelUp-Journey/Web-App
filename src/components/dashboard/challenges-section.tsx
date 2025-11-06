@@ -18,7 +18,11 @@ import { CodeVersionController } from "@/services/internal/challenges/challenge/
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
-export function ChallengesSection() {
+interface ChallengesSectionProps {
+    onCountChange?: (count: number) => void;
+}
+
+export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}) {
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [codeVersionsMap, setCodeVersionsMap] = useState<
         Map<string, CodeVersion[]>
@@ -39,6 +43,7 @@ export function ChallengesSection() {
             if (challengesData.length === 0) {
                 setError(true);
                 setChallenges([]);
+                onCountChange?.(0);
                 return;
             }
 
@@ -57,9 +62,11 @@ export function ChallengesSection() {
             );
 
             setCodeVersionsMap(versionsMap);
+            onCountChange?.(challengesData.length);
         } catch (err) {
             console.error("Error loading challenges:", err);
             setError(true);
+            onCountChange?.(0);
         } finally {
             setLoading(false);
         }
