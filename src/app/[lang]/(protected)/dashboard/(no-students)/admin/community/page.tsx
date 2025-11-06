@@ -26,19 +26,11 @@ export default function AdminCommunityPage() {
                 const usernameMap: Record<string, string> = {};
                 await Promise.all(
                     data.map(async (community) => {
-                        try {
-                            const profile =
-                                await ProfileController.getProfileById(
-                                    community.ownerProfileId,
-                                );
-                            usernameMap[community.ownerId] = profile.username;
-                        } catch (error) {
-                            console.error(
-                                `Error loading profile for ${community.ownerProfileId}:`,
-                                error,
+                        const profile =
+                            await ProfileController.getProfileById(
+                                community.ownerProfileId,
                             );
-                            usernameMap[community.ownerId] = "Unknown User";
-                        }
+                        usernameMap[community.ownerId] = profile?.username || "Unknown User";
                     }),
                 );
 
