@@ -1,8 +1,19 @@
 "use client";
 
+import { AlertCircle, RefreshCw } from "lucide-react";
 import { useLeaderboardData } from "@/hooks/use-leaderboard-data";
 import { getLeaderboardColumns } from "./leaderboard-columns";
 import { DataTable } from "@/components/ui/data-table";
+import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 
 interface LeaderboardTableProps {
     selectedRank: string;
@@ -23,12 +34,34 @@ export function LeaderboardTable({ selectedRank }: LeaderboardTableProps) {
     } = useLeaderboardData(selectedRank);
 
     if (loading) {
-        return <div className="text-center py-8">Loading...</div>;
+        return (
+            <div className="flex flex-col items-center justify-center py-16">
+                <Spinner className="size-8 mb-4" />
+                <p className="text-muted-foreground">Loading leaderboard...</p>
+            </div>
+        );
     }
 
     if (usersWithProfiles.length === 0) {
         return (
-            <div className="text-center py-8">No users found for this rank</div>
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <AlertCircle />
+                    </EmptyMedia>
+                    <EmptyTitle>No users found</EmptyTitle>
+                    <EmptyDescription>
+                        No users found for this rank. Try selecting a different
+                        rank.
+                    </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                    <Button onClick={() => window.location.reload()} variant="outline">
+                        <RefreshCw className="mr-2 h-4 w-4" />
+                        Retry
+                    </Button>
+                </EmptyContent>
+            </Empty>
         );
     }
 

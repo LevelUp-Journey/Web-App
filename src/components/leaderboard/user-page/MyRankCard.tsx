@@ -1,7 +1,18 @@
 "use client";
 
+import { AlertCircle, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
@@ -67,14 +78,33 @@ export default function MyRankCard() {
     }, []);
 
     if (loading) {
-        return <div className="text-center py-8">Loading...</div>;
+        return (
+            <div className="flex flex-col items-center justify-center py-16">
+                <Spinner className="size-8 mb-4" />
+                <p className="text-muted-foreground">Loading rank...</p>
+            </div>
+        );
     }
 
     if (!profile) {
         return (
-            <div className="text-center py-8">
-                No rank information available
-            </div>
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <AlertCircle />
+                    </EmptyMedia>
+                    <EmptyTitle>No rank information available</EmptyTitle>
+                    <EmptyDescription>
+                        Could not load your rank data. Please try again.
+                    </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                    <Button onClick={() => window.location.reload()} variant="outline">
+                        <RefreshCw className="mr-2 h-4 w-4" />
+                        Retry
+                    </Button>
+                </EmptyContent>
+            </Empty>
         );
     }
 
