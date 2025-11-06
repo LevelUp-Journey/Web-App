@@ -34,7 +34,7 @@ export default function ChallengeCard({
     return (
         <Card
             key={challenge.id}
-            className={cn("hover:shadow-lg transition-shadow flex flex-col my-6 mx-6 max-w-xs", className)}
+            className={cn("hover:shadow-lg transition-shadow flex flex-col max-w-xs", className)}
             {...props}
         >
             {/* Badges at the top */}
