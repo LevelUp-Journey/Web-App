@@ -146,6 +146,22 @@ export async function getUserIdFromTokenAction(): Promise<string> {
   }
 }
 
+export async function getUserEmailFromTokenAction(): Promise<string> {
+  try {
+    const decoded = await decodeJWT();
+    if (!decoded.email) {
+      throw new Error("No email found in token");
+    }
+    return decoded.email;
+  } catch (error) {
+    console.error(
+      "getUserEmailFromTokenAction: failed to decode token:",
+      error,
+    );
+    throw error;
+  }
+}
+
 export async function decodeJWT() {
   const authToken = await getAuthTokenAction();
   if (authToken.token === "NO_TOKEN_FOUND") {
