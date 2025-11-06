@@ -2,6 +2,7 @@
 
 import { EllipsisVertical, Star } from "lucide-react";
 import Link from "next/link";
+import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,6 +79,9 @@ export default function ChallengeCard({
                 </div>
             </CardHeader>
             <CardContent>
+                <div className="flex flex-wrap gap-2 mb-2">
+                    <ChallengeDifficultyBadge difficulty={challenge.difficulty} />
+                </div>
                 <div className="flex flex-wrap gap-2">
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
