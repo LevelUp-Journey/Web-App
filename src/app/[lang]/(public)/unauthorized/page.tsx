@@ -1,20 +1,49 @@
-import Image from "next/image";
-import Link from "next/link";
+"use client";
+
 import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { ArrowLeft, ShieldX } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { getLocalizedPaths } from "@/lib/paths";
 
 export default function UnauthorizedPage() {
+    const params = useParams();
+    const lang = params.lang as string;
+    const PATHS = getLocalizedPaths(lang);
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
-            <Image src="/pet_sad.png" alt="Logo" width={100} height={100} />
-            <h1 className="text-4xl font-bold mb-4">Unauthorized</h1>
-            <p className="text-lg mb-8">
-                You do not have permission to access this page.
-            </p>
-            <Link href="/">
-                <Button className="font-medium px-4 py-2 rounded-lg transition-colors duration-200">
-                    Go Back Home
-                </Button>
-            </Link>
-        </div>
+        <Empty>
+            <EmptyHeader>
+                <EmptyMedia variant="icon">
+                    <ShieldX />
+                </EmptyMedia>
+                <EmptyTitle>Unauthorized Access</EmptyTitle>
+                <EmptyDescription>
+                    You have attempted to access a page that you are not
+                    authorized to view. If you believe this is an error, please
+                    contact support.
+                </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+                <div className="flex gap-2">
+                    <Button asChild>
+                        <Link href={PATHS.DASHBOARD.ROOT}>
+                            <ArrowLeft /> Go back to Dashboard
+                        </Link>
+                    </Button>
+                    <Button asChild>
+                        <Link href={PATHS.ROOT}>Home</Link>
+                    </Button>
+                </div>
+            </EmptyContent>
+        </Empty>
     );
 }
