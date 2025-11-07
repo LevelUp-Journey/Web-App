@@ -26,7 +26,7 @@ export default async function Home({
         <div className="min-h-screen bg-background">
             {/* Header */}
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-center items-center">
+                <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
                     <Link
                         href={PATHS.DASHBOARD.ROOT}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -42,6 +42,19 @@ export default async function Home({
                             Level Up Journey
                         </span>
                     </Link>
+
+                    <div className="flex items-center gap-3">
+                        <Button variant="ghost" asChild>
+                            <Link href={PATHS.AUTH.SIGN_IN}>
+                                Sign In
+                            </Link>
+                        </Button>
+                        <Button asChild>
+                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
+                                Register
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </header>
 
