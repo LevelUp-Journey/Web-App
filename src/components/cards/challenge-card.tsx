@@ -6,7 +6,7 @@ import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-ba
 import FullLanguageBadge from "@/components/cards/full-language-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
-import type { ProgrammingLanguage } from "@/lib/consts";
+import { ChallengeDifficulty, type ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
@@ -40,7 +40,9 @@ export default function ChallengeCard({
             {/* Badges at the top */}
             <div className="px-3 py-1 pb-0.5">
                 <div className="flex flex-wrap gap-1">
-                    <ChallengeDifficultyBadge difficulty={challenge.difficulty} />
+                    <ChallengeDifficultyBadge
+                        difficulty={challenge.difficulty ?? ChallengeDifficulty.EASY}
+                    />
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
                             key={version.id}

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ChallengeDifficulty } from "@/lib/consts";
 
 interface ChallengeDifficultyBadgeProps {
-    difficulty: ChallengeDifficulty;
+    difficulty?: ChallengeDifficulty;
     selected?: boolean;
 }
 
@@ -48,8 +48,9 @@ const ChallengeDifficultyBadge: React.FC<ChallengeDifficultyBadgeProps> = ({
     difficulty,
     selected = false,
 }) => {
-    const scheme = COLOR_SCHEMES[difficulty];
-    const displayName = DIFFICULTY_NAMES[difficulty];
+    const safeDifficulty = difficulty ?? ChallengeDifficulty.EASY;
+    const scheme = COLOR_SCHEMES[safeDifficulty];
+    const displayName = DIFFICULTY_NAMES[safeDifficulty];
     const classes = selected
         ? scheme.selected
         : `${scheme.default} ${scheme.hover}`;
