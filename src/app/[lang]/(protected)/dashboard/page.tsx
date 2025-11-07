@@ -78,6 +78,16 @@ export default function DashboardPage() {
                             </div>
                         </div>
                     </div>
+
+                    <div className="bg-card border rounded-lg p-6 shadow-sm">
+                        <div className="text-left text-muted-foreground">
+                            <h3 className="text-xl font-semibold mb-4">Achivements</h3>
+                            <div className="text-muted-foreground/75 text-center">
+                                <p className="text-lg font-medium">Coming Soon</p>
+                                <p className="text-sm mt-2">Track your learning progress and achievements</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -102,7 +102,7 @@ export default async function AppSidebar() {
                     <SidebarMenuItem>
                         <div className="flex items-center gap-2">
                             <Image
-                                src="/pet_smile.png"
+                                src="/cat-smiling.svg"
                                 width={36}
                                 height={36}
                                 alt="Level Up Journey Pet Smiling"
