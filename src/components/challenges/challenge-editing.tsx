@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -40,6 +40,7 @@ import {
     MAX_CHALLENGE_EXPERIENCE_POINTS,
 } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
@@ -74,6 +75,12 @@ export default function ChallengeEditing({
 }: ChallengeEditingProps) {
     const router = useRouter();
     const editorRef = useRef<ShadcnTemplateRef>(null);
+    const [editorMethods, setEditorMethods] = useState<ShadcnTemplateRef | null>(
+        null,
+    );
+    const [challengeData, setChallengeData] =
+        useState<Challenge>(initialChallenge);
+    const [isSaving, setIsSaving] = useState(false);
 
     const [codeVersions, setCodeVersions] =
         useState<CodeVersion[]>(initialCodeVersions);
@@ -81,26 +88,88 @@ export default function ChallengeEditing({
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: initialChallenge.name,
-            tags: initialChallenge.tags.map((tag) => tag.name).join(", "),
+            title: challengeData.name,
+            tags: challengeData.tags.map((tag) => tag.name).join(", "),
             difficulty:
-                initialChallenge.difficulty ?? ChallengeDifficulty.EASY,
+                challengeData.difficulty ?? ChallengeDifficulty.EASY,
             experiencePoints: Math.min(
-                initialChallenge.experiencePoints,
+                challengeData.experiencePoints,
                 CHALLENGE_DIFFICULTY_MAX_XP[
-                    initialChallenge.difficulty ?? ChallengeDifficulty.EASY
+                    challengeData.difficulty ?? ChallengeDifficulty.EASY
                 ],
             ),
         },
     });
+    useEffect(() => {
+        setChallengeData(initialChallenge);
+    }, [initialChallenge]);
+
+    useEffect(() => {
+        form.reset({
+            title: challengeData.name,
+            tags: challengeData.tags.map((tag) => tag.name).join(", "),
+            difficulty:
+                challengeData.difficulty ?? ChallengeDifficulty.EASY,
+            experiencePoints: Math.min(
+                challengeData.experiencePoints,
+                CHALLENGE_DIFFICULTY_MAX_XP[
+                    challengeData.difficulty ?? ChallengeDifficulty.EASY
+                ],
+            ),
+        });
+    }, [challengeData, form]);
+
     const difficulty = form.watch("difficulty");
     const maxExperiencePoints = CHALLENGE_DIFFICULTY_MAX_XP[difficulty];
 
     const getEditorContent = () => {
-        return editorRef.current?.getMarkdown() || "";
+        return (
+            editorMethods?.getMarkdown() ||
+            editorRef.current?.getMarkdown() ||
+            challengeData.description ||
+            ""
+        );
     };
 
-    const onSubmit = form.handleSubmit(async (data: FormData) => {});
+    const onSubmit = form.handleSubmit(async (data: FormData) => {
+        const description = getEditorContent();
+        const tagNames = data.tags
+            ? data.tags
+                  .split(",")
+                  .map((tag) => tag.trim())
+                  .filter((tag) => tag.length > 0)
+            : [];
+
+        try {
+            setIsSaving(true);
+            const updatedChallenge = await ChallengeController.updateChallenge(
+                challengeId,
+                {
+                    name: data.title,
+                    description,
+                    experiencePoints: data.experiencePoints,
+                    difficulty: data.difficulty,
+                    tags: tagNames.length > 0 ? tagNames : undefined,
+                },
+            );
+
+            setChallengeData(updatedChallenge);
+
+            if (editorMethods || editorRef.current) {
+                (editorMethods ?? editorRef.current)?.injectMarkdown(
+                    updatedChallenge.description || "",
+                );
+            }
+
+            toast.success("Challenge updated successfully!");
+            router.refresh();
+        } catch (error) {
+            console.error("Error updating challenge:", error);
+            toast.error("Failed to update challenge. Please try again.");
+        } finally {
+            setIsSaving(false);
+        }
+    });
 
     const handleDelete = async () => {};
 
@@ -111,6 +180,18 @@ export default function ChallengeEditing({
     const handleAddVersion = () => {
         router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challengeId));
     };
+
+    const handleEditorReady = useCallback((methods: ShadcnTemplateRef) => {
+        setEditorMethods(methods);
+    }, []);
+
+    useEffect(() => {
+        const target = editorMethods ?? editorRef.current;
+        if (!target) {
+            return;
+        }
+        target.injectMarkdown(challengeData.description || "");
+    }, [challengeData.description, editorMethods]);
 
     useEffect(() => {
         const errors = form.formState.errors;
@@ -368,10 +449,12 @@ export default function ChallengeEditing({
                                             <Button
                                                 type="submit"
                                                 disabled={
+                                                    isSaving ||
                                                     form.formState.isSubmitting
                                                 }
                                             >
-                                                {form.formState.isSubmitting
+                                                {isSaving ||
+                                                form.formState.isSubmitting
                                                     ? "Saving..."
                                                     : "Save Changes"}
                                             </Button>
@@ -398,7 +481,10 @@ export default function ChallengeEditing({
                     {/* Right Column - Description Editor */}
                     <ResizablePanel defaultSize={60} maxSize={70} minSize={50}>
                         <div className="h-full overflow-y-auto border-l">
-                            <ShadcnTemplate ref={editorRef} />
+                            <ShadcnTemplate
+                                ref={editorRef}
+                                onReady={handleEditorReady}
+                            />
                         </div>
                     </ResizablePanel>
                 </ResizablePanelGroup>
