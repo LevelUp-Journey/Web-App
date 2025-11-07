@@ -3,13 +3,10 @@
 import { ChallengesSection } from "@/components/dashboard/challenges-section";
 import { Button } from "@/components/ui/button";
 import UniversityAnnouncements from "@/components/dashboard/university-announcements";
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function DashboardPage() {
-    const [challengesCount, setChallengesCount] = useState<number | null>(null);
-
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Announcements */}
@@ -51,7 +48,7 @@ export default function DashboardPage() {
                     {/* Featured Challenges Section */}
                     <div className="space-y-4">
                         <h2 className="text-xl font-semibold">Featured Challenges</h2>
-                        <ChallengesSection onCountChange={setChallengesCount} />
+                        <ChallengesSection />
                     </div>
                 </div>
 

@@ -13,10 +13,6 @@ import {
 
 export default function ChallengesPage() {
   const [challengesCount, setChallengesCount] = useState<number | null>(null);
-  const [difficultyFilter, setDifficultyFilter] = useState<string>("");
-  const [languageFilter, setLanguageFilter] = useState<string>("");
-  const [popularityFilter, setPopularityFilter] = useState<string>("");
-  const [recencyFilter, setRecencyFilter] = useState<string>("");
 
   return (
     <div className="container mx-auto px-4 pt-16 pb-8 space-y-6">
@@ -36,59 +32,51 @@ export default function ChallengesPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex justify-center gap-4">
-        <div className="flex flex-col gap-2">
-          <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Difficulty" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="easy">Easy</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="hard">Hard</SelectItem>
-              <SelectItem value="expert">Expert</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="flex justify-center gap-4 flex-wrap">
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Difficulty" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="easy">Easy</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="hard">Hard</SelectItem>
+            <SelectItem value="expert">Expert</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <div className="flex flex-col gap-2">
-          <Select value={languageFilter} onValueChange={setLanguageFilter}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Language" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="c++">C++</SelectItem>
-              <SelectItem value="python">Python</SelectItem>
-              <SelectItem value="javascript">JavaScript</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="c++">C++</SelectItem>
+            <SelectItem value="python">Python</SelectItem>
+            <SelectItem value="javascript">JavaScript</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <div className="flex flex-col gap-2">
-          <Select value={popularityFilter} onValueChange={setPopularityFilter}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Popularity" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="most-popular">Most Popular</SelectItem>
-              <SelectItem value="trending">Trending</SelectItem>
-              <SelectItem value="least-popular">Least Popular</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Popularity" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="most-popular">Most Popular</SelectItem>
+            <SelectItem value="trending">Trending</SelectItem>
+            <SelectItem value="least-popular">Least Popular</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <div className="flex flex-col gap-2">
-          <Select value={recencyFilter} onValueChange={setRecencyFilter}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Recentness" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest</SelectItem>
-              <SelectItem value="oldest">Oldest</SelectItem>
-              <SelectItem value="recently-updated">Recently Updated</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Recentness" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest</SelectItem>
+            <SelectItem value="oldest">Oldest</SelectItem>
+            <SelectItem value="recently-updated">Recently Updated</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Header Section */}
