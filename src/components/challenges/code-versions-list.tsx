@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, TestTube2, Trash2 } from "lucide-react";
+import { Edit3, TestTube2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -54,99 +54,84 @@ export default function CodeVersionsList({
         }
     };
 
+    // Don't render anything for students in summary mode
+    if (!isTeacher && variant === "summary") {
+        return null;
+    }
+
     return (
-        <div className="space-y-4">
-            <div className="space-y-2">
-                {codeVersions.map((version) => (
-                    <div key={version.id} className="flex gap-2">
-                        {/* Teacher buttons */}
-                        {isTeacher && (
-                            <>
-                                {variant === "summary" ? (
+        <div className="space-y-2">
+            {codeVersions.map((version) => (
+                <div key={version.id} className="flex gap-2 justify-end">
+                    {isTeacher && variant === "summary" ? (
+                        <>
+                            <Button size="default" variant="outline" asChild>
+                                <Link
+                                    href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                                        challengeId,
+                                        version.id,
+                                    )}
+                                >
+                                    <TestTube2 className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                            <Button size="default" variant="outline" asChild>
+                                <Link href="?editing=true">
+                                    <Edit3 className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </>
+                    ) : isTeacher ? (
+                        <>
+                            <Button size="default" variant="outline" asChild>
+                                <Link
+                                    href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                                        challengeId,
+                                        version.id,
+                                    )}
+                                >
+                                    <Edit3 className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
                                     <Button
                                         size="default"
                                         variant="outline"
-                                        asChild
+                                        disabled={deletingId === version.id}
                                     >
-                                        <Link
-                                            href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
-                                                challengeId,
-                                                version.id,
-                                            )}
-                                        >
-                                            <TestTube2 className="h-4 w-4" />
-                                        </Link>
+                                        <Trash2 className="h-4 w-4" />
                                     </Button>
-                                ) : (
-                                    <>
-                                        <Button
-                                            size="default"
-                                            variant="outline"
-                                            asChild
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Delete Code Version
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Are you sure you want to delete this code version?
+                                            This action cannot be undone.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={() => handleDelete(version.id)}
                                         >
-                                            <Link
-                                                href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
-                                                    challengeId,
-                                                    version.id,
-                                                )}
-                                            >
-                                                <Edit className="h-4 w-4" />
-                                            </Link>
-                                        </Button>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    size="default"
-                                                    variant="outline"
-                                                    disabled={
-                                                        deletingId ===
-                                                        version.id
-                                                    }
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>
-                                                        Delete Code Version
-                                                    </AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Are you sure you want to
-                                                        delete this code version?
-                                                        This action cannot be
-                                                        undone.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Cancel
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                version.id,
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </div>
-                ))}
-                {codeVersions.length === 0 && (
-                    <p className="text-muted-foreground text-sm">
-                        No code versions yet. Click "Add Code Version" to create
-                        one.
-                    </p>
-                )}
-            </div>
+                                            Delete
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </>
+                    ) : null}
+                </div>
+            ))}
+            {codeVersions.length === 0 && (
+                <p className="text-muted-foreground text-sm">
+                    No code versions yet. Click "Add Code Version" to create one.
+                </p>
+            )}
         </div>
     );
 }

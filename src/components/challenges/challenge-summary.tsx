@@ -12,7 +12,7 @@ import CodeVersionsList from "@/components/challenges/code-versions-list";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import PublishButton from "@/components/challenges/publish-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChallengeDifficulty, ChallengeStatus, type ProgrammingLanguage } from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
@@ -55,12 +55,10 @@ export default function ChallengeSummary({
     };
     return (
         <section className="flex flex-col p-4 w-full max-w-4xl mx-auto">
-            {/* Status Indicator - Outside Card */}
+            {/* Status Indicator */}
             {isTeacher && (
-                <div className="flex items-center gap-2 mb-4">
-                    <div className="text-sm text-muted-foreground">
-                        <strong>Status:</strong> {challenge.status}
-                    </div>
+                <div className="text-sm text-muted-foreground mb-4">
+                    <strong>Status:</strong> {challenge.status}
                 </div>
             )}
 
@@ -80,60 +78,47 @@ export default function ChallengeSummary({
                         ))}
                     </div>
 
-                    {/* Title */}
+                    {/* Title and Actions */}
                     <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1">
-                            <CardTitle className="text-3xl font-bold mb-2">
-                                {challenge.name}
-                            </CardTitle>
-                        </div>
+                        <CardTitle className="text-3xl font-bold">
+                            {challenge.name}
+                        </CardTitle>
 
-                        {/* Teacher Action Buttons */}
-                        <div className="flex gap-2 items-center ml-4">
-                            {isTeacher &&
-                                challenge.status !== ChallengeStatus.PUBLISHED && (
+                        {/* Teacher Actions */}
+                        {isTeacher && (
+                            <div className="flex gap-2 items-center ml-4">
+                                {challenge.status !== ChallengeStatus.PUBLISHED && (
                                     <PublishButton challengeId={challenge.id} />
                                 )}
-                            {isTeacher && (
-                                <div className="text-sm text-muted-foreground mr-2">
+                                <div className="text-sm text-muted-foreground">
                                     <strong>XP:</strong> {challenge.experiencePoints}
                                 </div>
-                            )}
-                            {isTeacher && (
-                                <Link href="?editing=true">
-                                    <Button variant="outline">Edit</Button>
-                                </Link>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Start Challenge Button */}
                     {!isTeacher && codeVersions.length > 0 && (
-                        <div className="flex justify-start">
-                            <Button
-                                onClick={handleStartChallenge}
-                                disabled={isStarting}
-                                size="lg"
-                            >
-                                <ChevronRight className="h-4 w-4 mr-2" />
-                                {isStarting ? "Starting..." : "Start Challenge"}
-                            </Button>
-                        </div>
+                        <Button
+                            onClick={handleStartChallenge}
+                            disabled={isStarting}
+                            size="lg"
+                        >
+                            <ChevronRight className="h-4 w-4 mr-2" />
+                            {isStarting ? "Starting..." : "Start Challenge"}
+                        </Button>
                     )}
                 </CardHeader>
             </Card>
 
-            {/* Vertical Layout */}
             <div className="space-y-6">
                 {/* Code Versions */}
-                <div className="space-y-4">
-                    <CodeVersionsList
-                        challengeId={challenge.id}
-                        codeVersions={codeVersions}
-                        variant="summary"
-                        isTeacher={isTeacher}
-                    />
-                </div>
+                <CodeVersionsList
+                    challengeId={challenge.id}
+                    codeVersions={codeVersions}
+                    variant="summary"
+                    isTeacher={isTeacher}
+                />
 
                 {/* Description */}
                 <div>
