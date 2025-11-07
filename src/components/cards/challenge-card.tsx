@@ -76,7 +76,7 @@ export default function ChallengeCard({
     return (
         <Card
             key={challenge.id}
-            className={cn("hover:shadow-lg transition-shadow flex flex-col max-w-xs", className)}
+            className={cn("hover:shadow-lg transition-shadow flex flex-col", className)}
             {...props}
         >
             {/* Badges at the top */}
@@ -95,7 +95,7 @@ export default function ChallengeCard({
             </div>
 
             {/* Title in the middle */}
-            <div className="flex-1 flex items-center px-3 py-0.5">
+            <div className="flex items-center px-3 py-2">
                 <CardTitle className="text-base font-bold">
                     {challenge.name}
                 </CardTitle>

@@ -1,13 +1,10 @@
 import {
-    ArrowRight,
     BookOpen,
     Code2,
-    Play,
     Trophy,
     Users,
     Zap,
     Target,
-    Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,7 +26,7 @@ export default async function Home({
         <div className="min-h-screen bg-background">
             {/* Header */}
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+                <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-center items-center">
                     <Link
                         href={PATHS.DASHBOARD.ROOT}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -45,22 +42,6 @@ export default async function Home({
                             Level Up Journey
                         </span>
                     </Link>
-                    <nav className="flex items-center gap-2 sm:gap-4">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            asChild
-                            className="text-sm"
-                        >
-                            <Link href={PATHS.AUTH.SIGN_IN}>Ingresar</Link>
-                        </Button>
-                        <Button size="sm" asChild className="text-sm">
-                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                Empezar
-                                <ArrowRight className="ml-1 h-3 w-3" />
-                            </Link>
-                        </Button>
-                    </nav>
                 </div>
             </header>
 
@@ -69,16 +50,15 @@ export default async function Home({
                 <section className="py-16 md:py-24 text-center">
                     <div className="max-w-4xl mx-auto space-y-6">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
-                            <Sparkles className="h-4 w-4 text-primary" />
                             <span className="text-sm font-medium text-foreground">
-                                Tu futuro tech empieza aquí
+                                Your tech future starts here
                             </span>
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-tight">
-                            Aprende a programar
+                            Learn to code
                             <br />
-                            <span className="text-primary">haciendo</span>
+                            <span className="text-primary">by doing</span>
                         </h1>
 
                         <div className="text-xl sm:text-2xl md:text-3xl font-semibold h-12 flex items-center justify-center">
@@ -102,9 +82,7 @@ export default async function Home({
                         </div>
 
                         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            Desafíos reales. Proyectos prácticos. Sin teoría
-                            aburrida. Aprende programación como lo hacen los
-                            profesionales.
+                            Real challenges. Practical projects. No boring theory. Learn programming like professionals do.
                         </p>
 
                         {/* CTA Buttons */}
@@ -115,19 +93,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    <Play className="mr-2 h-5 w-5" />
-                                    Comenzar gratis
-                                </Link>
-                            </Button>
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="text-base h-12 w-full sm:w-auto"
-                                asChild
-                            >
-                                <Link href={PATHS.DASHBOARD.CHALLENGES.ROOT}>
-                                    Ver desafíos
-                                    <ArrowRight className="ml-2 h-5 w-5" />
+                                    Start for free
                                 </Link>
                             </Button>
                         </div>
@@ -142,7 +108,7 @@ export default async function Home({
                                 10+
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Lenguajes
+                                Languages
                             </p>
                         </div>
                         <div className="text-center space-y-1">
@@ -150,7 +116,7 @@ export default async function Home({
                                 500+
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Desafíos
+                                Challenges
                             </p>
                         </div>
                         <div className="text-center space-y-1">
@@ -158,7 +124,7 @@ export default async function Home({
                                 1K+
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Estudiantes
+                                Students
                             </p>
                         </div>
                         <div className="text-center space-y-1">
@@ -166,7 +132,7 @@ export default async function Home({
                                 24/7
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Comunidad
+                                Community
                             </p>
                         </div>
                     </div>
@@ -178,10 +144,10 @@ export default async function Home({
                 <section className="py-12">
                     <div className="text-center mb-10">
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
-                            ¿Por qué nosotros?
+                            Why choose us?
                         </h2>
                         <p className="text-muted-foreground text-base max-w-2xl mx-auto">
-                            Todo lo que necesitas para despegar en tech
+                            Everything you need to launch your tech career
                         </p>
                     </div>
 
@@ -192,11 +158,10 @@ export default async function Home({
                                     <Zap className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Aprende rápido
+                                    Learn fast
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Desafíos cortos y prácticos. Feedback
-                                    instantáneo. Sin perder tiempo.
+                                    Short, practical challenges. Instant feedback. No wasted time.
                                 </p>
                             </CardContent>
                         </Card>
@@ -207,11 +172,10 @@ export default async function Home({
                                     <Target className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Enfoque práctico
+                                    Practical focus
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Proyectos reales desde día uno. Aprende lo
-                                    que realmente usan las empresas.
+                                    Real projects from day one. Learn what companies actually use.
                                 </p>
                             </CardContent>
                         </Card>
@@ -222,11 +186,10 @@ export default async function Home({
                                     <Users className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Comunidad activa
+                                    Active community
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Comparte código, resuelve dudas y aprende
-                                    con otros estudiantes.
+                                    Share code, solve questions, and learn with other students.
                                 </p>
                             </CardContent>
                         </Card>
@@ -237,11 +200,10 @@ export default async function Home({
                                     <Trophy className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Gamificación
+                                    Gamification
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Gana puntos, desbloquea logros y compite en
-                                    rankings globales.
+                                    Earn points, unlock achievements, and compete in global rankings.
                                 </p>
                             </CardContent>
                         </Card>
@@ -252,11 +214,10 @@ export default async function Home({
                                     <BookOpen className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Rutas de aprendizaje
+                                    Learning paths
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Sigue un camino estructurado desde
-                                    principiante hasta avanzado.
+                                    Follow a structured path from beginner to advanced.
                                 </p>
                             </CardContent>
                         </Card>
@@ -267,11 +228,10 @@ export default async function Home({
                                     <Code2 className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Editor integrado
+                                    Integrated editor
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Escribe, prueba y ejecuta código
-                                    directamente en el navegador.
+                                    Write, test, and run code directly in your browser.
                                 </p>
                             </CardContent>
                         </Card>
@@ -284,11 +244,10 @@ export default async function Home({
                 <section className="py-16 text-center">
                     <div className="max-w-3xl mx-auto space-y-6">
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
-                            ¿Listo para tu primer desafío?
+                            Ready for your first challenge?
                         </h2>
                         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Miles de estudiantes ya están aprendiendo. Únete
-                            gratis y empieza a construir tu futuro en tech.
+                            Thousands of students are already learning. Join for free and start building your tech future.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                             <Button
@@ -297,8 +256,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    <Play className="mr-2 h-5 w-5" />
-                                    Crear cuenta gratis
+                                    Create free account
                                 </Link>
                             </Button>
                             <Button
@@ -308,7 +266,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.DASHBOARD.CHALLENGES.ROOT}>
-                                    Explorar contenido
+                                    Explore content
                                 </Link>
                             </Button>
                         </div>
@@ -323,11 +281,11 @@ export default async function Home({
                         <div className="flex items-center gap-2">
                             <Code2 className="h-5 w-5 text-primary" />
                             <span className="text-sm text-muted-foreground">
-                                © 2024 Level Up Journey
+                                © 2025 Level Up Journey
                             </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Formando la próxima generación de developers
+                            Shaping the next generation of developers
                         </p>
                     </div>
                 </div>
