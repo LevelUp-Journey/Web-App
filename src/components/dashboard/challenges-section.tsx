@@ -49,16 +49,21 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
 
             setChallenges(challengesData);
 
-            // Fetch code versions for each challenge
-            const versionsMap = new Map<string, CodeVersion[]>();
-            await Promise.all(
-                challengesData.map(async (challenge) => {
-                    const versions =
-                        await CodeVersionController.getCodeVersionsByChallengeId(
-                            challenge.id,
-                        );
-                    versionsMap.set(challenge.id, versions);
-                }),
+            // Get all challenge IDs
+            const challengeIds = challengesData.map((challenge) => challenge.id);
+
+            // Fetch all code versions in a single batch request
+            const codeVersionsBatch =
+                await CodeVersionController.getCodeVersionsBatchByChallengesId(
+                    challengeIds,
+                );
+
+            // Create a map for easy lookup: challengeId -> codeVersions
+            const versionsMap = new Map(
+                codeVersionsBatch.map((item) => [
+                    item.challengeId,
+                    item.codeVersions,
+                ]),
             );
 
             setCodeVersionsMap(versionsMap);
@@ -109,7 +114,7 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
     }
 
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {challenges.map((challenge) => (
                 <ChallengeCard
                     key={challenge.id}
@@ -117,6 +122,6 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
                     codeVersions={codeVersionsMap.get(challenge.id) || []}
                 />
             ))}
-        </div>
+        </section>
     );
 }
