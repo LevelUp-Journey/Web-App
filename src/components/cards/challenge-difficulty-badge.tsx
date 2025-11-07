@@ -1,0 +1,69 @@
+import type React from "react";
+import { cn } from "@/lib/utils";
+import { ChallengeDifficulty } from "@/lib/consts";
+
+interface ChallengeDifficultyBadgeProps {
+    difficulty: ChallengeDifficulty;
+    selected?: boolean;
+}
+
+const DEFAULT_COLOR = "bg-muted text-muted-foreground";
+
+// Mapping de etiquetas legibles
+const DIFFICULTY_NAMES: Record<ChallengeDifficulty, string> = {
+    [ChallengeDifficulty.EASY]: "Easy",
+    [ChallengeDifficulty.MEDIUM]: "Medium",
+    [ChallengeDifficulty.HARD]: "Hard",
+    [ChallengeDifficulty.EXPERT]: "Expert",
+};
+
+// Colores por nivel de dificultad (modo claro / oscuro)
+const COLOR_SCHEMES: Record<
+    ChallengeDifficulty,
+    { default: string; hover: string; selected: string }
+> = {
+    [ChallengeDifficulty.EASY]: {
+        default: "bg-[#CDFFC4] text-[#0F6B00]",
+        hover: "hover:bg-[#CDFFC4] hover:text-[#0F6B00]",
+        selected: "bg-[#CDFFC4] text-[#0F6B00]",
+    },
+    [ChallengeDifficulty.MEDIUM]: {
+        default: "bg-[#FFFCB1] text-[#B17300]",
+        hover: "hover:bg-[#FFFCB1] hover:text-[#B17300]",
+        selected: "bg-[#FFFCB1] text-[#B17300]",
+    },
+    [ChallengeDifficulty.HARD]: {
+        default: "bg-[#FFC78E] text-[#944B00]",
+        hover: "hover:bg-[#FFC78E] hover:text-[#944B00]",
+        selected: "bg-[#FFC78E] text-[#944B00]",
+    },
+    [ChallengeDifficulty.EXPERT]: {
+        default: "bg-[#FFC9C9] text-[#940000]",
+        hover: "hover:bg-[#FFC9C9] hover:text-[#940000]",
+        selected: "bg-[#FFC9C9] text-[#940000]",
+    },
+};
+
+const ChallengeDifficultyBadge: React.FC<ChallengeDifficultyBadgeProps> = ({
+    difficulty,
+    selected = false,
+}) => {
+    const scheme = COLOR_SCHEMES[difficulty];
+    const displayName = DIFFICULTY_NAMES[difficulty];
+    const classes = selected
+        ? scheme.selected
+        : `${scheme.default} ${scheme.hover}`;
+
+    return (
+        <span
+            className={cn(
+                "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium transition-colors duration-200",
+                classes,
+            )}
+        >
+            {displayName}
+        </span>
+    );
+};
+
+export default ChallengeDifficultyBadge;

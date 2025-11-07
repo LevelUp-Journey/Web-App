@@ -1,4 +1,5 @@
 import type { ChallengeDifficulty, ChallengeStatus } from "@/lib/consts";
+import type { ChallengeStatus, ChallengeDifficulty } from "@/lib/consts";
 
 export interface Challenge {
     id: string;
@@ -7,6 +8,7 @@ export interface Challenge {
     description: string; // This is Markdown formatted text
     experiencePoints: number;
     difficulty?: ChallengeDifficulty;
+    difficulty: ChallengeDifficulty;
     status: ChallengeStatus;
     tags: ChallengeTag[];
     stars: ChallengeStar[];

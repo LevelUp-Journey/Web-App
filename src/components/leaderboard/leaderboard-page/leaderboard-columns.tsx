@@ -23,7 +23,7 @@ export const getLeaderboardColumns = (
                 selectedRank === "TOP500"
                     ? (row.original as any).position
                     : row.original.leaderboardPosition || "-";
-            return <div className="font-bold text-lg">#{position}</div>;
+            return <div className="font-mono font-medium">#{position}</div>;
         },
     },
     {
@@ -36,9 +36,9 @@ export const getLeaderboardColumns = (
                     <Image
                         src={RANK_ICONS[rank]}
                         alt={rank}
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 object-contain"
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 object-contain"
                         unoptimized
                     />
                 </div>
@@ -52,15 +52,15 @@ export const getLeaderboardColumns = (
             const username =
                 row.original.profile?.username ||
                 row.original.userId.substring(0, 20);
-            return <div className="font-medium">{username}</div>;
+            return <div className="font-mono font-medium">{username}</div>;
         },
     },
     {
         accessorKey: "totalPoints",
-        header: () => <div className="text-center">Points</div>,
+        header: () => <div className="text-center font-mono">Points</div>,
         cell: ({ row }) => {
             return (
-                <div className="text-center font-semibold">
+                <div className="text-center font-mono font-medium">
                     {row.original.totalPoints.toLocaleString()}
                 </div>
             );
