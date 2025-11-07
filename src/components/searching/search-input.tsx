@@ -8,7 +8,7 @@ import {
 
 export function SearchInput() {
     return (
-        <div className="max-w-md w-full inline">
+        <div className="max-w-lg w-full inline">
             <div className="relative">
                 <InputGroup>
                     <InputGroupInput placeholder="Search something..." />
