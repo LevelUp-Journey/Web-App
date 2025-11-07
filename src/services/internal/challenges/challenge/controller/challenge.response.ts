@@ -4,6 +4,7 @@ export interface ChallengeResponse {
     name: string;
     description: string; // This is Markdown formatted text
     experiencePoints: number;
+    difficulty?: string;
     status: string;
     tags: ChallengeTagResponse[];
     stars: ChallengeStarResponse[];

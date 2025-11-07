@@ -13,7 +13,12 @@ import {
     type ShadcnTemplateRef,
 } from "@/components/challenges/editor/lexkitEditor";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+    Field,
+    FieldDescription,
+    FieldError,
+    FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
     ResizableHandle,
@@ -28,7 +33,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChallengeDifficulty } from "@/lib/consts";
+import { Slider } from "@/components/ui/slider";
+import {
+    CHALLENGE_DIFFICULTY_MAX_XP,
+    ChallengeDifficulty,
+    MAX_CHALLENGE_EXPERIENCE_POINTS,
+} from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
@@ -43,7 +53,10 @@ const formSchema = z.object({
     experiencePoints: z
         .number()
         .min(0, "Experience points must be at least 0.")
-        .max(1000, "Experience points must be at most 1000."),
+        .max(
+            MAX_CHALLENGE_EXPERIENCE_POINTS,
+            `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
+        ),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -70,10 +83,18 @@ export default function ChallengeEditing({
         defaultValues: {
             title: initialChallenge.name,
             tags: initialChallenge.tags.map((tag) => tag.name).join(", "),
-            difficulty: ChallengeDifficulty.EASY, // TODO: Get from backend
-            experiencePoints: initialChallenge.experiencePoints,
+            difficulty:
+                initialChallenge.difficulty ?? ChallengeDifficulty.EASY,
+            experiencePoints: Math.min(
+                initialChallenge.experiencePoints,
+                CHALLENGE_DIFFICULTY_MAX_XP[
+                    initialChallenge.difficulty ?? ChallengeDifficulty.EASY
+                ],
+            ),
         },
     });
+    const difficulty = form.watch("difficulty");
+    const maxExperiencePoints = CHALLENGE_DIFFICULTY_MAX_XP[difficulty];
 
     const getEditorContent = () => {
         return editorRef.current?.getMarkdown() || "";
@@ -101,6 +122,15 @@ export default function ChallengeEditing({
             });
         }
     }, [form.formState.errors]);
+
+    useEffect(() => {
+        const currentXP = form.getValues("experiencePoints");
+        if (currentXP > maxExperiencePoints) {
+            form.setValue("experiencePoints", maxExperiencePoints, {
+                shouldDirty: true,
+            });
+        }
+    }, [form, maxExperiencePoints]);
 
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
@@ -298,23 +328,30 @@ export default function ChallengeEditing({
                                                     >
                                                         Experience Points
                                                     </FieldLabel>
-                                                    <Input
-                                                        {...field}
-                                                        id={field.name}
-                                                        type="number"
-                                                        aria-invalid={
-                                                            fieldState.invalid
+                                                    <FieldDescription>
+                                                        {difficulty} challenges
+                                                        can award up to{" "}
+                                                        {maxExperiencePoints} XP.
+                                                        Move the slider to
+                                                        adjust the reward.
+                                                    </FieldDescription>
+                                                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                                                        <span className="font-semibold text-foreground">
+                                                            {field.value ?? 0} XP
+                                                        </span>
+                                                        <span>
+                                                            Max {maxExperiencePoints} XP
+                                                        </span>
+                                                    </div>
+                                                    <Slider
+                                                        value={[field.value ?? 0]}
+                                                        min={0}
+                                                        max={maxExperiencePoints}
+                                                        step={1}
+                                                        onValueChange={(value) =>
+                                                            field.onChange(value[0] ?? 0)
                                                         }
-                                                        min="0"
-                                                        placeholder="100"
-                                                        onChange={(e) =>
-                                                            field.onChange(
-                                                                Number(
-                                                                    e.target
-                                                                        .value,
-                                                                ),
-                                                            )
-                                                        }
+                                                        aria-label="Experience points slider"
                                                     />
                                                     {fieldState.invalid && (
                                                         <FieldError
