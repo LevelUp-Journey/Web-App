@@ -66,16 +66,23 @@ export default function ChallengeSummary({
             <Card className="shrink-0 mb-6">
                 <CardHeader className="pb-4">
                     {/* Badges */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        <ChallengeDifficultyBadge
-                            difficulty={challenge.difficulty ?? ChallengeDifficulty.EASY}
-                        />
-                        {codeVersions.map((version) => (
-                            <FullLanguageBadge
-                                key={version.id}
-                                language={version.language as ProgrammingLanguage}
+                    <div className="flex flex-wrap gap-2 mb-4 justify-between items-center">
+                        <div className="flex flex-wrap gap-2">
+                            <ChallengeDifficultyBadge
+                                difficulty={challenge.difficulty ?? ChallengeDifficulty.EASY}
                             />
-                        ))}
+                            {codeVersions.map((version) => (
+                                <FullLanguageBadge
+                                    key={version.id}
+                                    language={version.language as ProgrammingLanguage}
+                                />
+                            ))}
+                        </div>
+                        {isTeacher && (
+                            <div className="text-sm text-muted-foreground">
+                                <strong>XP:</strong> {challenge.experiencePoints}
+                            </div>
+                        )}
                     </div>
 
                     {/* Title and Actions */}
@@ -90,9 +97,6 @@ export default function ChallengeSummary({
                                 {challenge.status !== ChallengeStatus.PUBLISHED && (
                                     <PublishButton challengeId={challenge.id} />
                                 )}
-                                <div className="text-sm text-muted-foreground">
-                                    <strong>XP:</strong> {challenge.experiencePoints}
-                                </div>
                             </div>
                         )}
                     </div>
