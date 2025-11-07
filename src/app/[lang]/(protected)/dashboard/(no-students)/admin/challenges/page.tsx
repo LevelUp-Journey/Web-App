@@ -16,6 +16,9 @@ import { CodeVersionController } from "@/services/internal/challenges/challenge/
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
+// Force dynamic rendering since we use cookies for authentication
+export const dynamic = "force-dynamic";
+
 export default async function AdminChallengesPage({
     params,
 }: {

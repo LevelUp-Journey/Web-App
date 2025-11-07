@@ -31,6 +31,7 @@ export function useFollowingFeed() {
                 const userId = await AuthController.getUserId();
                 if (!userId) {
                     setError("User not authenticated");
+                    setLoading(false);
                     return;
                 }
 
@@ -40,6 +41,7 @@ export function useFollowingFeed() {
 
                 if (subscriptions.length === 0) {
                     setPosts([]);
+                    setLoading(false);
                     return;
                 }
 

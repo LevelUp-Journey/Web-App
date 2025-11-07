@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -26,23 +27,37 @@ export default function DeleteChallengeButton({
     challengeId,
 }: DeleteChallengeButtonProps) {
     const router = useRouter();
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
         try {
-            await ChallengeController.deleteChallenge(challengeId);
+            setIsDeleting(true);
+            const deleted = await ChallengeController.deleteChallenge(
+                challengeId,
+            );
+
+            if (!deleted) {
+                toast.error(
+                    "You don't have permission to delete this challenge.",
+                );
+                return;
+            }
+
             toast.success("Challenge deleted successfully");
             router.push(PATHS.DASHBOARD.ADMINISTRATION.ROOT);
         } catch (error) {
             toast.error("Failed to delete challenge");
+        } finally {
+            setIsDeleting(false);
         }
     };
 
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="default">
+                <Button variant="destructive" size="default" disabled={isDeleting}>
                     <Trash2 className="w-4 h-4 mr-2" />
-                    Delete
+                    {isDeleting ? "Deleting..." : "Delete"}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -55,8 +70,11 @@ export default function DeleteChallengeButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>
-                        Delete
+                    <AlertDialogAction
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                    >
+                        {isDeleting ? "Deleting..." : "Delete"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
