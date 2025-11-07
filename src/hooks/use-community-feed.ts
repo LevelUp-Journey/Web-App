@@ -51,7 +51,13 @@ export function useCommunityFeed() {
                             await ProfileController.getProfileByUserId(
                                 authorId,
                             );
-                        return { authorId, profile };
+                        return {
+                            authorId,
+                            profile:
+                                profile ?? {
+                                    username: "Unknown User",
+                                },
+                        };
                     } catch (error) {
                         console.error(
                             `Error loading profile for ${authorId}:`,
@@ -95,7 +101,10 @@ export function useCommunityFeed() {
                 const postsWithDetails: PostWithDetails[] = allPosts.map(
                     (post) => ({
                         ...post,
-                        authorProfile: profileMap.get(post.authorId),
+                        authorProfile:
+                            profileMap.get(post.authorId) ?? {
+                                username: "Unknown User",
+                            },
                         community: communityMap.get(post.communityId),
                         reactions: reactionMap.get(post.id) || [],
                     }),

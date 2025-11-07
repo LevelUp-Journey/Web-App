@@ -1,14 +1,23 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CommunityCard } from "@/components/community/community-card";
 import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
 import { PATHS } from "@/lib/paths";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function AdminCommunityPage() {
     const router = useRouter();
@@ -26,19 +35,11 @@ export default function AdminCommunityPage() {
                 const usernameMap: Record<string, string> = {};
                 await Promise.all(
                     data.map(async (community) => {
-                        try {
-                            const profile =
-                                await ProfileController.getProfileById(
-                                    community.ownerProfileId,
-                                );
-                            usernameMap[community.ownerId] = profile.username;
-                        } catch (error) {
-                            console.error(
-                                `Error loading profile for ${community.ownerProfileId}:`,
-                                error,
+                        const profile =
+                            await ProfileController.getProfileById(
+                                community.ownerProfileId,
                             );
-                            usernameMap[community.ownerId] = "Unknown User";
-                        }
+                        usernameMap[community.ownerId] = profile?.username || "Unknown User";
                     }),
                 );
 
@@ -61,11 +62,17 @@ export default function AdminCommunityPage() {
     if (loading) {
         return (
             <div className="container mx-auto p-4 space-y-4">
-                <div className="flex items-center justify-center min-h-[400px]">
-                    <p className="text-muted-foreground">
-                        Loading communities...
-                    </p>
-                </div>
+                <Empty className="min-h-[400px]">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <Spinner className="size-6 text-muted-foreground" />
+                        </EmptyMedia>
+                        <EmptyTitle>Loading communities</EmptyTitle>
+                        <EmptyDescription>
+                            Preparing your community management tools.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             </div>
         );
     }
@@ -73,10 +80,68 @@ export default function AdminCommunityPage() {
     if (error) {
         return (
             <div className="container mx-auto p-4 space-y-4">
-                <div className="text-center space-y-4">
-                    <h1 className="text-xl font-semibold">Error</h1>
-                    <p className="text-muted-foreground">{error}</p>
+                <Empty className="min-h-[400px]">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <AlertCircle />
+                        </EmptyMedia>
+                        <EmptyTitle>Unable to load communities</EmptyTitle>
+                        <EmptyDescription>{error}</EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button onClick={() => window.location.reload()}>
+                            Retry
+                        </Button>
+                    </EmptyContent>
+                </Empty>
+            </div>
+        );
+    }
+
+    if (communities.length === 0) {
+        return (
+            <div className="container mx-auto p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-2xl font-semibold">
+                        Community Management
+                    </h1>
+                    <Button
+                        onClick={() =>
+                            router.push(
+                                PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE,
+                            )
+                        }
+                        size="sm"
+                    >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Create Community
+                    </Button>
                 </div>
+                <Empty className="min-h-[300px]">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <AlertCircle />
+                        </EmptyMedia>
+                        <EmptyTitle>No communities yet</EmptyTitle>
+                        <EmptyDescription>
+                            Create your first community to get started.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button
+                            onClick={() =>
+                                router.push(
+                                    PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY
+                                        .CREATE,
+                                )
+                            }
+                            size="sm"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Create Community
+                        </Button>
+                    </EmptyContent>
+                </Empty>
             </div>
         );
     }
@@ -107,27 +172,6 @@ export default function AdminCommunityPage() {
                     />
                 ))}
             </div>
-            {communities.length === 0 && (
-                <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg p-8">
-                    <h2 className="text-xl font-semibold mb-2">
-                        No communities found
-                    </h2>
-                    <p className="text-muted-foreground text-center mb-4">
-                        Create your first community to get started.
-                    </p>
-                    <Button
-                        onClick={() =>
-                            router.push(
-                                PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE,
-                            )
-                        }
-                        size="sm"
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Create Community
-                    </Button>
-                </div>
-            )}
         </div>
     );
 }

@@ -27,8 +27,13 @@ export default function ProfileCard({
         const loadProfile = async () => {
             try {
                 setLoading(true);
-                const profileData: ProfileResponse =
+                const profileData =
                     await ProfileController.getCurrentUserProfile();
+
+                if (!profileData) {
+                    setError("Profile not found");
+                    return;
+                }
 
                 setProfile(profileData);
             } catch (err) {

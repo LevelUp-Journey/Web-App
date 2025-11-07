@@ -69,10 +69,12 @@ export function useLeaderboardByRank(rank: string | null) {
                                 );
                             return {
                                 ...entry,
-                                username: profile.username,
-                                firstName: profile.firstName,
-                                lastName: profile.lastName,
-                                profileImageUrl: profile.profileUrl,
+                                username:
+                                    profile?.username ??
+                                    entry.userId.substring(0, 20),
+                                firstName: profile?.firstName,
+                                lastName: profile?.lastName,
+                                profileImageUrl: profile?.profileUrl,
                                 currentRank: entry.currentRank || "BRONZE",
                             };
                         } catch (err) {

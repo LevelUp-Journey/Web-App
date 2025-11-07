@@ -1,66 +1,98 @@
-import { Code2, Trophy } from "lucide-react";
-import ChallengeCard from "@/components/cards/challenge-card";
-import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
-import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
+"use client";
 
-export default async function ChallengesPage() {
-  // Fetch challenges
-  const challenges = await ChallengeController.getPublicChallenges();
+import { useState } from "react";
+import { ChallengesPageSection } from "@/components/challenges/challenges-page-section";
+import { SearchInput } from "@/components/searching/search-input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
-  // Get all challenge IDs
-  const challengeIds = challenges.map((challenge) => challenge.id);
-
-  // Fetch all code versions in a single batch request
-  const codeVersionsBatch =
-    await CodeVersionController.getCodeVersionsBatchByChallengesId(
-      challengeIds,
-    );
-
-  // Create a map for easy lookup: challengeId -> codeVersions
-  const codeVersionsMap = new Map(
-    codeVersionsBatch.map((item) => [item.challengeId, item.codeVersions]),
-  );
+export default function ChallengesPage() {
+  const [challengesCount, setChallengesCount] = useState<number | null>(null);
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="container mx-auto px-4 pt-16 pb-8 space-y-6">
+      {/* Inspirational Header */}
+      <div className="text-center max-w-4xl mx-auto mb-12">
+        <h1 className="text-4xl text-balance md:text-5xl font-medium text-foreground mb-6 leading-tight">
+          Start coding with purpose
+        </h1>
+        <p className="text-base text-pretty md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up.
+        </p>
+      </div>
+
+      {/* Search Bar */}
+      <div className="flex justify-center">
+        <SearchInput />
+      </div>
+
+      {/* Filters */}
+      <div className="flex justify-center gap-4 flex-wrap">
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Difficulty" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="easy">Easy</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="hard">Hard</SelectItem>
+            <SelectItem value="expert">Expert</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="c++">C++</SelectItem>
+            <SelectItem value="python">Python</SelectItem>
+            <SelectItem value="javascript">JavaScript</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Popularity" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="most-popular">Most Popular</SelectItem>
+            <SelectItem value="trending">Trending</SelectItem>
+            <SelectItem value="least-popular">Least Popular</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Recentness" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest</SelectItem>
+            <SelectItem value="oldest">Oldest</SelectItem>
+            <SelectItem value="recently-updated">Recently Updated</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Header Section */}
       <header className="space-y-2">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Code2 className="h-6 w-6 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Coding Challenges
-          </h1>{" "}
-        </div>
-        <p className="text-muted-foreground">
-          Test your skills with {challenges.length} coding challenges across
-          multiple programming languages
-        </p>
+        <h2 className="text-3xl font-medium tracking-tight">
+          Coding Challenges
+        </h2>
+        {challengesCount !== null && (
+          <p className="text-base text-muted-foreground">
+            {challengesCount} {challengesCount === 1 ? 'result' : 'results'}
+          </p>
+        )}
       </header>
 
       {/* Challenges Grid */}
-      {challenges.length > 0 ? (
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {challenges.map((challenge) => (
-            <ChallengeCard
-              key={challenge.id}
-              challenge={challenge}
-              codeVersions={codeVersionsMap.get(challenge.id) || []}
-            />
-          ))}
-        </section>
-      ) : (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <Trophy className="h-16 w-16 mb-4" />
-          <h3 className="text-lg font-semibold mb-2">
-            No challenges available
-          </h3>
-          <p className="text-sm text-muted-foreground max-w-md">
-            Check back soon for new coding challenges to test your skills
-          </p>
-        </div>
-      )}
+      <ChallengesPageSection onCountChange={setChallengesCount} />
     </div>
   );
 }

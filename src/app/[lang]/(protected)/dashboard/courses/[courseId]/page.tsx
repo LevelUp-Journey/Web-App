@@ -201,7 +201,7 @@ export default async function DashboardCoursePage({
   try {
     for (const authorId of course.authorIds) {
       const profile = await ProfileController.getProfileByUserId(authorId);
-      authorProfiles[authorId] = profile.username;
+      authorProfiles[authorId] = profile?.username || "Unknown Author";
     }
   } catch (error) {
     console.error("Error fetching author profiles:", error);

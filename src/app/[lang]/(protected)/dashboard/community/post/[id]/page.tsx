@@ -64,7 +64,7 @@ export default function PostPage() {
 
                 setPost({
                     ...foundPost,
-                    authorProfile,
+                    authorProfile: authorProfile || undefined,
                     community,
                 });
             } catch (err) {

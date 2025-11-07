@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon, MessageSquareIcon, Plus } from "lucide-react";
+import { SearchIcon, MessageSquareIcon, Plus, AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     InputGroup,
@@ -15,6 +15,15 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import { FeedPostCard } from "@/components/community/feed-post-card";
 import { EmptyFeed } from "@/components/community/empty-feed";
 import { useCommunityFeed } from "@/hooks/use-community-feed";
@@ -76,9 +85,17 @@ export default function CommunityFeedPage() {
         return (
             <div className="w-full h-full overflow-y-auto">
                 <div className="container mx-auto p-6">
-                    <div className="flex items-center justify-center min-h-[400px]">
-                        <p className="text-muted-foreground">Loading</p>
-                    </div>
+                    <Empty className="min-h-[400px]">
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <Spinner className="size-6 text-muted-foreground" />
+                            </EmptyMedia>
+                            <EmptyTitle>Loading community feed</EmptyTitle>
+                            <EmptyDescription>
+                                Fetching the latest updates from the community.
+                            </EmptyDescription>
+                        </EmptyHeader>
+                    </Empty>
                 </div>
             </div>
         );
@@ -88,17 +105,33 @@ export default function CommunityFeedPage() {
         return (
             <div className="w-full h-full overflow-y-auto">
                 <div className="container mx-auto p-6">
-                    <div className="text-center space-y-4">
-                        <h1 className="text-xl font-semibold">Error</h1>
-                        <p className="text-muted-foreground">{error}</p>
-                    </div>
+                    <Empty>
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <AlertCircle />
+                            </EmptyMedia>
+                            <EmptyTitle>Error loading dashboard</EmptyTitle>
+                            <EmptyDescription>
+                                Could not load admin dashboard data. Please try again.
+                            </EmptyDescription>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <Button
+                                onClick={() => window.location.reload()}
+                                variant="outline"
+                            >
+                                <RefreshCw className="mr-2 h-4 w-4" />
+                                Retry
+                            </Button>
+                        </EmptyContent>
+                    </Empty>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-4 w-full h-full overflow-y-auto bg-muted/20">
+        <div className="space-y-4 w-full h-full overflow-y-auto">
             {/* Feed Content */}
             <div className="container mx-auto px-4 py-4">
                 <div className="max-w-2xl mx-auto space-y-4">

@@ -56,10 +56,14 @@ export default function CreateGuidePage() {
 
             const response = await GuideController.createGuide(request);
 
-            // Redirect to edit page where user can add pages
-            router.push(
-                `${PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT}/${response.id}/edit`,
-            );
+            if (response) {
+                // Redirect to edit page where user can add pages
+                router.push(
+                    `${PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT}/${response.id}/edit`,
+                );
+            } else {
+                alert("Error creating guide. Please try again.");
+            }
         } catch (error) {
             console.error("Error creating guide:", error);
             alert("Error creating guide. Please try again.");

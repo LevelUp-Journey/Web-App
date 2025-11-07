@@ -1,10 +1,19 @@
 "use client";
 
-import { BookOpen, GraduationCap } from "lucide-react";
+import { AlertCircle, BookOpen, GraduationCap, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CourseCard from "@/components/cards/course-card";
 import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
@@ -56,8 +65,9 @@ export default function AdminCoursesPage() {
                     </div>
                 </header>
 
-                <div className="flex items-center justify-center min-h-[400px] text-muted-foreground">
-                    <p>Loading courses...</p>
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                    <Spinner className="size-8 mb-4" />
+                    <p className="text-muted-foreground">Loading courses...</p>
                 </div>
             </div>
         );
@@ -111,9 +121,23 @@ export default function AdminCoursesPage() {
 
             {/* Courses Grid */}
             {error ? (
-                <div className="flex items-center justify-center min-h-[400px] text-muted-foreground">
-                    <p>{error}</p>
-                </div>
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <AlertCircle />
+                        </EmptyMedia>
+                        <EmptyTitle>Error fetching courses</EmptyTitle>
+                        <EmptyDescription>
+                            {error}
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button onClick={() => window.location.reload()} variant="outline">
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            Retry
+                        </Button>
+                    </EmptyContent>
+                </Empty>
             ) : courses.length > 0 ? (
                 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {courses.map((course) => (

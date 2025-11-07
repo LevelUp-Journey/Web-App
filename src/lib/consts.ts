@@ -25,6 +25,18 @@ export enum ChallengeDifficulty {
     EXPERT = "EXPERT",
 }
 
+export const CHALLENGE_DIFFICULTY_MAX_XP: Record<ChallengeDifficulty, number> =
+    {
+        [ChallengeDifficulty.EASY]: 5,
+        [ChallengeDifficulty.MEDIUM]: 10,
+        [ChallengeDifficulty.HARD]: 20,
+        [ChallengeDifficulty.EXPERT]: 40,
+    };
+
+export const MAX_CHALLENGE_EXPERIENCE_POINTS = Math.max(
+    ...Object.values(CHALLENGE_DIFFICULTY_MAX_XP),
+);
+
 export enum ChallengeStatus {
     DRAFT = "DRAFT",
     PUBLISHED = "PUBLISHED",

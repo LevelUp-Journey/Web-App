@@ -40,7 +40,7 @@ export default function ProfileEditForm({
         const loadProfile = async () => {
             try {
                 setLoading(true);
-                let profileData: ProfileResponse;
+                let profileData: ProfileResponse | null;
 
                 if (profileId) {
                     profileData =
@@ -48,6 +48,11 @@ export default function ProfileEditForm({
                 } else {
                     profileData =
                         await ProfileController.getCurrentUserProfile();
+                }
+
+                if (!profileData) {
+                    console.error("Profile data not available");
+                    return;
                 }
 
                 setProfile(profileData);
@@ -74,24 +79,44 @@ export default function ProfileEditForm({
             setSaving(true);
 
             if (profileId) {
-                await ProfileController.updateProfileByUserId(
+                const result = await ProfileController.updateProfileByUserId(
                     profileId,
                     formData,
                 );
+
+                if (!result) {
+                    console.error("Failed to update profile");
+                    alert("Error: Could not update profile. Profile service may be unavailable.");
+                    return;
+                }
             } else {
                 // For current user, we need to get the user ID first
                 const currentProfile =
                     await ProfileController.getCurrentUserProfile();
-                await ProfileController.updateProfileByUserId(
+
+                if (!currentProfile) {
+                    console.error("Failed to get current profile");
+                    alert("Error: Could not load profile data. Profile service may be unavailable.");
+                    return;
+                }
+
+                const result = await ProfileController.updateProfileByUserId(
                     currentProfile.id,
                     formData,
                 );
+
+                if (!result) {
+                    console.error("Failed to update profile");
+                    alert("Error: Could not update profile. Profile service may be unavailable.");
+                    return;
+                }
             }
 
             onSuccess?.();
             router.refresh();
         } catch (error) {
             console.error("Error updating profile:", error);
+            alert("Error: An unexpected error occurred while updating your profile.");
         } finally {
             setSaving(false);
         }
@@ -134,6 +159,26 @@ export default function ProfileEditForm({
                     <div className="flex gap-4 pt-4">
                         <Skeleton className="h-10 w-32" />
                         <Skeleton className="h-10 w-20" />
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    if (!profile) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Edit Profile</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-center py-8">
+                        <p className="text-muted-foreground mb-4">
+                            Unable to load profile data. The profile service may be temporarily unavailable.
+                        </p>
+                        <Button variant="outline" onClick={onCancel}>
+                            Go Back
+                        </Button>
                     </div>
                 </CardContent>
             </Card>

@@ -20,13 +20,15 @@ export default function AuthLayout({
             ? PATHS.AUTH.SIGN_UP.ROOT
             : PATHS.AUTH.SIGN_IN;
 
+    const isUnauthorized = pathname === PATHS.UNAUTHORIZED;
+
     return (
         <div className="min-h-dvh flex flex-col">
             {/* Header */}
             <header className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-2">
                     <Image
-                        src="/pet_smile.png"
+                        src="/cat-smiling.svg"
                         width={36}
                         height={36}
                         alt="Level Up Journey Pet Smiling"
@@ -37,11 +39,13 @@ export default function AuthLayout({
                     </span>
                 </div>
 
-                <Button variant="outline" size="sm" asChild>
-                    <Link href={buttonHref} suppressHydrationWarning>
-                        {buttonMessage}
-                    </Link>
-                </Button>
+                {!isUnauthorized && (
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href={buttonHref} suppressHydrationWarning>
+                            {buttonMessage}
+                        </Link>
+                    </Button>
+                )}
             </header>
 
             {/* Main Content */}

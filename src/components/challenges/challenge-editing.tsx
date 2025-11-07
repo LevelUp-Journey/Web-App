@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -13,7 +13,12 @@ import {
     type ShadcnTemplateRef,
 } from "@/components/challenges/editor/lexkitEditor";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+    Field,
+    FieldDescription,
+    FieldError,
+    FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
     ResizableHandle,
@@ -28,8 +33,14 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChallengeDifficulty } from "@/lib/consts";
+import { Slider } from "@/components/ui/slider";
+import {
+    CHALLENGE_DIFFICULTY_MAX_XP,
+    ChallengeDifficulty,
+    MAX_CHALLENGE_EXPERIENCE_POINTS,
+} from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
@@ -43,7 +54,10 @@ const formSchema = z.object({
     experiencePoints: z
         .number()
         .min(0, "Experience points must be at least 0.")
-        .max(1000, "Experience points must be at most 1000."),
+        .max(
+            MAX_CHALLENGE_EXPERIENCE_POINTS,
+            `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
+        ),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -61,6 +75,12 @@ export default function ChallengeEditing({
 }: ChallengeEditingProps) {
     const router = useRouter();
     const editorRef = useRef<ShadcnTemplateRef>(null);
+    const [editorMethods, setEditorMethods] = useState<ShadcnTemplateRef | null>(
+        null,
+    );
+    const [challengeData, setChallengeData] =
+        useState<Challenge>(initialChallenge);
+    const [isSaving, setIsSaving] = useState(false);
 
     const [codeVersions, setCodeVersions] =
         useState<CodeVersion[]>(initialCodeVersions);
@@ -68,18 +88,88 @@ export default function ChallengeEditing({
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: initialChallenge.name,
-            tags: initialChallenge.tags.map((tag) => tag.name).join(", "),
-            difficulty: ChallengeDifficulty.EASY, // TODO: Get from backend
-            experiencePoints: initialChallenge.experiencePoints,
+            title: challengeData.name,
+            tags: challengeData.tags.map((tag) => tag.name).join(", "),
+            difficulty:
+                challengeData.difficulty ?? ChallengeDifficulty.EASY,
+            experiencePoints: Math.min(
+                challengeData.experiencePoints,
+                CHALLENGE_DIFFICULTY_MAX_XP[
+                    challengeData.difficulty ?? ChallengeDifficulty.EASY
+                ],
+            ),
         },
     });
+    useEffect(() => {
+        setChallengeData(initialChallenge);
+    }, [initialChallenge]);
+
+    useEffect(() => {
+        form.reset({
+            title: challengeData.name,
+            tags: challengeData.tags.map((tag) => tag.name).join(", "),
+            difficulty:
+                challengeData.difficulty ?? ChallengeDifficulty.EASY,
+            experiencePoints: Math.min(
+                challengeData.experiencePoints,
+                CHALLENGE_DIFFICULTY_MAX_XP[
+                    challengeData.difficulty ?? ChallengeDifficulty.EASY
+                ],
+            ),
+        });
+    }, [challengeData, form]);
+
+    const difficulty = form.watch("difficulty");
+    const maxExperiencePoints = CHALLENGE_DIFFICULTY_MAX_XP[difficulty];
 
     const getEditorContent = () => {
-        return editorRef.current?.getMarkdown() || "";
+        return (
+            editorMethods?.getMarkdown() ||
+            editorRef.current?.getMarkdown() ||
+            challengeData.description ||
+            ""
+        );
     };
 
-    const onSubmit = form.handleSubmit(async (data: FormData) => {});
+    const onSubmit = form.handleSubmit(async (data: FormData) => {
+        const description = getEditorContent();
+        const tagNames = data.tags
+            ? data.tags
+                  .split(",")
+                  .map((tag) => tag.trim())
+                  .filter((tag) => tag.length > 0)
+            : [];
+
+        try {
+            setIsSaving(true);
+            const updatedChallenge = await ChallengeController.updateChallenge(
+                challengeId,
+                {
+                    name: data.title,
+                    description,
+                    experiencePoints: data.experiencePoints,
+                    difficulty: data.difficulty,
+                    tags: tagNames.length > 0 ? tagNames : undefined,
+                },
+            );
+
+            setChallengeData(updatedChallenge);
+
+            if (editorMethods || editorRef.current) {
+                (editorMethods ?? editorRef.current)?.injectMarkdown(
+                    updatedChallenge.description || "",
+                );
+            }
+
+            toast.success("Challenge updated successfully!");
+            router.refresh();
+        } catch (error) {
+            console.error("Error updating challenge:", error);
+            toast.error("Failed to update challenge. Please try again.");
+        } finally {
+            setIsSaving(false);
+        }
+    });
 
     const handleDelete = async () => {};
 
@@ -91,6 +181,18 @@ export default function ChallengeEditing({
         router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challengeId));
     };
 
+    const handleEditorReady = useCallback((methods: ShadcnTemplateRef) => {
+        setEditorMethods(methods);
+    }, []);
+
+    useEffect(() => {
+        const target = editorMethods ?? editorRef.current;
+        if (!target) {
+            return;
+        }
+        target.injectMarkdown(challengeData.description || "");
+    }, [challengeData.description, editorMethods]);
+
     useEffect(() => {
         const errors = form.formState.errors;
         if (Object.keys(errors).length > 0) {
@@ -101,6 +203,15 @@ export default function ChallengeEditing({
             });
         }
     }, [form.formState.errors]);
+
+    useEffect(() => {
+        const currentXP = form.getValues("experiencePoints");
+        if (currentXP > maxExperiencePoints) {
+            form.setValue("experiencePoints", maxExperiencePoints, {
+                shouldDirty: true,
+            });
+        }
+    }, [form, maxExperiencePoints]);
 
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
@@ -298,23 +409,30 @@ export default function ChallengeEditing({
                                                     >
                                                         Experience Points
                                                     </FieldLabel>
-                                                    <Input
-                                                        {...field}
-                                                        id={field.name}
-                                                        type="number"
-                                                        aria-invalid={
-                                                            fieldState.invalid
+                                                    <FieldDescription>
+                                                        {difficulty} challenges
+                                                        can award up to{" "}
+                                                        {maxExperiencePoints} XP.
+                                                        Move the slider to
+                                                        adjust the reward.
+                                                    </FieldDescription>
+                                                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                                                        <span className="font-semibold text-foreground">
+                                                            {field.value ?? 0} XP
+                                                        </span>
+                                                        <span>
+                                                            Max {maxExperiencePoints} XP
+                                                        </span>
+                                                    </div>
+                                                    <Slider
+                                                        value={[field.value ?? 0]}
+                                                        min={0}
+                                                        max={maxExperiencePoints}
+                                                        step={1}
+                                                        onValueChange={(value) =>
+                                                            field.onChange(value[0] ?? 0)
                                                         }
-                                                        min="0"
-                                                        placeholder="100"
-                                                        onChange={(e) =>
-                                                            field.onChange(
-                                                                Number(
-                                                                    e.target
-                                                                        .value,
-                                                                ),
-                                                            )
-                                                        }
+                                                        aria-label="Experience points slider"
                                                     />
                                                     {fieldState.invalid && (
                                                         <FieldError
@@ -331,10 +449,12 @@ export default function ChallengeEditing({
                                             <Button
                                                 type="submit"
                                                 disabled={
+                                                    isSaving ||
                                                     form.formState.isSubmitting
                                                 }
                                             >
-                                                {form.formState.isSubmitting
+                                                {isSaving ||
+                                                form.formState.isSubmitting
                                                     ? "Saving..."
                                                     : "Save Changes"}
                                             </Button>
@@ -361,7 +481,10 @@ export default function ChallengeEditing({
                     {/* Right Column - Description Editor */}
                     <ResizablePanel defaultSize={60} maxSize={70} minSize={50}>
                         <div className="h-full overflow-y-auto border-l">
-                            <ShadcnTemplate ref={editorRef} />
+                            <ShadcnTemplate
+                                ref={editorRef}
+                                onReady={handleEditorReady}
+                            />
                         </div>
                     </ResizablePanel>
                 </ResizablePanelGroup>

@@ -116,8 +116,8 @@ export default function CreateCoursePage() {
             {
               id: userId,
               email: userEmail,
-              username: userProfile.username || "",
-              profilePicture: userProfile.profileUrl || "",
+              username: userProfile?.username || "",
+              profilePicture: userProfile?.profileUrl || "",
             },
           ]);
           form.setValue("authorIds", [userId]);
