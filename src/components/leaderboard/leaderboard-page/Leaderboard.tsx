@@ -35,7 +35,7 @@ export function LeaderboardPage() {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-end mb-6">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
@@ -56,7 +56,7 @@ export function LeaderboardPage() {
                             <ChevronDownIcon className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" side="bottom" className="ml-auto">
                         {RANKS.map((rank) => (
                             <DropdownMenuItem
                                 key={rank.key}
