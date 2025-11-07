@@ -22,7 +22,7 @@ export default function ChallengesPage() {
     <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Inspirational Header */}
       <div className="text-center max-w-4xl mx-auto mb-12">
-        <h1 className="text-4xl text-balance md:text-5xl font-bold text-foreground mb-6 leading-tight">
+        <h1 className="text-4xl text-balance md:text-5xl font-medium text-foreground mb-6 leading-tight">
           Start coding with purpose
         </h1>
         <p className="text-base text-pretty md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
