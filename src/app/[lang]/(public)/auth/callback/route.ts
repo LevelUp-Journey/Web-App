@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 import { CONSTS } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
     const error = searchParams.get("error");
 
     if (error) {
-        redirect("/en/auth/sign-in?error=" + encodeURIComponent(error));
+        redirect(`/${PATHS.AUTH.SIGN_IN}?error=${encodeURIComponent(error)}`);
     }
 
     if (token) {
@@ -19,8 +20,8 @@ export async function GET(request: NextRequest) {
         if (refreshToken) {
             cookieStore.set(CONSTS.AUTH_REFRESH_TOKEN_KEY, refreshToken);
         }
-        redirect("/en/dashboard");
+        redirect(PATHS.DASHBOARD.ROOT);
     } else {
-        redirect("/en/auth/sign-in");
+        redirect(PATHS.AUTH.SIGN_IN);
     }
 }

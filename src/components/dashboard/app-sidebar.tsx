@@ -69,11 +69,6 @@ const administrativeItems = [
         url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
         icon: ShieldUser,
     },
-    {
-        title: "Community Management",
-        url: PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
-        icon: Users,
-    },
 ];
 
 const bottomItems = [

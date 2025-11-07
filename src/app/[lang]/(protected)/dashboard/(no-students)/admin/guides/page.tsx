@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import GuideCard from "@/components/cards/guide-card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
@@ -28,6 +37,7 @@ import type { GuideResponse } from "@/services/internal/learning/guides/controll
 
 export default function GuidesPage() {
     const [userRole, setUserRole] = useState<string | null>(null);
+    const [permissionsChecked, setPermissionsChecked] = useState(false);
     const [loading, setLoading] = useState(true);
     const [guides, setGuides] = useState<GuideResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -47,7 +57,9 @@ export default function GuidesPage() {
                 setUserRole(role || null);
             } catch (err) {
                 console.error("Error checking permissions:", err);
-                setError("Error checking permissions");
+                setError("We couldn't verify your permissions.");
+            } finally {
+                setPermissionsChecked(true);
             }
         };
 
@@ -55,10 +67,15 @@ export default function GuidesPage() {
     }, []);
 
     useEffect(() => {
-        if (!userRole) return;
+        if (!permissionsChecked) return;
+        if (!userRole) {
+            setLoading(false);
+            return;
+        }
 
         const loadGuides = async () => {
             setLoading(true);
+            setError(null);
             try {
                 const response = await GuideController.getGuidesPaginated({
                     page: currentPage,
@@ -71,18 +88,18 @@ export default function GuidesPage() {
                     setTotalPages(response.totalPages);
                     setTotalElements(response.totalElements);
                 } else {
-                    setError("Error loading guides");
+                    setError("We couldn't load the guides.");
                 }
             } catch (err) {
                 console.error("Error loading guides:", err);
-                setError("Error loading guides");
+                setError("We couldn't load the guides. Please try again.");
             } finally {
                 setLoading(false);
             }
         };
 
         loadGuides();
-    }, [userRole, currentPage, pageSize]);
+    }, [permissionsChecked, userRole, currentPage, pageSize]);
 
     const handlePageChange = (page: number) => {
         if (page >= 0 && page < totalPages) {
@@ -134,40 +151,40 @@ export default function GuidesPage() {
         return items;
     };
 
-    // Loading state
-    if (loading && !userRole) {
+    if (!permissionsChecked || loading) {
         return (
-            <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                    <div>
-                        <Skeleton className="h-8 w-32 mb-2" />
-                        <Skeleton className="h-4 w-48" />
-                    </div>
-                    <Skeleton className="h-10 w-32" />
-                </div>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <Skeleton key={i} className="h-64 w-full rounded-lg" />
-                    ))}
-                </div>
-            </div>
+            <Empty className="min-h-[400px]">
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <Spinner className="size-6 text-muted-foreground" />
+                    </EmptyMedia>
+                    <EmptyTitle>Loading guides</EmptyTitle>
+                    <EmptyDescription>
+                        Fetching the latest learning guides for you.
+                    </EmptyDescription>
+                </EmptyHeader>
+            </Empty>
         );
     }
 
-    // No permissions
     if (!userRole) {
         return (
-            <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold">Guides</h2>
-                </div>
-                <div className="text-center space-y-4 py-12">
-                    <h1 className="text-2xl font-semibold">Access Denied</h1>
-                    <p className="text-muted-foreground">
-                        You don't have permission to view guides.
-                    </p>
-                </div>
-            </div>
+            <Empty className="min-h-[400px]">
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <AlertCircle />
+                    </EmptyMedia>
+                    <EmptyTitle>
+                        {error
+                            ? "Unable to verify permissions"
+                            : "Access denied"}
+                    </EmptyTitle>
+                    <EmptyDescription>
+                        {error ||
+                            "You need teacher or admin permissions to manage guides."}
+                    </EmptyDescription>
+                </EmptyHeader>
+            </Empty>
         );
     }
 
@@ -235,45 +252,40 @@ export default function GuidesPage() {
             )}
 
             {/* Content */}
-            {loading ? (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {Array.from({ length: pageSize }).map((_, i) => (
-                        <Skeleton key={i} className="h-64 w-full rounded-lg" />
-                    ))}
-                </div>
-            ) : error ? (
-                <div className="flex items-center justify-center min-h-[400px] text-muted-foreground">
-                    <div className="text-center">
-                        <p className="text-lg font-medium">{error}</p>
-                        <Button
-                            variant="outline"
-                            className="mt-4"
-                            onClick={() => window.location.reload()}
-                        >
+            {error ? (
+                <Empty className="min-h-[300px]">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <AlertCircle />
+                        </EmptyMedia>
+                        <EmptyTitle>Unable to load guides</EmptyTitle>
+                        <EmptyDescription>{error}</EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button onClick={() => window.location.reload()}>
                             Retry
                         </Button>
-                    </div>
-                </div>
+                    </EmptyContent>
+                </Empty>
             ) : guides.length === 0 ? (
-                <div className="flex items-center justify-center min-h-[400px] border-2 border-dashed rounded-lg">
-                    <div className="text-center space-y-3">
-                        <p className="text-lg font-medium text-muted-foreground">
-                            No guides created yet
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            Create your first guide to get started
-                        </p>
-                        <Button asChild className="mt-4">
-                            <Link
-                                href={
-                                    PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE
-                                }
-                            >
+                <Empty className="min-h-[300px]">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <AlertCircle />
+                        </EmptyMedia>
+                        <EmptyTitle>No guides yet</EmptyTitle>
+                        <EmptyDescription>
+                            Create your first guide to start helping students.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button asChild>
+                            <Link href={PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE}>
                                 Create Guide
                             </Link>
                         </Button>
-                    </div>
-                </div>
+                    </EmptyContent>
+                </Empty>
             ) : (
                 <>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

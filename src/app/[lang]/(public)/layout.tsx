@@ -20,6 +20,8 @@ export default function AuthLayout({
             ? PATHS.AUTH.SIGN_UP.ROOT
             : PATHS.AUTH.SIGN_IN;
 
+    const isUnauthorized = pathname === PATHS.UNAUTHORIZED;
+
     return (
         <div className="min-h-dvh flex flex-col">
             {/* Header */}
@@ -37,11 +39,13 @@ export default function AuthLayout({
                     </span>
                 </div>
 
-                <Button variant="outline" size="sm" asChild>
-                    <Link href={buttonHref} suppressHydrationWarning>
-                        {buttonMessage}
-                    </Link>
-                </Button>
+                {!isUnauthorized && (
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href={buttonHref} suppressHydrationWarning>
+                            {buttonMessage}
+                        </Link>
+                    </Button>
+                )}
             </header>
 
             {/* Main Content */}
