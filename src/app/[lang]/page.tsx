@@ -1,13 +1,10 @@
 import {
-    ArrowRight,
     BookOpen,
     Code2,
-    Play,
     Trophy,
     Users,
     Zap,
     Target,
-    Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,8 +53,7 @@ export default async function Home({
                         </Button>
                         <Button size="sm" asChild className="text-sm">
                             <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                Get Started
-                                <ArrowRight className="ml-1 h-3 w-3" />
+                                Register
                             </Link>
                         </Button>
                     </nav>
@@ -69,7 +65,6 @@ export default async function Home({
                 <section className="py-16 md:py-24 text-center">
                     <div className="max-w-4xl mx-auto space-y-6">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
-                            <Sparkles className="h-4 w-4 text-primary" />
                             <span className="text-sm font-medium text-foreground">
                                 Your tech future starts here
                             </span>
@@ -113,19 +108,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    <Play className="mr-2 h-5 w-5" />
                                     Start for free
-                                </Link>
-                            </Button>
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="text-base h-12 w-full sm:w-auto"
-                                asChild
-                            >
-                                <Link href={PATHS.DASHBOARD.CHALLENGES.ROOT}>
-                                    View challenges
-                                    <ArrowRight className="ml-2 h-5 w-5" />
                                 </Link>
                             </Button>
                         </div>
@@ -288,7 +271,6 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    <Play className="mr-2 h-5 w-5" />
                                     Create free account
                                 </Link>
                             </Button>
