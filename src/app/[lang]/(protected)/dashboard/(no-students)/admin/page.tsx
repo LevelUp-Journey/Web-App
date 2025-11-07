@@ -56,10 +56,17 @@ export default function AdminPage() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[400px]">
-                <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">Loading dashboard...</p>
-            </div>
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <Spinner className="size-6 text-muted-foreground" />
+                    </EmptyMedia>
+                    <EmptyTitle>Loading admin dashboard</EmptyTitle>
+                    <EmptyDescription>
+                        Fetching the latest challenges, guides, and courses.
+                    </EmptyDescription>
+                </EmptyHeader>
+            </Empty>
         );
     }
 
