@@ -24,7 +24,7 @@ export default function ChallengeSummary({
     isTeacher,
 }: ChallengeSummaryProps) {
     return (
-        <section className="h-screen flex flex-col p-4 w-full max-w-4xl mx-auto">
+        <section className="flex flex-col p-4 w-full max-w-4xl mx-auto">
             {/* Header */}
             <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
@@ -57,7 +57,7 @@ export default function ChallengeSummary({
             </header>
 
             {/* Vertical Layout */}
-            <div className="flex-1 overflow-y-auto space-y-6 p-6">
+            <div className="space-y-6 p-6">
                 {/* Code Versions */}
                 <div className="space-y-4">
                     <CodeVersionsList
