@@ -25,7 +25,7 @@ export default async function Home({
     return (
         <div className="min-h-screen bg-background">
             {/* Header */}
-            <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
                 <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
                     <Link
                         href={PATHS.DASHBOARD.ROOT}
@@ -33,12 +33,12 @@ export default async function Home({
                     >
                         <Image
                             src="/cat-smiling.svg"
-                            width={40}
-                            height={40}
-                            alt="Level Up Journey"
+                            width={36}
+                            height={36}
+                            alt="Level Up Journey Pet Smiling"
                             className="rounded-md"
                         />
-                        <span className="text-xl sm:text-2xl font-bold text-foreground">
+                        <span className="font-semibold text-lg tracking-tight">
                             Level Up Journey
                         </span>
                     </Link>
