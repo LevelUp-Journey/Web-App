@@ -7,7 +7,7 @@ import type {
     Subscription,
 } from "../entities/subscription.entity";
 
-const API_URL = `${ENV.SERVICES.COMMUNITY}/api/v1/subscriptions`;
+const API_URL = `${ENV.SERVICES.COMMUNITY.BASE_URL}/subscriptions`;
 
 export async function getUserSubscriptionsAction(
     userId: string,
