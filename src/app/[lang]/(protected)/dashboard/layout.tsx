@@ -10,9 +10,11 @@ export default function ProtectedLayout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main className="w-full h-screen">
+            <main className="w-full min-h-screen flex flex-col">
                 <SidebarContentHeader />
-                {children}
+                <div className="flex-1 bg-slate-50 dark:bg-black">
+                    {children}
+                </div>
             </main>
         </SidebarProvider>
     );

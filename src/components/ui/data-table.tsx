@@ -115,12 +115,15 @@ export function DataTable<TData, TValue>({
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     data-state={
                                         row.getIsSelected() && "selected"
                                     }
+                                    className={`bg-linear-to-r from-blue-700/8 via-blue-800/5 to-transparent hover:from-blue-700/12 hover:via-blue-800/8 dark:from-blue-300/8 dark:via-blue-200/6 dark:hover:from-blue-300/12 dark:hover:via-blue-200/8 !hover:bg-transparent transition-colors ${
+                                        index % 2 === 0 ? 'from-blue-600/6 via-blue-700/4 dark:from-blue-400/6 dark:via-blue-300/4 !hover:bg-transparent' : ''
+                                    }`}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

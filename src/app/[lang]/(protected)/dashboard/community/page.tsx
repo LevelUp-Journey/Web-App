@@ -121,7 +121,7 @@ export default function CommunityFeedPage() {
     }
 
     return (
-        <div className="space-y-4 w-full h-full overflow-y-auto bg-muted/20">
+        <div className="space-y-4 w-full h-full overflow-y-auto">
             {/* Feed Content */}
             <div className="container mx-auto px-4 py-4">
                 <div className="max-w-2xl mx-auto space-y-4">

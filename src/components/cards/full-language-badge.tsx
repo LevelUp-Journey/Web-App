@@ -30,28 +30,24 @@ const FullLanguageBadge: React.FC<FullLanguageBadgeProps> = ({
         }
     > = {
         [ProgrammingLanguage.JAVA]: {
-            default: DEFAULT_COLOR,
-            hover: "hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-900 dark:hover:text-red-300",
-            selected:
-                "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+            default: "bg-[#75D0F8] text-[#1D5168]",
+            hover: "hover:bg-[#75D0F8] hover:text-[#1D5168]",
+            selected: "bg-[#75D0F8] text-[#1D5168]",
         },
         [ProgrammingLanguage.PYTHON]: {
-            default: DEFAULT_COLOR,
-            hover: "hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-900 dark:hover:text-blue-300",
-            selected:
-                "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+            default: "bg-[#75D0F8] text-[#1D5168]",
+            hover: "hover:bg-[#75D0F8] hover:text-[#1D5168]",
+            selected: "bg-[#75D0F8] text-[#1D5168]",
         },
         [ProgrammingLanguage.C_PLUS_PLUS]: {
-            default: DEFAULT_COLOR,
-            hover: "hover:bg-sky-100 hover:text-sky-700 dark:hover:bg-sky-900 dark:hover:text-sky-300",
-            selected:
-                "bg-sky-100 text-sky-700 dark:bg-sky-900 dark:text-sky-300",
+            default: "bg-[#75D0F8] text-[#1D5168]",
+            hover: "hover:bg-[#75D0F8] hover:text-[#1D5168]",
+            selected: "bg-[#75D0F8] text-[#1D5168]",
         },
         [ProgrammingLanguage.JAVASCRIPT]: {
-            default: DEFAULT_COLOR,
-            hover: "hover:bg-yellow-100 hover:text-yellow-700 dark:hover:bg-yellow-900 dark:hover:text-yellow-300",
-            selected:
-                "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+            default: "bg-[#75D0F8] text-[#1D5168]",
+            hover: "hover:bg-[#75D0F8] hover:text-[#1D5168]",
+            selected: "bg-[#75D0F8] text-[#1D5168]",
         },
     };
 

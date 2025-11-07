@@ -18,7 +18,11 @@ import { CodeVersionController } from "@/services/internal/challenges/challenge/
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
-export function ChallengesSection() {
+interface ChallengesSectionProps {
+    onCountChange?: (count: number) => void;
+}
+
+export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}) {
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [codeVersionsMap, setCodeVersionsMap] = useState<
         Map<string, CodeVersion[]>
@@ -39,27 +43,35 @@ export function ChallengesSection() {
             if (challengesData.length === 0) {
                 setError(true);
                 setChallenges([]);
+                onCountChange?.(0);
                 return;
             }
 
             setChallenges(challengesData);
 
-            // Fetch code versions for each challenge
-            const versionsMap = new Map<string, CodeVersion[]>();
-            await Promise.all(
-                challengesData.map(async (challenge) => {
-                    const versions =
-                        await CodeVersionController.getCodeVersionsByChallengeId(
-                            challenge.id,
-                        );
-                    versionsMap.set(challenge.id, versions);
-                }),
+            // Get all challenge IDs
+            const challengeIds = challengesData.map((challenge) => challenge.id);
+
+            // Fetch all code versions in a single batch request
+            const codeVersionsBatch =
+                await CodeVersionController.getCodeVersionsBatchByChallengesId(
+                    challengeIds,
+                );
+
+            // Create a map for easy lookup: challengeId -> codeVersions
+            const versionsMap = new Map(
+                codeVersionsBatch.map((item) => [
+                    item.challengeId,
+                    item.codeVersions,
+                ]),
             );
 
             setCodeVersionsMap(versionsMap);
+            onCountChange?.(challengesData.length);
         } catch (err) {
             console.error("Error loading challenges:", err);
             setError(true);
+            onCountChange?.(0);
         } finally {
             setLoading(false);
         }
@@ -102,7 +114,7 @@ export function ChallengesSection() {
     }
 
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {challenges.map((challenge) => (
                 <ChallengeCard
                     key={challenge.id}
@@ -110,6 +122,6 @@ export function ChallengesSection() {
                     codeVersions={codeVersionsMap.get(challenge.id) || []}
                 />
             ))}
-        </div>
+        </section>
     );
 }

@@ -35,7 +35,7 @@ export default async function Home({
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                         <Image
-                            src="/pet_smile.png"
+                            src="/cat-smiling.svg"
                             width={40}
                             height={40}
                             alt="Level Up Journey"

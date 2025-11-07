@@ -3,6 +3,7 @@ import {
     Code2,
     HelpCircle,
     Home,
+    LayoutDashboard,
     Library,
     Settings,
     ShieldUser,
@@ -33,7 +34,7 @@ const topItems = [
     {
         title: "Dashboard",
         url: PATHS.DASHBOARD.ROOT,
-        icon: Home,
+        icon: LayoutDashboard,
     },
     {
         title: "Challenges",
@@ -96,7 +97,7 @@ export default async function AppSidebar() {
                     <SidebarMenuItem>
                         <div className="flex items-center gap-2">
                             <Image
-                                src="/pet_smile.png"
+                                src="/cat-smiling.svg"
                                 width={36}
                                 height={36}
                                 alt="Level Up Journey Pet Smiling"
