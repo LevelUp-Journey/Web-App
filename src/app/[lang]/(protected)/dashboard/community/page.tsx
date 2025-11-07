@@ -85,10 +85,17 @@ export default function CommunityFeedPage() {
         return (
             <div className="w-full h-full overflow-y-auto">
                 <div className="container mx-auto p-6">
-                    <div className="flex flex-col items-center justify-center min-h-[400px]">
-                        <Spinner className="size-8 mb-4" />
-                        <p className="text-muted-foreground">Loading community feed...</p>
-                    </div>
+                    <Empty className="min-h-[400px]">
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <Spinner className="size-6 text-muted-foreground" />
+                            </EmptyMedia>
+                            <EmptyTitle>Loading community feed</EmptyTitle>
+                            <EmptyDescription>
+                                Fetching the latest updates from the community.
+                            </EmptyDescription>
+                        </EmptyHeader>
+                    </Empty>
                 </div>
             </div>
         );
@@ -103,13 +110,16 @@ export default function CommunityFeedPage() {
                             <EmptyMedia variant="icon">
                                 <AlertCircle />
                             </EmptyMedia>
-                            <EmptyTitle>Error fetching community feed</EmptyTitle>
+                            <EmptyTitle>Error loading dashboard</EmptyTitle>
                             <EmptyDescription>
-                                {error}
+                                Could not load admin dashboard data. Please try again.
                             </EmptyDescription>
                         </EmptyHeader>
                         <EmptyContent>
-                            <Button onClick={() => window.location.reload()} variant="outline">
+                            <Button
+                                onClick={() => window.location.reload()}
+                                variant="outline"
+                            >
                                 <RefreshCw className="mr-2 h-4 w-4" />
                                 Retry
                             </Button>

@@ -2,6 +2,9 @@
 
 import { ChevronRight, EllipsisVertical, Star } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
 import { Button } from "@/components/ui/button";
@@ -11,12 +14,23 @@ import { PATHS } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ChallengeCardProps extends React.ComponentProps<"div"> {
     challenge: Challenge;
@@ -31,6 +45,34 @@ export default function ChallengeCard({
     className,
     ...props
 }: ChallengeCardProps) {
+    const router = useRouter();
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+    const handleDelete = async () => {
+        try {
+            setIsDeleting(true);
+            const deleted = await ChallengeController.deleteChallenge(
+                challenge.id,
+            );
+
+            if (!deleted) {
+                toast.error(
+                    "You don't have permission to delete this challenge.",
+                );
+                return;
+            }
+
+            toast.success("Challenge deleted successfully");
+            router.refresh();
+        } catch (error) {
+            toast.error("Failed to delete challenge");
+        } finally {
+            setIsDeleting(false);
+            setShowDeleteDialog(false);
+        }
+    };
+
     return (
         <Card
             key={challenge.id}
@@ -74,27 +116,54 @@ export default function ChallengeCard({
                         </Link>
                     </Button>
                     {adminMode && (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
-                                    <EllipsisVertical size={14} />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href={PATHS.DASHBOARD.CHALLENGES.VIEW(
-                                            challenge.id,
-                                        )}
+                        <>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                                        <EllipsisVertical size={14} />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            href={PATHS.DASHBOARD.CHALLENGES.VIEW(
+                                                challenge.id,
+                                            )}
+                                        >
+                                            Edit Challenge
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() => setShowDeleteDialog(true)}
+                                        className="text-destructive focus:text-destructive cursor-pointer"
                                     >
-                                        Edit Challenge
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    Delete Challenge
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                        Delete Challenge
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Delete Challenge</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Are you sure you want to delete "{challenge.name}"? This
+                                            action cannot be undone.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={handleDelete}
+                                            disabled={isDeleting}
+                                            className="bg-destructive hover:bg-destructive/90"
+                                        >
+                                            {isDeleting ? "Deleting..." : "Delete"}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </>
                     )}
                 </div>
             </div>
