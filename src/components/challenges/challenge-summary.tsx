@@ -55,6 +55,15 @@ export default function ChallengeSummary({
     };
     return (
         <section className="flex flex-col p-4 w-full max-w-4xl mx-auto">
+            {/* Status Indicator - Outside Card */}
+            {isTeacher && (
+                <div className="flex items-center gap-2 mb-4">
+                    <div className="text-sm text-muted-foreground">
+                        <strong>Status:</strong> {challenge.status}
+                    </div>
+                </div>
+            )}
+
             {/* Header Card */}
             <Card className="shrink-0 mb-6">
                 <CardHeader className="pb-4">
@@ -71,17 +80,12 @@ export default function ChallengeSummary({
                         ))}
                     </div>
 
-                    {/* Title and Status */}
+                    {/* Title */}
                     <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                             <CardTitle className="text-3xl font-bold mb-2">
                                 {challenge.name}
                             </CardTitle>
-                            {isTeacher && (
-                                <div className="text-sm text-muted-foreground">
-                                    <strong>Status:</strong> {challenge.status}
-                                </div>
-                            )}
                         </div>
 
                         {/* Teacher Action Buttons */}

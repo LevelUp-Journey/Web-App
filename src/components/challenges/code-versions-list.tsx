@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Edit, TestTube2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -74,7 +74,7 @@ export default function CodeVersionsList({
                                                 version.id,
                                             )}
                                         >
-                                            <Eye className="h-4 w-4" />
+                                            <TestTube2 className="h-4 w-4" />
                                         </Link>
                                     </Button>
                                 ) : (
