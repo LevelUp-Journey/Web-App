@@ -15,12 +15,10 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
 import type { Course } from "@/services/internal/learning/courses/domain/course.entity";
 
 export default function AdminCoursesPage() {
-    const [userRole, setUserRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [courses, setCourses] = useState<Course[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -29,16 +27,8 @@ export default function AdminCoursesPage() {
     useEffect(() => {
         const checkPermissionsAndLoad = async () => {
             try {
-                const roles = await AuthController.getUserRoles();
-                const role = roles.find(
-                    (r) => r === "ROLE_TEACHER" || r === "ROLE_ADMIN",
-                );
-                setUserRole(role || null);
-
-                if (role) {
-                    const courseList = await CourseController.getCourses();
-                    setCourses(courseList as Course[]);
-                }
+                const courseList = await CourseController.getCourses();
+                setCourses(courseList as Course[]);
             } catch (err) {
                 console.error("Error loading courses:", err);
                 setError("Error loading courses");
@@ -68,21 +58,6 @@ export default function AdminCoursesPage() {
                 <div className="flex flex-col items-center justify-center min-h-[400px]">
                     <Spinner className="size-8 mb-4" />
                     <p className="text-muted-foreground">Loading courses...</p>
-                </div>
-            </div>
-        );
-    }
-
-    // No permissions
-    if (!userRole) {
-        return (
-            <div className="container mx-auto px-4 py-8 space-y-8 text-center">
-                <div className="flex flex-col items-center justify-center gap-4">
-                    <GraduationCap className="h-12 w-12 text-muted-foreground/50" />
-                    <h1 className="text-2xl font-semibold">Access Denied</h1>
-                    <p className="text-muted-foreground max-w-md">
-                        You don't have permission to view this section.
-                    </p>
                 </div>
             </div>
         );
@@ -127,12 +102,13 @@ export default function AdminCoursesPage() {
                             <AlertCircle />
                         </EmptyMedia>
                         <EmptyTitle>Error fetching courses</EmptyTitle>
-                        <EmptyDescription>
-                            {error}
-                        </EmptyDescription>
+                        <EmptyDescription>{error}</EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
-                        <Button onClick={() => window.location.reload()} variant="outline">
+                        <Button
+                            onClick={() => window.location.reload()}
+                            variant="outline"
+                        >
                             <RefreshCw className="mr-2 h-4 w-4" />
                             Retry
                         </Button>
