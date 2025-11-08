@@ -1,17 +1,13 @@
 import {
-    BookOpen,
     Code2,
     HelpCircle,
-    Home,
     LayoutDashboard,
     Library,
     Settings,
     ShieldUser,
     Trophy,
-    Users,
 } from "lucide-react";
 import Image from "next/image";
-import { NavUser } from "@/components/dashboard/nav-user";
 import {
     Sidebar,
     SidebarContent,
@@ -27,7 +23,6 @@ import {
 import { UserRole } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 // Menu items.
 const topItems = [
@@ -42,19 +37,9 @@ const topItems = [
         icon: Code2,
     },
     {
-        title: "Community",
-        url: PATHS.DASHBOARD.COMMUNITY.ROOT,
-        icon: Users,
-    },
-    {
         title: "Leaderboard",
         url: PATHS.DASHBOARD.LEADERBOARD,
         icon: Trophy,
-    },
-    {
-        title: "Courses",
-        url: PATHS.DASHBOARD.COURSES.ROOT,
-        icon: BookOpen,
     },
     {
         title: "Guides",
