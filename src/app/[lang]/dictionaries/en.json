@@ -253,6 +253,79 @@
             }
         }
     },
+    "guides": {
+        "title": "Learning Guides",
+        "description": "Explore our collection of comprehensive guides to level up your skills",
+        "notFound": "Guide not found",
+        "authorNotAvailable": "Author profile not available"
+    },
+    "admin": {
+        "dashboard": {
+            "title": "Admin Dashboard — Recent Activity",
+            "loading": "Loading admin dashboard",
+            "loadingDescription": "Fetching the latest challenges, guides, and courses.",
+            "error": "Error loading dashboard",
+            "errorDescription": "Could not load admin dashboard data. Please try again.",
+            "retry": "Retry",
+            "challenges": "Challenges",
+            "noChallenges": "No challenges found.",
+            "guides": "Guides",
+            "noGuides": "No guides found."
+        },
+        "community": {
+            "title": "Community Management",
+            "create": "Create Community",
+            "loading": "Loading communities",
+            "loadingDescription": "Preparing your community management tools.",
+            "error": "Unable to load communities",
+            "noCommunities": "No communities yet",
+            "noCommunitiesDescription": "Create your first community to get started.",
+            "retry": "Retry",
+            "permissionsError": "Unable to verify permissions"
+        },
+        "challenges": {
+            "title": "My Challenges",
+            "createNew": "Create New Challenge",
+            "create": "Create Challenge",
+            "noChallenges": "No challenges yet",
+            "noChallengesDescription": "Start by creating your first challenge for the community.",
+            "error": "Unable to load challenges",
+            "errorDescription": "Something went wrong while fetching your challenges. Please try again."
+        },
+        "guides": {
+            "title": "Guides",
+            "subtitle": "Manage and create learning guides",
+            "create": "Create Guide",
+            "loading": "Loading guides",
+            "loadingDescription": "Fetching the latest learning guides for you.",
+            "accessDenied": "Access denied",
+            "accessDeniedDescription": "You need teacher or admin permissions to manage guides.",
+            "permissionsError": "Unable to verify permissions",
+            "noGuides": "No guides yet",
+            "noGuidesDescription": "Create your first guide to start helping students.",
+            "error": "Unable to load guides",
+            "errorDescription": "We couldn't load the guides. Please try again.",
+            "retry": "Retry",
+            "showing": "Showing",
+            "to": "to",
+            "of": "of",
+            "guides": "guides",
+            "perPage": "Per page:"
+        },
+        "courses": {
+            "title": "Courses",
+            "create": "Create Course",
+            "loading": "Loading courses",
+            "loadingDescription": "Checking your permissions and fetching the catalog.",
+            "accessDenied": "Access denied",
+            "accessDeniedDescription": "You need teacher or admin permissions to manage courses.",
+            "error": "Unable to load courses",
+            "errorDescription": "We couldn't load the courses. Please try again.",
+            "retry": "Retry",
+            "noCourses": "No courses yet",
+            "noCoursesDescription": "Create your first course to populate the catalog."
+        }
+    },
     "profile": {
         "title": "Profile",
         "edit": "Edit Profile",

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { AlertCircle } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import CourseCard from "@/components/cards/course-card";
 import { Button } from "@/components/ui/button";
@@ -14,12 +14,14 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
 import type { Course } from "@/services/internal/learning/courses/domain/course.entity";
 
 export default function AdminCoursesPage() {
+    const dict = useDictionary();
     const [userRole, setUserRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [courses, setCourses] = useState<Course[]>([]);
@@ -41,7 +43,10 @@ export default function AdminCoursesPage() {
                 }
             } catch (err) {
                 console.error("Error loading courses:", err);
-                setError("We couldn't load the courses. Please try again.");
+                setError(
+                    dict?.admin.courses.errorDescription ||
+                        "We couldn't load the courses. Please try again.",
+                );
             } finally {
                 setLoading(false);
             }
@@ -59,9 +64,9 @@ export default function AdminCoursesPage() {
                         <EmptyMedia variant="icon">
                             <Spinner className="size-6 text-muted-foreground" />
                         </EmptyMedia>
-                        <EmptyTitle>Loading courses</EmptyTitle>
+                        <EmptyTitle>{dict?.admin.courses.loading}</EmptyTitle>
                         <EmptyDescription>
-                            Checking your permissions and fetching the catalog.
+                            {dict?.admin.courses.loadingDescription}
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
@@ -77,9 +82,9 @@ export default function AdminCoursesPage() {
                     <EmptyMedia variant="icon">
                         <AlertCircle />
                     </EmptyMedia>
-                    <EmptyTitle>Access denied</EmptyTitle>
+                    <EmptyTitle>{dict?.admin.courses.accessDenied}</EmptyTitle>
                     <EmptyDescription>
-                        You need teacher or admin permissions to manage courses.
+                        {dict?.admin.courses.accessDeniedDescription}
                     </EmptyDescription>
                 </EmptyHeader>
             </Empty>
@@ -90,10 +95,12 @@ export default function AdminCoursesPage() {
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Courses</h2>
+                <h2 className="text-xl font-semibold">
+                    {dict?.admin.courses.title}
+                </h2>
                 <Button asChild>
                     <Link href={PATHS.DASHBOARD.ADMINISTRATION.COURSES.CREATE}>
-                        Create Course
+                        {dict?.admin.courses.create}
                     </Link>
                 </Button>
             </div>
@@ -104,12 +111,12 @@ export default function AdminCoursesPage() {
                         <EmptyMedia variant="icon">
                             <AlertCircle />
                         </EmptyMedia>
-                        <EmptyTitle>Unable to load courses</EmptyTitle>
+                        <EmptyTitle>{dict?.admin.courses.error}</EmptyTitle>
                         <EmptyDescription>{error}</EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
                         <Button onClick={() => window.location.reload()}>
-                            Retry
+                            {dict?.admin.courses.retry}
                         </Button>
                     </EmptyContent>
                 </Empty>
@@ -119,9 +126,9 @@ export default function AdminCoursesPage() {
                         <EmptyMedia variant="icon">
                             <AlertCircle />
                         </EmptyMedia>
-                        <EmptyTitle>No courses yet</EmptyTitle>
+                        <EmptyTitle>{dict?.admin.courses.noCourses}</EmptyTitle>
                         <EmptyDescription>
-                            Create your first course to populate the catalog.
+                            {dict?.admin.courses.noCoursesDescription}
                         </EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
@@ -132,7 +139,7 @@ export default function AdminCoursesPage() {
                                         .CREATE
                                 }
                             >
-                                Create Course
+                                {dict?.admin.courses.create}
                             </Link>
                         </Button>
                     </EmptyContent>

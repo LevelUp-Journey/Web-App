@@ -253,6 +253,79 @@
             }
         }
     },
+    "guides": {
+        "title": "Guías de Aprendizaje",
+        "description": "Explora nuestra colección de guías completas para mejorar tus habilidades",
+        "notFound": "Guía no encontrada",
+        "authorNotAvailable": "Perfil del autor no disponible"
+    },
+    "admin": {
+        "dashboard": {
+            "title": "Panel de Administración — Actividad Reciente",
+            "loading": "Cargando panel de administración",
+            "loadingDescription": "Obteniendo los últimos desafíos, guías y cursos.",
+            "error": "Error al cargar el panel",
+            "errorDescription": "No se pudo cargar los datos del panel de administración. Por favor, inténtalo de nuevo.",
+            "retry": "Reintentar",
+            "challenges": "Desafíos",
+            "noChallenges": "No se encontraron desafíos.",
+            "guides": "Guías",
+            "noGuides": "No se encontraron guías."
+        },
+        "community": {
+            "title": "Gestión de Comunidad",
+            "create": "Crear Comunidad",
+            "loading": "Cargando comunidades",
+            "loadingDescription": "Preparando tus herramientas de gestión de comunidad.",
+            "error": "No se pudieron cargar las comunidades",
+            "noCommunities": "Aún no hay comunidades",
+            "noCommunitiesDescription": "Crea tu primera comunidad para comenzar.",
+            "retry": "Reintentar",
+            "permissionsError": "No se pudieron verificar los permisos"
+        },
+        "challenges": {
+            "title": "Mis Desafíos",
+            "createNew": "Crear Nuevo Desafío",
+            "create": "Crear Desafío",
+            "noChallenges": "Aún no hay desafíos",
+            "noChallengesDescription": "Comienza creando tu primer desafío para la comunidad.",
+            "error": "No se pudieron cargar los desafíos",
+            "errorDescription": "Algo salió mal al obtener tus desafíos. Por favor, inténtalo de nuevo."
+        },
+        "guides": {
+            "title": "Guías",
+            "subtitle": "Gestionar y crear guías de aprendizaje",
+            "create": "Crear Guía",
+            "loading": "Cargando guías",
+            "loadingDescription": "Obteniendo las últimas guías de aprendizaje para ti.",
+            "accessDenied": "Acceso denegado",
+            "accessDeniedDescription": "Necesitas permisos de profesor o administrador para gestionar guías.",
+            "permissionsError": "No se pudieron verificar los permisos",
+            "noGuides": "Aún no hay guías",
+            "noGuidesDescription": "Crea tu primera guía para comenzar a ayudar a los estudiantes.",
+            "error": "No se pudieron cargar las guías",
+            "errorDescription": "No se pudieron cargar las guías. Por favor, inténtalo de nuevo.",
+            "retry": "Reintentar",
+            "showing": "Mostrando",
+            "to": "a",
+            "of": "de",
+            "guides": "guías",
+            "perPage": "Por página:"
+        },
+        "courses": {
+            "title": "Cursos",
+            "create": "Crear Curso",
+            "loading": "Cargando cursos",
+            "loadingDescription": "Verificando tus permisos y obteniendo el catálogo.",
+            "accessDenied": "Acceso denegado",
+            "accessDeniedDescription": "Necesitas permisos de profesor o administrador para gestionar cursos.",
+            "error": "No se pudieron cargar los cursos",
+            "errorDescription": "No se pudieron cargar los cursos. Por favor, inténtalo de nuevo.",
+            "retry": "Reintentar",
+            "noCourses": "Aún no hay cursos",
+            "noCoursesDescription": "Crea tu primer curso para poblar el catálogo."
+        }
+    },
     "profile": {
         "title": "Perfil",
         "edit": "Editar perfil",

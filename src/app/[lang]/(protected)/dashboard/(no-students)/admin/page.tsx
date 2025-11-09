@@ -14,6 +14,7 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
@@ -21,6 +22,7 @@ import { GuideController } from "@/services/internal/learning/guides/controller/
 import type { Guide } from "@/services/internal/learning/guides/domain/guide.entity";
 
 export default function AdminPage() {
+    const dict = useDictionary();
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [guides, setGuides] = useState<Guide[]>([]);
     const [loading, setLoading] = useState(true);
@@ -58,9 +60,9 @@ export default function AdminPage() {
                     <EmptyMedia variant="icon">
                         <Spinner className="size-6 text-muted-foreground" />
                     </EmptyMedia>
-                    <EmptyTitle>Loading admin dashboard</EmptyTitle>
+                    <EmptyTitle>{dict?.admin.dashboard.loading}</EmptyTitle>
                     <EmptyDescription>
-                        Fetching the latest challenges, guides, and courses.
+                        {dict?.admin.dashboard.loadingDescription}
                     </EmptyDescription>
                 </EmptyHeader>
             </Empty>
@@ -74,15 +76,15 @@ export default function AdminPage() {
                     <EmptyMedia variant="icon">
                         <AlertCircle />
                     </EmptyMedia>
-                    <EmptyTitle>Error loading dashboard</EmptyTitle>
+                    <EmptyTitle>{dict?.admin.dashboard.error}</EmptyTitle>
                     <EmptyDescription>
-                        Could not load admin dashboard data. Please try again.
+                        {dict?.admin.dashboard.errorDescription}
                     </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
                     <Button onClick={loadData} variant="outline">
                         <RefreshCw className="mr-2 h-4 w-4" />
-                        Retry
+                        {dict?.admin.dashboard.retry}
                     </Button>
                 </EmptyContent>
             </Empty>
@@ -103,15 +105,17 @@ export default function AdminPage() {
     return (
         <div className="space-y-8">
             <h2 className="text-2xl font-semibold tracking-tight">
-                Admin Dashboard — Recent Activity
+                {dict?.admin.dashboard.title}
             </h2>
 
             {/* Challenges Row */}
             <section className="space-y-3">
-                <h3 className="text-lg font-semibold">Challenges</h3>
+                <h3 className="text-lg font-semibold">
+                    {dict?.admin.dashboard.challenges}
+                </h3>
                 {sortedChallenges.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                        No challenges found.
+                        {dict?.admin.dashboard.noChallenges}
                     </p>
                 ) : (
                     <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400">
@@ -133,10 +137,12 @@ export default function AdminPage() {
 
             {/* Guides Row */}
             <section className="space-y-3">
-                <h3 className="text-lg font-semibold">Guides</h3>
+                <h3 className="text-lg font-semibold">
+                    {dict?.admin.dashboard.guides}
+                </h3>
                 {sortedGuides.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                        No guides found.
+                        {dict?.admin.dashboard.noGuides}
                     </p>
                 ) : (
                     <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400">
