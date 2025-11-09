@@ -307,7 +307,6 @@
         "settings": "Configuración",
         "help": "Ayuda",
         "admin": "Administración",
-        "courses": "Cursos",
         "guides": "Guías",
         "edit": "Editar",
         "auth": "Autenticación",
@@ -330,16 +329,14 @@
         "dashboard": {
             "title": "Panel de Administración — Actividad Reciente",
             "loading": "Cargando panel de administración",
-            "loadingDescription": "Obteniendo los últimos desafíos, guías y cursos.",
+            "loadingDescription": "Obteniendo los últimos desafíos y guías.",
             "error": "Error al cargar el panel",
             "errorDescription": "No se pudo cargar los datos del panel de administración. Por favor, inténtalo de nuevo.",
             "retry": "Reintentar",
             "challenges": "Desafíos",
             "noChallenges": "No se encontraron desafíos.",
             "guides": "Guías",
-            "noGuides": "No se encontraron guías.",
-            "courses": "Cursos",
-            "noCourses": "No se encontraron cursos."
+            "noGuides": "No se encontraron guías."
         },
         "community": {
             "title": "Gestión de Comunidad",
@@ -380,113 +377,6 @@
             "of": "de",
             "guides": "guías",
             "perPage": "Por página:"
-        },
-        "courses": {
-            "title": "Cursos",
-            "create": "Crear Curso",
-            "loading": "Cargando cursos",
-            "loadingDescription": "Verificando tus permisos y obteniendo el catálogo.",
-            "accessDenied": "Acceso denegado",
-            "accessDeniedDescription": "Necesitas permisos de profesor o administrador para gestionar cursos.",
-            "error": "No se pudieron cargar los cursos",
-            "errorDescription": "No se pudieron cargar los cursos. Por favor, inténtalo de nuevo.",
-            "retry": "Reintentar",
-            "noCourses": "Aún no hay cursos",
-            "noCoursesDescription": "Crea tu primer curso para poblar el catálogo.",
-            "createCourse": {
-                "title": "Crear Curso",
-                "subtitle": "Crea un nuevo curso para tus estudiantes.",
-                "form": {
-                    "title": "Título *",
-                    "titlePlaceholder": "Ingresa el título del curso",
-                    "description": "Descripción *",
-                    "descriptionPlaceholder": "Ingresa la descripción del curso",
-                    "difficulty": "Dificultad *",
-                    "difficultyPlaceholder": "Selecciona dificultad",
-                    "coverImage": "Imagen de Portada *",
-                    "topics": "Temas *",
-                    "topicsPlaceholder": "Buscar temas...",
-                    "authors": "Autores *",
-                    "authorsPlaceholder": "Buscar autores...",
-                    "cancel": "Cancelar",
-                    "create": "Crear Curso",
-                    "creating": "Creando..."
-                },
-                "difficulties": {
-                    "beginner": "Principiante",
-                    "intermediate": "Intermedio",
-                    "advanced": "Avanzado",
-                    "expert": "Experto"
-                },
-                "messages": {
-                    "searching": "Buscando...",
-                    "createTopic": "Crear \"{topic}\"",
-                    "noAuthors": "No se encontraron autores",
-                    "createNewTopic": "Crear Nuevo Tema",
-                    "topicName": "Nombre del tema",
-                    "create": "Crear",
-                    "creating": "Creando...",
-                    "back": "Atrás",
-                    "accessDenied": "Acceso Denegado",
-                    "accessDeniedDescription": "No tienes permisos para crear cursos.",
-                    "loading": "Cargando..."
-                },
-                "validation": {
-                    "titleMin": "El título debe tener al menos 5 caracteres",
-                    "descriptionMin": "La descripción debe tener al menos 10 caracteres",
-                    "coverImageRequired": "La imagen de portada es requerida",
-                    "authorsRequired": "Se requiere al menos un autor",
-                    "topicsRequired": "Se requiere al menos un tema"
-                }
-            },
-            "editCourse": {
-                "title": "Editar Curso",
-                "subtitle": "Actualizar información y configuración del curso.",
-                "loading": "Cargando...",
-                "accessDenied": "Acceso Denegado",
-                "accessDeniedDescription": "No tienes permisos para editar cursos.",
-                "goBack": "Volver",
-                "error": "Error",
-                "courseNotFound": "Curso No Encontrado",
-                "courseNotFoundDescription": "El curso que buscas no existe.",
-                "backToCourses": "Volver a Cursos",
-                "errorLoading": "Error al cargar los datos del curso",
-                "courseNotFoundShort": "Curso no encontrado"
-            },
-            "createGuide": {
-                "title": "Crear una Nueva Guía",
-                "subtitle": "Proporciona información básica sobre tu guía. Puedes agregar páginas después de la creación.",
-                "cancelConfirm": "¿Estás seguro de que quieres cancelar? Todo el progreso se perderá.",
-                "errorCreating": "Error al crear la guía. Por favor, inténtalo de nuevo."
-            },
-            "editGuide": {
-                "loading": "Cargando guía...",
-                "notFound": "Guía no encontrada",
-                "backToGuides": "Volver a Guías",
-                "subtitle": "Edita la información de tu guía y administra páginas",
-                "publish": "Publicar",
-                "publishing": "Publicando...",
-                "tabs": {
-                    "pages": "Páginas",
-                    "info": "Información Básica"
-                },
-                "basicInfo": {
-                    "title": "Información Básica",
-                    "subtitle": "Actualiza los detalles básicos de tu guía",
-                    "update": "Actualizar Guía",
-                    "updating": "Actualizando Guía...",
-                    "cancelConfirm": "¿Estás seguro de que quieres cancelar? Cualquier cambio no guardado se perderá.",
-                    "updateSuccess": "¡Guía actualizada exitosamente!",
-                    "updateError": "Error al actualizar la guía. Por favor, inténtalo de nuevo.",
-                    "publishError": "Error al publicar la guía. Por favor, inténtalo de nuevo."
-                },
-                "validation": {
-                    "titleRequired": "El título es requerido",
-                    "descriptionMin": "La descripción debe tener al menos 10 caracteres",
-                    "descriptionMax": "La descripción no debe exceder 1000 caracteres",
-                    "topicsRequired": "Se requiere al menos un tema"
-                }
-            }
         }
     },
     "profile": {
