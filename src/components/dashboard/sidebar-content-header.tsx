@@ -13,7 +13,7 @@ export async function SidebarContentHeader() {
     // If profile service is down, we still show the header but without user info
     if (!profile) {
         return (
-            <header className="w-full flex px-4 items-center justify-between border-b h-14">
+            <header className="w-full flex px-4 items-center justify-between border-b h-14 sticky top-0 bg-background z-10">
                 <div className="flex items-center">
                     <SidebarTrigger />
                     <NavigationIndicator />
@@ -34,7 +34,7 @@ export async function SidebarContentHeader() {
     }
 
     return (
-        <header className="w-full flex px-4 items-center justify-between border-b h-14 sticky">
+        <header className="w-full flex px-4 items-center justify-between border-b h-14 sticky top-0 bg-background z-10">
             <div className="flex items-center">
                 <SidebarTrigger />
                 <NavigationIndicator />
