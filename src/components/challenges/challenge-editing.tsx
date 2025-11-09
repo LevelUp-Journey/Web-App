@@ -44,6 +44,8 @@ import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
+import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 
 const formSchema = z.object({
     title: z
@@ -86,6 +88,15 @@ export default function ChallengeEditing({
     const [codeVersions, setCodeVersions] =
         useState<CodeVersion[]>(initialCodeVersions);
 
+    // Guides tab state
+    const [searchTerm, setSearchTerm] = useState("");
+    const [guides, setGuides] = useState<GuideResponse[]>([]);
+    const [selectedGuideIds, setSelectedGuideIds] = useState<string[]>(
+        challengeData.guides,
+    );
+    const [isSearching, setIsSearching] = useState(false);
+    const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -116,6 +127,7 @@ export default function ChallengeEditing({
                 ],
             ),
         });
+        setSelectedGuideIds(challengeData.guides);
     }, [challengeData, form]);
 
     const difficulty = form.watch("difficulty");
@@ -215,6 +227,80 @@ export default function ChallengeEditing({
         }
     }, [form, maxExperiencePoints]);
 
+    // Guides search with debounce
+    useEffect(() => {
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+        debounceRef.current = setTimeout(async () => {
+            if (searchTerm.trim()) {
+                console.log(
+                    `[ChallengeEditing] Searching guides with term: ${searchTerm}`,
+                );
+                setIsSearching(true);
+                try {
+                    const results = await GuideController.searchGuides({
+                        title: searchTerm,
+                    });
+                    console.log(
+                        `[ChallengeEditing] Found ${results?.length || 0} guides`,
+                    );
+                    setGuides(results || []);
+                } catch (error) {
+                    console.error(
+                        "[ChallengeEditing] Error searching guides:",
+                        error,
+                    );
+                    setGuides([]);
+                } finally {
+                    setIsSearching(false);
+                }
+            } else {
+                setGuides([]);
+            }
+        }, 500); // 500ms debounce
+
+        return () => {
+            if (debounceRef.current) {
+                clearTimeout(debounceRef.current);
+            }
+        };
+    }, [searchTerm]);
+
+    const handleSelectGuide = async (guide: GuideResponse) => {
+        console.log(
+            `[ChallengeEditing] Selecting guide: ${guide.id} - ${guide.title}`,
+        );
+        if (selectedGuideIds.includes(guide.id)) {
+            toast.info("Guide already selected.");
+            return;
+        }
+        const success = await ChallengeController.addGuideToChallenge(
+            challengeId,
+            guide.id,
+        );
+        if (success) {
+            setSelectedGuideIds((prev) => [...prev, guide.id]);
+            toast.success("Guide added to challenge successfully!");
+        } else {
+            toast.error("Failed to add guide to challenge.");
+        }
+    };
+
+    const handleRemoveGuide = async (guideId: string) => {
+        console.log(`[ChallengeEditing] Removing guide: ${guideId}`);
+        const success = await ChallengeController.removeGuideFromChallenge(
+            challengeId,
+            guideId,
+        );
+        if (success) {
+            setSelectedGuideIds((prev) => prev.filter((id) => id !== guideId));
+            toast.success("Guide removed from challenge successfully!");
+        } else {
+            toast.error("Failed to remove guide from challenge.");
+        }
+    };
+
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             {/* Header */}
@@ -241,12 +327,15 @@ export default function ChallengeEditing({
                     <ResizablePanel defaultSize={40} minSize={30}>
                         <div className="h-full overflow-y-auto p-6">
                             <Tabs defaultValue="basic" className="h-full">
-                                <TabsList className="grid w-full grid-cols-2">
+                                <TabsList className="grid w-full grid-cols-3">
                                     <TabsTrigger value="basic">
                                         Basic Information
                                     </TabsTrigger>
                                     <TabsTrigger value="languages">
                                         Available Languages
+                                    </TabsTrigger>
+                                    <TabsTrigger value="guides">
+                                        Guides
                                     </TabsTrigger>
                                 </TabsList>
                                 <TabsContent
@@ -486,6 +575,88 @@ export default function ChallengeEditing({
                                         variant="editing"
                                         isTeacher={true}
                                     />
+                                </TabsContent>
+                                <TabsContent
+                                    value="guides"
+                                    className="space-y-6 mt-6"
+                                >
+                                    <Field>
+                                        <FieldLabel>Search Guides</FieldLabel>
+                                        <Input
+                                            placeholder="Search guides by title..."
+                                            value={searchTerm}
+                                            onChange={(e) =>
+                                                setSearchTerm(e.target.value)
+                                            }
+                                        />
+                                        <FieldDescription>
+                                            Type to search for guides. Results
+                                            will appear below.
+                                        </FieldDescription>
+                                    </Field>
+                                    {isSearching && <p>Searching...</p>}
+                                    {guides.length > 0 && (
+                                        <div className="space-y-2">
+                                            <h3 className="text-lg font-semibold">
+                                                Search Results
+                                            </h3>
+                                            {guides.map((guide) => (
+                                                <div
+                                                    key={guide.id}
+                                                    className="flex items-center justify-between p-2 border rounded overflow-hidden"
+                                                >
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="font-medium">
+                                                            {guide.title}
+                                                        </p>
+                                                        <p className="text-sm text-muted-foreground max-w-[100ch] overflow-hidden text-ellipsis whitespace-nowrap">
+                                                            {guide.description}
+                                                        </p>
+                                                    </div>
+                                                    <Button
+                                                        onClick={() =>
+                                                            handleSelectGuide(
+                                                                guide,
+                                                            )
+                                                        }
+                                                        size="sm"
+                                                    >
+                                                        +
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {selectedGuideIds.length > 0 && (
+                                        <div className="space-y-2">
+                                            <h3 className="text-lg font-semibold">
+                                                Selected Guides
+                                            </h3>
+                                            {selectedGuideIds.map((guideId) => (
+                                                <div
+                                                    key={guideId}
+                                                    className="flex items-center justify-between p-2 border rounded bg-muted"
+                                                >
+                                                    <div>
+                                                        <p className="font-medium">
+                                                            Guide ID: {guideId}
+                                                        </p>
+                                                    </div>
+                                                    <Button
+                                                        onClick={() =>
+                                                            handleRemoveGuide(
+                                                                guideId,
+                                                            )
+                                                        }
+                                                        size="sm"
+                                                        variant="destructive"
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </TabsContent>
                             </Tabs>
                         </div>

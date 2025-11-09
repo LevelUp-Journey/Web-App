@@ -8,6 +8,7 @@ export interface ChallengeResponse {
     status: string;
     tags: ChallengeTagResponse[];
     stars: ChallengeStarResponse[];
+    guides: string[]; // Guide IDs
 }
 
 export interface ChallengeTagResponse {
@@ -28,6 +29,7 @@ export interface CreateChallengeRequest {
     experiencePoints: number;
     difficulty: string;
     tagIds: string[];
+    guideIds?: string[];
 }
 
 export interface UpdateChallengeRequest {

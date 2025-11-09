@@ -10,6 +10,8 @@ import type {
     GetGuidePagesByGuideIdRequest,
     GetPageByIdRequest,
     GuideResponse,
+    SearchGuideRequest,
+    SearchGuidesResponse,
     UpdateGuideRequest,
     UpdateGuideStatusRequest,
     UpdatePageRequest,
@@ -213,5 +215,22 @@ export async function deletePageAction(
     const response = await API_GATEWAY_HTTP.delete<
         LearningResponse<GuideResponse>
     >(`/guides/${request.guideId}/pages/${request.pageId}`);
+    return response.data.data;
+}
+
+export async function searchGuideAction(request: SearchGuideRequest) {
+    const params = new URLSearchParams();
+    if (request.title) params.append("title", request.title);
+    if (request.likes !== undefined)
+        params.append("likes", String(request.likes));
+    if (request.authorIds) {
+        request.authorIds.forEach((id) => params.append("authorIds", id));
+    }
+    if (request.topicIds) {
+        request.topicIds.forEach((id) => params.append("topicIds", id));
+    }
+    const url = `/guides/search${params.toString() ? `?${params.toString()}` : ""}`;
+    const response =
+        await API_GATEWAY_HTTP.get<LearningResponse<SearchGuidesResponse>>(url);
     return response.data.data;
 }

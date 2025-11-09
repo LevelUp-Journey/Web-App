@@ -12,6 +12,7 @@ import {
     getPageByIdAction,
     getTeachersGuidesAction,
     getTeachersGuidesPaginatedAction,
+    searchGuideAction,
     updateGuideAction,
     updateGuideStatusAction,
     updatePageAction,
@@ -24,6 +25,8 @@ import type {
     GetGuidePagesByGuideIdRequest,
     GetPageByIdRequest,
     GuideResponse,
+    SearchGuideRequest,
+    SearchGuidesResponse,
     UpdateGuideRequest,
     UpdateGuideStatusRequest,
     UpdatePageRequest,
@@ -170,6 +173,19 @@ export class GuideController {
                 error,
             );
             return null;
+        }
+    }
+
+    public static async searchGuides(
+        request: SearchGuideRequest,
+    ): Promise<GuideResponse[]> {
+        try {
+            const response: SearchGuidesResponse =
+                await searchGuideAction(request);
+            return response.content;
+        } catch (error) {
+            console.error("Error in GuideController.searchGuides:", error);
+            return [];
         }
     }
 }

@@ -203,3 +203,30 @@ export async function addGuideToChallenge(
         };
     }
 }
+
+export async function removeGuideFromChallenge(
+    challengeId: string,
+    guideId: string,
+) {
+    try {
+        const response = await API_GATEWAY_HTTP.delete(
+            `/challenges/${challengeId}/guides/${guideId}`,
+        );
+        console.log("REMOVE GUIDE FROM CHALLENGE RESPONSE", response);
+
+        return {
+            data: true,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as AxiosError<{ message?: string }>;
+        return {
+            data: String(
+                axiosError.response?.data?.message ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}

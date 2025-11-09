@@ -80,3 +80,39 @@ export enum GuideStatus {
     ARCHIVED = "ARCHIVED",
     ASSOCIATED_WITH_COURSE = "ASSOCIATED_WITH_COURSE",
 }
+
+export interface SearchGuideRequest {
+    title?: string;
+    authorIds?: string[];
+    topicIds?: string[];
+    likes?: number; // Minimum number of likes
+}
+
+export interface SearchGuidesResponse {
+    content: GuideResponse[];
+    pageable: {
+        pageNumber: number;
+        pageSize: number;
+        sort: {
+            empty: boolean;
+            sorted: boolean;
+            unsorted: boolean;
+        };
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+    };
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    first: boolean;
+    numberOfElements: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    empty: boolean;
+}

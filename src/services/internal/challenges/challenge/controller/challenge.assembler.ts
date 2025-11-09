@@ -19,6 +19,7 @@ const ChallengeValidator = z.object({
     difficulty: z.nativeEnum(ChallengeDifficulty).optional(),
     status: z.enum(ChallengeStatus),
     tags: z.array(ChallengeTagValidator),
+    guides: z.array(z.string()),
 });
 
 const ChallengeStarValidator = z.object({
@@ -56,6 +57,7 @@ export class ChallengeAssembler {
                     starredAt: star.starredAt,
                 };
             }),
+            guides: challenge.guides,
         };
     }
 
