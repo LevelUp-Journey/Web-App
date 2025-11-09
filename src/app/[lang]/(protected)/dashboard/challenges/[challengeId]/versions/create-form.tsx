@@ -1,6 +1,5 @@
 "use client";
 
-import Editor from "@monaco-editor/react";
 import type { SVGProps } from "react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
