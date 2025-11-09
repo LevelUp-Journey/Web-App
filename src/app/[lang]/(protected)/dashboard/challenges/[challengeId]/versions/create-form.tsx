@@ -157,7 +157,7 @@ export default function CreateCodeVersionForm({
     if (step === "select") {
         return (
             <div className="container mx-auto p-4 max-w-4xl">
-                <h1 className="text-2xl font-semibold">
+                <h1 className="text-2xl font-semibold mb-2">
                     {dict?.challenges?.codeVersions?.createForm?.title ||
                         "Choose Programming Language for Code Version"}
                 </h1>

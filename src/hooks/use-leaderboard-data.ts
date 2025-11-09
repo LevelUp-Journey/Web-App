@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
-import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
-import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { UsersByRankResponse } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
+import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
 import type { LeaderboardResponse } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export interface UserWithProfile {

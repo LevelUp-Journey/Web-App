@@ -6,7 +6,7 @@ export type { Locale };
 export { getDictionary };
 
 // Type for the dictionary structure
-export type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
+export type Dictionary = Record<string, any>;
 
 // Helper function to get locale from params
 export async function getLocaleFromParams(

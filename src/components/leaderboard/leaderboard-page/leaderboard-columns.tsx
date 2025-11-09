@@ -1,5 +1,5 @@
+import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import { ColumnDef } from "@tanstack/react-table";
 import type { UserWithProfile } from "@/hooks/use-leaderboard-data";
 
 const RANK_ICONS: Record<string, string> = {
