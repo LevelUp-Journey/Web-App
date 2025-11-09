@@ -6,12 +6,18 @@ import {
     InputGroupInput,
 } from "../ui/input-group";
 
-export function SearchInput() {
+interface SearchInputProps {
+    placeholder?: string;
+}
+
+export function SearchInput({
+    placeholder = "Search something...",
+}: SearchInputProps) {
     return (
         <div className="max-w-lg w-full inline">
             <div className="relative">
                 <InputGroup>
-                    <InputGroupInput placeholder="Search something..." />
+                    <InputGroupInput placeholder={placeholder} />
                     <InputGroupAddon>
                         <SearchIcon />
                     </InputGroupAddon>

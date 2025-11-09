@@ -46,7 +46,10 @@ export default function CodeVersionsList({
                 challengeId,
                 codeVersionId,
             );
-            toast.success("Code version deleted successfully");
+            toast.success(
+                dict?.challenges?.messages?.codeVersionDeleted ||
+                    "Code version deleted successfully",
+            );
             router.refresh();
         } catch (error) {
             console.error("Error deleting code version:", error);
@@ -111,24 +114,27 @@ export default function CodeVersionsList({
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>
-                                            Delete Code Version
+                                            {dict?.challenges?.alerts
+                                                ?.deleteCodeVersion?.title ||
+                                                "Delete Code Version"}
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Are you sure you want to delete this
-                                            code version? This action cannot be
-                                            undone.
+                                            {dict?.challenges?.alerts
+                                                ?.deleteCodeVersion
+                                                ?.description ||
+                                                "Are you sure you want to delete this code version? This action cannot be undone."}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>
-                                            Cancel
+                                            {dict?.common?.cancel || "Cancel"}
                                         </AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={() =>
                                                 handleDelete(version.id)
                                             }
                                         >
-                                            Delete
+                                            {dict?.common?.delete || "Delete"}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -139,8 +145,8 @@ export default function CodeVersionsList({
             ))}
             {codeVersions.length === 0 && (
                 <p className="text-muted-foreground text-sm">
-                    No code versions yet. Click "Add Code Version" to create
-                    one.
+                    {dict?.challenges?.codeVersions?.noCodeVersions ||
+                        'No code versions yet. Click "Add Code Version" to create one.'}
                 </p>
             )}
         </div>

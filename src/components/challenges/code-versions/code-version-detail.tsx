@@ -68,7 +68,10 @@ export default function CodeVersionDetail({
                     functionName: codeVersion.functionName,
                 },
             );
-            toast.success("Initial code updated successfully");
+            toast.success(
+                dict?.challenges?.codeVersions?.initialCodeUpdated ||
+                    "Initial code updated successfully",
+            );
             setIsEditingMode(false);
         } catch (error) {
             console.error("Error updating initial code:", error);
@@ -93,13 +96,20 @@ export default function CodeVersionDetail({
                 <div>
                     <h1 className="text-3xl font-bold mb-2">
                         {isEditingMode
-                            ? "Edit Initial Code"
-                            : "Code Version Summary"}
+                            ? dict?.challenges?.codeVersions?.editInitialCode ||
+                              "Edit Initial Code"
+                            : dict?.challenges?.codeVersions
+                                  ?.codeVersionSummary ||
+                              "Code Version Summary"}
                     </h1>
                     <p className="text-muted-foreground">
                         {isEditingMode
-                            ? "Modify the initial code for this code version."
-                            : "View the code version details."}
+                            ? dict?.challenges?.codeVersions
+                                  ?.modifyInitialCode ||
+                              "Modify the initial code for this code version."
+                            : dict?.challenges?.codeVersions
+                                  ?.viewCodeVersionDetails ||
+                              "View the code version details."}
                     </p>
                 </div>
                 <div className="flex gap-4">
@@ -110,7 +120,8 @@ export default function CodeVersionDetail({
                                 codeVersion.id,
                             )}
                         >
-                            Manage Tests
+                            {dict?.challenges?.codeVersions?.manageTests ||
+                                "Manage Tests"}
                         </Link>
                     </Button>
                     {isEditingMode ? (
@@ -119,13 +130,17 @@ export default function CodeVersionDetail({
                                 onClick={handleUpdateCodeVersion}
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? "Updating..." : "Save Changes"}
+                                {isSubmitting
+                                    ? dict?.challenges?.codeVersions
+                                          ?.updating || "Updating..."
+                                    : dict?.challenges?.codeVersions
+                                          ?.saveChanges || "Save Changes"}
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={handleCancelEdit}
                             >
-                                Cancel
+                                {dict?.common?.cancel || "Cancel"}
                             </Button>
                         </>
                     ) : (
@@ -133,7 +148,8 @@ export default function CodeVersionDetail({
                             variant="outline"
                             onClick={() => setIsEditingMode(true)}
                         >
-                            Edit Code Version
+                            {dict?.challenges?.codeVersions?.editCodeVersion ||
+                                "Edit Code Version"}
                         </Button>
                     )}
                 </div>
@@ -147,7 +163,10 @@ export default function CodeVersionDetail({
                         {/* Tests List */}
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold">
-                                Tests ({tests.length})
+                                {dict?.challenges?.codeVersions?.testsCount?.replace(
+                                    "{count}",
+                                    tests.length.toString(),
+                                ) || `Tests (${tests.length})`}
                             </h2>
                             <div className="space-y-2">
                                 {tests.map((test) => (
@@ -157,10 +176,15 @@ export default function CodeVersionDetail({
                                         </ItemMedia>
                                         <ItemContent>
                                             <ItemTitle>
-                                                Test Case {test.id.slice(-8)}
+                                                {dict?.challenges?.codeVersions?.testCase?.replace(
+                                                    "{id}",
+                                                    test.id.slice(-8),
+                                                ) ||
+                                                    `Test Case ${test.id.slice(-8)}`}
                                             </ItemTitle>
                                             <ItemDescription>
-                                                Input:{" "}
+                                                {dict?.challenges?.codeVersions
+                                                    ?.input || "Input:"}{" "}
                                                 {test.input.length > 20
                                                     ? `${test.input.slice(0, 20)}...`
                                                     : test.input}
@@ -178,14 +202,16 @@ export default function CodeVersionDetail({
                                                     test.id,
                                                 )}
                                             >
-                                                View
+                                                {dict?.challenges?.codeVersions
+                                                    ?.view || "View"}
                                             </Link>
                                         </Button>
                                     </Item>
                                 ))}
                                 {tests.length === 0 && (
                                     <p className="text-muted-foreground text-sm">
-                                        No tests yet.
+                                        {dict?.challenges?.codeVersions
+                                            ?.noTestsYet || "No tests yet."}
                                     </p>
                                 )}
                             </div>
@@ -203,7 +229,8 @@ export default function CodeVersionDetail({
                                         )}
                                     >
                                         <Plus className="w-3 h-3" />
-                                        Add Test
+                                        {dict?.challenges?.codeVersions
+                                            ?.addTest || "Add Test"}
                                     </Link>
                                 </Button>
                             )}
@@ -218,7 +245,8 @@ export default function CodeVersionDetail({
                     <div className="h-full flex flex-col">
                         <div className="p-4 border-b">
                             <h2 className="text-xl font-semibold">
-                                Initial Code
+                                {dict?.challenges?.codeVersions?.initialCode ||
+                                    "Initial Code"}
                                 {isEditing && (
                                     <>
                                         {" "}

@@ -30,7 +30,7 @@ export default function ChallengesPage() {
 
             {/* Search Bar */}
             <div className="flex justify-center">
-                <SearchInput />
+                <SearchInput placeholder={dict?.common?.search} />
             </div>
 
             {/* Filters */}
