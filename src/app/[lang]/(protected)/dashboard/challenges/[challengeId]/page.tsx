@@ -2,6 +2,7 @@ import { serialize } from "next-mdx-remote-client/serialize";
 import ChallengeEditing from "@/components/challenges/challenge-editing";
 import ChallengeSummary from "@/components/challenges/challenge-summary";
 import { UserRole } from "@/lib/consts";
+import { mdxOptions } from "@/lib/mdx-config";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
@@ -35,7 +36,7 @@ export default async function ChallengePage({
 
     // Serialize the description for client-side rendering
     const serializedMarkdown = challenge.description
-        ? await serialize({ source: challenge.description })
+        ? await serialize({ source: challenge.description, ...mdxOptions })
         : null;
 
     if (isEditing && isTeacherOrAdmin) {

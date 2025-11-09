@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import type { SerializeResult } from "next-mdx-remote-client/csr";
 import { serialize } from "next-mdx-remote-client/serialize";
 import StudentCodeEditor from "@/components/challenges/student-code-editor";
+import { mdxOptions } from "@/lib/mdx-config";
 import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
@@ -168,7 +169,10 @@ async function serializeDescription(
     }
 
     try {
-        const serialized = await serialize({ source: description });
+        const serialized = await serialize({
+            source: description,
+            ...mdxOptions,
+        });
         return serialized;
     } catch (error) {
         console.error("Error serializing challenge description:", error);

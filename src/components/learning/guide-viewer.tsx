@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useGuide } from "@/hooks/use-guide";
+import { mdxOptions } from "@/lib/mdx-config";
 import { cn } from "@/lib/utils";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
@@ -348,7 +349,9 @@ function PageContent({ content }: { content: string }) {
     > | null>(null);
 
     useEffect(() => {
-        serialize({ source: content }).then(setSerializedContent);
+        serialize({ source: content, ...mdxOptions }).then(
+            setSerializedContent,
+        );
     }, [content]);
 
     if (!serializedContent) {
