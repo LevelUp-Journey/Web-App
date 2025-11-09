@@ -48,8 +48,7 @@ const ChallengeDifficultyBadge: React.FC<ChallengeDifficultyBadgeProps> = ({
     const scheme = COLOR_SCHEMES[safeDifficulty];
 
     // Get difficulty name from dictionary
-    const difficultyKey =
-        safeDifficulty.toLowerCase() as keyof typeof dict.challenges.difficulty;
+    const difficultyKey = safeDifficulty.toLowerCase();
     const displayName =
         dict?.challenges?.difficulty?.[difficultyKey] || safeDifficulty;
 
