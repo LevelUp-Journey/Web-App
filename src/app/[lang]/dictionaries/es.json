@@ -208,6 +208,51 @@
             "submitError": "Error al enviar la solución"
         }
     },
+    "leaderboard": {
+        "ranking": "Clasificación",
+        "myRank": "Mi rango",
+        "information": "Información"
+    },
+    "challengesPage": {
+        "header": {
+            "title": "Comienza a programar con propósito",
+            "description": "Level Up Journey es la plataforma de aprendizaje para estudiantes de UPC que comienzan su camino profesional. Aborda desafíos reales de C++ diseñados por tus profesores — cada uno creado para guiarte desde los fundamentos hasta la fluidez. Aprende resolviendo, sube de nivel."
+        },
+        "filters": {
+            "difficulty": "Dificultad",
+            "language": "Lenguaje",
+            "popularity": "Popularidad",
+            "recentness": "Reciente",
+            "difficultyOptions": {
+                "easy": "Fácil",
+                "medium": "Medio",
+                "hard": "Difícil",
+                "expert": "Experto"
+            },
+            "languageOptions": {
+                "cpp": "C++",
+                "python": "Python",
+                "javascript": "JavaScript"
+            },
+            "popularityOptions": {
+                "mostPopular": "Más popular",
+                "trending": "Tendencia",
+                "leastPopular": "Menos popular"
+            },
+            "recentnessOptions": {
+                "newest": "Más nuevo",
+                "oldest": "Más antiguo",
+                "recentlyUpdated": "Actualizado recientemente"
+            }
+        },
+        "section": {
+            "title": "Desafíos de programación",
+            "results": {
+                "singular": "resultado",
+                "plural": "resultados"
+            }
+        }
+    },
     "profile": {
         "title": "Perfil",
         "edit": "Editar perfil",

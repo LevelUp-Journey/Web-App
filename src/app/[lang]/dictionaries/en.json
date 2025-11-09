@@ -208,6 +208,51 @@
             "submitError": "Error submitting solution"
         }
     },
+    "leaderboard": {
+        "ranking": "Ranking",
+        "myRank": "My Rank",
+        "information": "Information"
+    },
+    "challengesPage": {
+        "header": {
+            "title": "Start coding with purpose",
+            "description": "Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up."
+        },
+        "filters": {
+            "difficulty": "Difficulty",
+            "language": "Language",
+            "popularity": "Popularity",
+            "recentness": "Recentness",
+            "difficultyOptions": {
+                "easy": "Easy",
+                "medium": "Medium",
+                "hard": "Hard",
+                "expert": "Expert"
+            },
+            "languageOptions": {
+                "cpp": "C++",
+                "python": "Python",
+                "javascript": "JavaScript"
+            },
+            "popularityOptions": {
+                "mostPopular": "Most Popular",
+                "trending": "Trending",
+                "leastPopular": "Least Popular"
+            },
+            "recentnessOptions": {
+                "newest": "Newest",
+                "oldest": "Oldest",
+                "recentlyUpdated": "Recently Updated"
+            }
+        },
+        "section": {
+            "title": "Coding Challenges",
+            "results": {
+                "singular": "result",
+                "plural": "results"
+            }
+        }
+    },
     "profile": {
         "title": "Profile",
         "edit": "Edit Profile",
