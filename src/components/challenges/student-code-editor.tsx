@@ -24,6 +24,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAutoSave } from "@/hooks/challenges/use-auto-save";
 import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { CONSTS, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
@@ -65,6 +66,7 @@ export default function StudentCodeEditor({
     serializedDescription,
     solution,
 }: StudentCodeEditorProps) {
+    const dict = useDictionary();
     // Estado de la UI
     const [activeTab, setActiveTab] = useState<"description" | "tests">(
         "description",
@@ -131,7 +133,7 @@ export default function StudentCodeEditor({
             toast.success("Code saved successfully!");
         } catch (error) {
             console.error("Error saving code:", error);
-            toast.error("Failed to save code");
+            toast.error(dict?.errors?.saving?.code || "Failed to save code");
         }
     };
 

@@ -21,6 +21,7 @@ import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
 import { Java } from "@/components/ui/svgs/java";
 import { Javascript } from "@/components/ui/svgs/javascript";
 import { Python } from "@/components/ui/svgs/python";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
@@ -72,6 +73,7 @@ const getMonacoLanguage = (language: ProgrammingLanguage): string => {
 
 export default function VersionEditing({ challengeId }: VersionEditingProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [selectedLanguage, setSelectedLanguage] =
         useState<ProgrammingLanguage | null>(null);
     const [initialCode, setInitialCode] = useState<string>("");
@@ -106,7 +108,10 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
             );
         } catch (error) {
             console.error("Error adding code version:", error);
-            toast.error("Failed to add code version");
+            toast.error(
+                dict?.errors?.creating?.codeVersion ||
+                    "Failed to add code version",
+            );
         } finally {
             setIsSubmitting(false);
         }

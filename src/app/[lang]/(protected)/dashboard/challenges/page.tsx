@@ -36,7 +36,7 @@ export default function ChallengesPage() {
             {/* Filters */}
             <div className="flex justify-center gap-4 flex-wrap">
                 <Select>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger>
                         <SelectValue
                             placeholder={
                                 dict?.challengesPage.filters.difficulty
@@ -72,7 +72,7 @@ export default function ChallengesPage() {
                 </Select>
 
                 <Select>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger>
                         <SelectValue
                             placeholder={dict?.challengesPage.filters.language}
                         />
@@ -97,7 +97,7 @@ export default function ChallengesPage() {
                 </Select>
 
                 <Select>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger>
                         <SelectValue
                             placeholder={
                                 dict?.challengesPage.filters.popularity
@@ -127,7 +127,7 @@ export default function ChallengesPage() {
                 </Select>
 
                 <Select>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger>
                         <SelectValue
                             placeholder={
                                 dict?.challengesPage.filters.recentness

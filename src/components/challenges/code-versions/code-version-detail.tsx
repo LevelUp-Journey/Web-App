@@ -18,6 +18,7 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useDictionary } from "@/hooks/use-dictionary";
 import {
     getReadableLanguageName,
     type ProgrammingLanguage,
@@ -41,6 +42,7 @@ export default function CodeVersionDetail({
     tests,
     isEditing = false,
 }: CodeVersionDetailProps) {
+    const dict = useDictionary();
     const [isEditingMode, setIsEditingMode] = useState(isEditing);
     const [initialCode, setInitialCode] = useState<string>(
         codeVersion.initialCode,
@@ -70,7 +72,10 @@ export default function CodeVersionDetail({
             setIsEditingMode(false);
         } catch (error) {
             console.error("Error updating initial code:", error);
-            toast.error("Failed to update initial code");
+            toast.error(
+                dict?.errors?.updating?.initialCode ||
+                    "Failed to update initial code",
+            );
         } finally {
             setIsSubmitting(false);
         }

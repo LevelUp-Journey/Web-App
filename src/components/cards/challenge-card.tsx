@@ -2,25 +2,11 @@
 
 import { ChevronRight, EllipsisVertical, Star } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
-import { ChallengeDifficulty, type ProgrammingLanguage } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
-import { cn } from "@/lib/utils";
-import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
-import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,6 +17,21 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
+import { useDictionary } from "@/hooks/use-dictionary";
+import { ChallengeDifficulty, type ProgrammingLanguage } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
+import { cn } from "@/lib/utils";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface ChallengeCardProps extends React.ComponentProps<"div"> {
     challenge: Challenge;
@@ -46,6 +47,7 @@ export default function ChallengeCard({
     ...props
 }: ChallengeCardProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -58,7 +60,8 @@ export default function ChallengeCard({
 
             if (!deleted) {
                 toast.error(
-                    "You don't have permission to delete this challenge.",
+                    dict?.errors?.permissions?.deleteChallenge ||
+                        "You don't have permission to delete this challenge.",
                 );
                 return;
             }
@@ -66,7 +69,10 @@ export default function ChallengeCard({
             toast.success("Challenge deleted successfully");
             router.refresh();
         } catch (error) {
-            toast.error("Failed to delete challenge");
+            toast.error(
+                dict?.errors?.deleting?.challenge ||
+                    "Failed to delete challenge",
+            );
         } finally {
             setIsDeleting(false);
             setShowDeleteDialog(false);

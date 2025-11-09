@@ -169,11 +169,6 @@
             "published": "Publicado",
             "archived": "Archivado"
         },
-        "difficulty": {
-            "easy": "Fácil",
-            "medium": "Medio",
-            "hard": "Difícil"
-        },
         "codeVersions": {
             "title": "Versiones de código",
             "create": "Agregar versión de código",
@@ -182,7 +177,77 @@
             "language": "Lenguaje",
             "initialCode": "Código inicial",
             "functionName": "Nombre de función",
-            "testCases": "Casos de prueba"
+            "testCases": "Casos de prueba",
+            "createForm": {
+                "title": "Elegir Lenguaje de Programación para Versión de Código",
+                "description": "Selecciona el lenguaje de programación en el que los estudiantes implementarán su solución para este desafío. Puedes agregar múltiples versiones de código en diferentes lenguajes.",
+                "back": "Atrás",
+                "createTitle": "Crear Versión de Código - {language}",
+                "functionNameLabel": "Nombre de Función",
+                "functionNamePlaceholder": "Ingresa el nombre de la función",
+                "functionNameDescription": "El nombre de la función a implementar (detectado automáticamente desde el código).",
+                "createButton": "Crear Versión de Código",
+                "codeTemplateTitle": "Plantilla de Código",
+                "codeTemplateDescription": "Modifica la plantilla de código según sea necesario."
+            }
+        },
+        "difficulty": {
+            "easy": "Fácil",
+            "medium": "Medio",
+            "hard": "Difícil",
+            "expert": "Experto"
+        },
+        "courseDifficulty": {
+            "beginner": "Principiante",
+            "intermediate": "Intermedio",
+            "advanced": "Avanzado",
+            "expert": "Experto"
+        },
+        "languages": {
+            "java": "Java",
+            "python": "Python",
+            "cpp": "C++",
+            "javascript": "JavaScript"
+        },
+        "cards": {
+            "edit": "Editar",
+            "delete": "Eliminar",
+            "view": "Ver",
+            "status": "Estado",
+            "published": "Publicado",
+            "draft": "Borrador",
+            "likes": "me gusta",
+            "viewCourse": "Ver curso",
+            "viewGuide": "Ver guía",
+            "editGuide": "Editar guía",
+            "deleteGuide": "Eliminar guía",
+            "editCourse": "Editar curso",
+            "deleteCourse": "Eliminar curso",
+            "createdOn": "Creado el",
+            "like": "me gusta"
+        },
+        "buttons": {
+            "delete": "Eliminar",
+            "deleting": "Eliminando...",
+            "publish": "Publicar",
+            "publishing": "Publicando...",
+            "publishChallenge": "Publicar desafío",
+            "cancel": "Cancelar",
+            "retry": "Reintentar"
+        },
+        "alerts": {
+            "deleteChallenge": {
+                "title": "Eliminar desafío",
+                "description": "¿Estás seguro de que quieres eliminar este desafío? Esta acción no se puede deshacer."
+            },
+            "deleteGuide": {
+                "title": "Eliminar guía",
+                "description": "¿Estás seguro de que quieres eliminar esta guía? Esta acción no se puede deshacer."
+            },
+            "deleteCourse": {
+                "title": "Eliminar curso",
+                "description": "¿Estás seguro de que quieres eliminar este curso? Esta acción no se puede deshacer."
+            }
         },
         "editor": {
             "title": "Editor de código",
@@ -199,6 +264,13 @@
             "failed": "Fallido"
         },
         "messages": {
+            "challengeDeleted": "Desafío eliminado exitosamente",
+            "guideDeleted": "Guía eliminada exitosamente",
+            "courseDeleted": "Curso eliminado exitosamente",
+            "challengePublished": "¡Desafío publicado exitosamente!",
+            "loadingChallenges": "Cargando desafíos...",
+            "errorFetchingChallenges": "Error al obtener desafíos",
+            "challengesUnavailable": "El servicio de desafíos no está disponible temporalmente. Por favor, inténtalo de nuevo.",
             "created": "Desafío creado exitosamente",
             "updated": "Desafío actualizado exitosamente",
             "deleted": "Desafío eliminado exitosamente",
@@ -257,7 +329,24 @@
         "title": "Guías de Aprendizaje",
         "description": "Explora nuestra colección de guías completas para mejorar tus habilidades",
         "notFound": "Guía no encontrada",
-        "authorNotAvailable": "Perfil del autor no disponible"
+        "authorNotAvailable": "Perfil del autor no disponible",
+        "viewer": {
+            "backToOverview": "Volver a la vista general",
+            "previousPage": "Página anterior",
+            "nextPage": "Página siguiente",
+            "pageIndicator": "Página {current} de {total}",
+            "readGuide": "Leer guía",
+            "minRead": "{time} min de lectura",
+            "pageSingular": "página",
+            "pagePlural": "páginas",
+            "likes": "{count} me gusta",
+            "topics": "Temas",
+            "status": {
+                "published": "Publicado",
+                "draft": "Borrador"
+            }
+        },
+        "guidePageCount": "Esta guía tiene {count} {unit}"
     },
     "createChallenge": {
         "title": "Crear Nuevo Desafío",
@@ -375,7 +464,6 @@
             "showing": "Mostrando",
             "to": "a",
             "of": "de",
-            "guides": "guías",
             "perPage": "Por página:"
         }
     },
@@ -407,7 +495,78 @@
         "unauthorized": "Acceso no autorizado",
         "forbidden": "Acceso prohibido",
         "badRequest": "Solicitud incorrecta",
-        "generic": "Algo salió mal"
+        "generic": "Algo salió mal",
+        "loading": {
+            "guide": "Error al cargar la guía. Por favor, inténtalo de nuevo.",
+            "guides": "No pudimos cargar las guías. Por favor, inténtalo de nuevo.",
+            "challenges": "Error al obtener desafíos",
+            "challenge": "Error al cargar el desafío",
+            "profile": "Error al cargar el perfil",
+            "profileData": "Error al cargar los datos del perfil",
+            "codeVersion": "Error al cargar la versión del código",
+            "tests": "Error al cargar las pruebas",
+            "competitiveProfile": "Error al cargar el perfil competitivo"
+        },
+        "creating": {
+            "guide": "Error al crear la guía. Por favor, inténtalo de nuevo.",
+            "challenge": "Error al crear el desafío. Por favor, inténtalo de nuevo.",
+            "codeVersion": "Error al crear la versión del código. Por favor, inténtalo de nuevo.",
+            "post": "Error al crear la publicación",
+            "profile": "Error al crear el perfil"
+        },
+        "updating": {
+            "guide": "Error al actualizar la guía. Por favor, inténtalo de nuevo.",
+            "challenge": "Error al actualizar el desafío. Por favor, inténtalo de nuevo.",
+            "codeVersion": "Error al actualizar la versión del código",
+            "initialCode": "Error al actualizar el código inicial",
+            "profile": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+            "profileService": "Error: No se pudo actualizar el perfil. El servicio de perfiles puede estar no disponible."
+        },
+        "deleting": {
+            "challenge": "Error al eliminar el desafío",
+            "codeVersion": "Error al eliminar la versión del código",
+            "test": "Error al eliminar la prueba"
+        },
+        "saving": {
+            "code": "Error al guardar el código",
+            "basicTest": "Error al guardar la prueba básica",
+            "customTest": "Error al guardar la prueba personalizada",
+            "names": "Algo salió mal. Por favor, inténtalo de nuevo."
+        },
+        "uploading": {
+            "image": "Error al subir la imagen. Por favor, inténtalo de nuevo."
+        },
+        "permissions": {
+            "deleteChallenge": "No tienes permisos para eliminar este desafío.",
+            "accessDenied": "Acceso denegado",
+            "unauthorized": "Acceso no autorizado"
+        },
+        "validation": {
+            "fillAllFields": "Por favor, completa todos los campos",
+            "passwordMismatch": "Las contraseñas no coinciden",
+            "profileNotLoaded": "Perfil no cargado. Por favor, inténtalo de nuevo.",
+            "fileRejected": "Archivo rechazado",
+            "invalidStep": "Paso inválido"
+        },
+        "publishing": {
+            "guide": "Error al publicar la guía. Por favor, inténtalo de nuevo."
+        },
+        "starting": {
+            "challenge": "Error al iniciar el desafío"
+        },
+        "serializing": {
+            "description": "Error al serializar la descripción del desafío"
+        },
+        "dashboard": {
+            "loading": "Error al cargar el panel",
+            "loadingDescription": "No se pudieron cargar los datos del panel de administración. Por favor, inténtalo de nuevo."
+        },
+        "guide": {
+            "notFound": "Guía no encontrada. Por favor, inténtalo de nuevo.",
+            "authorNotAvailable": "Autor no disponible"
+        },
+        "pageNotFound": "El número de página {pageNumber} no existe en esta guía. Esta guía tiene {totalPages} página{pagesPlural}.",
+        "tryAgain": "Por favor, inténtalo de nuevo."
     },
     "landing": {
         "header": {

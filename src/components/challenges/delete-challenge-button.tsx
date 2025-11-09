@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import {
     AlertDialog,
@@ -16,6 +16,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 
@@ -27,6 +28,7 @@ export default function DeleteChallengeButton({
     challengeId,
 }: DeleteChallengeButtonProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
@@ -37,15 +39,22 @@ export default function DeleteChallengeButton({
 
             if (!deleted) {
                 toast.error(
-                    "You don't have permission to delete this challenge.",
+                    dict?.errors?.permissions?.deleteChallenge ||
+                        "You don't have permission to delete this challenge.",
                 );
                 return;
             }
 
-            toast.success("Challenge deleted successfully");
+            toast.success(
+                dict?.challenges?.messages?.challengeDeleted ||
+                    "Challenge deleted successfully",
+            );
             router.push(PATHS.DASHBOARD.ADMINISTRATION.ROOT);
         } catch (error) {
-            toast.error("Failed to delete challenge");
+            toast.error(
+                dict?.errors?.deleting?.challenge ||
+                    "Failed to delete challenge",
+            );
         } finally {
             setIsDeleting(false);
         }
@@ -60,24 +69,35 @@ export default function DeleteChallengeButton({
                     disabled={isDeleting}
                 >
                     <Trash2 className="w-4 h-4 mr-2" />
-                    {isDeleting ? "Deleting..." : "Delete"}
+                    {isDeleting
+                        ? dict?.challenges?.buttons?.deleting || "Deleting..."
+                        : dict?.challenges?.buttons?.delete || "Delete"}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Challenge</AlertDialogTitle>
+                    <AlertDialogTitle>
+                        {dict?.challenges?.alerts?.deleteChallenge?.title ||
+                            "Delete Challenge"}
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to delete this challenge? This
-                        action cannot be undone.
+                        {dict?.challenges?.alerts?.deleteChallenge
+                            ?.description ||
+                            "Are you sure you want to delete this challenge? This action cannot be undone."}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>
+                        {dict?.challenges?.buttons?.cancel || "Cancel"}
+                    </AlertDialogCancel>
                     <AlertDialogAction
                         onClick={handleDelete}
                         disabled={isDeleting}
                     >
-                        {isDeleting ? "Deleting..." : "Delete"}
+                        {isDeleting
+                            ? dict?.challenges?.buttons?.deleting ||
+                              "Deleting..."
+                            : dict?.challenges?.buttons?.delete || "Delete"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

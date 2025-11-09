@@ -32,8 +32,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useDictionary } from "@/hooks/use-dictionary";
 import {
     CHALLENGE_DIFFICULTY_MAX_XP,
     ChallengeDifficulty,
@@ -74,6 +75,7 @@ export default function ChallengeEditing({
     initialCodeVersions,
 }: ChallengeEditingProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const editorRef = useRef<ShadcnTemplateRef>(null);
     const [editorMethods, setEditorMethods] =
         useState<ShadcnTemplateRef | null>(null);
@@ -162,7 +164,10 @@ export default function ChallengeEditing({
             router.refresh();
         } catch (error) {
             console.error("Error updating challenge:", error);
-            toast.error("Failed to update challenge. Please try again.");
+            toast.error(
+                dict?.errors?.updating?.challenge ||
+                    "Failed to update challenge. Please try again.",
+            );
         } finally {
             setIsSaving(false);
         }

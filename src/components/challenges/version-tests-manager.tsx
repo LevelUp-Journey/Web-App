@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/resizable";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
@@ -105,6 +106,7 @@ export default function VersionTestsManager({
     isEditing = false,
 }: VersionTestsManagerProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [tests, setTests] = useState<VersionTest[]>([]);
     const [selectedTest, setSelectedTest] = useState<VersionTest | null>(null);
     const [isCreating, setIsCreating] = useState(false);
@@ -140,7 +142,7 @@ export default function VersionTestsManager({
             setTests(loadedTests);
         } catch (error) {
             console.error("Error loading tests:", error);
-            toast.error("Failed to load tests");
+            toast.error(dict?.errors?.loading?.tests || "Failed to load tests");
         }
     };
 
@@ -168,7 +170,10 @@ export default function VersionTestsManager({
 
     const handleSaveBasic = async () => {
         if (!input.trim() || !expectedOutput.trim()) {
-            toast.error("Input and expected output are required");
+            toast.error(
+                dict?.errors?.validation?.fillAllFields ||
+                    "Input and expected output are required",
+            );
             return;
         }
 
@@ -210,7 +215,9 @@ export default function VersionTestsManager({
             }
         } catch (error) {
             console.error("Error saving basic test:", error);
-            toast.error("Failed to save basic test");
+            toast.error(
+                dict?.errors?.saving?.basicTest || "Failed to save basic test",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -218,7 +225,10 @@ export default function VersionTestsManager({
 
     const handleSaveCustom = async () => {
         if (!customValidationCode.trim()) {
-            toast.error("Custom validation code is required");
+            toast.error(
+                dict?.errors?.validation?.fillAllFields ||
+                    "Custom validation code is required",
+            );
             return;
         }
 
@@ -260,7 +270,10 @@ export default function VersionTestsManager({
             }
         } catch (error) {
             console.error("Error saving custom test:", error);
-            toast.error("Failed to save custom test");
+            toast.error(
+                dict?.errors?.saving?.customTest ||
+                    "Failed to save custom test",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -287,7 +300,9 @@ export default function VersionTestsManager({
             }
         } catch (error) {
             console.error("Error deleting test:", error);
-            toast.error("Failed to delete test");
+            toast.error(
+                dict?.errors?.deleting?.test || "Failed to delete test",
+            );
         }
     };
 

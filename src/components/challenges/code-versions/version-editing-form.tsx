@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
@@ -21,6 +22,7 @@ export default function VersionEditingForm({
     codeVersion,
 }: VersionEditingFormProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [language, setLanguage] = useState(codeVersion.language);
     const [initialCode, setInitialCode] = useState(codeVersion.initialCode);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,7 +48,10 @@ export default function VersionEditingForm({
             );
         } catch (error) {
             console.error("Error updating code version:", error);
-            toast.error("Failed to update code version");
+            toast.error(
+                dict?.errors?.updating?.codeVersion ||
+                    "Failed to update code version",
+            );
         } finally {
             setIsSubmitting(false);
         }

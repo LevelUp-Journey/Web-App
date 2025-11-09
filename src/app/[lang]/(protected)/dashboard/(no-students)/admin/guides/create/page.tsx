@@ -18,7 +18,7 @@ import type { CreateGuideRequest } from "@/services/internal/learning/guides/con
 export default function CreateGuidePage() {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
-    const dict = useDictionary() as any;
+    const dict = useDictionary();
     const [saving, setSaving] = useState(false);
 
     const formSchema = z.object({

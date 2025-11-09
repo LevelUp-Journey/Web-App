@@ -1,5 +1,3 @@
-import { Calendar, Heart } from "lucide-react";
-import Image from "next/image";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { GuideViewer } from "@/components/learning/guide-viewer";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";

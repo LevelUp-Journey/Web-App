@@ -12,7 +12,7 @@ export default async function ProtectedLayout({
     return (
         <SidebarProvider>
             <AppSidebar params={params} />
-            <main className="w-full min-h-screen flex flex-col">
+            <main className="w-full min-h-screen flex flex-col relative">
                 <SidebarContentHeader />
                 <div className="flex-1">{children}</div>
             </main>

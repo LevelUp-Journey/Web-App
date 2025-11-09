@@ -25,7 +25,7 @@ export default function EditGuidePage() {
     const router = useRouter();
     const params = useParams();
     const PATHS = useLocalizedPaths();
-    const dict = useDictionary() as any;
+    const dict = useDictionary();
     const guideId = params.guideId as string;
 
     const formSchema = z.object({
