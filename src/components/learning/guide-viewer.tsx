@@ -74,30 +74,35 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     const handleNextPage = () => {
         if (hasNextPage) {
             const nextPage = currentPageIndex + 2; // +2 porque el índice es 0-based pero la URL es 1-based
-            router.push(`?page=${nextPage}`, { scroll: false });
+            router.push(`?page=${nextPage}`);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
     const handlePreviousPage = () => {
         if (hasPreviousPage) {
             const prevPage = currentPageIndex; // currentPageIndex ya es el anterior en 1-based
-            router.push(`?page=${prevPage}`, { scroll: false });
+            router.push(`?page=${prevPage}`);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
     const handleBackToOverview = () => {
-        router.push(window.location.pathname, { scroll: false });
+        router.push(window.location.pathname);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const handleStartReading = () => {
-        router.push(`?page=1`, { scroll: false });
+        router.push(`?page=1`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const handleGoToPage = (pageIndex: number) => {
         const pageNum = pageIndex + 1; // Convertir índice 0-based a número de página 1-based
         // Validar que la página está en el rango
         if (pageNum >= 1 && pageNum <= storedGuide.pagesCount) {
-            router.push(`?page=${pageNum}`, { scroll: false });
+            router.push(`?page=${pageNum}`);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
