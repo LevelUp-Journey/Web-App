@@ -75,9 +75,8 @@ export default function ChallengeEditing({
 }: ChallengeEditingProps) {
     const router = useRouter();
     const editorRef = useRef<ShadcnTemplateRef>(null);
-    const [editorMethods, setEditorMethods] = useState<ShadcnTemplateRef | null>(
-        null,
-    );
+    const [editorMethods, setEditorMethods] =
+        useState<ShadcnTemplateRef | null>(null);
     const [challengeData, setChallengeData] =
         useState<Challenge>(initialChallenge);
     const [isSaving, setIsSaving] = useState(false);
@@ -90,8 +89,7 @@ export default function ChallengeEditing({
         defaultValues: {
             title: challengeData.name,
             tags: challengeData.tags.map((tag) => tag.name).join(", "),
-            difficulty:
-                challengeData.difficulty ?? ChallengeDifficulty.EASY,
+            difficulty: challengeData.difficulty ?? ChallengeDifficulty.EASY,
             experiencePoints: Math.min(
                 challengeData.experiencePoints,
                 CHALLENGE_DIFFICULTY_MAX_XP[
@@ -108,8 +106,7 @@ export default function ChallengeEditing({
         form.reset({
             title: challengeData.name,
             tags: challengeData.tags.map((tag) => tag.name).join(", "),
-            difficulty:
-                challengeData.difficulty ?? ChallengeDifficulty.EASY,
+            difficulty: challengeData.difficulty ?? ChallengeDifficulty.EASY,
             experiencePoints: Math.min(
                 challengeData.experiencePoints,
                 CHALLENGE_DIFFICULTY_MAX_XP[
@@ -412,25 +409,38 @@ export default function ChallengeEditing({
                                                     <FieldDescription>
                                                         {difficulty} challenges
                                                         can award up to{" "}
-                                                        {maxExperiencePoints} XP.
-                                                        Move the slider to
+                                                        {maxExperiencePoints}{" "}
+                                                        XP. Move the slider to
                                                         adjust the reward.
                                                     </FieldDescription>
                                                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                                                         <span className="font-semibold text-foreground">
-                                                            {field.value ?? 0} XP
+                                                            {field.value ?? 0}{" "}
+                                                            XP
                                                         </span>
                                                         <span>
-                                                            Max {maxExperiencePoints} XP
+                                                            Max{" "}
+                                                            {
+                                                                maxExperiencePoints
+                                                            }{" "}
+                                                            XP
                                                         </span>
                                                     </div>
                                                     <Slider
-                                                        value={[field.value ?? 0]}
+                                                        value={[
+                                                            field.value ?? 0,
+                                                        ]}
                                                         min={0}
-                                                        max={maxExperiencePoints}
+                                                        max={
+                                                            maxExperiencePoints
+                                                        }
                                                         step={1}
-                                                        onValueChange={(value) =>
-                                                            field.onChange(value[0] ?? 0)
+                                                        onValueChange={(
+                                                            value,
+                                                        ) =>
+                                                            field.onChange(
+                                                                value[0] ?? 0,
+                                                            )
                                                         }
                                                         aria-label="Experience points slider"
                                                     />

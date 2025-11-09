@@ -38,7 +38,12 @@ export default function VersionEditingForm({
                 },
             );
             toast.success("Code version updated successfully");
-            router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(challengeId, codeVersion.id));
+            router.push(
+                PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                    challengeId,
+                    codeVersion.id,
+                ),
+            );
         } catch (error) {
             console.error("Error updating code version:", error);
             toast.error("Failed to update code version");

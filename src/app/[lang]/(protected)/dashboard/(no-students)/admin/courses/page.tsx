@@ -126,7 +126,12 @@ export default function AdminCoursesPage() {
                     </EmptyHeader>
                     <EmptyContent>
                         <Button asChild>
-                            <Link href={PATHS.DASHBOARD.ADMINISTRATION.COURSES.CREATE}>
+                            <Link
+                                href={
+                                    PATHS.DASHBOARD.ADMINISTRATION.COURSES
+                                        .CREATE
+                                }
+                            >
                                 Create Course
                             </Link>
                         </Button>

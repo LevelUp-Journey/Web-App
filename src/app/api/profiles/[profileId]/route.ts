@@ -7,9 +7,7 @@ export async function GET(
 ) {
     try {
         const { profileId } = await params;
-        const profile = await ProfileController.getProfileByUserId(
-            profileId,
-        );
+        const profile = await ProfileController.getProfileByUserId(profileId);
 
         return NextResponse.json(profile);
     } catch (error) {

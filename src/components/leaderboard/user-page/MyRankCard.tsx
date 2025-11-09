@@ -99,7 +99,10 @@ export default function MyRankCard() {
                     </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
-                    <Button onClick={() => window.location.reload()} variant="outline">
+                    <Button
+                        onClick={() => window.location.reload()}
+                        variant="outline"
+                    >
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Retry
                     </Button>

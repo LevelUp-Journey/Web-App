@@ -76,14 +76,19 @@ export default function ChallengeCard({
     return (
         <Card
             key={challenge.id}
-            className={cn("hover:shadow-lg transition-shadow flex flex-col", className)}
+            className={cn(
+                "hover:shadow-lg transition-shadow flex flex-col",
+                className,
+            )}
             {...props}
         >
             {/* Badges at the top */}
             <div className="px-3 py-1 pb-0.5">
                 <div className="flex flex-wrap gap-1">
                     <ChallengeDifficultyBadge
-                        difficulty={challenge.difficulty ?? ChallengeDifficulty.EASY}
+                        difficulty={
+                            challenge.difficulty ?? ChallengeDifficulty.EASY
+                        }
                     />
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
@@ -104,14 +109,25 @@ export default function ChallengeCard({
             {/* Stars at the bottom */}
             <div className="px-3 py-1 pt-0.5 flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                    <Button
+                        size={"sm"}
+                        variant={"ghost"}
+                        className="h-6 w-6 p-0"
+                    >
                         <Star className="text-yellow-400" size={14} />
                     </Button>
                     <span className="text-xs">{challenge.stars.length}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0" asChild>
-                        <Link href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}>
+                    <Button
+                        size={"sm"}
+                        variant={"ghost"}
+                        className="h-6 w-6 p-0"
+                        asChild
+                    >
+                        <Link
+                            href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}
+                        >
                             <ChevronRight size={14} />
                         </Link>
                     </Button>
@@ -119,7 +135,11 @@ export default function ChallengeCard({
                         <>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                                    <Button
+                                        size={"sm"}
+                                        variant={"ghost"}
+                                        className="h-6 w-6 p-0"
+                                    >
                                         <EllipsisVertical size={14} />
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -134,7 +154,9 @@ export default function ChallengeCard({
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
-                                        onClick={() => setShowDeleteDialog(true)}
+                                        onClick={() =>
+                                            setShowDeleteDialog(true)
+                                        }
                                         className="text-destructive focus:text-destructive cursor-pointer"
                                     >
                                         Delete Challenge
@@ -142,23 +164,35 @@ export default function ChallengeCard({
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
-                            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                            <AlertDialog
+                                open={showDeleteDialog}
+                                onOpenChange={setShowDeleteDialog}
+                            >
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Delete Challenge</AlertDialogTitle>
+                                        <AlertDialogTitle>
+                                            Delete Challenge
+                                        </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Are you sure you want to delete "{challenge.name}"? This
-                                            action cannot be undone.
+                                            Are you sure you want to delete "
+                                            {challenge.name}"? This action
+                                            cannot be undone.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel
+                                            disabled={isDeleting}
+                                        >
+                                            Cancel
+                                        </AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={handleDelete}
                                             disabled={isDeleting}
                                             className="bg-destructive hover:bg-destructive/90"
                                         >
-                                            {isDeleting ? "Deleting..." : "Delete"}
+                                            {isDeleting
+                                                ? "Deleting..."
+                                                : "Delete"}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

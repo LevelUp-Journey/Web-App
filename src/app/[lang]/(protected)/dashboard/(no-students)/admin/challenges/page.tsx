@@ -92,7 +92,9 @@ export default async function AdminChallengesPage({
                         <ChallengeCard
                             key={challenge.id}
                             challenge={challenge}
-                            codeVersions={codeVersionsMap.get(challenge.id) || []}
+                            codeVersions={
+                                codeVersionsMap.get(challenge.id) || []
+                            }
                             adminMode={true}
                             className="w-full"
                         />

@@ -70,10 +70,9 @@ export function useCommunityData(communityId: string) {
                             );
                         return {
                             authorId,
-                            profile:
-                                profile ?? {
-                                    username: "Unknown User",
-                                },
+                            profile: profile ?? {
+                                username: "Unknown User",
+                            },
                         };
                     } catch (error) {
                         console.error(
@@ -96,10 +95,9 @@ export function useCommunityData(communityId: string) {
                 const postsWithDetails: PostWithDetails[] = communityPosts.map(
                     (post) => ({
                         ...post,
-                        authorProfile:
-                            profileMap.get(post.authorId) ?? {
-                                username: "Unknown User",
-                            },
+                        authorProfile: profileMap.get(post.authorId) ?? {
+                            username: "Unknown User",
+                        },
                         community: communityData,
                     }),
                 );

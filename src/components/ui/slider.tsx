@@ -44,7 +44,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         );
 
         const currentValue = clamp(
-            controlledValue ? controlledValue[0] ?? min : uncontrolledValue,
+            controlledValue ? (controlledValue[0] ?? min) : uncontrolledValue,
             min,
             max,
         );

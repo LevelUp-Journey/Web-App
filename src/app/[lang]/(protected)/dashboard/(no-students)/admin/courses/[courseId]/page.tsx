@@ -209,7 +209,7 @@ export default async function AdminViewCoursePage({
                                             key={guide.id}
                                             className="flex items-start gap-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
                                         >
-                                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+                                            <div className="shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
                                                 {index + 1}
                                             </div>
                                             {guide.coverImage && (

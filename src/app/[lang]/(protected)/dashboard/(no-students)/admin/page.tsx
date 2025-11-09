@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
 import ChallengeCard from "@/components/cards/challenge-card";
-import CourseCard from "@/components/cards/course-card";
 import GuideCard from "@/components/cards/guide-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,14 +15,14 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { CourseController } from "@/services/internal/learning/courses/controller/course.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
+import type { Guide } from "@/services/internal/learning/guides/domain/guide.entity";
 
 export default function AdminPage() {
-    const [challenges, setChallenges] = useState<any[]>([]);
-    const [guides, setGuides] = useState<any[]>([]);
-    const [courses, setCourses] = useState<any[]>([]);
+    const [challenges, setChallenges] = useState<Challenge[]>([]);
+    const [guides, setGuides] = useState<Guide[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -34,15 +33,13 @@ export default function AdminPage() {
 
             const userId = await AuthController.getUserId();
 
-            const [challengesData, guidesData, coursesData] = await Promise.all([
+            const [challengesData, guidesData] = await Promise.all([
                 ChallengeController.getChallengesByTeacherId(userId),
                 GuideController.getAllGuides(),
-                CourseController.getCourses(),
             ]);
 
             setChallenges(challengesData);
             setGuides(guidesData);
-            setCourses(coursesData);
         } catch (err) {
             setError(true);
         } finally {
@@ -102,7 +99,6 @@ export default function AdminPage() {
 
     const sortedChallenges = sortByUpdated([...challenges]);
     const sortedGuides = sortByUpdated([...guides]);
-    const sortedCourses = sortByUpdated([...courses]);
 
     return (
         <div className="space-y-8">
@@ -119,10 +115,10 @@ export default function AdminPage() {
                     </p>
                 ) : (
                     <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400">
-                        {sortedChallenges.map((challenge: any) => (
+                        {sortedChallenges.map((challenge) => (
                             <div
                                 key={challenge.id}
-                                className="min-w-[340px] flex-shrink-0"
+                                className="min-w-[340px] shrink-0"
                             >
                                 <ChallengeCard
                                     challenge={challenge}
@@ -144,33 +140,12 @@ export default function AdminPage() {
                     </p>
                 ) : (
                     <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400">
-                        {sortedGuides.map((guide: any) => (
+                        {sortedGuides.map((guide) => (
                             <div
                                 key={guide.id}
-                                className="min-w-[340px] flex-shrink-0"
+                                className="min-w-[340px] shrink-0"
                             >
                                 <GuideCard guide={guide} adminMode={true} />
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            {/* Courses Row */}
-            <section className="space-y-3">
-                <h3 className="text-lg font-semibold">Courses</h3>
-                {sortedCourses.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
-                        No courses found.
-                    </p>
-                ) : (
-                    <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400">
-                        {sortedCourses.map((course: any) => (
-                            <div
-                                key={course.id}
-                                className="min-w-[340px] flex-shrink-0"
-                            >
-                                <CourseCard course={course} adminMode={true} />
                             </div>
                         ))}
                     </div>

@@ -24,14 +24,9 @@ export default async function AdminLayout({
             label: "Challenges",
             href: PATHS.DASHBOARD.ADMINISTRATION.CHALLENGES.ROOT,
         },
-        { label: "Courses", href: PATHS.DASHBOARD.ADMINISTRATION.COURSES.ROOT },
         {
             label: "Guides",
             href: PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
-        },
-        {
-            label: "Communities",
-            href: PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
         },
     ];
 

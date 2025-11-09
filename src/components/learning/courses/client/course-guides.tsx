@@ -36,7 +36,7 @@ export function CourseGuides({
         <div className="space-y-4">
             {course.guides.map((guide, index) => (
                 <div key={guide.id} className="flex gap-3 items-start group">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary mt-2">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary mt-2">
                         {index + 1}
                     </div>
                     <Link
@@ -49,7 +49,7 @@ export function CourseGuides({
                         <div className="p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
                             <div className="flex items-start gap-4">
                                 {guide.coverImage && (
-                                    <div className="relative w-20 h-20 rounded-md overflow-hidden flex-shrink-0">
+                                    <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0">
                                         <Image
                                             src={guide.coverImage}
                                             alt={guide.title}
