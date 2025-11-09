@@ -1,4 +1,7 @@
+"use client";
+
 import type React from "react";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { cn } from "@/lib/utils"; // si no tienes esta función, te explico cómo hacerla abajo
 import { CourseDifficulty } from "@/services/internal/learning/courses/domain/course.entity";
 
@@ -8,14 +11,6 @@ interface CourseDifficultyBadgeProps {
 }
 
 const DEFAULT_COLOR = "bg-muted text-muted-foreground";
-
-// Mapping de etiquetas legibles
-const DIFFICULTY_NAMES: Record<CourseDifficulty, string> = {
-    [CourseDifficulty.BEGINNER]: "Beginner",
-    [CourseDifficulty.INTERMEDIATE]: "Intermediate",
-    [CourseDifficulty.ADVANCED]: "Advanced",
-    [CourseDifficulty.EXPERT]: "Expert",
-};
 
 // Colores por nivel de dificultad (modo claro / oscuro)
 const COLOR_SCHEMES: Record<
@@ -51,8 +46,15 @@ const CourseDifficultyBadge: React.FC<CourseDifficultyBadgeProps> = ({
     difficulty,
     selected = false,
 }) => {
+    const dict = useDictionary();
     const scheme = COLOR_SCHEMES[difficulty];
-    const displayName = DIFFICULTY_NAMES[difficulty];
+
+    // Get difficulty name from dictionary
+    const difficultyKey =
+        difficulty.toLowerCase() as keyof typeof dict.challenges.courseDifficulty;
+    const displayName =
+        dict?.challenges?.courseDifficulty?.[difficultyKey] || difficulty;
+
     const classes = selected
         ? scheme.selected
         : `${scheme.default} ${scheme.hover}`;

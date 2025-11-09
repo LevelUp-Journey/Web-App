@@ -17,6 +17,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
@@ -35,6 +36,7 @@ export default function CodeVersionsList({
     isTeacher = false,
 }: CodeVersionsListProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const handleDelete = async (codeVersionId: string) => {
@@ -48,7 +50,10 @@ export default function CodeVersionsList({
             router.refresh();
         } catch (error) {
             console.error("Error deleting code version:", error);
-            toast.error("Failed to delete code version");
+            toast.error(
+                dict?.errors?.deleting?.codeVersion ||
+                    "Failed to delete code version",
+            );
         } finally {
             setDeletingId(null);
         }

@@ -13,6 +13,7 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
@@ -25,6 +26,7 @@ interface ChallengesPageSectionProps {
 export function ChallengesPageSection({
     onCountChange,
 }: ChallengesPageSectionProps = {}) {
+    const dict = useDictionary();
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [codeVersionsMap, setCodeVersionsMap] = useState<
         Map<string, CodeVersion[]>
@@ -88,7 +90,10 @@ export function ChallengesPageSection({
         return (
             <div className="flex flex-col items-center justify-center py-16">
                 <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">Loading challenges...</p>
+                <p className="text-muted-foreground">
+                    {dict?.challenges?.messages?.loadingChallenges ||
+                        "Loading challenges..."}
+                </p>
             </div>
         );
     }
@@ -100,16 +105,19 @@ export function ChallengesPageSection({
                     <EmptyMedia variant="icon">
                         <AlertCircle />
                     </EmptyMedia>
-                    <EmptyTitle>Error fetching challenges</EmptyTitle>
+                    <EmptyTitle>
+                        {dict?.challenges?.messages?.errorFetchingChallenges ||
+                            "Error fetching challenges"}
+                    </EmptyTitle>
                     <EmptyDescription>
-                        The challenge service is temporarily unavailable. Please
-                        try again.
+                        {dict?.challenges?.messages?.challengesUnavailable ||
+                            "The challenge service is temporarily unavailable. Please try again."}
                     </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
                     <Button onClick={loadChallenges} variant="outline">
                         <RefreshCw className="mr-2 h-4 w-4" />
-                        Retry
+                        {dict?.challenges?.buttons?.retry || "Retry"}
                     </Button>
                 </EmptyContent>
             </Empty>

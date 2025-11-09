@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { cn } from "@/lib/utils";
 import { CloudinaryController } from "@/services/external/cloudinary/cloudinary.controller";
 
@@ -23,6 +24,7 @@ export function AvatarDropzone({
     disabled = false,
     className,
 }: AvatarDropzoneProps) {
+    const dict = useDictionary();
     const [isDragActive, setIsDragActive] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | null>(
@@ -44,7 +46,10 @@ export function AvatarDropzone({
                 toast.success("Image uploaded successfully!");
             } catch (error) {
                 console.error("Cloudinary upload error:", error);
-                toast.error("Failed to upload image. Please try again.");
+                toast.error(
+                    dict?.errors?.uploading?.image ||
+                        "Failed to upload image. Please try again.",
+                );
             } finally {
                 setIsUploading(false);
             }
@@ -60,7 +65,11 @@ export function AvatarDropzone({
         ) => {
             if (fileRejections.length > 0) {
                 const message = fileRejections.at(0)?.errors.at(0)?.message;
-                toast.error(message || "File rejected");
+                toast.error(
+                    message ||
+                        dict?.errors?.validation?.fileRejected ||
+                        "File rejected",
+                );
                 setIsDragActive(false);
                 return;
             }

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import type { Dictionary } from "@/lib/i18n";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
@@ -30,6 +31,7 @@ interface SignUpStep3Props {
 export default function SignUpStep3({ dict }: SignUpStep3Props) {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
+    const errorDict = useDictionary();
 
     const [userProfile, setUserProfile] = useState<ProfileResponse | null>(
         null,
@@ -121,7 +123,10 @@ export default function SignUpStep3({ dict }: SignUpStep3Props) {
 
     const onProfileUpdate = async (data: FormData) => {
         if (!userProfile) {
-            toast.error("Profile not loaded. Please try again.");
+            toast.error(
+                dict?.auth.signUp.step3.profileNotLoaded ||
+                    "Profile not loaded. Please try again.",
+            );
             return;
         }
 

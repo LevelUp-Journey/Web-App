@@ -17,6 +17,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 import type { Course } from "@/services/internal/learning/courses/domain/course.entity";
@@ -33,6 +34,7 @@ export default function CourseCard({
     className,
     ...props
 }: CourseCardProps) {
+    const dict = useDictionary();
     const formattedDate = new Date(course.createdAt).toLocaleDateString(
         "en-US",
         {
@@ -91,7 +93,8 @@ export default function CourseCard({
                         <Button size="icon" variant="ghost">
                             <Star className="text-yellow-400" size={18} />
                         </Button>
-                        {course.likesCount}
+                        {course.likesCount}{" "}
+                        {dict?.challenges?.cards?.likes || "likes"}
                     </div>
 
                     {adminMode && (
@@ -104,11 +107,13 @@ export default function CourseCard({
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem asChild>
                                     <Link href={courseEditPath}>
-                                        Edit Course
+                                        {dict?.challenges?.cards?.editCourse ||
+                                            "Edit Course"}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    Delete Course
+                                    {dict?.challenges?.cards?.deleteCourse ||
+                                        "Delete Course"}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -123,7 +128,9 @@ export default function CourseCard({
                 <div className="space-y-2 mt-3 text-sm text-muted-foreground">
                     {adminMode && (
                         <div className="flex justify-between">
-                            <span>Status:</span>
+                            <span>
+                                {dict?.challenges?.cards?.status || "Status"}:
+                            </span>
                             <span
                                 className={cn(
                                     "px-2 py-1 rounded text-xs font-medium",
@@ -134,7 +141,13 @@ export default function CourseCard({
                                           : "bg-blue-100 text-blue-800",
                                 )}
                             >
-                                {course.status}
+                                {course.status === "PUBLISHED"
+                                    ? dict?.challenges?.cards?.published ||
+                                      "Published"
+                                    : course.status === "DRAFT"
+                                      ? dict?.challenges?.cards?.draft ||
+                                        "Draft"
+                                      : course.status}
                             </span>
                         </div>
                     )}
@@ -148,7 +161,10 @@ export default function CourseCard({
                     </div>
 
                     <Button asChild className="w-full mt-3">
-                        <Link href={courseViewPath}>View Course</Link>
+                        <Link href={courseViewPath}>
+                            {dict?.challenges?.cards?.viewCourse ||
+                                "View Course"}
+                        </Link>
                     </Button>
                 </div>
             </CardContent>

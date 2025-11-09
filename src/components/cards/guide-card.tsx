@@ -11,6 +11,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 import type { Guide } from "@/services/internal/learning/guides/domain/guide.entity";
@@ -26,6 +27,7 @@ export default function GuideCard({
     className,
     ...props
 }: GuideCardProps) {
+    const dict = useDictionary();
     const formattedDate = new Date(guide.createdAt).toLocaleDateString(
         "en-US",
         {
@@ -80,7 +82,8 @@ export default function GuideCard({
                         <Button size="icon" variant="ghost">
                             <Heart className="text-red-400" size={18} />
                         </Button>
-                        {guide.likesCount}
+                        {guide.likesCount}{" "}
+                        {dict?.challenges?.cards?.likes || "likes"}
                     </div>
                     {adminMode && (
                         <DropdownMenu>
@@ -96,11 +99,13 @@ export default function GuideCard({
                                             guide.id,
                                         )}
                                     >
-                                        Edit Guide
+                                        {dict?.challenges?.cards?.editGuide ||
+                                            "Edit Guide"}
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    Delete Guide
+                                    {dict?.challenges?.cards?.deleteGuide ||
+                                        "Delete Guide"}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -112,7 +117,9 @@ export default function GuideCard({
                 <div className="space-y-2 text-sm text-muted-foreground">
                     {adminMode && (
                         <div className="flex justify-between">
-                            <span>Status:</span>
+                            <span>
+                                {dict?.challenges?.cards?.status || "Status"}:
+                            </span>
                             <span
                                 className={cn(
                                     "px-2 py-1 rounded text-xs font-medium",
@@ -123,7 +130,13 @@ export default function GuideCard({
                                           : "bg-blue-100 text-blue-800",
                                 )}
                             >
-                                {guide.status}
+                                {guide.status === "PUBLISHED"
+                                    ? dict?.challenges?.cards?.published ||
+                                      "Published"
+                                    : guide.status === "DRAFT"
+                                      ? dict?.challenges?.cards?.draft ||
+                                        "Draft"
+                                      : guide.status}
                             </span>
                         </div>
                     )}

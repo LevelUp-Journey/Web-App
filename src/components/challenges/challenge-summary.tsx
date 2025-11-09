@@ -3,9 +3,9 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { SerializeResult } from "next-mdx-remote-client/csr";
 import { useState } from "react";
 import { toast } from "sonner";
-import type { SerializeResult } from "next-mdx-remote-client/csr";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
 import CodeVersionsList from "@/components/challenges/code-versions-list";
@@ -13,6 +13,7 @@ import MdxRenderer from "@/components/challenges/mdx-renderer";
 import PublishButton from "@/components/challenges/publish-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDictionary } from "@/hooks/use-dictionary";
 import {
     ChallengeDifficulty,
     ChallengeStatus,
@@ -36,6 +37,7 @@ export default function ChallengeSummary({
     isTeacher,
 }: ChallengeSummaryProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [isStarting, setIsStarting] = useState(false);
 
     const handleStartChallenge = async () => {
@@ -52,7 +54,10 @@ export default function ChallengeSummary({
             );
         } catch (error) {
             console.error("Error starting challenge:", error);
-            toast.error("Failed to start challenge");
+            toast.error(
+                dict?.errors?.starting?.challenge ||
+                    "Failed to start challenge",
+            );
         } finally {
             setIsStarting(false);
         }

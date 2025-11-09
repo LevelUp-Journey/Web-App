@@ -1,6 +1,9 @@
+"use client";
+
 import type React from "react";
-import { cn } from "@/lib/utils";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ChallengeDifficulty } from "@/lib/consts";
+import { cn } from "@/lib/utils";
 
 interface ChallengeDifficultyBadgeProps {
     difficulty?: ChallengeDifficulty;
@@ -8,14 +11,6 @@ interface ChallengeDifficultyBadgeProps {
 }
 
 const DEFAULT_COLOR = "bg-muted text-muted-foreground";
-
-// Mapping de etiquetas legibles
-const DIFFICULTY_NAMES: Record<ChallengeDifficulty, string> = {
-    [ChallengeDifficulty.EASY]: "Easy",
-    [ChallengeDifficulty.MEDIUM]: "Medium",
-    [ChallengeDifficulty.HARD]: "Hard",
-    [ChallengeDifficulty.EXPERT]: "Expert",
-};
 
 // Colores por nivel de dificultad (modo claro / oscuro)
 const COLOR_SCHEMES: Record<
@@ -48,9 +43,16 @@ const ChallengeDifficultyBadge: React.FC<ChallengeDifficultyBadgeProps> = ({
     difficulty,
     selected = false,
 }) => {
+    const dict = useDictionary();
     const safeDifficulty = difficulty ?? ChallengeDifficulty.EASY;
     const scheme = COLOR_SCHEMES[safeDifficulty];
-    const displayName = DIFFICULTY_NAMES[safeDifficulty];
+
+    // Get difficulty name from dictionary
+    const difficultyKey =
+        safeDifficulty.toLowerCase() as keyof typeof dict.challenges.difficulty;
+    const displayName =
+        dict?.challenges?.difficulty?.[difficultyKey] || safeDifficulty;
+
     const classes = selected
         ? scheme.selected
         : `${scheme.default} ${scheme.hover}`;

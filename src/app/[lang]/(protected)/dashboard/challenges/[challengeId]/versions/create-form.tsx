@@ -11,6 +11,7 @@ import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
 import { Java } from "@/components/ui/svgs/java";
 import { Javascript } from "@/components/ui/svgs/javascript";
 import { Python } from "@/components/ui/svgs/python";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { getReadableLanguageName, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
@@ -89,6 +90,7 @@ type Step = "select" | "edit";
 export default function CreateCodeVersionForm({
     challengeId,
 }: CreateCodeVersionFormProps) {
+    const dict = useDictionary();
     const [step, setStep] = useState<Step>("select");
     const [selectedLanguage, setSelectedLanguage] =
         useState<ProgrammingLanguage | null>(null);
@@ -123,7 +125,10 @@ export default function CreateCodeVersionForm({
 
     const handleSubmit = async () => {
         if (!selectedLanguage || !functionName.trim() || !code.trim()) {
-            toast.error("Please fill in all fields");
+            toast.error(
+                dict?.errors?.validation?.fillAllFields ||
+                    "Please fill in all fields",
+            );
             return;
         }
 
@@ -142,20 +147,23 @@ export default function CreateCodeVersionForm({
             );
         } catch (error) {
             console.error("Error creating code version:", error);
-            toast.error("Failed to create code version. Please try again.");
+            toast.error(
+                dict?.errors?.creating?.codeVersion ||
+                    "Failed to create code version. Please try again.",
+            );
         }
     };
 
     if (step === "select") {
         return (
             <div className="container mx-auto p-4 max-w-4xl">
-                <h1 className="text-2xl font-semibold mb-2">
-                    Choose Programming Language for Code Version
+                <h1 className="text-2xl font-semibold">
+                    {dict?.challenges?.codeVersions?.createForm?.title ||
+                        "Choose Programming Language for Code Version"}
                 </h1>
                 <p className="text-muted-foreground mb-6">
-                    Select the programming language in which students will
-                    implement their solution for this challenge. You can add
-                    multiple code versions in different languages.
+                    {dict?.challenges?.codeVersions?.createForm?.description ||
+                        "Select the programming language in which students will implement their solution for this challenge. You can add multiple code versions in different languages."}
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                     {Object.values(ProgrammingLanguage).map((language) => {
@@ -169,7 +177,9 @@ export default function CreateCodeVersionForm({
                             >
                                 <IconComponent className="w-8 h-8" />
                                 <span className="text-sm font-medium">
-                                    {getReadableLanguageName(language)}
+                                    {dict?.challenges?.languages?.[
+                                        language.toLowerCase()
+                                    ] || getReadableLanguageName(language)}
                                 </span>
                             </Button>
                         );
@@ -183,11 +193,21 @@ export default function CreateCodeVersionForm({
         <section className="h-screen flex flex-col container mx-auto p-4 max-w-full">
             <header className="shrink-0 p-4 border-b flex items-center gap-4">
                 <Button variant="outline" onClick={handleBack}>
-                    Back
+                    {dict?.challenges?.codeVersions?.createForm?.back || "Back"}
                 </Button>
                 <h1 className="text-2xl font-semibold">
-                    Create Code Version -{" "}
-                    {getReadableLanguageName(selectedLanguage!)}
+                    {(() => {
+                        const langName =
+                            dict?.challenges?.languages?.[
+                                selectedLanguage!.toLowerCase()
+                            ] || getReadableLanguageName(selectedLanguage!);
+                        return (
+                            dict?.challenges?.codeVersions?.createForm?.createTitle?.replace(
+                                "{language}",
+                                langName,
+                            ) || `Create Code Version - ${langName}`
+                        );
+                    })()}
                 </h1>
             </header>
 
@@ -195,29 +215,41 @@ export default function CreateCodeVersionForm({
                 <div className="w-80 shrink-0 border-r p-4 flex flex-col gap-4">
                     <Field>
                         <FieldLabel htmlFor="functionName">
-                            Function Name
+                            {dict?.challenges?.codeVersions?.createForm
+                                ?.functionNameLabel || "Function Name"}
                         </FieldLabel>
                         <Input
                             id="functionName"
                             value={functionName}
                             onChange={(e) => setFunctionName(e.target.value)}
-                            placeholder="Enter function name"
+                            placeholder={
+                                dict?.challenges?.codeVersions?.createForm
+                                    ?.functionNamePlaceholder ||
+                                "Enter function name"
+                            }
                             autoComplete="off"
                         />
                         <FieldDescription>
-                            The name of the function to implement (automatically
-                            detected from code).
+                            {dict?.challenges?.codeVersions?.createForm
+                                ?.functionNameDescription ||
+                                "The name of the function to implement (automatically detected from code)."}
                         </FieldDescription>
                     </Field>
                     <Button onClick={handleSubmit} className="w-full">
-                        Create Code Version
+                        {dict?.challenges?.codeVersions?.createForm
+                            ?.createButton || "Create Code Version"}
                     </Button>
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden">
                     <div className="p-4 border-b shrink-0">
-                        <h2 className="text-lg font-semibold">Code Template</h2>
+                        <h2 className="text-lg font-semibold">
+                            {dict?.challenges?.codeVersions?.createForm
+                                ?.codeTemplateTitle || "Code Template"}
+                        </h2>
                         <p className="text-sm text-muted-foreground">
-                            Modify the code template as needed.
+                            {dict?.challenges?.codeVersions?.createForm
+                                ?.codeTemplateDescription ||
+                                "Modify the code template as needed."}
                         </p>
                     </div>
                     <div className="flex-1 overflow-hidden p-4">

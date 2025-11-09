@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useGuide } from "@/hooks/use-guide";
 import { mdxOptions } from "@/lib/mdx-config";
 import { cn } from "@/lib/utils";
@@ -35,6 +36,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pageParam = searchParams.get("page");
+    const dict = useDictionary();
 
     // Usar hook personalizado para manejar el guide
     const { guide: storedGuide, author: storedAuthor } = useGuide({
@@ -113,19 +115,41 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                 <div className="text-center space-y-4">
                     <div>
                         <h2 className="text-2xl font-bold mb-2">
-                            Page Not Found
+                            {dict?.errors?.notFound || "Page Not Found"}
                         </h2>
                         <p className="text-muted-foreground">
-                            The page number {pageNumber} does not exist in this
-                            guide.
+                            {dict?.errors?.pageNotFound
+                                ?.replace("{pageNumber}", pageNumber.toString())
+                                ?.replace(
+                                    "{totalPages}",
+                                    storedGuide.pagesCount.toString(),
+                                )
+                                ?.replace(
+                                    "{pagesPlural}",
+                                    storedGuide.pagesCount !== 1 ? "s" : "",
+                                ) ||
+                                `The page number ${pageNumber} does not exist in this guide. This guide has ${storedGuide.pagesCount} page${storedGuide.pagesCount !== 1 ? "s" : ""}.`}
                         </p>
                         <p className="text-sm text-muted-foreground mt-1">
-                            This guide has {storedGuide.pagesCount} page
-                            {storedGuide.pagesCount !== 1 ? "s" : ""}.
+                            {dict?.guides?.guidePageCount
+                                ?.replace(
+                                    "{count}",
+                                    storedGuide.pagesCount.toString(),
+                                )
+                                ?.replace(
+                                    "{unit}",
+                                    storedGuide.pagesCount !== 1
+                                        ? dict?.guides?.viewer?.pagePlural ||
+                                              "pages"
+                                        : dict?.guides?.viewer?.pageSingular ||
+                                              "page",
+                                ) ||
+                                `This guide has ${storedGuide.pagesCount} page${storedGuide.pagesCount !== 1 ? "s" : ""}.`}
                         </p>
                     </div>
                     <Button onClick={handleBackToOverview}>
-                        Back to Overview
+                        {dict?.guides?.viewer?.backToOverview ||
+                            "Back to Overview"}
                     </Button>
                 </div>
             </div>
@@ -146,11 +170,20 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                                 className="flex items-center gap-2"
                             >
                                 <ArrowLeft className="h-4 w-4" />
-                                Back to Overview
+                                {dict?.guides?.viewer?.backToOverview ||
+                                    "Back to Overview"}
                             </Button>
                             <div className="text-sm text-muted-foreground">
-                                Page {currentPageIndex + 1} of{" "}
-                                {storedGuide.pagesCount}
+                                {dict?.guides?.viewer?.pageIndicator
+                                    ?.replace(
+                                        "{current}",
+                                        (currentPageIndex + 1).toString(),
+                                    )
+                                    ?.replace(
+                                        "{total}",
+                                        storedGuide.pagesCount.toString(),
+                                    ) ||
+                                    `Page ${currentPageIndex + 1} of ${storedGuide.pagesCount}`}
                             </div>
                         </div>
                     </div>
@@ -171,7 +204,8 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             className="flex items-center gap-2"
                         >
                             <ChevronLeft className="h-4 w-4" />
-                            Previous Page
+                            {dict?.guides?.viewer?.previousPage ||
+                                "Previous Page"}
                         </Button>
 
                         <div className="flex items-center gap-2">
@@ -200,7 +234,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             disabled={!hasNextPage}
                             className="flex items-center gap-2"
                         >
-                            Next Page
+                            {dict?.guides?.viewer?.nextPage || "Next Page"}
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>
@@ -245,12 +279,19 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             }
                             className="text-xs uppercase tracking-wider"
                         >
-                            {storedGuide.status}
+                            {dict?.guides?.viewer?.status?.[
+                                storedGuide.status.toLowerCase()
+                            ] || storedGuide.status}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                            {totalReadingTime} min read •{" "}
-                            {storedGuide.pagesCount} page
-                            {storedGuide.pagesCount !== 1 ? "s" : ""}
+                            {dict?.guides?.viewer?.minRead?.replace(
+                                "{time}",
+                                totalReadingTime.toString(),
+                            ) || `${totalReadingTime} min read`}{" "}
+                            • {storedGuide.pagesCount}{" "}
+                            {storedGuide.pagesCount !== 1
+                                ? dict?.guides?.viewer?.pagePlural || "pages"
+                                : dict?.guides?.viewer?.pageSingular || "page"}
                         </span>
                     </div>
 
@@ -297,7 +338,12 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         {/* Likes */}
                         <div className="flex items-center gap-1.5">
                             <Heart className="h-4 w-4" />
-                            <span>{storedGuide.likesCount} likes</span>
+                            <span>
+                                {dict?.guides?.viewer?.likes?.replace(
+                                    "{count}",
+                                    storedGuide.likesCount.toString(),
+                                ) || `${storedGuide.likesCount} likes`}
+                            </span>
                         </div>
                     </div>
 
@@ -313,8 +359,15 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                                 className="flex items-center gap-2"
                             >
                                 <BookOpen className="h-4 w-4" />
-                                Read Guide ({storedGuide.pagesCount} page
-                                {storedGuide.pagesCount !== 1 ? "s" : ""})
+                                {(() => {
+                                    const unit =
+                                        storedGuide.pagesCount !== 1
+                                            ? dict?.guides?.viewer
+                                                  ?.pagePlural || "pages"
+                                            : dict?.guides?.viewer
+                                                  ?.pageSingular || "page";
+                                    return `${dict?.guides?.viewer?.readGuide || "Read Guide"} (${storedGuide.pagesCount} ${unit})`;
+                                })()}
                             </Button>
                         )}
                     </div>
@@ -325,7 +378,9 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                 {/* Topics */}
                 {storedGuide.topics && storedGuide.topics.length > 0 && (
                     <div className="mb-8">
-                        <h2 className="text-lg font-semibold mb-4">Topics</h2>
+                        <h2 className="text-lg font-semibold mb-4">
+                            {dict?.guides?.viewer?.topics || "Topics"}
+                        </h2>
                         <div className="flex flex-wrap gap-2">
                             {storedGuide.topics.map((topic) => (
                                 <Badge key={topic.id} variant="outline">

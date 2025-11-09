@@ -169,11 +169,6 @@
             "published": "Published",
             "archived": "Archived"
         },
-        "difficulty": {
-            "easy": "Easy",
-            "medium": "Medium",
-            "hard": "Hard"
-        },
         "codeVersions": {
             "title": "Code Versions",
             "create": "Add Code Version",
@@ -182,7 +177,77 @@
             "language": "Language",
             "initialCode": "Initial Code",
             "functionName": "Function Name",
-            "testCases": "Test Cases"
+            "testCases": "Test Cases",
+            "createForm": {
+                "title": "Choose Programming Language for Code Version",
+                "description": "Select the programming language in which students will implement their solution for this challenge. You can add multiple code versions in different languages.",
+                "back": "Back",
+                "createTitle": "Create Code Version - {language}",
+                "functionNameLabel": "Function Name",
+                "functionNamePlaceholder": "Enter function name",
+                "functionNameDescription": "The name of the function to implement (automatically detected from code).",
+                "createButton": "Create Code Version",
+                "codeTemplateTitle": "Code Template",
+                "codeTemplateDescription": "Modify the code template as needed."
+            }
+        },
+        "difficulty": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard",
+            "expert": "Expert"
+        },
+        "courseDifficulty": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "advanced": "Advanced",
+            "expert": "Expert"
+        },
+        "languages": {
+            "java": "Java",
+            "python": "Python",
+            "cpp": "C++",
+            "javascript": "JavaScript"
+        },
+        "cards": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "view": "View",
+            "status": "Status",
+            "published": "Published",
+            "draft": "Draft",
+            "likes": "likes",
+            "viewCourse": "View Course",
+            "viewGuide": "View Guide",
+            "editGuide": "Edit Guide",
+            "deleteGuide": "Delete Guide",
+            "editCourse": "Edit Course",
+            "deleteCourse": "Delete Course",
+            "createdOn": "Created on",
+            "like": "like"
+        },
+        "buttons": {
+            "delete": "Delete",
+            "deleting": "Deleting...",
+            "publish": "Publish",
+            "publishing": "Publishing...",
+            "publishChallenge": "Publish Challenge",
+            "cancel": "Cancel",
+            "retry": "Retry"
+        },
+        "alerts": {
+            "deleteChallenge": {
+                "title": "Delete Challenge",
+                "description": "Are you sure you want to delete this challenge? This action cannot be undone."
+            },
+            "deleteGuide": {
+                "title": "Delete Guide",
+                "description": "Are you sure you want to delete this guide? This action cannot be undone."
+            },
+            "deleteCourse": {
+                "title": "Delete Course",
+                "description": "Are you sure you want to delete this course? This action cannot be undone."
+            }
         },
         "editor": {
             "title": "Code Editor",
@@ -199,6 +264,13 @@
             "failed": "Failed"
         },
         "messages": {
+            "challengeDeleted": "Challenge deleted successfully",
+            "guideDeleted": "Guide deleted successfully",
+            "courseDeleted": "Course deleted successfully",
+            "challengePublished": "Challenge published successfully!",
+            "loadingChallenges": "Loading challenges...",
+            "errorFetchingChallenges": "Error fetching challenges",
+            "challengesUnavailable": "The challenge service is temporarily unavailable. Please try again.",
             "created": "Challenge created successfully",
             "updated": "Challenge updated successfully",
             "deleted": "Challenge deleted successfully",
@@ -257,7 +329,24 @@
         "title": "Learning Guides",
         "description": "Explore our collection of comprehensive guides to level up your skills",
         "notFound": "Guide not found",
-        "authorNotAvailable": "Author profile not available"
+        "authorNotAvailable": "Author profile not available",
+        "viewer": {
+            "backToOverview": "Back to Overview",
+            "previousPage": "Previous Page",
+            "nextPage": "Next Page",
+            "pageIndicator": "Page {current} of {total}",
+            "readGuide": "Read Guide",
+            "minRead": "{time} min read",
+            "pageSingular": "page",
+            "pagePlural": "pages",
+            "likes": "{count} likes",
+            "topics": "Topics",
+            "status": {
+                "published": "Published",
+                "draft": "Draft"
+            }
+        },
+        "guidePageCount": "This guide has {count} {unit}"
     },
     "createChallenge": {
         "title": "Create New Challenge",
@@ -375,7 +464,6 @@
             "showing": "Showing",
             "to": "to",
             "of": "of",
-            "guides": "guides",
             "perPage": "Per page:"
         }
     },
@@ -407,7 +495,78 @@
         "unauthorized": "Unauthorized access",
         "forbidden": "Access forbidden",
         "badRequest": "Bad request",
-        "generic": "Something went wrong"
+        "generic": "Something went wrong",
+        "loading": {
+            "guide": "Error loading guide. Please try again.",
+            "guides": "We couldn't load the guides. Please try again.",
+            "challenges": "Error fetching challenges",
+            "challenge": "Error loading challenge",
+            "profile": "Failed to load profile",
+            "profileData": "Error loading profile data",
+            "codeVersion": "Error loading code version",
+            "tests": "Failed to load tests",
+            "competitiveProfile": "Failed to load competitive profile"
+        },
+        "creating": {
+            "guide": "Error creating guide. Please try again.",
+            "challenge": "Failed to create challenge. Please try again.",
+            "codeVersion": "Failed to create code version. Please try again.",
+            "post": "Failed to create post",
+            "profile": "Error creating profile"
+        },
+        "updating": {
+            "guide": "Error updating guide. Please try again.",
+            "challenge": "Failed to update challenge. Please try again.",
+            "codeVersion": "Failed to update code version",
+            "initialCode": "Failed to update initial code",
+            "profile": "Failed to update profile. Please try again.",
+            "profileService": "Error: Could not update profile. Profile service may be unavailable."
+        },
+        "deleting": {
+            "challenge": "Failed to delete challenge",
+            "codeVersion": "Failed to delete code version",
+            "test": "Failed to delete test"
+        },
+        "saving": {
+            "code": "Failed to save code",
+            "basicTest": "Failed to save basic test",
+            "customTest": "Failed to save custom test",
+            "names": "Something went wrong. Please try again."
+        },
+        "uploading": {
+            "image": "Failed to upload image. Please try again."
+        },
+        "permissions": {
+            "deleteChallenge": "You don't have permission to delete this challenge.",
+            "accessDenied": "Access Denied",
+            "unauthorized": "Unauthorized Access"
+        },
+        "validation": {
+            "fillAllFields": "Please fill in all fields",
+            "passwordMismatch": "Passwords do not match",
+            "profileNotLoaded": "Profile not loaded. Please try again.",
+            "fileRejected": "File rejected",
+            "invalidStep": "Invalid step"
+        },
+        "publishing": {
+            "guide": "Error publishing guide. Please try again."
+        },
+        "starting": {
+            "challenge": "Failed to start challenge"
+        },
+        "serializing": {
+            "description": "Error serializing challenge description"
+        },
+        "dashboard": {
+            "loading": "Error loading dashboard",
+            "loadingDescription": "Could not load admin dashboard data. Please try again."
+        },
+        "guide": {
+            "notFound": "Guide not found. Please try again.",
+            "authorNotAvailable": "Author not available"
+        },
+        "pageNotFound": "The page number {pageNumber} does not exist in this guide. This guide has {totalPages} page{pagesPlural}.",
+        "tryAgain": "Please try again."
     },
     "landing": {
         "header": {
