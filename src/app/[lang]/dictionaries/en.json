@@ -7,7 +7,12 @@
         "settings": "Settings",
         "logout": "Logout",
         "login": "Login",
-        "signup": "Sign Up"
+        "signup": "Sign Up",
+        "leaderboard": "Leaderboard",
+        "guides": "Guides",
+        "help": "Help",
+        "adminDashboard": "Admin Dashboard",
+        "language": "Language"
     },
     "common": {
         "loading": "Loading...",
@@ -59,6 +64,70 @@
             "passwordMismatch": "Passwords do not match",
             "required": "This field is required",
             "invalidEmail": "Invalid email address"
+        },
+        "signIn": {
+            "title": "Sign in to Level Up Journey",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "submitButton": "Sign In",
+            "orSeparator": "Or",
+            "continueWithGoogle": "Continue with Google",
+            "continueWithGithub": "Continue with Github",
+            "noAccount": "Don't have an account?",
+            "signUpLink": "Sign up",
+            "error": "Something went wrong"
+        },
+        "signUp": {
+            "step1": {
+                "title": "Sign Up",
+                "emailPlaceholder": "Email",
+                "passwordPlaceholder": "Password",
+                "confirmPasswordPlaceholder": "Confirm Password",
+                "nextButton": "Next",
+                "haveAccount": "If you already have an account,",
+                "signInLink": "Sign in",
+                "passwordMismatch": "Passwords do not match"
+            },
+            "step2": {
+                "title": "Tell Us About Yourself",
+                "subtitle": "Enter your first and last name to continue",
+                "firstNameLabel": "First Name",
+                "firstNamePlaceholder": "Enter your first name",
+                "lastNameLabel": "Last Name",
+                "lastNamePlaceholder": "Enter your last name",
+                "continueButton": "Continue",
+                "savingButton": "Saving...",
+                "backButton": "Back",
+                "error": "Something went wrong. Please try again.",
+                "validation": {
+                    "nameEmpty": "Name cannot be empty",
+                    "nameTooLong": "Name cannot exceed 20 characters",
+                    "nameInvalid": "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters"
+                }
+            },
+            "step3": {
+                "title": "Complete Your Profile",
+                "subtitle": "Add a photo to get started",
+                "usernameLabel": "Username",
+                "usernamePlaceholder": "Enter your username",
+                "usernameHelp": "This is how you'll appear to others. You can change this anytime.",
+                "startAdventureButton": "Start Your Adventure",
+                "creatingProfileButton": "Creating Profile...",
+                "backButton": "Back",
+                "loadingProfile": "Loading your profile...",
+                "profileLoadFailed": "Failed to load your profile",
+                "goBackButton": "Go Back",
+                "profileLoadError": "Failed to load your profile. Please try again.",
+                "profileNotLoaded": "Profile not loaded. Please try again.",
+                "profileUpdateSuccess": "Profile updated successfully!",
+                "profileUpdateError": "Failed to update profile. Please try again.",
+                "invalidStep": "Invalid step",
+                "validation": {
+                    "usernameEmpty": "Username cannot be empty",
+                    "usernameTooLong": "Username cannot exceed 30 characters",
+                    "usernameInvalid": "Username must contain only alphanumeric characters (letters and numbers), no spaces, maximum 30 characters"
+                }
+            }
         }
     },
     "dashboard": {
@@ -80,6 +149,10 @@
         "delete": "Delete Challenge",
         "publish": "Publish",
         "unpublish": "Unpublish",
+        "loading": "Loading challenges...",
+        "errorFetching": "Error fetching challenges",
+        "errorDescription": "The challenge service is temporarily unavailable. Please try again.",
+        "retry": "Retry",
         "details": {
             "title": "Challenge Details",
             "description": "Description",
@@ -135,8 +208,182 @@
             "submitError": "Error submitting solution"
         }
     },
+    "leaderboard": {
+        "ranking": "Ranking",
+        "myRank": "My Rank",
+        "information": "Information"
+    },
+    "challengesPage": {
+        "header": {
+            "title": "Start coding with purpose",
+            "description": "Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up."
+        },
+        "filters": {
+            "difficulty": "Difficulty",
+            "language": "Language",
+            "popularity": "Popularity",
+            "recentness": "Recentness",
+            "difficultyOptions": {
+                "easy": "Easy",
+                "medium": "Medium",
+                "hard": "Hard",
+                "expert": "Expert"
+            },
+            "languageOptions": {
+                "cpp": "C++",
+                "python": "Python",
+                "javascript": "JavaScript"
+            },
+            "popularityOptions": {
+                "mostPopular": "Most Popular",
+                "trending": "Trending",
+                "leastPopular": "Least Popular"
+            },
+            "recentnessOptions": {
+                "newest": "Newest",
+                "oldest": "Oldest",
+                "recentlyUpdated": "Recently Updated"
+            }
+        },
+        "section": {
+            "title": "Coding Challenges",
+            "results": {
+                "singular": "result",
+                "plural": "results"
+            }
+        }
+    },
+    "guides": {
+        "title": "Learning Guides",
+        "description": "Explore our collection of comprehensive guides to level up your skills",
+        "notFound": "Guide not found",
+        "authorNotAvailable": "Author profile not available"
+    },
+    "createChallenge": {
+        "title": "Create New Challenge",
+        "subtitle": "Fill in the details below to create a new challenge for students.",
+        "form": {
+            "title": "Challenge Title",
+            "titlePlaceholder": "Enter challenge title",
+            "tags": "Tags (comma separated)",
+            "tagsPlaceholder": "e.g., JavaScript, React, Node.js",
+            "difficulty": "Difficulty Level",
+            "difficultyPlaceholder": "Select difficulty",
+            "experiencePoints": "Experience Points",
+            "experiencePointsDescription": "{difficulty} challenges can award up to {maxXP} XP. Use the slider to set the reward.",
+            "xp": "XP",
+            "maxXP": "Max {maxXP} XP",
+            "createButton": "Create Challenge",
+            "creatingButton": "Creating..."
+        },
+        "difficulties": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard",
+            "expert": "Expert"
+        },
+        "messages": {
+            "created": "Challenge created successfully!",
+            "error": "Failed to create challenge. Please try again."
+        },
+        "validation": {
+            "titleMin": "Challenge title must be at least 5 characters.",
+            "titleMax": "Challenge title must be at most 32 characters.",
+            "xpMin": "Experience points must be at least 0.",
+            "xpMax": "Experience points must be at most {maxXP}."
+        }
+    },
+    "navigationIndicator": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "challenges": "Challenges",
+        "create": "Create",
+        "versions": "Versions",
+        "tests": "Tests",
+        "community": "Community",
+        "post": "Post",
+        "leaderboard": "Leaderboard",
+        "settings": "Settings",
+        "help": "Help",
+        "admin": "Administration",
+        "guides": "Guides",
+        "edit": "Edit",
+        "auth": "Auth",
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "legal": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "detail": "Detail"
+    },
+    "announcements": {
+        "upc": "UPC Announcement"
+    },
+    "admin": {
+        "layout": {
+            "general": "General",
+            "challenges": "Challenges",
+            "guides": "Guides"
+        },
+        "dashboard": {
+            "title": "Admin Dashboard — Recent Activity",
+            "loading": "Loading admin dashboard",
+            "loadingDescription": "Fetching the latest challenges and guides.",
+            "error": "Error loading dashboard",
+            "errorDescription": "Could not load admin dashboard data. Please try again.",
+            "retry": "Retry",
+            "challenges": "Challenges",
+            "noChallenges": "No challenges found.",
+            "guides": "Guides",
+            "noGuides": "No guides found."
+        },
+        "community": {
+            "title": "Community Management",
+            "create": "Create Community",
+            "loading": "Loading communities",
+            "loadingDescription": "Preparing your community management tools.",
+            "error": "Unable to load communities",
+            "noCommunities": "No communities yet",
+            "noCommunitiesDescription": "Create your first community to get started.",
+            "retry": "Retry",
+            "permissionsError": "Unable to verify permissions"
+        },
+        "challenges": {
+            "title": "My Challenges",
+            "createNew": "Create New Challenge",
+            "create": "Create Challenge",
+            "noChallenges": "No challenges yet",
+            "noChallengesDescription": "Start by creating your first challenge for the community.",
+            "error": "Unable to load challenges",
+            "errorDescription": "Something went wrong while fetching your challenges. Please try again."
+        },
+        "guides": {
+            "title": "Guides",
+            "subtitle": "Manage and create learning guides",
+            "create": "Create Guide",
+            "loading": "Loading guides",
+            "loadingDescription": "Fetching the latest learning guides for you.",
+            "accessDenied": "Access denied",
+            "accessDeniedDescription": "You need teacher or admin permissions to manage guides.",
+            "permissionsError": "Unable to verify permissions",
+            "noGuides": "No guides yet",
+            "noGuidesDescription": "Create your first guide to start helping students.",
+            "error": "Unable to load guides",
+            "errorDescription": "We couldn't load the guides. Please try again.",
+            "retry": "Retry",
+            "showing": "Showing",
+            "to": "to",
+            "of": "of",
+            "guides": "guides",
+            "perPage": "Per page:"
+        }
+    },
     "profile": {
         "title": "Profile",
+        "account": {
+            "title": "Account Settings"
+        },
         "edit": "Edit Profile",
         "stats": "Statistics",
         "achievements": "Achievements",
@@ -161,5 +408,110 @@
         "forbidden": "Access forbidden",
         "badRequest": "Bad request",
         "generic": "Something went wrong"
+    },
+    "landing": {
+        "header": {
+            "signIn": "Sign In",
+            "register": "Register"
+        },
+        "hero": {
+            "badge": "Your tech future starts here",
+            "title": "Learn to code",
+            "titleHighlight": "by doing",
+            "description": "Real challenges. Practical projects. No boring theory. Learn programming like professionals do.",
+            "cta": "Start for free"
+        },
+        "stats": {
+            "languages": "Languages",
+            "challenges": "Challenges",
+            "students": "Students",
+            "community": "Community"
+        },
+        "features": {
+            "title": "Why choose us?",
+            "subtitle": "Everything you need to launch your tech career",
+            "learnFast": {
+                "title": "Learn fast",
+                "description": "Short, practical challenges. Instant feedback. No wasted time."
+            },
+            "practicalFocus": {
+                "title": "Practical focus",
+                "description": "Real projects from day one. Learn what companies actually use."
+            },
+            "activeCommunity": {
+                "title": "Active community",
+                "description": "Share code, solve questions, and learn with other students."
+            },
+            "gamification": {
+                "title": "Gamification",
+                "description": "Earn points, unlock achievements, and compete in global rankings."
+            },
+            "learningPaths": {
+                "title": "Learning paths",
+                "description": "Follow a structured path from beginner to advanced."
+            },
+            "integratedEditor": {
+                "title": "Integrated editor",
+                "description": "Write, test, and run code directly in your browser."
+            }
+        },
+        "cta": {
+            "title": "Ready for your first challenge?",
+            "description": "Thousands of students are already learning. Join for free and start building your tech future.",
+            "createAccount": "Create free account",
+            "exploreContent": "Explore content"
+        },
+        "footer": {
+            "copyright": "© 2025 Level Up Journey",
+            "tagline": "Shaping the next generation of developers"
+        }
+    },
+    "dashboardPage": {
+        "upNext": {
+            "title": "Up Next",
+            "card": {
+                "title": "Plan your learning journey",
+                "description": "Explore guided learning paths and curated courses designed for UPC students.",
+                "button": "Explore Guides"
+            }
+        },
+        "featuredChallenges": "Featured Challenges",
+        "streak": {
+            "title": "Streak",
+            "comingSoon": "Coming Soon",
+            "description": "Track your coding consistency"
+        },
+        "progress": {
+            "title": "Progress",
+            "comingSoon": "Coming Soon",
+            "description": "Unlock badges and rewards for your progress"
+        },
+        "achievements": {
+            "title": "Achievements",
+            "comingSoon": "Coming Soon",
+            "description": "Unlock badges and rewards for your progress"
+        }
+    },
+    "sidebar": {
+        "groups": {
+            "home": "Home",
+            "administrative": "Administrative"
+        }
+    },
+    "legal": {
+        "privacyPolicy": {
+            "title": "Privacy Policy",
+            "content": "This is the privacy policy page."
+        },
+        "terms": {
+            "title": "Terms of Service",
+            "content": "This is the terms of service page."
+        }
+    },
+    "unauthorized": {
+        "title": "Unauthorized Access",
+        "description": "You have attempted to access a page that you are not authorized to view. If you believe this is an error, please contact support.",
+        "goBackDashboard": "Go back to Dashboard",
+        "homeButton": "Home"
     }
 }

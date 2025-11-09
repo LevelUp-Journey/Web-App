@@ -10,22 +10,21 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useDictionary } from "@/hooks/use-dictionary";
 
 export default function ChallengesPage() {
     const [challengesCount, setChallengesCount] = useState<number | null>(null);
+    const dict = useDictionary();
 
     return (
         <div className="container mx-auto px-4 pt-16 pb-8 space-y-6">
             {/* Inspirational Header */}
             <div className="text-center max-w-4xl mx-auto mb-12">
                 <h1 className="text-4xl text-balance md:text-5xl font-medium text-foreground mb-6 leading-tight">
-                    Start coding with purpose
+                    {dict?.challengesPage.header.title}
                 </h1>
                 <p className="text-base text-pretty md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-                    Level Up Journey is the learning platform for UPC students
-                    beginning their career path. Tackle real C++ challenges
-                    designed by your professors — each crafted to guide you from
-                    fundamentals to fluency. Learn by solving, level up.
+                    {dict?.challengesPage.header.description}
                 </p>
             </div>
 
@@ -38,51 +37,121 @@ export default function ChallengesPage() {
             <div className="flex justify-center gap-4 flex-wrap">
                 <Select>
                     <SelectTrigger className="w-32">
-                        <SelectValue placeholder="Difficulty" />
+                        <SelectValue
+                            placeholder={
+                                dict?.challengesPage.filters.difficulty
+                            }
+                        />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="easy">Easy</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="hard">Hard</SelectItem>
-                        <SelectItem value="expert">Expert</SelectItem>
+                        <SelectItem value="easy">
+                            {
+                                dict?.challengesPage.filters.difficultyOptions
+                                    .easy
+                            }
+                        </SelectItem>
+                        <SelectItem value="medium">
+                            {
+                                dict?.challengesPage.filters.difficultyOptions
+                                    .medium
+                            }
+                        </SelectItem>
+                        <SelectItem value="hard">
+                            {
+                                dict?.challengesPage.filters.difficultyOptions
+                                    .hard
+                            }
+                        </SelectItem>
+                        <SelectItem value="expert">
+                            {
+                                dict?.challengesPage.filters.difficultyOptions
+                                    .expert
+                            }
+                        </SelectItem>
                     </SelectContent>
                 </Select>
 
                 <Select>
                     <SelectTrigger className="w-32">
-                        <SelectValue placeholder="Language" />
+                        <SelectValue
+                            placeholder={dict?.challengesPage.filters.language}
+                        />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="c++">C++</SelectItem>
-                        <SelectItem value="python">Python</SelectItem>
-                        <SelectItem value="javascript">JavaScript</SelectItem>
+                        <SelectItem value="c++">
+                            {dict?.challengesPage.filters.languageOptions.cpp}
+                        </SelectItem>
+                        <SelectItem value="python">
+                            {
+                                dict?.challengesPage.filters.languageOptions
+                                    .python
+                            }
+                        </SelectItem>
+                        <SelectItem value="javascript">
+                            {
+                                dict?.challengesPage.filters.languageOptions
+                                    .javascript
+                            }
+                        </SelectItem>
                     </SelectContent>
                 </Select>
 
                 <Select>
                     <SelectTrigger className="w-32">
-                        <SelectValue placeholder="Popularity" />
+                        <SelectValue
+                            placeholder={
+                                dict?.challengesPage.filters.popularity
+                            }
+                        />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="most-popular">
-                            Most Popular
+                            {
+                                dict?.challengesPage.filters.popularityOptions
+                                    .mostPopular
+                            }
                         </SelectItem>
-                        <SelectItem value="trending">Trending</SelectItem>
+                        <SelectItem value="trending">
+                            {
+                                dict?.challengesPage.filters.popularityOptions
+                                    .trending
+                            }
+                        </SelectItem>
                         <SelectItem value="least-popular">
-                            Least Popular
+                            {
+                                dict?.challengesPage.filters.popularityOptions
+                                    .leastPopular
+                            }
                         </SelectItem>
                     </SelectContent>
                 </Select>
 
                 <Select>
                     <SelectTrigger className="w-32">
-                        <SelectValue placeholder="Recentness" />
+                        <SelectValue
+                            placeholder={
+                                dict?.challengesPage.filters.recentness
+                            }
+                        />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="newest">Newest</SelectItem>
-                        <SelectItem value="oldest">Oldest</SelectItem>
+                        <SelectItem value="newest">
+                            {
+                                dict?.challengesPage.filters.recentnessOptions
+                                    .newest
+                            }
+                        </SelectItem>
+                        <SelectItem value="oldest">
+                            {
+                                dict?.challengesPage.filters.recentnessOptions
+                                    .oldest
+                            }
+                        </SelectItem>
                         <SelectItem value="recently-updated">
-                            Recently Updated
+                            {
+                                dict?.challengesPage.filters.recentnessOptions
+                                    .recentlyUpdated
+                            }
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -91,12 +160,14 @@ export default function ChallengesPage() {
             {/* Header Section */}
             <header className="space-y-2">
                 <h2 className="text-3xl font-medium tracking-tight">
-                    Coding Challenges
+                    {dict?.challengesPage.section.title}
                 </h2>
                 {challengesCount !== null && (
                     <p className="text-base text-muted-foreground">
                         {challengesCount}{" "}
-                        {challengesCount === 1 ? "result" : "results"}
+                        {challengesCount === 1
+                            ? dict?.challengesPage.section.results.singular
+                            : dict?.challengesPage.section.results.plural}
                     </p>
                 )}
             </header>

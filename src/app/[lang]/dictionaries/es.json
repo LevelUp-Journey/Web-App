@@ -7,7 +7,12 @@
         "settings": "Configuración",
         "logout": "Cerrar sesión",
         "login": "Iniciar sesión",
-        "signup": "Registrarse"
+        "signup": "Registrarse",
+        "leaderboard": "Clasificación",
+        "guides": "Guías",
+        "help": "Ayuda",
+        "adminDashboard": "Panel de administración",
+        "language": "Idioma"
     },
     "common": {
         "loading": "Cargando...",
@@ -59,6 +64,70 @@
             "passwordMismatch": "Las contraseñas no coinciden",
             "required": "Este campo es obligatorio",
             "invalidEmail": "Dirección de correo electrónico no válida"
+        },
+        "signIn": {
+            "title": "Inicia sesión en Level Up Journey",
+            "emailPlaceholder": "Correo electrónico",
+            "passwordPlaceholder": "Contraseña",
+            "submitButton": "Iniciar sesión",
+            "orSeparator": "O",
+            "continueWithGoogle": "Continuar con Google",
+            "continueWithGithub": "Continuar con Github",
+            "noAccount": "¿No tienes una cuenta?",
+            "signUpLink": "Regístrate",
+            "error": "Algo salió mal"
+        },
+        "signUp": {
+            "step1": {
+                "title": "Registrarse",
+                "emailPlaceholder": "Correo electrónico",
+                "passwordPlaceholder": "Contraseña",
+                "confirmPasswordPlaceholder": "Confirmar contraseña",
+                "nextButton": "Siguiente",
+                "haveAccount": "Si ya tienes una cuenta,",
+                "signInLink": "inicia sesión",
+                "passwordMismatch": "Las contraseñas no coinciden"
+            },
+            "step2": {
+                "title": "Cuéntanos sobre ti",
+                "subtitle": "Ingresa tu nombre y apellido para continuar",
+                "firstNameLabel": "Nombre",
+                "firstNamePlaceholder": "Ingresa tu nombre",
+                "lastNameLabel": "Apellido",
+                "lastNamePlaceholder": "Ingresa tu apellido",
+                "continueButton": "Continuar",
+                "savingButton": "Guardando...",
+                "backButton": "Atrás",
+                "error": "Algo salió mal. Por favor, inténtalo de nuevo.",
+                "validation": {
+                    "nameEmpty": "El nombre no puede estar vacío",
+                    "nameTooLong": "El nombre no puede exceder 20 caracteres",
+                    "nameInvalid": "El nombre debe contener solo letras, acentos, espacios y guiones, máximo 20 caracteres"
+                }
+            },
+            "step3": {
+                "title": "Completa tu perfil",
+                "subtitle": "Agrega una foto para comenzar",
+                "usernameLabel": "Nombre de usuario",
+                "usernamePlaceholder": "Ingresa tu nombre de usuario",
+                "usernameHelp": "Así es como aparecerás ante los demás. Puedes cambiar esto en cualquier momento.",
+                "startAdventureButton": "Comienza tu aventura",
+                "creatingProfileButton": "Creando perfil...",
+                "backButton": "Atrás",
+                "loadingProfile": "Cargando tu perfil...",
+                "profileLoadFailed": "Error al cargar tu perfil",
+                "goBackButton": "Volver",
+                "profileLoadError": "Error al cargar tu perfil. Por favor, inténtalo de nuevo.",
+                "profileNotLoaded": "Perfil no cargado. Por favor, inténtalo de nuevo.",
+                "profileUpdateSuccess": "¡Perfil actualizado exitosamente!",
+                "profileUpdateError": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+                "invalidStep": "Paso inválido",
+                "validation": {
+                    "usernameEmpty": "El nombre de usuario no puede estar vacío",
+                    "usernameTooLong": "El nombre de usuario no puede exceder 30 caracteres",
+                    "usernameInvalid": "El nombre de usuario debe contener solo caracteres alfanuméricos (letras y números), sin espacios, máximo 30 caracteres"
+                }
+            }
         }
     },
     "dashboard": {
@@ -80,6 +149,10 @@
         "delete": "Eliminar desafío",
         "publish": "Publicar",
         "unpublish": "Despublicar",
+        "loading": "Cargando desafíos...",
+        "errorFetching": "Error al cargar desafíos",
+        "errorDescription": "El servicio de desafíos no está disponible temporalmente. Por favor, inténtalo de nuevo.",
+        "retry": "Reintentar",
         "details": {
             "title": "Detalles del desafío",
             "description": "Descripción",
@@ -135,8 +208,182 @@
             "submitError": "Error al enviar la solución"
         }
     },
+    "leaderboard": {
+        "ranking": "Clasificación",
+        "myRank": "Mi rango",
+        "information": "Información"
+    },
+    "challengesPage": {
+        "header": {
+            "title": "Comienza a programar con propósito",
+            "description": "Level Up Journey es la plataforma de aprendizaje para estudiantes de UPC que comienzan su camino profesional. Aborda desafíos reales de C++ diseñados por tus profesores — cada uno creado para guiarte desde los fundamentos hasta la fluidez. Aprende resolviendo, sube de nivel."
+        },
+        "filters": {
+            "difficulty": "Dificultad",
+            "language": "Lenguaje",
+            "popularity": "Popularidad",
+            "recentness": "Reciente",
+            "difficultyOptions": {
+                "easy": "Fácil",
+                "medium": "Medio",
+                "hard": "Difícil",
+                "expert": "Experto"
+            },
+            "languageOptions": {
+                "cpp": "C++",
+                "python": "Python",
+                "javascript": "JavaScript"
+            },
+            "popularityOptions": {
+                "mostPopular": "Más popular",
+                "trending": "Tendencia",
+                "leastPopular": "Menos popular"
+            },
+            "recentnessOptions": {
+                "newest": "Más nuevo",
+                "oldest": "Más antiguo",
+                "recentlyUpdated": "Actualizado recientemente"
+            }
+        },
+        "section": {
+            "title": "Desafíos de programación",
+            "results": {
+                "singular": "resultado",
+                "plural": "resultados"
+            }
+        }
+    },
+    "guides": {
+        "title": "Guías de Aprendizaje",
+        "description": "Explora nuestra colección de guías completas para mejorar tus habilidades",
+        "notFound": "Guía no encontrada",
+        "authorNotAvailable": "Perfil del autor no disponible"
+    },
+    "createChallenge": {
+        "title": "Crear Nuevo Desafío",
+        "subtitle": "Completa los detalles a continuación para crear un nuevo desafío para los estudiantes.",
+        "form": {
+            "title": "Título del Desafío",
+            "titlePlaceholder": "Ingresa el título del desafío",
+            "tags": "Etiquetas (separadas por comas)",
+            "tagsPlaceholder": "ej., JavaScript, React, Node.js",
+            "difficulty": "Nivel de Dificultad",
+            "difficultyPlaceholder": "Selecciona dificultad",
+            "experiencePoints": "Puntos de Experiencia",
+            "experiencePointsDescription": "Los desafíos {difficulty} pueden otorgar hasta {maxXP} XP. Usa el deslizador para establecer la recompensa.",
+            "xp": "XP",
+            "maxXP": "Máx {maxXP} XP",
+            "createButton": "Crear Desafío",
+            "creatingButton": "Creando..."
+        },
+        "difficulties": {
+            "easy": "Fácil",
+            "medium": "Medio",
+            "hard": "Difícil",
+            "expert": "Experto"
+        },
+        "messages": {
+            "created": "¡Desafío creado exitosamente!",
+            "error": "Error al crear el desafío. Por favor, inténtalo de nuevo."
+        },
+        "validation": {
+            "titleMin": "El título del desafío debe tener al menos 5 caracteres.",
+            "titleMax": "El título del desafío debe tener como máximo 32 caracteres.",
+            "xpMin": "Los puntos de experiencia deben ser al menos 0.",
+            "xpMax": "Los puntos de experiencia deben ser como máximo {maxXP}."
+        }
+    },
+    "navigationIndicator": {
+        "home": "Inicio",
+        "dashboard": "Panel",
+        "profile": "Perfil",
+        "challenges": "Desafíos",
+        "create": "Crear",
+        "versions": "Versiones",
+        "tests": "Pruebas",
+        "community": "Comunidad",
+        "post": "Publicación",
+        "leaderboard": "Clasificación",
+        "settings": "Configuración",
+        "help": "Ayuda",
+        "admin": "Administración",
+        "guides": "Guías",
+        "edit": "Editar",
+        "auth": "Autenticación",
+        "signIn": "Iniciar Sesión",
+        "signUp": "Registrarse",
+        "legal": "Legal",
+        "privacyPolicy": "Política de Privacidad",
+        "terms": "Términos de Servicio",
+        "detail": "Detalle"
+    },
+    "announcements": {
+        "upc": "Anuncio UPC"
+    },
+    "admin": {
+        "layout": {
+            "general": "General",
+            "challenges": "Desafíos",
+            "guides": "Guías"
+        },
+        "dashboard": {
+            "title": "Panel de Administración — Actividad Reciente",
+            "loading": "Cargando panel de administración",
+            "loadingDescription": "Obteniendo los últimos desafíos y guías.",
+            "error": "Error al cargar el panel",
+            "errorDescription": "No se pudo cargar los datos del panel de administración. Por favor, inténtalo de nuevo.",
+            "retry": "Reintentar",
+            "challenges": "Desafíos",
+            "noChallenges": "No se encontraron desafíos.",
+            "guides": "Guías",
+            "noGuides": "No se encontraron guías."
+        },
+        "community": {
+            "title": "Gestión de Comunidad",
+            "create": "Crear Comunidad",
+            "loading": "Cargando comunidades",
+            "loadingDescription": "Preparando tus herramientas de gestión de comunidad.",
+            "error": "No se pudieron cargar las comunidades",
+            "noCommunities": "Aún no hay comunidades",
+            "noCommunitiesDescription": "Crea tu primera comunidad para comenzar.",
+            "retry": "Reintentar",
+            "permissionsError": "No se pudieron verificar los permisos"
+        },
+        "challenges": {
+            "title": "Mis Desafíos",
+            "createNew": "Crear Nuevo Desafío",
+            "create": "Crear Desafío",
+            "noChallenges": "Aún no hay desafíos",
+            "noChallengesDescription": "Comienza creando tu primer desafío para la comunidad.",
+            "error": "No se pudieron cargar los desafíos",
+            "errorDescription": "Algo salió mal al obtener tus desafíos. Por favor, inténtalo de nuevo."
+        },
+        "guides": {
+            "title": "Guías",
+            "subtitle": "Gestionar y crear guías de aprendizaje",
+            "create": "Crear Guía",
+            "loading": "Cargando guías",
+            "loadingDescription": "Obteniendo las últimas guías de aprendizaje para ti.",
+            "accessDenied": "Acceso denegado",
+            "accessDeniedDescription": "Necesitas permisos de profesor o administrador para gestionar guías.",
+            "permissionsError": "No se pudieron verificar los permisos",
+            "noGuides": "Aún no hay guías",
+            "noGuidesDescription": "Crea tu primera guía para comenzar a ayudar a los estudiantes.",
+            "error": "No se pudieron cargar las guías",
+            "errorDescription": "No se pudieron cargar las guías. Por favor, inténtalo de nuevo.",
+            "retry": "Reintentar",
+            "showing": "Mostrando",
+            "to": "a",
+            "of": "de",
+            "guides": "guías",
+            "perPage": "Por página:"
+        }
+    },
     "profile": {
         "title": "Perfil",
+        "account": {
+            "title": "Configuración de Cuenta"
+        },
         "edit": "Editar perfil",
         "stats": "Estadísticas",
         "achievements": "Logros",
@@ -161,5 +408,110 @@
         "forbidden": "Acceso prohibido",
         "badRequest": "Solicitud incorrecta",
         "generic": "Algo salió mal"
+    },
+    "landing": {
+        "header": {
+            "signIn": "Iniciar sesión",
+            "register": "Registrarse"
+        },
+        "hero": {
+            "badge": "Tu futuro tecnológico comienza aquí",
+            "title": "Aprende a programar",
+            "titleHighlight": "practicando",
+            "description": "Desafíos reales. Proyectos prácticos. Sin teoría aburrida. Aprende a programar como lo hacen los profesionales.",
+            "cta": "Comienza gratis"
+        },
+        "stats": {
+            "languages": "Lenguajes",
+            "challenges": "Desafíos",
+            "students": "Estudiantes",
+            "community": "Comunidad"
+        },
+        "features": {
+            "title": "¿Por qué elegirnos?",
+            "subtitle": "Todo lo que necesitas para lanzar tu carrera tecnológica",
+            "learnFast": {
+                "title": "Aprende rápido",
+                "description": "Desafíos cortos y prácticos. Retroalimentación instantánea. Sin perder tiempo."
+            },
+            "practicalFocus": {
+                "title": "Enfoque práctico",
+                "description": "Proyectos reales desde el primer día. Aprende lo que las empresas realmente usan."
+            },
+            "activeCommunity": {
+                "title": "Comunidad activa",
+                "description": "Comparte código, resuelve dudas y aprende con otros estudiantes."
+            },
+            "gamification": {
+                "title": "Gamificación",
+                "description": "Gana puntos, desbloquea logros y compite en clasificaciones globales."
+            },
+            "learningPaths": {
+                "title": "Rutas de aprendizaje",
+                "description": "Sigue un camino estructurado desde principiante hasta avanzado."
+            },
+            "integratedEditor": {
+                "title": "Editor integrado",
+                "description": "Escribe, prueba y ejecuta código directamente en tu navegador."
+            }
+        },
+        "cta": {
+            "title": "¿Listo para tu primer desafío?",
+            "description": "Miles de estudiantes ya están aprendiendo. Únete gratis y comienza a construir tu futuro tecnológico.",
+            "createAccount": "Crear cuenta gratis",
+            "exploreContent": "Explorar contenido"
+        },
+        "footer": {
+            "copyright": "© 2025 Level Up Journey",
+            "tagline": "Formando la próxima generación de desarrolladores"
+        }
+    },
+    "dashboardPage": {
+        "upNext": {
+            "title": "Siguiente",
+            "card": {
+                "title": "Planifica tu viaje de aprendizaje",
+                "description": "Explora rutas de aprendizaje guiadas y cursos seleccionados diseñados para estudiantes de UPC.",
+                "button": "Explorar guías"
+            }
+        },
+        "featuredChallenges": "Desafíos destacados",
+        "streak": {
+            "title": "Racha",
+            "comingSoon": "Próximamente",
+            "description": "Rastrea tu consistencia de codificación"
+        },
+        "progress": {
+            "title": "Progreso",
+            "comingSoon": "Próximamente",
+            "description": "Desbloquea insignias y recompensas por tu progreso"
+        },
+        "achievements": {
+            "title": "Logros",
+            "comingSoon": "Próximamente",
+            "description": "Desbloquea insignias y recompensas por tu progreso"
+        }
+    },
+    "sidebar": {
+        "groups": {
+            "home": "Inicio",
+            "administrative": "Administrativo"
+        }
+    },
+    "legal": {
+        "privacyPolicy": {
+            "title": "Política de privacidad",
+            "content": "Esta es la página de política de privacidad."
+        },
+        "terms": {
+            "title": "Términos de servicio",
+            "content": "Esta es la página de términos de servicio."
+        }
+    },
+    "unauthorized": {
+        "title": "Acceso no autorizado",
+        "description": "Has intentado acceder a una página que no tienes autorización para ver. Si crees que esto es un error, por favor contacta al soporte.",
+        "goBackDashboard": "Volver al panel",
+        "homeButton": "Inicio"
     }
 }

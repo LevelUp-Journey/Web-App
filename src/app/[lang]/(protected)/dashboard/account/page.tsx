@@ -3,9 +3,11 @@
 import { useState } from "react";
 import ProfileCard from "@/components/profiles/profile-card";
 import ProfileEditForm from "@/components/profiles/profile-edit-form";
+import { useDictionary } from "@/hooks/use-dictionary";
 
 export default function AccountPage() {
     const [isEditing, setIsEditing] = useState(false);
+    const dict = useDictionary();
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -22,7 +24,9 @@ export default function AccountPage() {
     return (
         <div className="container mx-auto p-4">
             <div className="max-w-2xl mx-auto space-y-6">
-                <h1 className="text-2xl font-semibold">Account Settings</h1>
+                <h1 className="text-2xl font-semibold">
+                    {dict?.profile.account.title}
+                </h1>
 
                 {isEditing ? (
                     <ProfileEditForm

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -16,16 +17,20 @@ export default async function AdminLayout({
     params: Promise<{ lang: string }>;
 }) {
     const { lang } = await params;
+    const dict = await getDictionary(lang as "en" | "es");
     const PATHS = getLocalizedPaths(lang);
 
     const navLinks = [
-        { label: "General", href: PATHS.DASHBOARD.ADMINISTRATION.ROOT },
         {
-            label: "Challenges",
+            label: dict.admin.layout.general,
+            href: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
+        },
+        {
+            label: dict.admin.layout.challenges,
             href: PATHS.DASHBOARD.ADMINISTRATION.CHALLENGES.ROOT,
         },
         {
-            label: "Guides",
+            label: dict.admin.layout.guides,
             href: PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
         },
     ];

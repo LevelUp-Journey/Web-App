@@ -3,8 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { TypingAnimation } from "@/components/ui/typing-animation";
+import { getDictionary } from "@/lib/i18n";
 import { getLocalizedPaths } from "@/lib/paths";
 
 export default async function Home({
@@ -14,6 +17,7 @@ export default async function Home({
 }) {
     const { lang } = await params;
     const PATHS = getLocalizedPaths(lang);
+    const dict = await getDictionary(lang as "en" | "es");
 
     return (
         <div className="min-h-screen bg-background">
@@ -37,11 +41,17 @@ export default async function Home({
                     </Link>
 
                     <div className="flex items-center gap-3">
+                        <ThemeToggle />
+                        <LanguageToggle />
                         <Button variant="ghost" asChild>
-                            <Link href={PATHS.AUTH.SIGN_IN}>Sign In</Link>
+                            <Link href={PATHS.AUTH.SIGN_IN}>
+                                {dict.landing.header.signIn}
+                            </Link>
                         </Button>
                         <Button asChild>
-                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>Register</Link>
+                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
+                                {dict.landing.header.register}
+                            </Link>
                         </Button>
                     </div>
                 </div>
@@ -53,14 +63,16 @@ export default async function Home({
                     <div className="max-w-4xl mx-auto space-y-6">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
                             <span className="text-sm font-medium text-foreground">
-                                Your tech future starts here
+                                {dict.landing.hero.badge}
                             </span>
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-tight">
-                            Learn to code
+                            {dict.landing.hero.title}
                             <br />
-                            <span className="text-primary">by doing</span>
+                            <span className="text-primary">
+                                {dict.landing.hero.titleHighlight}
+                            </span>
                         </h1>
 
                         <div className="text-xl sm:text-2xl md:text-3xl font-semibold h-12 flex items-center justify-center">
@@ -84,8 +96,7 @@ export default async function Home({
                         </div>
 
                         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            Real challenges. Practical projects. No boring
-                            theory. Learn programming like professionals do.
+                            {dict.landing.hero.description}
                         </p>
 
                         {/* CTA Buttons */}
@@ -96,7 +107,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    Start for free
+                                    {dict.landing.hero.cta}
                                 </Link>
                             </Button>
                         </div>
@@ -111,7 +122,7 @@ export default async function Home({
                                 10+
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Languages
+                                {dict.landing.stats.languages}
                             </p>
                         </div>
                         <div className="text-center space-y-1">
@@ -119,7 +130,7 @@ export default async function Home({
                                 500+
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Challenges
+                                {dict.landing.stats.challenges}
                             </p>
                         </div>
                         <div className="text-center space-y-1">
@@ -127,7 +138,7 @@ export default async function Home({
                                 1K+
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Students
+                                {dict.landing.stats.students}
                             </p>
                         </div>
                         <div className="text-center space-y-1">
@@ -135,7 +146,7 @@ export default async function Home({
                                 24/7
                             </div>
                             <p className="text-xs sm:text-sm text-muted-foreground">
-                                Community
+                                {dict.landing.stats.community}
                             </p>
                         </div>
                     </div>
@@ -147,10 +158,10 @@ export default async function Home({
                 <section className="py-12">
                     <div className="text-center mb-10">
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
-                            Why choose us?
+                            {dict.landing.features.title}
                         </h2>
                         <p className="text-muted-foreground text-base max-w-2xl mx-auto">
-                            Everything you need to launch your tech career
+                            {dict.landing.features.subtitle}
                         </p>
                     </div>
 
@@ -161,11 +172,13 @@ export default async function Home({
                                     <Zap className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Learn fast
+                                    {dict.landing.features.learnFast.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Short, practical challenges. Instant
-                                    feedback. No wasted time.
+                                    {
+                                        dict.landing.features.learnFast
+                                            .description
+                                    }
                                 </p>
                             </CardContent>
                         </Card>
@@ -176,11 +189,13 @@ export default async function Home({
                                     <Target className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Practical focus
+                                    {dict.landing.features.practicalFocus.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Real projects from day one. Learn what
-                                    companies actually use.
+                                    {
+                                        dict.landing.features.practicalFocus
+                                            .description
+                                    }
                                 </p>
                             </CardContent>
                         </Card>
@@ -191,11 +206,16 @@ export default async function Home({
                                     <Users className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Active community
+                                    {
+                                        dict.landing.features.activeCommunity
+                                            .title
+                                    }
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Share code, solve questions, and learn with
-                                    other students.
+                                    {
+                                        dict.landing.features.activeCommunity
+                                            .description
+                                    }
                                 </p>
                             </CardContent>
                         </Card>
@@ -206,11 +226,13 @@ export default async function Home({
                                     <Trophy className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Gamification
+                                    {dict.landing.features.gamification.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Earn points, unlock achievements, and
-                                    compete in global rankings.
+                                    {
+                                        dict.landing.features.gamification
+                                            .description
+                                    }
                                 </p>
                             </CardContent>
                         </Card>
@@ -221,11 +243,13 @@ export default async function Home({
                                     <BookOpen className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Learning paths
+                                    {dict.landing.features.learningPaths.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Follow a structured path from beginner to
-                                    advanced.
+                                    {
+                                        dict.landing.features.learningPaths
+                                            .description
+                                    }
                                 </p>
                             </CardContent>
                         </Card>
@@ -236,11 +260,16 @@ export default async function Home({
                                     <Code2 className="h-6 w-6 text-primary" />
                                 </div>
                                 <h3 className="text-lg font-semibold">
-                                    Integrated editor
+                                    {
+                                        dict.landing.features.integratedEditor
+                                            .title
+                                    }
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Write, test, and run code directly in your
-                                    browser.
+                                    {
+                                        dict.landing.features.integratedEditor
+                                            .description
+                                    }
                                 </p>
                             </CardContent>
                         </Card>
@@ -253,11 +282,10 @@ export default async function Home({
                 <section className="py-16 text-center">
                     <div className="max-w-3xl mx-auto space-y-6">
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
-                            Ready for your first challenge?
+                            {dict.landing.cta.title}
                         </h2>
                         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Thousands of students are already learning. Join for
-                            free and start building your tech future.
+                            {dict.landing.cta.description}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                             <Button
@@ -266,7 +294,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    Create free account
+                                    {dict.landing.cta.createAccount}
                                 </Link>
                             </Button>
                             <Button
@@ -276,7 +304,7 @@ export default async function Home({
                                 asChild
                             >
                                 <Link href={PATHS.DASHBOARD.CHALLENGES.ROOT}>
-                                    Explore content
+                                    {dict.landing.cta.exploreContent}
                                 </Link>
                             </Button>
                         </div>
@@ -291,11 +319,11 @@ export default async function Home({
                         <div className="flex items-center gap-2">
                             <Code2 className="h-5 w-5 text-primary" />
                             <span className="text-sm text-muted-foreground">
-                                © 2025 Level Up Journey
+                                {dict.landing.footer.copyright}
                             </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Shaping the next generation of developers
+                            {dict.landing.footer.tagline}
                         </p>
                     </div>
                 </div>

@@ -12,6 +12,7 @@ import {
 import { PagesForm } from "@/components/learning/guide/pages-form";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type {
@@ -20,23 +21,44 @@ import type {
 } from "@/services/internal/learning/guides/controller/guide.response";
 import { GuideStatus } from "@/services/internal/learning/guides/controller/guide.response";
 
-const formSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z
-        .string()
-        .min(10, "Description must be at least 10 characters")
-        .max(1000, "Description must not exceed 1000 characters"),
-    cover: z.string().optional(),
-    topicIds: z.array(z.string()).min(1, "At least one topic is required"),
-});
-
-type FormData = z.infer<typeof formSchema>;
-
 export default function EditGuidePage() {
     const router = useRouter();
     const params = useParams();
     const PATHS = useLocalizedPaths();
+    const dict = useDictionary() as any;
     const guideId = params.guideId as string;
+
+    const formSchema = z.object({
+        title: z
+            .string()
+            .min(
+                1,
+                dict?.admin?.guides?.editGuide?.validation?.titleRequired ||
+                    "Title is required",
+            ),
+        description: z
+            .string()
+            .min(
+                10,
+                dict?.admin?.guides?.editGuide?.validation?.descriptionMin ||
+                    "Description must be at least 10 characters",
+            )
+            .max(
+                1000,
+                dict?.admin?.guides?.editGuide?.validation?.descriptionMax ||
+                    "Description must not exceed 1000 characters",
+            ),
+        cover: z.string().optional(),
+        topicIds: z
+            .array(z.string())
+            .min(
+                1,
+                dict?.admin?.guides?.editGuide?.validation?.topicsRequired ||
+                    "At least one topic is required",
+            ),
+    });
+
+    type FormData = z.infer<typeof formSchema>;
 
     const [guide, setGuide] = useState<GuideResponse | null>(null);
     const [loading, setLoading] = useState(true);
@@ -70,12 +92,18 @@ export default function EditGuidePage() {
                         topicIds: response.topics.map((t) => t.id),
                     });
                 } else {
-                    alert("Guide not found. Please try again.");
+                    alert(
+                        dict?.admin?.guides?.editGuide?.notFound ||
+                            "Guide not found. Please try again.",
+                    );
                     router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
                 }
             } catch (error) {
                 console.error("Error loading guide:", error);
-                alert("Error loading guide. Please try again.");
+                alert(
+                    dict?.admin?.guides?.editGuide?.basicInfo?.updateError ||
+                        "Error loading guide. Please try again.",
+                );
                 router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
             } finally {
                 setLoading(false);
@@ -102,10 +130,16 @@ export default function EditGuidePage() {
                 request,
             );
             setGuide(response);
-            alert("Guide updated successfully!");
+            alert(
+                dict?.admin?.guides?.editGuide?.basicInfo?.updateSuccess ||
+                    "Guide updated successfully!",
+            );
         } catch (error) {
             console.error("Error updating guide:", error);
-            alert("Error updating guide. Please try again.");
+            alert(
+                dict?.admin?.guides?.editGuide?.basicInfo?.updateError ||
+                    "Error updating guide. Please try again.",
+            );
         } finally {
             setSaving(false);
         }
@@ -118,7 +152,8 @@ export default function EditGuidePage() {
     const handleCancel = () => {
         if (
             confirm(
-                "Are you sure you want to cancel? Any unsaved changes will be lost.",
+                dict?.admin?.guides?.editGuide?.basicInfo?.cancelConfirm ||
+                    "Are you sure you want to cancel? Any unsaved changes will be lost.",
             )
         ) {
             router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
@@ -140,7 +175,10 @@ export default function EditGuidePage() {
             router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
         } catch (error) {
             console.error("Error publishing guide:", error);
-            alert("Error publishing guide. Please try again.");
+            alert(
+                dict?.admin?.guides?.editGuide?.basicInfo?.publishError ||
+                    "Error publishing guide. Please try again.",
+            );
         } finally {
             setPublishing(false);
         }
@@ -151,7 +189,9 @@ export default function EditGuidePage() {
             <section className="flex flex-col h-full items-center justify-center">
                 <div className="text-center space-y-4">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
-                    <p className="text-muted-foreground">Loading guide...</p>
+                    <p className="text-muted-foreground">
+                        {dict?.admin?.guides?.editGuide?.loading}
+                    </p>
                 </div>
             </section>
         );
@@ -161,7 +201,9 @@ export default function EditGuidePage() {
         return (
             <section className="flex flex-col h-full items-center justify-center">
                 <div className="text-center space-y-4">
-                    <p className="text-muted-foreground">Guide not found</p>
+                    <p className="text-muted-foreground">
+                        {dict?.admin?.guides?.editGuide?.notFound}
+                    </p>
                     <Button
                         onClick={() =>
                             router.push(
@@ -169,7 +211,7 @@ export default function EditGuidePage() {
                             )
                         }
                     >
-                        Back to Guides
+                        {dict?.admin?.guides?.editGuide?.backToGuides}
                     </Button>
                 </div>
             </section>
@@ -187,7 +229,7 @@ export default function EditGuidePage() {
                                 {guide.title}
                             </h1>
                             <p className="text-sm text-muted-foreground mt-1">
-                                Edit your guide information and manage pages
+                                {dict?.admin?.guides?.editGuide?.subtitle}
                             </p>
                         </div>
                         <div className="flex gap-2">
@@ -199,7 +241,9 @@ export default function EditGuidePage() {
                                     guide?.status === GuideStatus.PUBLISHED
                                 }
                             >
-                                {publishing ? "Publishing..." : "Publish"}
+                                {publishing
+                                    ? dict?.admin?.guides?.editGuide?.publishing
+                                    : dict?.admin?.guides?.editGuide?.publish}
                             </Button>
                             <Button
                                 variant="outline"
@@ -210,7 +254,7 @@ export default function EditGuidePage() {
                                     )
                                 }
                             >
-                                Back to Guides
+                                {dict?.admin?.guides?.editGuide?.backToGuides}
                             </Button>
                         </div>
                     </div>
@@ -230,13 +274,14 @@ export default function EditGuidePage() {
                                 value="pages"
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                             >
-                                Pages ({guide.pagesCount})
+                                {dict?.admin?.guides?.editGuide?.tabs?.pages} (
+                                {guide.pagesCount})
                             </TabsTrigger>
                             <TabsTrigger
                                 value="info"
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                             >
-                                Basic Information
+                                {dict?.admin?.guides?.editGuide?.tabs?.info}
                             </TabsTrigger>
                         </TabsList>
 
@@ -260,10 +305,16 @@ export default function EditGuidePage() {
                             <div className="max-w-3xl mx-auto p-6">
                                 <div className="mb-6">
                                     <h2 className="text-xl font-semibold">
-                                        Basic Information
+                                        {
+                                            dict?.admin?.guides?.editGuide
+                                                ?.basicInfo?.title
+                                        }
                                     </h2>
                                     <p className="text-muted-foreground mt-1">
-                                        Update the basic details of your guide
+                                        {
+                                            dict?.admin?.guides?.editGuide
+                                                ?.basicInfo?.subtitle
+                                        }
                                     </p>
                                 </div>
                                 <BasicInfoForm
@@ -271,8 +322,14 @@ export default function EditGuidePage() {
                                     onSubmit={handleUpdateBasicInfo}
                                     onCancel={handleCancel}
                                     isSubmitting={saving}
-                                    submitButtonText="Update Guide"
-                                    submitButtonLoadingText="Updating Guide..."
+                                    submitButtonText={
+                                        dict?.admin?.guides?.editGuide
+                                            ?.basicInfo?.update
+                                    }
+                                    submitButtonLoadingText={
+                                        dict?.admin?.guides?.editGuide
+                                            ?.basicInfo?.updating
+                                    }
                                 />
                             </div>
                         </TabsContent>
