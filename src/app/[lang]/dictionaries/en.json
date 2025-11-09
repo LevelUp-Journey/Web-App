@@ -322,6 +322,11 @@
         "upc": "UPC Announcement"
     },
     "admin": {
+        "layout": {
+            "general": "General",
+            "challenges": "Challenges",
+            "guides": "Guides"
+        },
         "dashboard": {
             "title": "Admin Dashboard — Recent Activity",
             "loading": "Loading admin dashboard",
@@ -332,7 +337,9 @@
             "challenges": "Challenges",
             "noChallenges": "No challenges found.",
             "guides": "Guides",
-            "noGuides": "No guides found."
+            "noGuides": "No guides found.",
+            "courses": "Courses",
+            "noCourses": "No courses found."
         },
         "community": {
             "title": "Community Management",
@@ -385,7 +392,101 @@
             "errorDescription": "We couldn't load the courses. Please try again.",
             "retry": "Retry",
             "noCourses": "No courses yet",
-            "noCoursesDescription": "Create your first course to populate the catalog."
+            "noCoursesDescription": "Create your first course to populate the catalog.",
+            "createCourse": {
+                "title": "Create Course",
+                "subtitle": "Create a new course for your students.",
+                "form": {
+                    "title": "Title *",
+                    "titlePlaceholder": "Enter course title",
+                    "description": "Description *",
+                    "descriptionPlaceholder": "Enter course description",
+                    "difficulty": "Difficulty *",
+                    "difficultyPlaceholder": "Select difficulty",
+                    "coverImage": "Cover Image *",
+                    "topics": "Topics *",
+                    "topicsPlaceholder": "Search topics...",
+                    "authors": "Authors *",
+                    "authorsPlaceholder": "Search authors...",
+                    "cancel": "Cancel",
+                    "create": "Create Course",
+                    "creating": "Creating..."
+                },
+                "difficulties": {
+                    "beginner": "Beginner",
+                    "intermediate": "Intermediate",
+                    "advanced": "Advanced",
+                    "expert": "Expert"
+                },
+                "messages": {
+                    "searching": "Searching...",
+                    "createTopic": "Create \"{topic}\"",
+                    "noAuthors": "No authors found",
+                    "createNewTopic": "Create New Topic",
+                    "topicName": "Topic name",
+                    "create": "Create",
+                    "creating": "Creating...",
+                    "back": "Back",
+                    "accessDenied": "Access Denied",
+                    "accessDeniedDescription": "You don't have permission to create courses.",
+                    "loading": "Loading..."
+                },
+                "validation": {
+                    "titleMin": "Title must be at least 5 characters",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "coverImageRequired": "Cover image is required",
+                    "authorsRequired": "At least one author is required",
+                    "topicsRequired": "At least one topic is required"
+                }
+            },
+            "editCourse": {
+                "title": "Edit Course",
+                "subtitle": "Update course information and settings.",
+                "loading": "Loading...",
+                "accessDenied": "Access Denied",
+                "accessDeniedDescription": "You don't have permission to edit courses.",
+                "goBack": "Go Back",
+                "error": "Error",
+                "courseNotFound": "Course Not Found",
+                "courseNotFoundDescription": "The course you're looking for doesn't exist.",
+                "backToCourses": "Back to Courses",
+                "errorLoading": "Error loading course data",
+                "courseNotFoundShort": "Course not found"
+            },
+            "createGuide": {
+                "title": "Create a New Guide",
+                "subtitle": "Provide basic information about your guide. You can add pages after creation.",
+                "cancelConfirm": "Are you sure you want to cancel? All progress will be lost.",
+                "errorCreating": "Error creating guide. Please try again."
+            },
+            "editGuide": {
+                "loading": "Loading guide...",
+                "notFound": "Guide not found",
+                "backToGuides": "Back to Guides",
+                "subtitle": "Edit your guide information and manage pages",
+                "publish": "Publish",
+                "publishing": "Publishing...",
+                "tabs": {
+                    "pages": "Pages",
+                    "info": "Basic Information"
+                },
+                "basicInfo": {
+                    "title": "Basic Information",
+                    "subtitle": "Update the basic details of your guide",
+                    "update": "Update Guide",
+                    "updating": "Updating Guide...",
+                    "cancelConfirm": "Are you sure you want to cancel? Any unsaved changes will be lost.",
+                    "updateSuccess": "Guide updated successfully!",
+                    "updateError": "Error updating guide. Please try again.",
+                    "publishError": "Error publishing guide. Please try again."
+                },
+                "validation": {
+                    "titleRequired": "Title is required",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 1000 characters",
+                    "topicsRequired": "At least one topic is required"
+                }
+            }
         }
     },
     "profile": {
