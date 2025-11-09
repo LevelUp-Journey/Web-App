@@ -3,7 +3,6 @@ import CodeVersionDetail from "@/components/challenges/code-versions/code-versio
 import { UserRole } from "@/lib/consts";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import { VersionTestController } from "@/services/internal/challenges/challenge/controller/versions-test.controller";
-import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
