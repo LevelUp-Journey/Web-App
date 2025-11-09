@@ -1,12 +1,6 @@
 "use client";
 
-import {
-    EllipsisVertical,
-    LogOut,
-    MoonIcon,
-    SunIcon,
-    UserCircle2Icon,
-} from "lucide-react";
+import { LogOut, MoonIcon, SunIcon, UserCircle2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
