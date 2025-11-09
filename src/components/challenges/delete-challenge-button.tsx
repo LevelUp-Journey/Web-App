@@ -32,9 +32,8 @@ export default function DeleteChallengeButton({
     const handleDelete = async () => {
         try {
             setIsDeleting(true);
-            const deleted = await ChallengeController.deleteChallenge(
-                challengeId,
-            );
+            const deleted =
+                await ChallengeController.deleteChallenge(challengeId);
 
             if (!deleted) {
                 toast.error(
@@ -55,7 +54,11 @@ export default function DeleteChallengeButton({
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="default" disabled={isDeleting}>
+                <Button
+                    variant="destructive"
+                    size="default"
+                    disabled={isDeleting}
+                >
                     <Trash2 className="w-4 h-4 mr-2" />
                     {isDeleting ? "Deleting..." : "Delete"}
                 </Button>

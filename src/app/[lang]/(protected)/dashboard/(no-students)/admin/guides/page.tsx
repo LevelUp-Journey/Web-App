@@ -280,7 +280,11 @@ export default function GuidesPage() {
                     </EmptyHeader>
                     <EmptyContent>
                         <Button asChild>
-                            <Link href={PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE}>
+                            <Link
+                                href={
+                                    PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE
+                                }
+                            >
                                 Create Guide
                             </Link>
                         </Button>

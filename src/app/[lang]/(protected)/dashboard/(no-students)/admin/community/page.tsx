@@ -35,11 +35,11 @@ export default function AdminCommunityPage() {
                 const usernameMap: Record<string, string> = {};
                 await Promise.all(
                     data.map(async (community) => {
-                        const profile =
-                            await ProfileController.getProfileById(
-                                community.ownerProfileId,
-                            );
-                        usernameMap[community.ownerId] = profile?.username || "Unknown User";
+                        const profile = await ProfileController.getProfileById(
+                            community.ownerProfileId,
+                        );
+                        usernameMap[community.ownerId] =
+                            profile?.username || "Unknown User";
                     }),
                 );
 

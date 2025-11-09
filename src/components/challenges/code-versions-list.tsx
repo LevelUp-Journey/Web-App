@@ -109,14 +109,19 @@ export default function CodeVersionsList({
                                             Delete Code Version
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Are you sure you want to delete this code version?
-                                            This action cannot be undone.
+                                            Are you sure you want to delete this
+                                            code version? This action cannot be
+                                            undone.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel>
+                                            Cancel
+                                        </AlertDialogCancel>
                                         <AlertDialogAction
-                                            onClick={() => handleDelete(version.id)}
+                                            onClick={() =>
+                                                handleDelete(version.id)
+                                            }
                                         >
                                             Delete
                                         </AlertDialogAction>
@@ -129,7 +134,8 @@ export default function CodeVersionsList({
             ))}
             {codeVersions.length === 0 && (
                 <p className="text-muted-foreground text-sm">
-                    No code versions yet. Click "Add Code Version" to create one.
+                    No code versions yet. Click "Add Code Version" to create
+                    one.
                 </p>
             )}
         </div>

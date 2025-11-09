@@ -56,7 +56,11 @@ export function LeaderboardPage() {
                             <ChevronDownIcon className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" side="bottom" className="ml-auto">
+                    <DropdownMenuContent
+                        align="end"
+                        side="bottom"
+                        className="ml-auto"
+                    >
                         {RANKS.map((rank) => (
                             <DropdownMenuItem
                                 key={rank.key}

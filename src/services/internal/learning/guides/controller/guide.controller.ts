@@ -47,7 +47,10 @@ export class GuideController {
             const response = await getGuidesPaginatedAction(request);
             return response;
         } catch (error) {
-            console.error("Error in GuideController.getGuidesPaginated:", error);
+            console.error(
+                "Error in GuideController.getGuidesPaginated:",
+                error,
+            );
             return null;
         }
     }

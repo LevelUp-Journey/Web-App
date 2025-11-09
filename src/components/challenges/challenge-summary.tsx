@@ -13,7 +13,11 @@ import MdxRenderer from "@/components/challenges/mdx-renderer";
 import PublishButton from "@/components/challenges/publish-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChallengeDifficulty, ChallengeStatus, type ProgrammingLanguage } from "@/lib/consts";
+import {
+    ChallengeDifficulty,
+    ChallengeStatus,
+    type ProgrammingLanguage,
+} from "@/lib/consts";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
@@ -69,18 +73,24 @@ export default function ChallengeSummary({
                     <div className="flex flex-wrap gap-2 mb-4 justify-between items-center">
                         <div className="flex flex-wrap gap-2">
                             <ChallengeDifficultyBadge
-                                difficulty={challenge.difficulty ?? ChallengeDifficulty.EASY}
+                                difficulty={
+                                    challenge.difficulty ??
+                                    ChallengeDifficulty.EASY
+                                }
                             />
                             {codeVersions.map((version) => (
                                 <FullLanguageBadge
                                     key={version.id}
-                                    language={version.language as ProgrammingLanguage}
+                                    language={
+                                        version.language as ProgrammingLanguage
+                                    }
                                 />
                             ))}
                         </div>
                         {isTeacher && (
                             <div className="text-sm text-muted-foreground">
-                                <strong>XP:</strong> {challenge.experiencePoints}
+                                <strong>XP:</strong>{" "}
+                                {challenge.experiencePoints}
                             </div>
                         )}
                     </div>
@@ -94,7 +104,8 @@ export default function ChallengeSummary({
                         {/* Teacher Actions */}
                         {isTeacher && (
                             <div className="flex gap-2 items-center ml-4">
-                                {challenge.status !== ChallengeStatus.PUBLISHED && (
+                                {challenge.status !==
+                                    ChallengeStatus.PUBLISHED && (
                                     <PublishButton challengeId={challenge.id} />
                                 )}
                             </div>
@@ -126,7 +137,9 @@ export default function ChallengeSummary({
 
                 {/* Description */}
                 <div>
-                    <h4 className="text-xl font-semibold text-muted-foreground mb-4">Overview</h4>
+                    <h4 className="text-xl font-semibold text-muted-foreground mb-4">
+                        Overview
+                    </h4>
                     <MdxRenderer serializedSource={serializedMarkdown} />
                 </div>
             </div>

@@ -86,7 +86,9 @@ export default function ProfileEditForm({
 
                 if (!result) {
                     console.error("Failed to update profile");
-                    alert("Error: Could not update profile. Profile service may be unavailable.");
+                    alert(
+                        "Error: Could not update profile. Profile service may be unavailable.",
+                    );
                     return;
                 }
             } else {
@@ -96,7 +98,9 @@ export default function ProfileEditForm({
 
                 if (!currentProfile) {
                     console.error("Failed to get current profile");
-                    alert("Error: Could not load profile data. Profile service may be unavailable.");
+                    alert(
+                        "Error: Could not load profile data. Profile service may be unavailable.",
+                    );
                     return;
                 }
 
@@ -107,7 +111,9 @@ export default function ProfileEditForm({
 
                 if (!result) {
                     console.error("Failed to update profile");
-                    alert("Error: Could not update profile. Profile service may be unavailable.");
+                    alert(
+                        "Error: Could not update profile. Profile service may be unavailable.",
+                    );
                     return;
                 }
             }
@@ -116,7 +122,9 @@ export default function ProfileEditForm({
             router.refresh();
         } catch (error) {
             console.error("Error updating profile:", error);
-            alert("Error: An unexpected error occurred while updating your profile.");
+            alert(
+                "Error: An unexpected error occurred while updating your profile.",
+            );
         } finally {
             setSaving(false);
         }
@@ -174,7 +182,8 @@ export default function ProfileEditForm({
                 <CardContent>
                     <div className="text-center py-8">
                         <p className="text-muted-foreground mb-4">
-                            Unable to load profile data. The profile service may be temporarily unavailable.
+                            Unable to load profile data. The profile service may
+                            be temporarily unavailable.
                         </p>
                         <Button variant="outline" onClick={onCancel}>
                             Go Back

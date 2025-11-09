@@ -53,10 +53,9 @@ export function useCommunityFeed() {
                             );
                         return {
                             authorId,
-                            profile:
-                                profile ?? {
-                                    username: "Unknown User",
-                                },
+                            profile: profile ?? {
+                                username: "Unknown User",
+                            },
                         };
                     } catch (error) {
                         console.error(
@@ -101,10 +100,9 @@ export function useCommunityFeed() {
                 const postsWithDetails: PostWithDetails[] = allPosts.map(
                     (post) => ({
                         ...post,
-                        authorProfile:
-                            profileMap.get(post.authorId) ?? {
-                                username: "Unknown User",
-                            },
+                        authorProfile: profileMap.get(post.authorId) ?? {
+                            username: "Unknown User",
+                        },
                         community: communityMap.get(post.communityId),
                         reactions: reactionMap.get(post.id) || [],
                     }),

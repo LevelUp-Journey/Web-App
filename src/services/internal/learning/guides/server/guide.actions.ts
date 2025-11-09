@@ -54,9 +54,9 @@ export async function getAllGuidesAction(): Promise<GuideResponse[]> {
     try {
         console.log(API_GATEWAY_HTTP);
         const response =
-            await API_GATEWAY_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
-                "/guides",
-            );
+            await API_GATEWAY_HTTP.get<
+                LearningResponse<GetGuidesResponseFormat>
+            >("/guides");
         return response.data.data.content;
     } catch (error) {
         console.error("Error fetching all guides:", error);

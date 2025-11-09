@@ -22,7 +22,9 @@ interface ChallengesPageSectionProps {
     onCountChange?: (count: number) => void;
 }
 
-export function ChallengesPageSection({ onCountChange }: ChallengesPageSectionProps = {}) {
+export function ChallengesPageSection({
+    onCountChange,
+}: ChallengesPageSectionProps = {}) {
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [codeVersionsMap, setCodeVersionsMap] = useState<
         Map<string, CodeVersion[]>
@@ -49,7 +51,9 @@ export function ChallengesPageSection({ onCountChange }: ChallengesPageSectionPr
             setChallenges(challengesData);
 
             // Get all challenge IDs
-            const challengeIds = challengesData.map((challenge) => challenge.id);
+            const challengeIds = challengesData.map(
+                (challenge) => challenge.id,
+            );
 
             // Fetch all code versions in a single batch request
             const codeVersionsBatch =

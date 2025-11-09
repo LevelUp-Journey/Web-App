@@ -130,9 +130,12 @@ export default function EditGuidePage() {
 
         setPublishing(true);
         try {
-            const updatedGuide = await GuideController.updateGuideStatus(guide.id, {
-                status: GuideStatus.PUBLISHED,
-            });
+            const updatedGuide = await GuideController.updateGuideStatus(
+                guide.id,
+                {
+                    status: GuideStatus.PUBLISHED,
+                },
+            );
             setGuide(updatedGuide);
             router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
         } catch (error) {
@@ -191,7 +194,10 @@ export default function EditGuidePage() {
                             <Button
                                 variant="default"
                                 onClick={handlePublish}
-                                disabled={publishing || guide?.status === GuideStatus.PUBLISHED}
+                                disabled={
+                                    publishing ||
+                                    guide?.status === GuideStatus.PUBLISHED
+                                }
                             >
                                 {publishing ? "Publishing..." : "Publish"}
                             </Button>
@@ -199,7 +205,8 @@ export default function EditGuidePage() {
                                 variant="outline"
                                 onClick={() =>
                                     router.push(
-                                        PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
+                                        PATHS.DASHBOARD.ADMINISTRATION.GUIDES
+                                            .ROOT,
                                     )
                                 }
                             >

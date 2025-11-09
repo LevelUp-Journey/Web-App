@@ -30,14 +30,23 @@ export default function DashboardPage() {
                                 />
                                 <div className="flex-1 flex flex-col justify-between h-full min-h-[200px]">
                                     <div className="flex-1">
-                                        <h4 className="text-xl font-semibold mb-3">Plan your learning journey</h4>
+                                        <h4 className="text-xl font-semibold mb-3">
+                                            Plan your learning journey
+                                        </h4>
                                         <p className="text-muted-foreground text-base leading-relaxed">
-                                            Explore guided learning paths and curated courses designed for UPC students.
+                                            Explore guided learning paths and
+                                            curated courses designed for UPC
+                                            students.
                                         </p>
                                     </div>
                                     <div className="mt-auto pt-4">
                                         <Link href="/dashboard/guides">
-                                            <Button size="lg" className="px-6 py-3">Explore Guides</Button>
+                                            <Button
+                                                size="lg"
+                                                className="px-6 py-3"
+                                            >
+                                                Explore Guides
+                                            </Button>
                                         </Link>
                                     </div>
                                 </div>
@@ -47,7 +56,9 @@ export default function DashboardPage() {
 
                     {/* Featured Challenges Section */}
                     <div className="space-y-4">
-                        <h2 className="text-xl font-semibold">Featured Challenges</h2>
+                        <h2 className="text-xl font-semibold">
+                            Featured Challenges
+                        </h2>
                         <ChallengesSection />
                     </div>
                 </div>
@@ -59,20 +70,30 @@ export default function DashboardPage() {
                         <h3 className="text-xl font-semibold mb-3">Streak</h3>
                         <div className="bg-card border rounded-lg p-6 shadow-sm">
                             <div className="text-center text-muted-foreground/75">
-                                <p className="text-lg font-medium">Coming Soon</p>
-                                <p className="text-sm mt-2">Track your coding consistency</p>
+                                <p className="text-lg font-medium">
+                                    Coming Soon
+                                </p>
+                                <p className="text-sm mt-2">
+                                    Track your coding consistency
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     {/* Progress Card */}
-                       <div className="bg-card border rounded-lg p-6 shadow-sm">
+                    <div className="bg-card border rounded-lg p-6 shadow-sm">
                         <div className="text-left">
-                            <h3 className="text-xl font-semibold mb-4 text-foreground">Progress</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-foreground">
+                                Progress
+                            </h3>
 
                             <div className="text-center text-muted-foreground/75">
-                                <p className="text-lg font-medium">Coming Soon</p>
-                                <p className="text-sm mt-2">Unlock badges and rewards for your progress</p>
+                                <p className="text-lg font-medium">
+                                    Coming Soon
+                                </p>
+                                <p className="text-sm mt-2">
+                                    Unlock badges and rewards for your progress
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -80,11 +101,17 @@ export default function DashboardPage() {
                     {/* Achievements Card */}
                     <div className="bg-card border rounded-lg p-6 shadow-sm">
                         <div className="text-left">
-                            <h3 className="text-xl font-semibold mb-4 text-foreground">Achievements</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-foreground">
+                                Achievements
+                            </h3>
 
                             <div className="text-center text-muted-foreground/75">
-                                <p className="text-lg font-medium">Coming Soon</p>
-                                <p className="text-sm mt-2">Unlock badges and rewards for your progress</p>
+                                <p className="text-lg font-medium">
+                                    Coming Soon
+                                </p>
+                                <p className="text-sm mt-2">
+                                    Unlock badges and rewards for your progress
+                                </p>
                             </div>
                         </div>
                     </div>

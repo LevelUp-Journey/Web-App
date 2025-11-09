@@ -1,11 +1,4 @@
-import {
-    BookOpen,
-    Code2,
-    Trophy,
-    Users,
-    Zap,
-    Target,
-} from "lucide-react";
+import { BookOpen, Code2, Target, Trophy, Users, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -45,14 +38,10 @@ export default async function Home({
 
                     <div className="flex items-center gap-3">
                         <Button variant="ghost" asChild>
-                            <Link href={PATHS.AUTH.SIGN_IN}>
-                                Sign In
-                            </Link>
+                            <Link href={PATHS.AUTH.SIGN_IN}>Sign In</Link>
                         </Button>
                         <Button asChild>
-                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                Register
-                            </Link>
+                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>Register</Link>
                         </Button>
                     </div>
                 </div>
@@ -95,7 +84,8 @@ export default async function Home({
                         </div>
 
                         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            Real challenges. Practical projects. No boring theory. Learn programming like professionals do.
+                            Real challenges. Practical projects. No boring
+                            theory. Learn programming like professionals do.
                         </p>
 
                         {/* CTA Buttons */}
@@ -174,7 +164,8 @@ export default async function Home({
                                     Learn fast
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Short, practical challenges. Instant feedback. No wasted time.
+                                    Short, practical challenges. Instant
+                                    feedback. No wasted time.
                                 </p>
                             </CardContent>
                         </Card>
@@ -188,7 +179,8 @@ export default async function Home({
                                     Practical focus
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Real projects from day one. Learn what companies actually use.
+                                    Real projects from day one. Learn what
+                                    companies actually use.
                                 </p>
                             </CardContent>
                         </Card>
@@ -202,7 +194,8 @@ export default async function Home({
                                     Active community
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Share code, solve questions, and learn with other students.
+                                    Share code, solve questions, and learn with
+                                    other students.
                                 </p>
                             </CardContent>
                         </Card>
@@ -216,7 +209,8 @@ export default async function Home({
                                     Gamification
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Earn points, unlock achievements, and compete in global rankings.
+                                    Earn points, unlock achievements, and
+                                    compete in global rankings.
                                 </p>
                             </CardContent>
                         </Card>
@@ -230,7 +224,8 @@ export default async function Home({
                                     Learning paths
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Follow a structured path from beginner to advanced.
+                                    Follow a structured path from beginner to
+                                    advanced.
                                 </p>
                             </CardContent>
                         </Card>
@@ -244,7 +239,8 @@ export default async function Home({
                                     Integrated editor
                                 </h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Write, test, and run code directly in your browser.
+                                    Write, test, and run code directly in your
+                                    browser.
                                 </p>
                             </CardContent>
                         </Card>
@@ -260,7 +256,8 @@ export default async function Home({
                             Ready for your first challenge?
                         </h2>
                         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Thousands of students are already learning. Join for free and start building your tech future.
+                            Thousands of students are already learning. Join for
+                            free and start building your tech future.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                             <Button

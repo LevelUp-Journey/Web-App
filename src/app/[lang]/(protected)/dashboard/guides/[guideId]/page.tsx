@@ -22,7 +22,9 @@ export default async function GuidePage({ params }: GuidePageProps) {
         );
     }
 
-    const author = await ProfileController.getProfileByUserId(guide.authorIds[0]); // Get first author
+    const author = await ProfileController.getProfileByUserId(
+        guide.authorIds[0],
+    ); // Get first author
 
     if (!author) {
         return (
@@ -32,10 +34,5 @@ export default async function GuidePage({ params }: GuidePageProps) {
         );
     }
 
-    return (
-        <GuideViewer
-            guide={guide}
-            author={author}
-        />
-    );
+    return <GuideViewer guide={guide} author={author} />;
 }

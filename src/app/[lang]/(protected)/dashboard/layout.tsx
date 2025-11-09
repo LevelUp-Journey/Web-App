@@ -3,17 +3,17 @@ import { SidebarContentHeader } from "@/components/dashboard/sidebar-content-hea
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function ProtectedLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full min-h-screen flex flex-col">
-        <SidebarContentHeader />
-        <div className="flex-1">{children}</div>
-      </main>
-    </SidebarProvider>
-  );
+    return (
+        <SidebarProvider>
+            <AppSidebar />
+            <main className="w-full min-h-screen flex flex-col">
+                <SidebarContentHeader />
+                <div className="flex-1">{children}</div>
+            </main>
+        </SidebarProvider>
+    );
 }
