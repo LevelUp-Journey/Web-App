@@ -259,6 +259,68 @@
         "notFound": "Guía no encontrada",
         "authorNotAvailable": "Perfil del autor no disponible"
     },
+    "createChallenge": {
+        "title": "Crear Nuevo Desafío",
+        "subtitle": "Completa los detalles a continuación para crear un nuevo desafío para los estudiantes.",
+        "form": {
+            "title": "Título del Desafío",
+            "titlePlaceholder": "Ingresa el título del desafío",
+            "tags": "Etiquetas (separadas por comas)",
+            "tagsPlaceholder": "ej., JavaScript, React, Node.js",
+            "difficulty": "Nivel de Dificultad",
+            "difficultyPlaceholder": "Selecciona dificultad",
+            "experiencePoints": "Puntos de Experiencia",
+            "experiencePointsDescription": "Los desafíos {difficulty} pueden otorgar hasta {maxXP} XP. Usa el deslizador para establecer la recompensa.",
+            "xp": "XP",
+            "maxXP": "Máx {maxXP} XP",
+            "createButton": "Crear Desafío",
+            "creatingButton": "Creando..."
+        },
+        "difficulties": {
+            "easy": "Fácil",
+            "medium": "Medio",
+            "hard": "Difícil",
+            "expert": "Experto"
+        },
+        "messages": {
+            "created": "¡Desafío creado exitosamente!",
+            "error": "Error al crear el desafío. Por favor, inténtalo de nuevo."
+        },
+        "validation": {
+            "titleMin": "El título del desafío debe tener al menos 5 caracteres.",
+            "titleMax": "El título del desafío debe tener como máximo 32 caracteres.",
+            "xpMin": "Los puntos de experiencia deben ser al menos 0.",
+            "xpMax": "Los puntos de experiencia deben ser como máximo {maxXP}."
+        }
+    },
+    "navigationIndicator": {
+        "home": "Inicio",
+        "dashboard": "Panel",
+        "profile": "Perfil",
+        "challenges": "Desafíos",
+        "create": "Crear",
+        "versions": "Versiones",
+        "tests": "Pruebas",
+        "community": "Comunidad",
+        "post": "Publicación",
+        "leaderboard": "Clasificación",
+        "settings": "Configuración",
+        "help": "Ayuda",
+        "admin": "Administración",
+        "courses": "Cursos",
+        "guides": "Guías",
+        "edit": "Editar",
+        "auth": "Autenticación",
+        "signIn": "Iniciar Sesión",
+        "signUp": "Registrarse",
+        "legal": "Legal",
+        "privacyPolicy": "Política de Privacidad",
+        "terms": "Términos de Servicio",
+        "detail": "Detalle"
+    },
+    "announcements": {
+        "upc": "Anuncio UPC"
+    },
     "admin": {
         "dashboard": {
             "title": "Panel de Administración — Actividad Reciente",
@@ -328,6 +390,9 @@
     },
     "profile": {
         "title": "Perfil",
+        "account": {
+            "title": "Configuración de Cuenta"
+        },
         "edit": "Editar perfil",
         "stats": "Estadísticas",
         "achievements": "Logros",

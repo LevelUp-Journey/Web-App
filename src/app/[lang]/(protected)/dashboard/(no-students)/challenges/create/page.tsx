@@ -31,6 +31,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { useDictionary } from "@/hooks/use-dictionary";
 import {
     CHALLENGE_DIFFICULTY_MAX_XP,
     ChallengeDifficulty,
@@ -40,27 +41,44 @@ import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { CreateChallengeRequest } from "@/services/internal/challenges/challenge/controller/challenge.response";
 
-const formSchema = z.object({
-    title: z
-        .string()
-        .min(5, "Challenge title must be at least 5 characters.")
-        .max(32, "Challenge title must be at most 32 characters."),
-    tags: z.string().optional(),
-    difficulty: z.enum(ChallengeDifficulty),
-    experiencePoints: z
-        .number()
-        .min(0, "Experience points must be at least 0.")
-        .max(
-            MAX_CHALLENGE_EXPERIENCE_POINTS,
-            `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
-        ),
-});
-
-type FormData = z.infer<typeof formSchema>;
-
 export default function CreateChallengePage() {
     const router = useRouter();
     const editorRef = useRef<ShadcnTemplateRef>(null);
+    const dict = useDictionary();
+
+    const formSchema = z.object({
+        title: z
+            .string()
+            .min(
+                5,
+                dict?.createChallenge.validation.titleMin ||
+                    "Challenge title must be at least 5 characters.",
+            )
+            .max(
+                32,
+                dict?.createChallenge.validation.titleMax ||
+                    "Challenge title must be at most 32 characters.",
+            ),
+        tags: z.string().optional(),
+        difficulty: z.enum(ChallengeDifficulty),
+        experiencePoints: z
+            .number()
+            .min(
+                0,
+                dict?.createChallenge.validation.xpMin ||
+                    "Experience points must be at least 0.",
+            )
+            .max(
+                MAX_CHALLENGE_EXPERIENCE_POINTS,
+                dict?.createChallenge.validation.xpMax.replace(
+                    "{maxXP}",
+                    MAX_CHALLENGE_EXPERIENCE_POINTS.toString(),
+                ) ||
+                    `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
+            ),
+    });
+
+    type FormData = z.infer<typeof formSchema>;
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -101,11 +119,17 @@ export default function CreateChallengePage() {
         try {
             const challenge =
                 await ChallengeController.createChallenge(request);
-            toast.success("Challenge created successfully!");
+            toast.success(
+                dict?.createChallenge.messages.created ||
+                    "Challenge created successfully!",
+            );
             router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challenge.id));
         } catch (error) {
             console.error("Error creating challenge:", error);
-            toast.error("Failed to create challenge. Please try again.");
+            toast.error(
+                dict?.createChallenge.messages.error ||
+                    "Failed to create challenge. Please try again.",
+            );
         }
     });
 
@@ -134,11 +158,10 @@ export default function CreateChallengePage() {
             {/* Header - Fixed height */}
             <header className="shrink-0 p-6 border-b">
                 <h1 className="text-3xl font-bold mb-2">
-                    Create New Challenge
+                    {dict?.createChallenge.title}
                 </h1>
                 <p className="text-muted-foreground">
-                    Fill in the details below to create a new challenge for
-                    students.
+                    {dict?.createChallenge.subtitle}
                 </p>
             </header>
 
@@ -157,13 +180,16 @@ export default function CreateChallengePage() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        Challenge Title
+                                        {dict?.createChallenge.form.title}
                                     </FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
                                         aria-invalid={fieldState.invalid}
-                                        placeholder="Enter challenge title"
+                                        placeholder={
+                                            dict?.createChallenge.form
+                                                .titlePlaceholder
+                                        }
                                         autoComplete="off"
                                     />
                                     {fieldState.invalid && (
@@ -182,13 +208,16 @@ export default function CreateChallengePage() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        Tags (comma separated)
+                                        {dict?.createChallenge.form.tags}
                                     </FieldLabel>
                                     <Input
                                         {...field}
                                         id={field.name}
                                         aria-invalid={fieldState.invalid}
-                                        placeholder="e.g., JavaScript, React, Node.js"
+                                        placeholder={
+                                            dict?.createChallenge.form
+                                                .tagsPlaceholder
+                                        }
                                         autoComplete="off"
                                     />
                                     {fieldState.invalid && (
@@ -207,7 +236,7 @@ export default function CreateChallengePage() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        Difficulty Level
+                                        {dict?.createChallenge.form.difficulty}
                                     </FieldLabel>
                                     <Select
                                         name={field.name}
@@ -218,32 +247,49 @@ export default function CreateChallengePage() {
                                             id={field.name}
                                             aria-invalid={fieldState.invalid}
                                         >
-                                            <SelectValue placeholder="Select difficulty" />
+                                            <SelectValue
+                                                placeholder={
+                                                    dict?.createChallenge.form
+                                                        .difficultyPlaceholder
+                                                }
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem
                                                 value={ChallengeDifficulty.EASY}
                                             >
-                                                Easy
+                                                {
+                                                    dict?.createChallenge
+                                                        .difficulties.easy
+                                                }
                                             </SelectItem>
                                             <SelectItem
                                                 value={
                                                     ChallengeDifficulty.MEDIUM
                                                 }
                                             >
-                                                Medium
+                                                {
+                                                    dict?.createChallenge
+                                                        .difficulties.medium
+                                                }
                                             </SelectItem>
                                             <SelectItem
                                                 value={ChallengeDifficulty.HARD}
                                             >
-                                                Hard
+                                                {
+                                                    dict?.createChallenge
+                                                        .difficulties.hard
+                                                }
                                             </SelectItem>
                                             <SelectItem
                                                 value={
                                                     ChallengeDifficulty.EXPERT
                                                 }
                                             >
-                                                Expert
+                                                {
+                                                    dict?.createChallenge
+                                                        .difficulties.expert
+                                                }
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
@@ -263,19 +309,32 @@ export default function CreateChallengePage() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        Experience Points
+                                        {
+                                            dict?.createChallenge.form
+                                                .experiencePoints
+                                        }
                                     </FieldLabel>
                                     <FieldDescription>
-                                        {difficulty} challenges can award up to{" "}
-                                        {maxExperiencePoints} XP. Use the slider
-                                        to set the reward.
+                                        {dict?.createChallenge.form.experiencePointsDescription
+                                            .replace(
+                                                "{difficulty}",
+                                                difficulty.toLowerCase(),
+                                            )
+                                            .replace(
+                                                "{maxXP}",
+                                                maxExperiencePoints.toString(),
+                                            )}
                                     </FieldDescription>
                                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                                         <span className="font-semibold text-foreground">
-                                            {field.value ?? 0} XP
+                                            {field.value ?? 0}{" "}
+                                            {dict?.createChallenge.form.xp}
                                         </span>
                                         <span>
-                                            Max {maxExperiencePoints} XP
+                                            {dict?.createChallenge.form.maxXP.replace(
+                                                "{maxXP}",
+                                                maxExperiencePoints.toString(),
+                                            )}
                                         </span>
                                     </div>
                                     <Slider
@@ -303,8 +362,8 @@ export default function CreateChallengePage() {
                                 disabled={form.formState.isSubmitting}
                             >
                                 {form.formState.isSubmitting
-                                    ? "Creating..."
-                                    : "Create Challenge"}
+                                    ? dict?.createChallenge.form.creatingButton
+                                    : dict?.createChallenge.form.createButton}
                             </Button>
                         </div>
                     </form>

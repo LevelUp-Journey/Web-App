@@ -259,6 +259,68 @@
         "notFound": "Guide not found",
         "authorNotAvailable": "Author profile not available"
     },
+    "createChallenge": {
+        "title": "Create New Challenge",
+        "subtitle": "Fill in the details below to create a new challenge for students.",
+        "form": {
+            "title": "Challenge Title",
+            "titlePlaceholder": "Enter challenge title",
+            "tags": "Tags (comma separated)",
+            "tagsPlaceholder": "e.g., JavaScript, React, Node.js",
+            "difficulty": "Difficulty Level",
+            "difficultyPlaceholder": "Select difficulty",
+            "experiencePoints": "Experience Points",
+            "experiencePointsDescription": "{difficulty} challenges can award up to {maxXP} XP. Use the slider to set the reward.",
+            "xp": "XP",
+            "maxXP": "Max {maxXP} XP",
+            "createButton": "Create Challenge",
+            "creatingButton": "Creating..."
+        },
+        "difficulties": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard",
+            "expert": "Expert"
+        },
+        "messages": {
+            "created": "Challenge created successfully!",
+            "error": "Failed to create challenge. Please try again."
+        },
+        "validation": {
+            "titleMin": "Challenge title must be at least 5 characters.",
+            "titleMax": "Challenge title must be at most 32 characters.",
+            "xpMin": "Experience points must be at least 0.",
+            "xpMax": "Experience points must be at most {maxXP}."
+        }
+    },
+    "navigationIndicator": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "challenges": "Challenges",
+        "create": "Create",
+        "versions": "Versions",
+        "tests": "Tests",
+        "community": "Community",
+        "post": "Post",
+        "leaderboard": "Leaderboard",
+        "settings": "Settings",
+        "help": "Help",
+        "admin": "Administration",
+        "courses": "Courses",
+        "guides": "Guides",
+        "edit": "Edit",
+        "auth": "Auth",
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "legal": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "detail": "Detail"
+    },
+    "announcements": {
+        "upc": "UPC Announcement"
+    },
     "admin": {
         "dashboard": {
             "title": "Admin Dashboard — Recent Activity",
@@ -328,6 +390,9 @@
     },
     "profile": {
         "title": "Profile",
+        "account": {
+            "title": "Account Settings"
+        },
         "edit": "Edit Profile",
         "stats": "Statistics",
         "achievements": "Achievements",
