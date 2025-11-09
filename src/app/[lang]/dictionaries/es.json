@@ -7,7 +7,12 @@
         "settings": "Configuración",
         "logout": "Cerrar sesión",
         "login": "Iniciar sesión",
-        "signup": "Registrarse"
+        "signup": "Registrarse",
+        "leaderboard": "Tabla de clasificación",
+        "guides": "Guías",
+        "help": "Ayuda",
+        "adminDashboard": "Panel de administración",
+        "language": "Idioma"
     },
     "common": {
         "loading": "Cargando...",
@@ -80,6 +85,10 @@
         "delete": "Eliminar desafío",
         "publish": "Publicar",
         "unpublish": "Despublicar",
+        "loading": "Cargando desafíos...",
+        "errorFetching": "Error al cargar desafíos",
+        "errorDescription": "El servicio de desafíos no está disponible temporalmente. Por favor, inténtalo de nuevo.",
+        "retry": "Reintentar",
         "details": {
             "title": "Detalles del desafío",
             "description": "Descripción",
@@ -161,5 +170,94 @@
         "forbidden": "Acceso prohibido",
         "badRequest": "Solicitud incorrecta",
         "generic": "Algo salió mal"
+    },
+    "landing": {
+        "header": {
+            "signIn": "Iniciar sesión",
+            "register": "Registrarse"
+        },
+        "hero": {
+            "badge": "Tu futuro tecnológico comienza aquí",
+            "title": "Aprende a programar",
+            "titleHighlight": "practicando",
+            "description": "Desafíos reales. Proyectos prácticos. Sin teoría aburrida. Aprende a programar como lo hacen los profesionales.",
+            "cta": "Comienza gratis"
+        },
+        "stats": {
+            "languages": "Lenguajes",
+            "challenges": "Desafíos",
+            "students": "Estudiantes",
+            "community": "Comunidad"
+        },
+        "features": {
+            "title": "¿Por qué elegirnos?",
+            "subtitle": "Todo lo que necesitas para lanzar tu carrera tecnológica",
+            "learnFast": {
+                "title": "Aprende rápido",
+                "description": "Desafíos cortos y prácticos. Retroalimentación instantánea. Sin perder tiempo."
+            },
+            "practicalFocus": {
+                "title": "Enfoque práctico",
+                "description": "Proyectos reales desde el primer día. Aprende lo que las empresas realmente usan."
+            },
+            "activeCommunity": {
+                "title": "Comunidad activa",
+                "description": "Comparte código, resuelve dudas y aprende con otros estudiantes."
+            },
+            "gamification": {
+                "title": "Gamificación",
+                "description": "Gana puntos, desbloquea logros y compite en clasificaciones globales."
+            },
+            "learningPaths": {
+                "title": "Rutas de aprendizaje",
+                "description": "Sigue un camino estructurado desde principiante hasta avanzado."
+            },
+            "integratedEditor": {
+                "title": "Editor integrado",
+                "description": "Escribe, prueba y ejecuta código directamente en tu navegador."
+            }
+        },
+        "cta": {
+            "title": "¿Listo para tu primer desafío?",
+            "description": "Miles de estudiantes ya están aprendiendo. Únete gratis y comienza a construir tu futuro tecnológico.",
+            "createAccount": "Crear cuenta gratis",
+            "exploreContent": "Explorar contenido"
+        },
+        "footer": {
+            "copyright": "© 2025 Level Up Journey",
+            "tagline": "Formando la próxima generación de desarrolladores"
+        }
+    },
+    "dashboardPage": {
+        "upNext": {
+            "title": "Siguiente",
+            "card": {
+                "title": "Planifica tu viaje de aprendizaje",
+                "description": "Explora rutas de aprendizaje guiadas y cursos seleccionados diseñados para estudiantes de UPC.",
+                "button": "Explorar guías"
+            }
+        },
+        "featuredChallenges": "Desafíos destacados",
+        "streak": {
+            "title": "Racha",
+            "comingSoon": "Próximamente",
+            "description": "Rastrea tu consistencia de codificación"
+        },
+        "progress": {
+            "title": "Progreso",
+            "comingSoon": "Próximamente",
+            "description": "Desbloquea insignias y recompensas por tu progreso"
+        },
+        "achievements": {
+            "title": "Logros",
+            "comingSoon": "Próximamente",
+            "description": "Desbloquea insignias y recompensas por tu progreso"
+        }
+    },
+    "sidebar": {
+        "groups": {
+            "home": "Inicio",
+            "administrative": "Administrativo"
+        }
     }
 }

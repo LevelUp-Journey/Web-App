@@ -21,59 +21,67 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { UserRole } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
+import { getDictionary } from "@/lib/i18n";
+import { getLocalizedPaths } from "@/lib/paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
-// Menu items.
-const topItems = [
-    {
-        title: "Dashboard",
-        url: PATHS.DASHBOARD.ROOT,
-        icon: LayoutDashboard,
-    },
-    {
-        title: "Challenges",
-        url: PATHS.DASHBOARD.CHALLENGES.ROOT,
-        icon: Code2,
-    },
-    {
-        title: "Leaderboard",
-        url: PATHS.DASHBOARD.LEADERBOARD,
-        icon: Trophy,
-    },
-    {
-        title: "Guides",
-        url: PATHS.DASHBOARD.GUIDES.ROOT,
-        icon: Library,
-    },
-];
-
-const administrativeItems = [
-    {
-        title: "Admin Dashboard",
-        url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
-        icon: ShieldUser,
-    },
-];
-
-const bottomItems = [
-    {
-        title: "Settings",
-        url: PATHS.DASHBOARD.SETTINGS,
-        icon: Settings,
-    },
-    {
-        title: "Help",
-        url: PATHS.DASHBOARD.HELP,
-        icon: HelpCircle,
-    },
-];
-
-export default async function AppSidebar() {
+export default async function AppSidebar({
+    params,
+}: {
+    params: Promise<{ lang: string }>;
+}) {
+    const { lang } = await params;
+    const dict = await getDictionary(lang as "en" | "es");
+    const PATHS = getLocalizedPaths(lang);
     const roles = await AuthController.getUserRoles();
 
     const isTeacher =
         roles.includes(UserRole.TEACHER) || roles.includes(UserRole.ADMIN);
+
+    // Menu items with translations
+    const topItems = [
+        {
+            title: dict.navigation.dashboard,
+            url: PATHS.DASHBOARD.ROOT,
+            icon: LayoutDashboard,
+        },
+        {
+            title: dict.navigation.challenges,
+            url: PATHS.DASHBOARD.CHALLENGES.ROOT,
+            icon: Code2,
+        },
+        {
+            title: dict.navigation.leaderboard,
+            url: PATHS.DASHBOARD.LEADERBOARD,
+            icon: Trophy,
+        },
+        {
+            title: dict.navigation.guides,
+            url: PATHS.DASHBOARD.GUIDES.ROOT,
+            icon: Library,
+        },
+    ];
+
+    const administrativeItems = [
+        {
+            title: dict.navigation.adminDashboard,
+            url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
+            icon: ShieldUser,
+        },
+    ];
+
+    const bottomItems = [
+        {
+            title: dict.navigation.settings,
+            url: PATHS.DASHBOARD.SETTINGS,
+            icon: Settings,
+        },
+        {
+            title: dict.navigation.help,
+            url: PATHS.DASHBOARD.HELP,
+            icon: HelpCircle,
+        },
+    ];
 
     return (
         <Sidebar>
@@ -97,7 +105,9 @@ export default async function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Home</SidebarGroupLabel>
+                    <SidebarGroupLabel>
+                        {dict.sidebar.groups.home}
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {topItems.map((item) => (
@@ -115,7 +125,9 @@ export default async function AppSidebar() {
                 </SidebarGroup>
                 {isTeacher && (
                     <SidebarGroup>
-                        <SidebarGroupLabel>Administrative</SidebarGroupLabel>
+                        <SidebarGroupLabel>
+                            {dict.sidebar.groups.administrative}
+                        </SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 {administrativeItems.map((item) => (
