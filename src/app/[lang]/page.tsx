@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { getDictionary } from "@/lib/i18n";
 import { getLocalizedPaths } from "@/lib/paths";
@@ -39,6 +41,8 @@ export default async function Home({
                     </Link>
 
                     <div className="flex items-center gap-3">
+                        <ThemeToggle />
+                        <LanguageToggle />
                         <Button variant="ghost" asChild>
                             <Link href={PATHS.AUTH.SIGN_IN}>
                                 {dict.landing.header.signIn}
