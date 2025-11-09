@@ -142,12 +142,12 @@ function SortableGuideItem({
       </div>
 
       {/* Position Badge */}
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium">
+      <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium">
         {index + 1}
       </div>
 
       {/* Cover Image */}
-      <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
+      <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0">
         <Image
           src={guide.coverImage}
           alt={guide.title}
@@ -763,7 +763,7 @@ export function EditCourseForm({ course }: EditCourseFormProps) {
                       onClick={() => handleAddGuide(guide)}
                       className="w-full p-3 hover:bg-muted/50 transition-colors text-left flex items-center gap-3"
                     >
-                      <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
+                      <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0">
                         <Image
                           src={guide.coverImage}
                           alt={guide.title}
