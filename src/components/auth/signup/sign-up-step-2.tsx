@@ -10,29 +10,46 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import type { Dictionary } from "@/lib/i18n";
 
-// Validation schema for names (firstName and lastName)
-const nameSchema = z
-    .string()
-    .trim()
-    .min(1, "Name cannot be empty")
-    .max(20, "Name cannot exceed 20 characters")
-    .regex(
-        /^[A-Za-zÁáÉéÍíÓóÚúÑñÜü\s-]+$/,
-        "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters",
-    );
+type FormData = {
+    firstName: string;
+    lastName: string;
+};
 
-const formSchema = z.object({
-    firstName: nameSchema,
-    lastName: nameSchema,
-});
+interface SignUpStep2Props {
+    dict?: Dictionary;
+}
 
-type FormData = z.infer<typeof formSchema>;
-
-export default function SignUpStep2() {
+export default function SignUpStep2({ dict }: SignUpStep2Props) {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
     const [loading, setLoading] = useState(false);
+
+    // Validation schema for names (firstName and lastName)
+    const nameSchema = z
+        .string()
+        .trim()
+        .min(
+            1,
+            dict?.auth.signUp.step2.validation.nameEmpty ||
+                "Name cannot be empty",
+        )
+        .max(
+            20,
+            dict?.auth.signUp.step2.validation.nameTooLong ||
+                "Name cannot exceed 20 characters",
+        )
+        .regex(
+            /^[A-Za-zÁáÉéÍíÓóÚúÑñÜü\s-]+$/,
+            dict?.auth.signUp.step2.validation.nameInvalid ||
+                "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters",
+        );
+
+    const formSchema = z.object({
+        firstName: nameSchema,
+        lastName: nameSchema,
+    });
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -61,7 +78,10 @@ export default function SignUpStep2() {
             router.push(redirection);
         } catch (error) {
             console.error("Error saving names:", error);
-            toast.error("Something went wrong. Please try again.");
+            toast.error(
+                dict?.auth.signUp.step2.error ||
+                    "Something went wrong. Please try again.",
+            );
         } finally {
             setLoading(false);
         }
@@ -77,22 +97,26 @@ export default function SignUpStep2() {
             {/* Header */}
             <div className="text-center">
                 <h1 className="mb-2 text-2xl font-semibold">
-                    Tell Us About Yourself
+                    {dict?.auth.signUp.step2.title || "Tell Us About Yourself"}
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                    Enter your first and last name to continue
+                    {dict?.auth.signUp.step2.subtitle ||
+                        "Enter your first and last name to continue"}
                 </p>
             </div>
 
             {/* First Name Input */}
             <div className="flex flex-col gap-2">
                 <Label htmlFor="firstName" className="text-sm font-medium">
-                    First Name
+                    {dict?.auth.signUp.step2.firstNameLabel || "First Name"}
                 </Label>
                 <Input
                     id="firstName"
                     type="text"
-                    placeholder="Enter your first name"
+                    placeholder={
+                        dict?.auth.signUp.step2.firstNamePlaceholder ||
+                        "Enter your first name"
+                    }
                     disabled={loading}
                     autoFocus
                     {...register("firstName")}
@@ -107,12 +131,15 @@ export default function SignUpStep2() {
             {/* Last Name Input */}
             <div className="flex flex-col gap-2">
                 <Label htmlFor="lastName" className="text-sm font-medium">
-                    Last Name
+                    {dict?.auth.signUp.step2.lastNameLabel || "Last Name"}
                 </Label>
                 <Input
                     id="lastName"
                     type="text"
-                    placeholder="Enter your last name"
+                    placeholder={
+                        dict?.auth.signUp.step2.lastNamePlaceholder ||
+                        "Enter your last name"
+                    }
                     disabled={loading}
                     {...register("lastName")}
                 />
@@ -131,7 +158,9 @@ export default function SignUpStep2() {
                     size="lg"
                     className="w-full"
                 >
-                    {loading ? "Saving..." : "Continue"}
+                    {loading
+                        ? dict?.auth.signUp.step2.savingButton || "Saving..."
+                        : dict?.auth.signUp.step2.continueButton || "Continue"}
                 </Button>
 
                 <Button
@@ -142,7 +171,7 @@ export default function SignUpStep2() {
                     className="w-full"
                     disabled={loading}
                 >
-                    Back
+                    {dict?.auth.signUp.step2.backButton || "Back"}
                 </Button>
             </div>
         </form>

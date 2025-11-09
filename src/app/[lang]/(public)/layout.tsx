@@ -3,6 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { LanguageToggle } from "@/components/ui/language-toggle";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 
 export default function AuthLayout({
@@ -11,9 +14,12 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const dict = useDictionary();
 
     const buttonMessage =
-        pathname === PATHS.AUTH.SIGN_IN ? "Sign Up" : "Sign In";
+        pathname === PATHS.AUTH.SIGN_IN
+            ? dict?.auth.signIn.signUpLink || "Sign Up"
+            : "Sign In";
 
     const buttonHref =
         pathname === PATHS.AUTH.SIGN_IN
@@ -39,13 +45,17 @@ export default function AuthLayout({
                     </span>
                 </div>
 
-                {!isUnauthorized && (
-                    <Button variant="outline" size="sm" asChild>
-                        <Link href={buttonHref} suppressHydrationWarning>
-                            {buttonMessage}
-                        </Link>
-                    </Button>
-                )}
+                <div className="flex items-center gap-2">
+                    <ThemeToggle />
+                    <LanguageToggle />
+                    {!isUnauthorized && (
+                        <Button variant="outline" size="sm" asChild>
+                            <Link href={buttonHref} suppressHydrationWarning>
+                                {buttonMessage}
+                            </Link>
+                        </Button>
+                    )}
+                </div>
             </header>
 
             {/* Main Content */}
@@ -57,8 +67,12 @@ export default function AuthLayout({
 
             {/* Footer */}
             <footer className="flex justify-center gap-4 py-4 text-sm">
-                <Link href={PATHS.LEGAL.TERMS}>Terms</Link>
-                <Link href={PATHS.LEGAL.PRIVACY_POLICY}>Privacy Policy</Link>
+                <Link href={PATHS.LEGAL.TERMS}>
+                    {dict?.legal.terms.title || "Terms"}
+                </Link>
+                <Link href={PATHS.LEGAL.PRIVACY_POLICY}>
+                    {dict?.legal.privacyPolicy.title || "Privacy Policy"}
+                </Link>
             </footer>
         </div>
     );

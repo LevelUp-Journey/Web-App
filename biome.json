@@ -30,7 +30,8 @@
             "a11y": {
                 "noSvgWithoutTitle": "off",
                 "useKeyWithClickEvents": "off",
-                "noStaticElementInteractions": "off"
+                "noStaticElementInteractions": "off",
+                "useSemanticElements": "off"
             },
             "correctness": {
                 "useExhaustiveDependencies": "warn"

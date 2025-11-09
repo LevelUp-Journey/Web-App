@@ -259,5 +259,87 @@
             "home": "Inicio",
             "administrative": "Administrativo"
         }
+    },
+    "auth": {
+        "signIn": {
+            "title": "Inicia sesión en Level Up Journey",
+            "emailPlaceholder": "Correo electrónico",
+            "passwordPlaceholder": "Contraseña",
+            "submitButton": "Iniciar sesión",
+            "orSeparator": "O",
+            "continueWithGoogle": "Continuar con Google",
+            "continueWithGithub": "Continuar con Github",
+            "noAccount": "¿No tienes una cuenta?",
+            "signUpLink": "Regístrate",
+            "error": "Algo salió mal"
+        },
+        "signUp": {
+            "step1": {
+                "title": "Registrarse",
+                "emailPlaceholder": "Correo electrónico",
+                "passwordPlaceholder": "Contraseña",
+                "confirmPasswordPlaceholder": "Confirmar contraseña",
+                "nextButton": "Siguiente",
+                "haveAccount": "Si ya tienes una cuenta,",
+                "signInLink": "inicia sesión",
+                "passwordMismatch": "Las contraseñas no coinciden"
+            },
+            "step2": {
+                "title": "Cuéntanos sobre ti",
+                "subtitle": "Ingresa tu nombre y apellido para continuar",
+                "firstNameLabel": "Nombre",
+                "firstNamePlaceholder": "Ingresa tu nombre",
+                "lastNameLabel": "Apellido",
+                "lastNamePlaceholder": "Ingresa tu apellido",
+                "continueButton": "Continuar",
+                "savingButton": "Guardando...",
+                "backButton": "Atrás",
+                "error": "Algo salió mal. Por favor, inténtalo de nuevo.",
+                "validation": {
+                    "nameEmpty": "El nombre no puede estar vacío",
+                    "nameTooLong": "El nombre no puede exceder 20 caracteres",
+                    "nameInvalid": "El nombre debe contener solo letras, acentos, espacios y guiones, máximo 20 caracteres"
+                }
+            },
+            "step3": {
+                "title": "Completa tu perfil",
+                "subtitle": "Agrega una foto para comenzar",
+                "usernameLabel": "Nombre de usuario",
+                "usernamePlaceholder": "Ingresa tu nombre de usuario",
+                "usernameHelp": "Así es como aparecerás ante los demás. Puedes cambiar esto en cualquier momento.",
+                "startAdventureButton": "Comienza tu aventura",
+                "creatingProfileButton": "Creando perfil...",
+                "backButton": "Atrás",
+                "loadingProfile": "Cargando tu perfil...",
+                "profileLoadFailed": "Error al cargar tu perfil",
+                "goBackButton": "Volver",
+                "profileLoadError": "Error al cargar tu perfil. Por favor, inténtalo de nuevo.",
+                "profileNotLoaded": "Perfil no cargado. Por favor, inténtalo de nuevo.",
+                "profileUpdateSuccess": "¡Perfil actualizado exitosamente!",
+                "profileUpdateError": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+                "invalidStep": "Paso inválido",
+                "validation": {
+                    "usernameEmpty": "El nombre de usuario no puede estar vacío",
+                    "usernameTooLong": "El nombre de usuario no puede exceder 30 caracteres",
+                    "usernameInvalid": "El nombre de usuario debe contener solo caracteres alfanuméricos (letras y números), sin espacios, máximo 30 caracteres"
+                }
+            }
+        }
+    },
+    "legal": {
+        "privacyPolicy": {
+            "title": "Política de privacidad",
+            "content": "Esta es la página de política de privacidad."
+        },
+        "terms": {
+            "title": "Términos de servicio",
+            "content": "Esta es la página de términos de servicio."
+        }
+    },
+    "unauthorized": {
+        "title": "Acceso no autorizado",
+        "description": "Has intentado acceder a una página que no tienes autorización para ver. Si crees que esto es un error, por favor contacta al soporte.",
+        "goBackDashboard": "Volver al panel",
+        "homeButton": "Inicio"
     }
 }

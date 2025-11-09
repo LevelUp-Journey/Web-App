@@ -259,5 +259,87 @@
             "home": "Home",
             "administrative": "Administrative"
         }
+    },
+    "auth": {
+        "signIn": {
+            "title": "Sign in to Level Up Journey",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "submitButton": "Sign In",
+            "orSeparator": "Or",
+            "continueWithGoogle": "Continue with Google",
+            "continueWithGithub": "Continue with Github",
+            "noAccount": "Don't have an account?",
+            "signUpLink": "Sign up",
+            "error": "Something went wrong"
+        },
+        "signUp": {
+            "step1": {
+                "title": "Sign Up",
+                "emailPlaceholder": "Email",
+                "passwordPlaceholder": "Password",
+                "confirmPasswordPlaceholder": "Confirm Password",
+                "nextButton": "Next",
+                "haveAccount": "If you already have an account,",
+                "signInLink": "Sign in",
+                "passwordMismatch": "Passwords do not match"
+            },
+            "step2": {
+                "title": "Tell Us About Yourself",
+                "subtitle": "Enter your first and last name to continue",
+                "firstNameLabel": "First Name",
+                "firstNamePlaceholder": "Enter your first name",
+                "lastNameLabel": "Last Name",
+                "lastNamePlaceholder": "Enter your last name",
+                "continueButton": "Continue",
+                "savingButton": "Saving...",
+                "backButton": "Back",
+                "error": "Something went wrong. Please try again.",
+                "validation": {
+                    "nameEmpty": "Name cannot be empty",
+                    "nameTooLong": "Name cannot exceed 20 characters",
+                    "nameInvalid": "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters"
+                }
+            },
+            "step3": {
+                "title": "Complete Your Profile",
+                "subtitle": "Add a photo to get started",
+                "usernameLabel": "Username",
+                "usernamePlaceholder": "Enter your username",
+                "usernameHelp": "This is how you'll appear to others. You can change this anytime.",
+                "startAdventureButton": "Start Your Adventure",
+                "creatingProfileButton": "Creating Profile...",
+                "backButton": "Back",
+                "loadingProfile": "Loading your profile...",
+                "profileLoadFailed": "Failed to load your profile",
+                "goBackButton": "Go Back",
+                "profileLoadError": "Failed to load your profile. Please try again.",
+                "profileNotLoaded": "Profile not loaded. Please try again.",
+                "profileUpdateSuccess": "Profile updated successfully!",
+                "profileUpdateError": "Failed to update profile. Please try again.",
+                "invalidStep": "Invalid step",
+                "validation": {
+                    "usernameEmpty": "Username cannot be empty",
+                    "usernameTooLong": "Username cannot exceed 30 characters",
+                    "usernameInvalid": "Username must contain only alphanumeric characters (letters and numbers), no spaces, maximum 30 characters"
+                }
+            }
+        }
+    },
+    "legal": {
+        "privacyPolicy": {
+            "title": "Privacy Policy",
+            "content": "This is the privacy policy page."
+        },
+        "terms": {
+            "title": "Terms of Service",
+            "content": "This is the terms of service page."
+        }
+    },
+    "unauthorized": {
+        "title": "Unauthorized Access",
+        "description": "You have attempted to access a page that you are not authorized to view. If you believe this is an error, please contact support.",
+        "goBackDashboard": "Go back to Dashboard",
+        "homeButton": "Home"
     }
 }
