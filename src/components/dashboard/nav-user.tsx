@@ -114,10 +114,47 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
                         Account
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        onClick={(e) => {
+                        onClick={async (e) => {
                             e.preventDefault();
-                            setTheme((prev) =>
-                                prev === "light" ? "dark" : "light",
+                            const newTheme =
+                                document.documentElement.classList.contains(
+                                    "dark",
+                                )
+                                    ? "light"
+                                    : "dark";
+
+                            // Check if browser supports startViewTransition
+                            if (!document.startViewTransition) {
+                                setTheme(newTheme);
+                                return;
+                            }
+
+                            const target = e.currentTarget as HTMLElement;
+                            await document.startViewTransition(() => {
+                                setTheme(newTheme);
+                            }).ready;
+
+                            const { top, left, width, height } =
+                                target.getBoundingClientRect();
+                            const x = left + width / 2;
+                            const y = top + height / 2;
+                            const maxRadius = Math.hypot(
+                                Math.max(left, window.innerWidth - left),
+                                Math.max(top, window.innerHeight - top),
+                            );
+
+                            document.documentElement.animate(
+                                {
+                                    clipPath: [
+                                        `circle(0px at ${x}px ${y}px)`,
+                                        `circle(${maxRadius}px at ${x}px ${y}px)`,
+                                    ],
+                                },
+                                {
+                                    duration: 400,
+                                    easing: "ease-in-out",
+                                    pseudoElement: "::view-transition-new(root)",
+                                },
                             );
                         }}
                     >

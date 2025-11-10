@@ -13,7 +13,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { serialize } from "next-mdx-remote-client/serialize";
 import { useEffect, useState } from "react";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
-import { GuideAuthorCard } from "@/components/learning/guide-author-card";
 import { GuideLikeButton } from "@/components/learning/guide-like-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -76,7 +75,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     const handleNextPage = () => {
         if (hasNextPage) {
             const nextPage = currentPageIndex + 2; // +2 porque el índice es 0-based pero la URL es 1-based
-            router.push(`?page=${nextPage}`);
+            router.replace(`?page=${nextPage}`);
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
@@ -84,13 +83,13 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     const handlePreviousPage = () => {
         if (hasPreviousPage) {
             const prevPage = currentPageIndex; // currentPageIndex ya es el anterior en 1-based
-            router.push(`?page=${prevPage}`);
+            router.replace(`?page=${prevPage}`);
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
     const handleBackToOverview = () => {
-        router.push(window.location.pathname);
+        router.replace(window.location.pathname);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -103,7 +102,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         const pageNum = pageIndex + 1; // Convertir índice 0-based a número de página 1-based
         // Validar que la página está en el rango
         if (pageNum >= 1 && pageNum <= storedGuide.pagesCount) {
-            router.push(`?page=${pageNum}`);
+            router.replace(`?page=${pageNum}`);
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
@@ -295,6 +294,19 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         </span>
                     </div>
 
+                    {/* Topics */}
+                    {storedGuide.topics && storedGuide.topics.length > 0 && (
+                        <div className="mt-4">
+                            <div className="flex flex-wrap gap-2">
+                                {storedGuide.topics.map((topic) => (
+                                    <Badge key={topic.id} variant="outline">
+                                        {topic.name}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Title */}
                     <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
                         {storedGuide.title}
@@ -374,29 +386,6 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                 </header>
 
                 <Separator className="my-8" />
-
-                {/* Topics */}
-                {storedGuide.topics && storedGuide.topics.length > 0 && (
-                    <div className="mb-8">
-                        <h2 className="text-lg font-semibold mb-4">
-                            {dict?.guides?.viewer?.topics || "Topics"}
-                        </h2>
-                        <div className="flex flex-wrap gap-2">
-                            {storedGuide.topics.map((topic) => (
-                                <Badge key={topic.id} variant="outline">
-                                    {topic.name}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                <Separator className="my-8" />
-
-                {/* Author Card */}
-                <aside className="py-8">
-                    <GuideAuthorCard author={storedAuthor} />
-                </aside>
             </div>
         </div>
     );

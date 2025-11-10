@@ -283,7 +283,139 @@
     "leaderboard": {
         "ranking": "Ranking",
         "myRank": "My Rank",
-        "information": "Information"
+        "information": "Information",
+        "table": {
+            "position": "Position",
+            "rank": "Rank",
+            "username": "Username",
+            "points": "Points"
+        },
+        "loading": {
+            "leaderboard": "Loading leaderboard...",
+            "rank": "Loading rank..."
+        },
+        "empty": {
+            "noUsers": "No users found for this rank",
+            "noRankInfo": "No rank information available",
+            "loadError": "Could not load your rank data. Please try again."
+        },
+        "ui": {
+            "retry": "Retry",
+            "rankingSystem": "Ranking System",
+            "myCurrentRank": "My Current Rank"
+        },
+        "ranks": {
+            "bronze": {
+                "name": "Bronze",
+                "description": "The Bronze rank marks the beginning of your coding journey. As a dedicated learner, you're building foundational skills and tackling your first challenges with enthusiasm."
+            },
+            "silver": {
+                "name": "Silver",
+                "description": "Silver-ranked coders demonstrate growing proficiency. You've mastered basic concepts and are now solving more complex problems with increasing confidence and efficiency."
+            },
+            "gold": {
+                "name": "Gold",
+                "description": "Gold rank signifies advanced coding abilities. You consistently deliver solid solutions, understand algorithmic principles, and are ready for more challenging technical puzzles."
+            },
+            "platinum": {
+                "name": "Platinum",
+                "description": "Platinum coders excel in problem-solving and code quality. Your solutions are not only correct but optimized, showing deep understanding of data structures and algorithms."
+            },
+            "diamond": {
+                "name": "Diamond",
+                "description": "An elite problem-solver. Diamond-ranked coders consistently deliver high-quality solutions and deep algorithmic knowledge."
+            },
+            "master": {
+                "name": "Master",
+                "description": "A true architect of logic and precision. The Master Coder has conquered every challenge with elegance and consistency, demonstrating not just technical skill but creative problem-solving and deep understanding of algorithms."
+            },
+            "grandmaster": {
+                "name": "Grandmaster",
+                "description": "A rare virtuoso — Grandmaster developers lead innovations, solve the hardest problems and inspire the community with creative, reliable solutions."
+            }
+        },
+        "rankingSystem": {
+            "overview": {
+                "title": "Overview",
+                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels. Each user begins as a Bronze Coder with a base score of 1000 points, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
+            },
+            "byScore": {
+                "ranges": {
+                    "bronze": "0 – 499",
+                    "silver": "500 – 899",
+                    "gold": "900 – 1149",
+                    "platinum": "1150 – 1299",
+                    "diamond": "1300 – 1399",
+                    "master": "1400 – 1499",
+                    "grandmaster": "1500 +"
+                }
+            },
+            "rules": {
+                "title": "Scoring Rules Overview",
+                "description": "Quick guide to how LevelUp Journey translates difficulty, correctness, and time into leaderboard points.",
+                "difficultyLevels": {
+                    "easy": "EASY → 5 pts",
+                    "medium": "MEDIUM → 10 pts",
+                    "hard": "HARD → 20 pts",
+                    "expert": "EXPERT → 40 pts"
+                },
+                "sections": {
+                    "difficultyCeiling": {
+                        "title": "Difficulty Sets the Ceiling",
+                        "summary": "Every challenge ships with a fixed max score. Difficulty only raises that ceiling — your time determines what you take home.",
+                        "items": [
+                            "Higher tiers unlock bigger point pools, but also expect longer focus sessions.",
+                            "Once you know the cap, you can pace your effort to keep the best time window."
+                        ]
+                    },
+                    "correctnessFirst": {
+                        "title": "Correctness First",
+                        "summary": "Scoring is binary on accuracy. Only fully green test suites move on to time-based math.",
+                        "items": [
+                            "All tests pass → your time tier decides the percentage.",
+                            "Any failure → 0 points. No partial credit, but the attempt stays on your history."
+                        ]
+                    },
+                    "timePercentage": {
+                        "title": "Time Controls The Percentage",
+                        "summary": "Once correctness is locked, the clock slots you into a payout tier relative to the challenge ceiling.",
+                        "items": [
+                            "Within grace → 100%. Slight delay → 80%. Moderate → 60%. Slow → 40%. Very late → 20%.",
+                            "Harder challenges stretch grace periods so advanced problems stay fair."
+                        ]
+                    },
+                    "minimumScore": {
+                        "title": "Minimum Guaranteed Score",
+                        "summary": "Passing all tests never feels wasted time. Even the slowest clean solution gives back 20% of the challenge cap.",
+                        "items": [
+                            "Examples: Easy ≥ 1 pt, Medium ≥ 2 pts, Hard ≥ 4 pts, Expert ≥ 8 pts.",
+                            "Think of it as effort insurance — correctness always counts."
+                        ]
+                    },
+                    "timeTracking": {
+                        "title": "How We Track Time",
+                        "summary": "The timer covers the full build-measure-learn loop, not just the final run button.",
+                        "items": [
+                            "Start when you create the challenge solution. End on the final submission.",
+                            "Coding, debugging, and retries all count. Internally we store seconds, but show minutes in the UI."
+                        ]
+                    },
+                    "summaryHierarchy": {
+                        "title": "Summary Hierarchy",
+                        "summary": "Two-step mental checklist: be correct, then be timely. Everything else flows from there.",
+                        "items": [
+                            "Pass all tests + stay inside time → max score.",
+                            "Pass all tests + miss time → reduced score.",
+                            "Fail any test → zero score regardless of time."
+                        ]
+                    }
+                }
+            },
+            "penalization": {
+                "title": "Penalization",
+                "description": "If the student reaches the maximum number of allowed attempts without success, the system may apply a penalty of 25 points to the student's current score."
+            }
+        }
     },
     "challengesPage": {
         "header": {

@@ -17,6 +17,7 @@ import Image from "next/image";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { CompetitiveProfile } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 const RANK_ICONS: Record<string, string> = {
     BRONZE: "/ranks-trophies/trophy-bronze.svg",
@@ -28,28 +29,12 @@ const RANK_ICONS: Record<string, string> = {
     GRANDMASTER: "/ranks-trophies/trophy-grandmaster.svg",
 };
 
-function rankDescription(rank: string) {
-    switch (rank) {
-        case "BRONZE":
-            return "The Bronze rank marks the beginning of your coding journey. As a dedicated learner, you're building foundational skills and tackling your first challenges with enthusiasm.";
-        case "SILVER":
-            return "Silver-ranked coders demonstrate growing proficiency. You've mastered basic concepts and are now solving more complex problems with increasing confidence and efficiency.";
-        case "GOLD":
-            return "Gold rank signifies advanced coding abilities. You consistently deliver solid solutions, understand algorithmic principles, and are ready for more challenging technical puzzles.";
-        case "PLATINUM":
-            return "Platinum coders excel in problem-solving and code quality. Your solutions are not only correct but optimized, showing deep understanding of data structures and algorithms.";
-        case "DIAMOND":
-            return "An elite problem-solver. Diamond-ranked coders consistently deliver high-quality solutions and deep algorithmic knowledge.";
-        case "MASTER":
-            return "A true architect of logic and precision. The Master Coder has conquered every challenge with elegance and consistency, demonstrating not just technical skill but creative problem-solving and deep understanding of algorithms.";
-        case "GRANDMASTER":
-            return "A rare virtuoso — Grandmaster developers lead innovations, solve the hardest problems and inspire the community with creative, reliable solutions.";
-        default:
-            return "A dedicated coder steadily climbing the ranks. Keep solving challenges to unlock the next tier and climb the leaderboard.";
-    }
+function rankDescription(rank: string, dict: Dictionary) {
+    const rankKey = rank.toLowerCase() as keyof typeof dict.leaderboard.ranks;
+    return dict.leaderboard.ranks[rankKey]?.description || dict.leaderboard.ranks.bronze.description;
 }
 
-export default function MyRankCard() {
+export default function MyRankCard({ dict }: { dict: Dictionary }) {
     const [profile, setProfile] = useState<CompetitiveProfile | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -81,7 +66,7 @@ export default function MyRankCard() {
         return (
             <div className="flex flex-col items-center justify-center py-16">
                 <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">Loading rank...</p>
+                <p className="text-muted-foreground">{dict.leaderboard.loading.rank}</p>
             </div>
         );
     }
@@ -93,9 +78,9 @@ export default function MyRankCard() {
                     <EmptyMedia variant="icon">
                         <AlertCircle />
                     </EmptyMedia>
-                    <EmptyTitle>No rank information available</EmptyTitle>
+                    <EmptyTitle>{dict.leaderboard.empty.noRankInfo}</EmptyTitle>
                     <EmptyDescription>
-                        Could not load your rank data. Please try again.
+                        {dict.leaderboard.empty.loadError}
                     </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
@@ -104,7 +89,7 @@ export default function MyRankCard() {
                         variant="outline"
                     >
                         <RefreshCw className="mr-2 h-4 w-4" />
-                        Retry
+                        {dict.leaderboard.ui.retry}
                     </Button>
                 </EmptyContent>
             </Empty>
@@ -118,7 +103,7 @@ export default function MyRankCard() {
             <Card className="bg-transparent border-none">
                 <CardContent className="flex flex-col items-center gap-6 py-8">
                     <div className="text-2xl text-muted-foreground">
-                        My Current Rank
+                        {dict.leaderboard.ui.myCurrentRank}
                     </div>
 
                     <Image
@@ -155,7 +140,7 @@ export default function MyRankCard() {
                     </div>
 
                     <p className="text-sm text-muted-foreground max-w-[46ch] text-center">
-                        {rankDescription(profile.currentRank)}
+                        {rankDescription(profile.currentRank, dict)}
                     </p>
                 </CardContent>
             </Card>

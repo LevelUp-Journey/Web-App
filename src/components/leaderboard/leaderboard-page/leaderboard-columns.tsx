@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import type { UserWithProfile } from "@/hooks/use-leaderboard-data";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 const RANK_ICONS: Record<string, string> = {
     BRONZE: "/ranks/rank-bronze.svg",
@@ -14,10 +15,11 @@ const RANK_ICONS: Record<string, string> = {
 
 export const getLeaderboardColumns = (
     selectedRank: string,
+    dict: Dictionary,
 ): ColumnDef<UserWithProfile>[] => [
     {
         accessorKey: "position",
-        header: "Position",
+        header: dict.leaderboard.table.position,
         cell: ({ row }) => {
             const position =
                 selectedRank === "TOP500"
@@ -28,7 +30,7 @@ export const getLeaderboardColumns = (
     },
     {
         accessorKey: "currentRank",
-        header: "Rank",
+        header: dict.leaderboard.table.rank,
         cell: ({ row }) => {
             const rank = row.original.currentRank || "BRONZE";
             return (
@@ -47,7 +49,7 @@ export const getLeaderboardColumns = (
     },
     {
         accessorKey: "username",
-        header: "Username",
+        header: dict.leaderboard.table.username,
         cell: ({ row }) => {
             const username =
                 row.original.profile?.username ||
@@ -57,7 +59,7 @@ export const getLeaderboardColumns = (
     },
     {
         accessorKey: "totalPoints",
-        header: () => <div className="text-center font-mono">Points</div>,
+        header: () => <div className="text-center font-mono">{dict.leaderboard.table.points}</div>,
         cell: ({ row }) => {
             return (
                 <div className="text-center font-mono font-medium">

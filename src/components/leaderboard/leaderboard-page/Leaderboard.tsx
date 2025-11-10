@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 const RANKS = [
     { key: "TOP500", name: "Top 500" }, // No icon for Top 500
@@ -27,7 +28,7 @@ const RANKS = [
     { key: "BRONZE", name: "Bronze", icon: "/ranks/rank-bronze.svg" },
 ];
 
-export function LeaderboardPage() {
+export function LeaderboardPage({ dict }: { dict: Dictionary }) {
     const [selectedRank, setSelectedRank] = useState("TOP500");
 
     const selectedRankData =
@@ -84,7 +85,7 @@ export function LeaderboardPage() {
                 </DropdownMenu>
             </div>
 
-            <LeaderboardTable selectedRank={selectedRank} />
+            <LeaderboardTable selectedRank={selectedRank} dict={dict} />
         </div>
     );
 }
