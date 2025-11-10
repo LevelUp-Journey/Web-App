@@ -333,6 +333,13 @@ export default function EditGuidePage() {
                             value="pages"
                             className="flex-1 mt-0 overflow-y-auto"
                         >
+                            <div
+                                tabIndex={-1}
+                                style={{
+                                    position: "absolute",
+                                    left: "-9999px",
+                                }}
+                            ></div>
                             <PagesForm
                                 guideId={guideId}
                                 initialPages={
@@ -351,6 +358,13 @@ export default function EditGuidePage() {
                             value="challenges"
                             className="flex-1 mt-0 overflow-y-auto"
                         >
+                            <div
+                                tabIndex={-1}
+                                style={{
+                                    position: "absolute",
+                                    left: "-9999px",
+                                }}
+                            ></div>
                             <ChallengesForm
                                 guideId={guideId}
                                 initialChallenges={relatedChallenges}
@@ -363,6 +377,13 @@ export default function EditGuidePage() {
                             value="info"
                             className="flex-1 mt-0 overflow-y-auto"
                         >
+                            <div
+                                tabIndex={-1}
+                                style={{
+                                    position: "absolute",
+                                    left: "-9999px",
+                                }}
+                            ></div>
                             <div className="max-w-3xl mx-auto p-6">
                                 <div className="mb-6">
                                     <h2 className="text-xl font-semibold">
