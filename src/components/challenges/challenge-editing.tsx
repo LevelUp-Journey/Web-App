@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -94,6 +95,9 @@ export default function ChallengeEditing({
     const [selectedGuideIds, setSelectedGuideIds] = useState<string[]>(
         challengeData.guides,
     );
+    const [selectedGuidesMap, setSelectedGuidesMap] = useState<
+        Map<string, GuideResponse>
+    >(new Map());
     const [isSearching, setIsSearching] = useState(false);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -129,6 +133,40 @@ export default function ChallengeEditing({
         });
         setSelectedGuideIds(challengeData.guides);
     }, [challengeData, form]);
+
+    // Load existing selected guides data
+    useEffect(() => {
+        const loadSelectedGuides = async () => {
+            if (selectedGuideIds.length === 0) {
+                setSelectedGuidesMap(new Map());
+                return;
+            }
+
+            const guidesData = await Promise.all(
+                selectedGuideIds.map(async (guideId) => {
+                    try {
+                        const guide =
+                            await GuideController.getGuideById(guideId);
+                        return guide;
+                    } catch (error) {
+                        console.error(`Error loading guide ${guideId}:`, error);
+                        return null;
+                    }
+                }),
+            );
+
+            const newMap = new Map<string, GuideResponse>();
+            guidesData.forEach((guide) => {
+                if (guide) {
+                    newMap.set(guide.id, guide);
+                }
+            });
+            setSelectedGuidesMap(newMap);
+        };
+
+        loadSelectedGuides();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedGuideIds.length, selectedGuideIds.join(",")]);
 
     const difficulty = form.watch("difficulty");
     const maxExperiencePoints = CHALLENGE_DIFFICULTY_MAX_XP[difficulty];
@@ -287,6 +325,7 @@ export default function ChallengeEditing({
         );
         if (success) {
             setSelectedGuideIds((prev) => [...prev, guide.id]);
+            setSelectedGuidesMap((prev) => new Map(prev).set(guide.id, guide));
             toast.success(
                 dict?.challenges?.messages?.edit?.guideAdded ||
                     "Guide added to challenge successfully!",
@@ -307,6 +346,11 @@ export default function ChallengeEditing({
         );
         if (success) {
             setSelectedGuideIds((prev) => prev.filter((id) => id !== guideId));
+            setSelectedGuidesMap((prev) => {
+                const newMap = new Map(prev);
+                newMap.delete(guideId);
+                return newMap;
+            });
             toast.success(
                 dict?.challenges?.messages?.edit?.guideRemoved ||
                     "Guide removed from challenge successfully!",
@@ -740,36 +784,51 @@ export default function ChallengeEditing({
                                                     ?.edit?.selectedGuides ||
                                                     "Selected Guides"}
                                             </h3>
-                                            {selectedGuideIds.map((guideId) => (
-                                                <div
-                                                    key={guideId}
-                                                    className="flex items-center justify-between p-2 border rounded bg-muted"
-                                                >
-                                                    <div>
-                                                        <p className="font-medium">
-                                                            {dict?.challenges?.messages?.edit?.guideId?.replace(
-                                                                "{id}",
-                                                                guideId,
-                                                            ) ||
-                                                                `Guide ID: ${guideId}`}
-                                                        </p>
-                                                    </div>
-                                                    <Button
-                                                        onClick={() =>
-                                                            handleRemoveGuide(
-                                                                guideId,
-                                                            )
-                                                        }
-                                                        size="sm"
-                                                        variant="destructive"
+                                            {selectedGuideIds.map((guideId) => {
+                                                const guide =
+                                                    selectedGuidesMap.get(
+                                                        guideId,
+                                                    );
+                                                return (
+                                                    <div
+                                                        key={guideId}
+                                                        className="flex items-center justify-between p-3 border rounded bg-muted/50 hover:bg-muted transition-colors"
                                                     >
-                                                        {dict?.challenges
-                                                            ?.messages?.edit
-                                                            ?.remove ||
-                                                            "Remove"}
-                                                    </Button>
-                                                </div>
-                                            ))}
+                                                        <div className="flex-1">
+                                                            <p className="font-medium text-foreground">
+                                                                {guide?.title ||
+                                                                    guideId}
+                                                            </p>
+                                                            {guide?.description && (
+                                                                <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                                                                    {
+                                                                        guide.description
+                                                                    }
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                        <Button
+                                                            onClick={() =>
+                                                                handleRemoveGuide(
+                                                                    guideId,
+                                                                )
+                                                            }
+                                                            size="icon"
+                                                            variant="ghost"
+                                                            className="ml-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                                            aria-label={
+                                                                dict?.challenges
+                                                                    ?.messages
+                                                                    ?.edit
+                                                                    ?.removeGuide ||
+                                                                "Remove guide"
+                                                            }
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </TabsContent>
