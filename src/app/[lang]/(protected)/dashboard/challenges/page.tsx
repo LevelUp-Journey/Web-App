@@ -10,6 +10,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import { useDictionary } from "@/hooks/use-dictionary";
 
 export default function ChallengesPage() {
@@ -20,8 +21,19 @@ export default function ChallengesPage() {
         <div className="container mx-auto px-4 pt-16 pb-8 space-y-6">
             {/* Inspirational Header */}
             <div className="text-center max-w-4xl mx-auto mb-12">
-                <h1 className="text-4xl text-balance md:text-5xl font-medium text-foreground mb-6 leading-tight">
-                    {dict?.challengesPage.header.title}
+                <h1 className="text-4xl text-balance md:text-5xl font-medium text-foreground mb-6 leading-tight h-16 flex items-center justify-center">
+                    <TypingAnimation
+                        words={["Start coding with purpose"]}
+                        className="text-foreground"
+                        typeSpeed={100}
+                        deleteSpeed={50}
+                        delay={500}
+                        pauseDelay={2000}
+                        loop={false}
+                        showCursor={true}
+                        blinkCursor={true}
+                        cursorStyle="line"
+                    />
                 </h1>
                 <p className="text-base text-pretty md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
                     {dict?.challengesPage.header.description}
