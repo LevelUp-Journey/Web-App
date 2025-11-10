@@ -192,7 +192,10 @@ export default function VersionTestsManager({
                         isSecret,
                     },
                 );
-                toast.success("Basic test created successfully");
+                toast.success(
+                    dict?.challenges?.messages?.tests?.basicTestCreated ||
+                        "Basic test created successfully",
+                );
             } else if (selectedTest) {
                 await VersionTestController.updateVersionTest(
                     challengeId,
@@ -206,7 +209,10 @@ export default function VersionTestsManager({
                         isSecret,
                     },
                 );
-                toast.success("Basic test updated successfully");
+                toast.success(
+                    dict?.challenges?.messages?.tests?.basicTestUpdated ||
+                        "Basic test updated successfully",
+                );
             }
 
             await loadTests();
@@ -247,7 +253,10 @@ export default function VersionTestsManager({
                         isSecret,
                     },
                 );
-                toast.success("Custom test created successfully");
+                toast.success(
+                    dict?.challenges?.messages?.tests?.customTestCreated ||
+                        "Custom test created successfully",
+                );
             } else if (selectedTest) {
                 await VersionTestController.updateVersionTest(
                     challengeId,
@@ -261,7 +270,10 @@ export default function VersionTestsManager({
                         isSecret,
                     },
                 );
-                toast.success("Custom test updated successfully");
+                toast.success(
+                    dict?.challenges?.messages?.tests?.customTestUpdated ||
+                        "Custom test updated successfully",
+                );
             }
 
             await loadTests();
@@ -280,7 +292,13 @@ export default function VersionTestsManager({
     };
 
     const handleDeleteTest = async (testId: string) => {
-        if (!confirm("Are you sure you want to delete this test?")) return;
+        if (
+            !confirm(
+                dict?.challenges?.messages?.tests?.confirmDeleteTest ||
+                    "Are you sure you want to delete this test?",
+            )
+        )
+            return;
 
         try {
             await VersionTestController.deleteVersionTest(
@@ -288,7 +306,10 @@ export default function VersionTestsManager({
                 codeVersionId,
                 testId,
             );
-            toast.success("Test deleted successfully");
+            toast.success(
+                dict?.challenges?.messages?.tests?.testDeleted ||
+                    "Test deleted successfully",
+            );
             await loadTests();
             if (selectedTest?.id === testId) {
                 setSelectedTest(null);
@@ -311,9 +332,13 @@ export default function VersionTestsManager({
             {/* Header */}
             <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">Version Tests</h1>
+                    <h1 className="text-3xl font-bold mb-2">
+                        {dict?.challenges?.messages?.tests?.title ||
+                            "Version Tests"}
+                    </h1>
                     <p className="text-muted-foreground">
-                        Manage test cases for this code version
+                        {dict?.challenges?.messages?.tests?.description ||
+                            "Manage test cases for this code version"}
                     </p>
                 </div>
                 <div className="flex gap-4">
@@ -327,7 +352,8 @@ export default function VersionTestsManager({
                                 )
                             }
                         >
-                            Finish
+                            {dict?.challenges?.messages?.tests?.finish ||
+                                "Finish"}
                         </Button>
                     )}
                     <Button
@@ -340,7 +366,8 @@ export default function VersionTestsManager({
                             )
                         }
                     >
-                        Back to Version
+                        {dict?.challenges?.messages?.tests?.backToVersion ||
+                            "Back to Version"}
                     </Button>
                 </div>
             </header>
@@ -352,7 +379,10 @@ export default function VersionTestsManager({
                     <div className="h-full overflow-y-auto p-6">
                         <div className="mb-4">
                             <h2 className="text-xl font-semibold">
-                                Test Cases ({tests.length})
+                                {dict?.challenges?.messages?.tests?.testCasesCount?.replace(
+                                    "{count}",
+                                    tests.length.toString(),
+                                ) || `Test Cases (${tests.length})`}
                             </h2>
                         </div>
 
@@ -360,10 +390,14 @@ export default function VersionTestsManager({
                             {tests.length === 0 ? (
                                 <div className="text-center py-8 text-muted-foreground">
                                     <TestTube className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                                    <p>No tests yet</p>
+                                    <p>
+                                        {dict?.challenges?.messages?.tests
+                                            ?.noTestsYet || "No tests yet"}
+                                    </p>
                                     <p className="text-sm">
-                                        Click "Add Test" to create your first
-                                        test case
+                                        {dict?.challenges?.messages?.tests
+                                            ?.clickAddTest ||
+                                            'Click "Add Test" to create your first test case'}
                                     </p>
                                 </div>
                             ) : (
@@ -383,10 +417,16 @@ export default function VersionTestsManager({
                                         </ItemMedia>
                                         <ItemContent>
                                             <ItemTitle>
-                                                Test Case {test.id.slice(-8)}
+                                                {dict?.challenges?.messages?.tests?.testCase?.replace(
+                                                    "{id}",
+                                                    test.id.slice(-8),
+                                                ) ||
+                                                    `Test Case ${test.id.slice(-8)}`}
                                             </ItemTitle>
                                             <ItemDescription>
-                                                Input:{" "}
+                                                {dict?.challenges?.messages
+                                                    ?.tests?.input ||
+                                                    "Input:"}{" "}
                                                 {test.input.length > 20
                                                     ? `${test.input.slice(0, 20)}...`
                                                     : test.input}
@@ -401,7 +441,8 @@ export default function VersionTestsManager({
                                             }}
                                             className="text-destructive hover:text-destructive"
                                         >
-                                            Delete
+                                            {dict?.challenges?.messages?.tests
+                                                ?.delete || "Delete"}
                                         </Button>
                                     </Item>
                                 ))
@@ -415,7 +456,8 @@ export default function VersionTestsManager({
                                 className="w-full flex items-center justify-center gap-2 text-xs"
                             >
                                 <Plus className="w-3 h-3" />
-                                Add Test
+                                {dict?.challenges?.messages?.tests?.addTest ||
+                                    "Add Test"}
                             </Button>
                         </div>
                     </div>
@@ -429,10 +471,17 @@ export default function VersionTestsManager({
                         <div className="p-4 border-b">
                             <h2 className="text-xl font-semibold">
                                 {isCreating
-                                    ? "Create New Test"
+                                    ? dict?.challenges?.messages?.tests
+                                          ?.createNewTest || "Create New Test"
                                     : selectedTest
-                                      ? `Edit Test Case ${selectedTest.id.slice(-8)}`
-                                      : "Select a test to edit"}
+                                      ? dict?.challenges?.messages?.tests?.editTestCase?.replace(
+                                            "{id}",
+                                            selectedTest.id.slice(-8),
+                                        ) ||
+                                        `Edit Test Case ${selectedTest.id.slice(-8)}`
+                                      : dict?.challenges?.messages?.tests
+                                            ?.selectTestToEdit ||
+                                        "Select a test to edit"}
                             </h2>
                         </div>
 
@@ -441,10 +490,13 @@ export default function VersionTestsManager({
                                 <Tabs defaultValue="basic" className="h-full">
                                     <TabsList className="grid grid-cols-2 m-4">
                                         <TabsTrigger value="basic">
-                                            Basic Test
+                                            {dict?.challenges?.messages?.tests
+                                                ?.basicTest || "Basic Test"}
                                         </TabsTrigger>
                                         <TabsTrigger value="custom">
-                                            Custom Validation
+                                            {dict?.challenges?.messages?.tests
+                                                ?.customValidation ||
+                                                "Custom Validation"}
                                         </TabsTrigger>
                                     </TabsList>
 
@@ -453,10 +505,19 @@ export default function VersionTestsManager({
                                         className="p-4 space-y-4"
                                     >
                                         <div className="space-y-2">
-                                            <Label htmlFor="input">Input</Label>
+                                            <Label htmlFor="input">
+                                                {dict?.challenges?.messages
+                                                    ?.tests?.inputLabel ||
+                                                    "Input"}
+                                            </Label>
                                             <Input
                                                 id="input"
-                                                placeholder="Enter test input..."
+                                                placeholder={
+                                                    dict?.challenges?.messages
+                                                        ?.tests
+                                                        ?.inputPlaceholder ||
+                                                    "Enter test input..."
+                                                }
                                                 value={input}
                                                 onChange={(e) =>
                                                     setInput(e.target.value)
@@ -466,11 +527,18 @@ export default function VersionTestsManager({
 
                                         <div className="space-y-2">
                                             <Label htmlFor="expectedOutput">
-                                                Expected Output
+                                                {dict?.challenges?.messages
+                                                    ?.tests?.expectedOutput ||
+                                                    "Expected Output"}
                                             </Label>
                                             <Input
                                                 id="expectedOutput"
-                                                placeholder="Enter expected output..."
+                                                placeholder={
+                                                    dict?.challenges?.messages
+                                                        ?.tests
+                                                        ?.expectedOutputPlaceholder ||
+                                                    "Enter expected output..."
+                                                }
                                                 value={expectedOutput}
                                                 onChange={(e) =>
                                                     setExpectedOutput(
@@ -482,11 +550,18 @@ export default function VersionTestsManager({
 
                                         <div className="space-y-2">
                                             <Label htmlFor="failureMessage">
-                                                Failure Message (Optional)
+                                                {dict?.challenges?.messages
+                                                    ?.tests?.failureMessage ||
+                                                    "Failure Message (Optional)"}
                                             </Label>
                                             <Input
                                                 id="failureMessage"
-                                                placeholder="Custom failure message..."
+                                                placeholder={
+                                                    dict?.challenges?.messages
+                                                        ?.tests
+                                                        ?.failureMessagePlaceholder ||
+                                                    "Custom failure message..."
+                                                }
                                                 value={failureMessage}
                                                 onChange={(e) =>
                                                     setFailureMessage(
@@ -506,13 +581,16 @@ export default function VersionTestsManager({
                                                     }
                                                 />
                                                 <Label htmlFor="isSecret">
-                                                    Secret Test
+                                                    {dict?.challenges?.messages
+                                                        ?.tests?.secretTest ||
+                                                        "Secret Test"}
                                                 </Label>
                                             </div>
                                             <p className="text-sm text-muted-foreground">
-                                                Secret tests are not visible to
-                                                students and are used for
-                                                additional validation.
+                                                {dict?.challenges?.messages
+                                                    ?.tests
+                                                    ?.secretTestDescription ||
+                                                    "Secret tests are not visible to students and are used for additional validation."}
                                             </p>
                                         </div>
 
@@ -523,10 +601,18 @@ export default function VersionTestsManager({
                                                 className="w-full"
                                             >
                                                 {isSubmitting
-                                                    ? "Saving..."
+                                                    ? dict?.challenges?.messages
+                                                          ?.tests?.saving ||
+                                                      "Saving..."
                                                     : isCreating
-                                                      ? "Create Basic Test"
-                                                      : "Update Basic Test"}
+                                                      ? dict?.challenges
+                                                            ?.messages?.tests
+                                                            ?.createBasicTest ||
+                                                        "Create Basic Test"
+                                                      : dict?.challenges
+                                                            ?.messages?.tests
+                                                            ?.updateBasicTest ||
+                                                        "Update Basic Test"}
                                             </Button>
                                         </div>
                                     </TabsContent>
@@ -551,11 +637,18 @@ export default function VersionTestsManager({
 
                                         <div className="space-y-2 mt-4">
                                             <Label htmlFor="failureMessageCustom">
-                                                Failure Message (Optional)
+                                                {dict?.challenges?.messages
+                                                    ?.tests?.failureMessage ||
+                                                    "Failure Message (Optional)"}
                                             </Label>
                                             <Input
                                                 id="failureMessageCustom"
-                                                placeholder="Custom failure message..."
+                                                placeholder={
+                                                    dict?.challenges?.messages
+                                                        ?.tests
+                                                        ?.failureMessagePlaceholder ||
+                                                    "Custom failure message..."
+                                                }
                                                 value={failureMessage}
                                                 onChange={(e) =>
                                                     setFailureMessage(
@@ -575,13 +668,16 @@ export default function VersionTestsManager({
                                                     }
                                                 />
                                                 <Label htmlFor="isSecretCustom">
-                                                    Secret Test
+                                                    {dict?.challenges?.messages
+                                                        ?.tests?.secretTest ||
+                                                        "Secret Test"}
                                                 </Label>
                                             </div>
                                             <p className="text-sm text-muted-foreground">
-                                                Secret tests are not visible to
-                                                students and are used for
-                                                additional validation.
+                                                {dict?.challenges?.messages
+                                                    ?.tests
+                                                    ?.secretTestDescription ||
+                                                    "Secret tests are not visible to students and are used for additional validation."}
                                             </p>
                                         </div>
 
@@ -592,10 +688,18 @@ export default function VersionTestsManager({
                                                 className="w-full"
                                             >
                                                 {isSubmitting
-                                                    ? "Saving..."
+                                                    ? dict?.challenges?.messages
+                                                          ?.tests?.saving ||
+                                                      "Saving..."
                                                     : isCreating
-                                                      ? "Create Custom Test"
-                                                      : "Update Custom Test"}
+                                                      ? dict?.challenges
+                                                            ?.messages?.tests
+                                                            ?.createCustomTest ||
+                                                        "Create Custom Test"
+                                                      : dict?.challenges
+                                                            ?.messages?.tests
+                                                            ?.updateCustomTest ||
+                                                        "Update Custom Test"}
                                             </Button>
                                         </div>
                                     </TabsContent>
@@ -608,11 +712,14 @@ export default function VersionTestsManager({
                                 <div className="text-center">
                                     <TestTube className="w-16 h-16 mx-auto mb-4 opacity-50" />
                                     <p className="text-lg mb-2">
-                                        No test selected
+                                        {dict?.challenges?.messages?.tests
+                                            ?.noTestSelected ||
+                                            "No test selected"}
                                     </p>
                                     <p className="text-sm">
-                                        Select a test from the left panel or
-                                        create a new one
+                                        {dict?.challenges?.messages?.tests
+                                            ?.selectTestOrCreate ||
+                                            "Select a test from the left panel or create a new one"}
                                     </p>
                                 </div>
                             </div>

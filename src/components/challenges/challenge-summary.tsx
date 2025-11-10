@@ -67,7 +67,10 @@ export default function ChallengeSummary({
             {/* Status Indicator */}
             {isTeacher && (
                 <div className="text-sm text-muted-foreground mb-4">
-                    <strong>Status:</strong> {challenge.status}
+                    <strong>
+                        {dict?.challenges?.summary?.status || "Status:"}
+                    </strong>{" "}
+                    {challenge.status}
                 </div>
             )}
 
@@ -94,7 +97,9 @@ export default function ChallengeSummary({
                         </div>
                         {isTeacher && (
                             <div className="text-sm text-muted-foreground">
-                                <strong>XP:</strong>{" "}
+                                <strong>
+                                    {dict?.challenges?.summary?.xp || "XP:"}
+                                </strong>{" "}
                                 {challenge.experiencePoints}
                             </div>
                         )}
@@ -125,7 +130,11 @@ export default function ChallengeSummary({
                             size="lg"
                         >
                             <ChevronRight className="h-4 w-4 mr-2" />
-                            {isStarting ? "Starting..." : "Start Challenge"}
+                            {isStarting
+                                ? dict?.challenges?.summary?.starting ||
+                                  "Starting..."
+                                : dict?.challenges?.summary?.startChallenge ||
+                                  "Start Challenge"}
                         </Button>
                     )}
                 </CardHeader>
@@ -143,7 +152,7 @@ export default function ChallengeSummary({
                 {/* Description */}
                 <div>
                     <h4 className="text-xl font-semibold text-muted-foreground mb-4">
-                        Overview
+                        {dict?.challenges?.summary?.overview || "Overview"}
                     </h4>
                     <MdxRenderer serializedSource={serializedMarkdown} />
                 </div>
