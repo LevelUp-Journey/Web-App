@@ -131,14 +131,7 @@ export default function CreateCommunityPage() {
     };
 
     const handleCancel = () => {
-        if (
-            confirm(
-                dict?.admin.community.createForm?.cancelConfirm ||
-                    "Are you sure you want to cancel? All progress will be lost.",
-            )
-        ) {
-            router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT);
-        }
+        router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT);
     };
 
     return (

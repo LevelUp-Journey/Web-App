@@ -1,7 +1,17 @@
-export default function CommunityPage() {
+import { getDictionary } from "@/app/[lang]/dictionaries";
+import { CommunityTabs } from "@/components/community/community-tabs";
+
+export default async function CommunityPage({
+    params,
+}: {
+    params: Promise<{ lang: string }>;
+}) {
+    const { lang } = await params;
+    const dict = await getDictionary(lang as "en" | "es");
+
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <h1 className="text-4xl font-bold">Community</h1>
+        <div className="container mx-auto p-6">
+            <CommunityTabs dict={dict} />
         </div>
     );
 }
