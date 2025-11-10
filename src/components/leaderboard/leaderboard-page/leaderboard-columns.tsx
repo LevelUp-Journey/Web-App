@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import type { UserWithProfile } from "@/hooks/use-leaderboard-data";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import type { UserWithProfile } from "@/hooks/use-leaderboard-data";
 
 const RANK_ICONS: Record<string, string> = {
     BRONZE: "/ranks/rank-bronze.svg",
@@ -23,9 +23,10 @@ export const getLeaderboardColumns = (
         cell: ({ row }) => {
             const position =
                 selectedRank === "TOP500"
-                    ? (row.original as any).position
-                    : row.original.leaderboardPosition || "-";
-            return <div className="font-mono font-medium">#{position}</div>;
+                    ? row.original.position
+                    : row.original.leaderboardPosition;
+            const value = typeof position === "number" ? position : "-";
+            return <div className="font-mono font-medium">#{value}</div>;
         },
     },
     {
@@ -51,15 +52,20 @@ export const getLeaderboardColumns = (
         accessorKey: "username",
         header: dict.leaderboard.table.username,
         cell: ({ row }) => {
-            const username =
-                row.original.profile?.username ||
-                row.original.userId.substring(0, 20);
-            return <div className="font-mono font-medium">{username}</div>;
+            return (
+                <div className="font-mono font-medium">
+                    {row.original.username}
+                </div>
+            );
         },
     },
     {
         accessorKey: "totalPoints",
-        header: () => <div className="text-center font-mono">{dict.leaderboard.table.points}</div>,
+        header: () => (
+            <div className="text-center font-mono">
+                {dict.leaderboard.table.points}
+            </div>
+        ),
         cell: ({ row }) => {
             return (
                 <div className="text-center font-mono font-medium">
