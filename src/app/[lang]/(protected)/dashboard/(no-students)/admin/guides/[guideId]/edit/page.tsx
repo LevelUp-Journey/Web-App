@@ -249,7 +249,10 @@ export default function EditGuidePage() {
                             </TabsTrigger>
                         </TabsList>
 
-                        <TabsContent value="pages" className="flex-1 mt-0">
+                        <TabsContent
+                            value="pages"
+                            className="flex-1 mt-0 overflow-y-auto"
+                        >
                             <PagesForm
                                 guideId={guideId}
                                 initialPages={
