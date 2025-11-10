@@ -33,9 +33,11 @@ import type {
 } from "./guide.response";
 
 export class GuideController {
-    public static async getAllGuides(): Promise<GuideResponse[]> {
+    public static async getAllGuides(
+        forParam?: string,
+    ): Promise<GuideResponse[]> {
         try {
-            const response = await getAllGuidesAction();
+            const response = await getAllGuidesAction(forParam);
             return response;
         } catch (error) {
             console.error("Error in GuideController.getAllGuides:", error);

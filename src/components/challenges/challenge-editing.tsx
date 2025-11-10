@@ -63,12 +63,15 @@ const formSchema = z.object({
             `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
         ),
     maxAttemptsBeforeGuides: z
-        .number()
-        .min(2, "Max attempts before guides must be at least 2.")
-        .max(5, "Max attempts before guides must be at most 5."),
+        .union([z.string(), z.number()])
+        .transform(Number)
+        .pipe(
+            z
+                .number()
+                .min(2, "Max attempts before guides must be at least 2.")
+                .max(5, "Max attempts before guides must be at most 5."),
+        ),
 });
-
-type FormData = z.infer<typeof formSchema>;
 
 interface ChallengeEditingProps {
     challengeId: string;
@@ -105,7 +108,7 @@ export default function ChallengeEditing({
     const [isSearching, setIsSearching] = useState(false);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-    const form = useForm<FormData>({
+    const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: challengeData.name,
@@ -192,7 +195,7 @@ export default function ChallengeEditing({
         );
     };
 
-    const onSubmit = form.handleSubmit(async (data: FormData) => {
+    const onSubmit = form.handleSubmit(async (data) => {
         const description = getEditorContent();
         const tagNames = data.tags
             ? data.tags

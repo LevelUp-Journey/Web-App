@@ -61,7 +61,6 @@ export default function EditGuidePage() {
     type FormData = z.infer<typeof formSchema>;
 
     const [guide, setGuide] = useState<GuideResponse | null>(null);
-    const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [publishing, setPublishing] = useState(false);
     const [activeTab, setActiveTab] = useState<string>("pages");
@@ -105,8 +104,6 @@ export default function EditGuidePage() {
                         "Error loading guide. Please try again.",
                 );
                 router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -184,40 +181,6 @@ export default function EditGuidePage() {
         }
     };
 
-    if (loading) {
-        return (
-            <section className="flex flex-col h-full items-center justify-center">
-                <div className="text-center space-y-4">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
-                    <p className="text-muted-foreground">
-                        {dict?.admin?.guides?.editGuide?.loading}
-                    </p>
-                </div>
-            </section>
-        );
-    }
-
-    if (!guide) {
-        return (
-            <section className="flex flex-col h-full items-center justify-center">
-                <div className="text-center space-y-4">
-                    <p className="text-muted-foreground">
-                        {dict?.admin?.guides?.editGuide?.notFound}
-                    </p>
-                    <Button
-                        onClick={() =>
-                            router.push(
-                                PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
-                            )
-                        }
-                    >
-                        {dict?.admin?.guides?.editGuide?.backToGuides}
-                    </Button>
-                </div>
-            </section>
-        );
-    }
-
     return (
         <section className="flex flex-col h-full">
             {/* Header */}
@@ -226,7 +189,7 @@ export default function EditGuidePage() {
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-2xl font-bold">
-                                {guide.title}
+                                {guide?.title || "Loading..."}
                             </h1>
                             <p className="text-sm text-muted-foreground mt-1">
                                 {dict?.admin?.guides?.editGuide?.subtitle}
@@ -238,6 +201,7 @@ export default function EditGuidePage() {
                                 onClick={handlePublish}
                                 disabled={
                                     publishing ||
+                                    !guide ||
                                     guide?.status === GuideStatus.PUBLISHED
                                 }
                             >
@@ -275,7 +239,7 @@ export default function EditGuidePage() {
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                             >
                                 {dict?.admin?.guides?.editGuide?.tabs?.pages} (
-                                {guide.pagesCount})
+                                {guide?.pagesCount || 0})
                             </TabsTrigger>
                             <TabsTrigger
                                 value="info"
@@ -288,12 +252,14 @@ export default function EditGuidePage() {
                         <TabsContent value="pages" className="flex-1 mt-0">
                             <PagesForm
                                 guideId={guideId}
-                                initialPages={guide.pages.map((p) => ({
-                                    id: p.id,
-                                    content: p.content,
-                                    orderNumber: p.orderNumber,
-                                    isNew: false,
-                                }))}
+                                initialPages={
+                                    guide?.pages.map((p) => ({
+                                        id: p.id,
+                                        content: p.content,
+                                        orderNumber: p.orderNumber,
+                                        isNew: false,
+                                    })) || []
+                                }
                                 onFinish={handleFinish}
                             />
                         </TabsContent>

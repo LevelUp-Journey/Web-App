@@ -81,9 +81,8 @@ export default function GuideCard({
                     <div className="flex items-center gap-2 text-sm">
                         <Button size="icon" variant="ghost">
                             <Heart className="text-red-400" size={18} />
+                            {guide.likesCount}
                         </Button>
-                        {guide.likesCount}{" "}
-                        {dict?.challenges?.cards?.likes || "likes"}
                     </div>
                     {adminMode && (
                         <DropdownMenu>

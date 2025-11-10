@@ -1,5 +1,6 @@
 "use server";
 
+import axios from "axios";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import type { LearningResponse } from "../../shared";
 import type {
@@ -52,13 +53,19 @@ export interface GetGuidesResponseFormat {
     empty: boolean;
 }
 
-export async function getAllGuidesAction(): Promise<GuideResponse[]> {
+export async function getAllGuidesAction(
+    forParam?: string,
+): Promise<GuideResponse[]> {
     try {
         console.log(API_GATEWAY_HTTP);
-        const response =
-            await API_GATEWAY_HTTP.get<
-                LearningResponse<GetGuidesResponseFormat>
-            >("/guides");
+
+        const params = new URLSearchParams();
+        if (forParam) params.append("for", forParam);
+        console.log(params.toString());
+
+        const response = await API_GATEWAY_HTTP.get<
+            LearningResponse<GetGuidesResponseFormat>
+        >(`/guides${params.toString() ? `?${params.toString()}` : ""}`);
         return response.data.data.content;
     } catch (error) {
         console.error("Error fetching all guides:", error);

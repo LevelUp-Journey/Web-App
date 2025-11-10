@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit3, Play, TestTube2, Trash2 } from "lucide-react";
+import { Code, Edit3, Play, TestTube2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +18,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { getReadableLanguageName } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
@@ -158,68 +163,125 @@ export default function CodeVersionsList({
     }
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-3">
             {codeVersions.map((version) => (
-                <div key={version.id} className="flex gap-2 justify-end">
-                    {isTeacher ? (
-                        <>
-                            <Button size="default" variant="outline" asChild>
-                                <Link
-                                    href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
-                                        challengeId,
-                                        version.id,
-                                    )}
-                                >
-                                    <Edit3 className="h-4 w-4" />
-                                </Link>
-                            </Button>
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button
-                                        size="default"
-                                        variant="outline"
-                                        disabled={deletingId === version.id}
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            {dict?.challenges?.alerts
-                                                ?.deleteCodeVersion?.title ||
-                                                "Delete Code Version"}
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            {dict?.challenges?.alerts
-                                                ?.deleteCodeVersion
-                                                ?.description ||
-                                                "Are you sure you want to delete this code version? This action cannot be undone."}
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            {dict?.common?.cancel || "Cancel"}
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={() =>
-                                                handleDelete(version.id)
-                                            }
+                <div
+                    key={version.id}
+                    className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent/50 transition-colors shadow-sm"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
+                            <Code className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                            <span className="font-semibold text-foreground">
+                                {getReadableLanguageName(version.language)}
+                            </span>
+                            <p className="text-sm text-muted-foreground">
+                                {dict?.challenges?.codeVersions?.language ||
+                                    "Programming Language"}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        {isTeacher ? (
+                            <>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            asChild
                                         >
-                                            {dict?.common?.delete || "Delete"}
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </>
-                    ) : null}
+                                            <Link
+                                                href={PATHS.DASHBOARD.CHALLENGES.VERSIONS.VIEW(
+                                                    challengeId,
+                                                    version.id,
+                                                )}
+                                            >
+                                                <Edit3 className="h-4 w-4" />
+                                            </Link>
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>
+                                            {dict?.challenges?.codeVersions
+                                                ?.edit || "Edit Version"}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    disabled={
+                                                        deletingId ===
+                                                        version.id
+                                                    }
+                                                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>
+                                                        {dict?.challenges
+                                                            ?.alerts
+                                                            ?.deleteCodeVersion
+                                                            ?.title ||
+                                                            "Delete Code Version"}
+                                                    </AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        {dict?.challenges
+                                                            ?.alerts
+                                                            ?.deleteCodeVersion
+                                                            ?.description ||
+                                                            "Are you sure you want to delete this code version? This action cannot be undone."}
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>
+                                                        {dict?.common?.cancel ||
+                                                            "Cancel"}
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                version.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        {dict?.common?.delete ||
+                                                            "Delete"}
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>
+                                            {dict?.challenges?.codeVersions
+                                                ?.delete || "Delete Version"}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </>
+                        ) : null}
+                    </div>
                 </div>
             ))}
             {codeVersions.length === 0 && (
-                <p className="text-muted-foreground text-sm">
-                    {dict?.challenges?.codeVersions?.noCodeVersions ||
-                        'No code versions yet. Click "Add Code Version" to create one.'}
-                </p>
+                <div className="text-center py-8">
+                    <Code className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground text-sm">
+                        {dict?.challenges?.codeVersions?.noCodeVersions ||
+                            'No code versions yet. Click "Add Code Version" to create one.'}
+                    </p>
+                </div>
             )}
         </div>
     );

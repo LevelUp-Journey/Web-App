@@ -37,7 +37,7 @@ export default function AdminPage() {
 
             const [challengesData, guidesData] = await Promise.all([
                 ChallengeController.getChallengesByTeacherId(userId),
-                GuideController.getAllGuides(),
+                GuideController.getAllGuides("dashboard"),
             ]);
 
             setChallenges(challengesData);
