@@ -613,7 +613,47 @@
             "showing": "Showing",
             "to": "to",
             "of": "of",
-            "perPage": "Per page:"
+            "perPage": "Per page:",
+            "createGuide": {
+                "title": "Create New Guide",
+                "subtitle": "Fill in the details below to create a new learning guide.",
+                "validation": {
+                    "titleRequired": "Title is required",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 1000 characters",
+                    "topicsRequired": "At least one topic is required"
+                },
+                "errorCreating": "Error creating guide. Please try again.",
+                "cancelConfirm": "Are you sure you want to cancel? All progress will be lost."
+            },
+            "editGuide": {
+                "subtitle": "Edit the guide details and content.",
+                "publish": "Publish",
+                "publishing": "Publishing...",
+                "backToGuides": "Back to Guides",
+                "tabs": {
+                    "pages": "Pages",
+                    "info": "Basic Information"
+                },
+                "basicInfo": {
+                    "title": "Basic Information",
+                    "subtitle": "Update the guide's title, description, and topics.",
+                    "update": "Update Guide",
+                    "updating": "Updating...",
+                    "updateSuccess": "Guide updated successfully!",
+                    "updateError": "Error updating guide. Please try again.",
+                    "cancelConfirm": "Are you sure you want to cancel? Any unsaved changes will be lost.",
+                    "publishError": "Error publishing guide. Please try again."
+                },
+                "validation": {
+                    "titleRequired": "Title is required",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 1000 characters",
+                    "topicsRequired": "At least one topic is required"
+                },
+                "notFound": "Guide not found. Please try again.",
+                "loading": "Loading guide..."
+            }
         }
     },
     "profile": {

@@ -614,7 +614,47 @@
             "showing": "Mostrando",
             "to": "a",
             "of": "de",
-            "perPage": "Por página:"
+            "perPage": "Por página:",
+            "createGuide": {
+                "title": "Crear Nueva Guía",
+                "subtitle": "Completa los detalles a continuación para crear una nueva guía de aprendizaje.",
+                "validation": {
+                    "titleRequired": "El título es obligatorio",
+                    "descriptionMin": "La descripción debe tener al menos 10 caracteres",
+                    "descriptionMax": "La descripción no debe exceder los 1000 caracteres",
+                    "topicsRequired": "Se requiere al menos un tema"
+                },
+                "errorCreating": "Error al crear la guía. Por favor, inténtalo de nuevo.",
+                "cancelConfirm": "¿Estás seguro de que quieres cancelar? Se perderá todo el progreso."
+            },
+            "editGuide": {
+                "subtitle": "Edita los detalles y contenido de la guía.",
+                "publish": "Publicar",
+                "publishing": "Publicando...",
+                "backToGuides": "Volver a Guías",
+                "tabs": {
+                    "pages": "Páginas",
+                    "info": "Información Básica"
+                },
+                "basicInfo": {
+                    "title": "Información Básica",
+                    "subtitle": "Actualiza el título, descripción y temas de la guía.",
+                    "update": "Actualizar Guía",
+                    "updating": "Actualizando...",
+                    "updateSuccess": "¡Guía actualizada exitosamente!",
+                    "updateError": "Error al actualizar la guía. Por favor, inténtalo de nuevo.",
+                    "cancelConfirm": "¿Estás seguro de que quieres cancelar? Se perderán todos los cambios no guardados.",
+                    "publishError": "Error al publicar la guía. Por favor, inténtalo de nuevo."
+                },
+                "validation": {
+                    "titleRequired": "El título es obligatorio",
+                    "descriptionMin": "La descripción debe tener al menos 10 caracteres",
+                    "descriptionMax": "La descripción no debe exceder los 1000 caracteres",
+                    "topicsRequired": "Se requiere al menos un tema"
+                },
+                "notFound": "Guía no encontrada. Por favor, inténtalo de nuevo.",
+                "loading": "Cargando guía..."
+            }
         }
     },
     "profile": {
