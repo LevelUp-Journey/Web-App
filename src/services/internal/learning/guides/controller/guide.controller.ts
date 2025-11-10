@@ -47,9 +47,10 @@ export class GuideController {
 
     public static async getGuidesPaginated(
         request?: GetGuidesPaginatedRequest,
+        forParam?: string,
     ): Promise<GetGuidesResponseFormat | null> {
         try {
-            const response = await getGuidesPaginatedAction(request);
+            const response = await getGuidesPaginatedAction(request, forParam);
             return response;
         } catch (error) {
             console.error(

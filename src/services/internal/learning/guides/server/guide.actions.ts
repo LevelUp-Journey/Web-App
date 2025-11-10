@@ -65,7 +65,7 @@ export async function getAllGuidesAction(
 
         const response = await API_GATEWAY_HTTP.get<
             LearningResponse<GetGuidesResponseFormat>
-        >(`/guides${params.toString() ? `?${params.toString()}` : ""}`);
+        >(`/guides${forParam ? `?${params.toString()}` : ""}`);
         return response.data.data.content;
     } catch (error) {
         console.error("Error fetching all guides:", error);
@@ -75,6 +75,7 @@ export async function getAllGuidesAction(
 
 export async function getGuidesPaginatedAction(
     request?: GetGuidesPaginatedRequest,
+    forParam?: string,
 ): Promise<GetGuidesResponseFormat | null> {
     try {
         const params = new URLSearchParams();
@@ -83,6 +84,7 @@ export async function getGuidesPaginatedAction(
         if (request?.size !== undefined)
             params.append("size", String(request.size));
         if (request?.sort) params.append("sort", request.sort);
+        if (forParam) params.append("for", forParam);
 
         const response = await API_GATEWAY_HTTP.get<
             LearningResponse<GetGuidesResponseFormat>
