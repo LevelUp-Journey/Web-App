@@ -88,8 +88,8 @@ export default function CreateChallengePage() {
             ),
         maxAttemptsBeforeGuides: z
             .number()
-            .min(0, "Max attempts before guides must be at least 0.")
-            .max(100, "Max attempts before guides must be at most 100."),
+            .min(2, "Max attempts before guides must be at least 2.")
+            .max(5, "Max attempts before guides must be at most 5."),
     });
 
     type FormData = z.infer<typeof formSchema>;
@@ -548,8 +548,8 @@ export default function CreateChallengePage() {
                                                 {...field}
                                                 id={field.name}
                                                 type="number"
-                                                min={0}
-                                                max={100}
+                                                min={2}
+                                                max={5}
                                                 aria-invalid={
                                                     fieldState.invalid
                                                 }

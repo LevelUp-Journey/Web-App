@@ -2,6 +2,7 @@
 
 import {
     ArrowLeft,
+    BookOpen,
     CheckCircle,
     Lock,
     Play,
@@ -15,12 +16,27 @@ import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAutoSave } from "@/hooks/challenges/use-auto-save";
 import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
@@ -32,6 +48,7 @@ import type { CodeVersion } from "@/services/internal/challenges/challenge/entit
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
 import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
+import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
@@ -39,6 +56,7 @@ interface StudentCodeEditorProps {
     tests: VersionTest[];
     serializedDescription: SerializeResult | null;
     solution: SolutionResponse | null;
+    guides: GuideResponse[];
 }
 
 /**
@@ -65,12 +83,18 @@ export default function StudentCodeEditor({
     tests,
     serializedDescription,
     solution,
+    guides,
 }: StudentCodeEditorProps) {
     const dict = useDictionary();
     // Estado de la UI
     const [activeTab, setActiveTab] = useState<"description" | "tests">(
         "description",
     );
+
+    // Estado de intentos y guías
+    const [attemptCount, setAttemptCount] = useState(0);
+    const [showGuidesModal, setShowGuidesModal] = useState(false);
+    const [selectedGuideId, setSelectedGuideId] = useState<string>("");
 
     // ID de la solución (inmutable)
     const solutionId = solution?.id || null;
@@ -127,6 +151,13 @@ export default function StudentCodeEditor({
         },
     });
 
+    // Verificar si se deben mostrar las guías después de un envío fallido
+    const maxAttempts = Math.max(
+        2,
+        Math.min(5, challenge.maxAttemptsBeforeGuides ?? 3),
+    );
+    const shouldShowGuides = attemptCount >= maxAttempts && guides.length > 0;
+
     /**
      * Manejador de guardado manual
      */
@@ -149,8 +180,30 @@ export default function StudentCodeEditor({
     const handleSubmit = async () => {
         try {
             await submit();
+            // Incrementar contador de intentos después del envío
+            setAttemptCount((prev) => prev + 1);
         } catch {
             // El error ya se maneja en el hook
+        }
+    };
+
+    /**
+     * Manejador para abrir el modal de guías
+     */
+    const handleOpenGuidesModal = () => {
+        setShowGuidesModal(true);
+    };
+
+    /**
+     * Manejador para seleccionar una guía
+     */
+    const handleGuideSelect = (guideId: string) => {
+        setSelectedGuideId(guideId);
+        // Aquí podrías navegar a la guía o abrirla en una nueva pestaña
+        // Por ahora solo mostramos un toast
+        const selectedGuide = guides.find((g) => g.id === guideId);
+        if (selectedGuide) {
+            toast.success(`Opening guide: ${selectedGuide.title}`);
         }
     };
 
@@ -200,11 +253,40 @@ export default function StudentCodeEditor({
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
 
-                    <div>
-                        <h1 className="text-2xl font-bold">{challenge.name}</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {challenge.experiencePoints} XP
-                        </p>
+                    <div className="flex items-center gap-4">
+                        <div>
+                            <h1 className="text-2xl font-bold">
+                                {challenge.name}
+                            </h1>
+                            <p className="text-sm text-muted-foreground">
+                                {challenge.experiencePoints} XP
+                            </p>
+                        </div>
+
+                        {/* Selector de guías (solo visible después de superar intentos) */}
+                        {shouldShowGuides && (
+                            <div className="flex items-center gap-2">
+                                <BookOpen className="h-4 w-4 text-muted-foreground" />
+                                <Select
+                                    value={selectedGuideId}
+                                    onValueChange={handleGuideSelect}
+                                >
+                                    <SelectTrigger className="w-48">
+                                        <SelectValue placeholder="Select a guide..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {guides.map((guide) => (
+                                            <SelectItem
+                                                key={guide.id}
+                                                value={guide.id}
+                                            >
+                                                {guide.title}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -251,6 +333,50 @@ export default function StudentCodeEditor({
                     </Button>
                 </div>
             </header>
+
+            {/* Modal de guías */}
+            {shouldShowGuides && (
+                <Dialog
+                    open={showGuidesModal}
+                    onOpenChange={setShowGuidesModal}
+                >
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Need Help?</DialogTitle>
+                            <DialogDescription>
+                                If you're having difficulties with this
+                                challenge, check out these helpful guides.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            {guides.map((guide) => (
+                                <div
+                                    key={guide.id}
+                                    className="flex items-center justify-between p-3 border rounded-lg"
+                                >
+                                    <div>
+                                        <h4 className="font-medium">
+                                            {guide.title}
+                                        </h4>
+                                        <p className="text-sm text-muted-foreground">
+                                            {guide.description}
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                            handleGuideSelect(guide.id)
+                                        }
+                                    >
+                                        View Guide
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
 
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -382,6 +508,20 @@ export default function StudentCodeEditor({
                                                             ?.editor
                                                             ?.someTestsFailed ||
                                                             "Some tests failed. Keep trying!"}
+                                                        {/* Mostrar botón de guías si se superaron los intentos */}
+                                                        {shouldShowGuides && (
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={
+                                                                    handleOpenGuidesModal
+                                                                }
+                                                                className="ml-2"
+                                                            >
+                                                                <BookOpen className="h-4 w-4 mr-1" />
+                                                                Get Help
+                                                            </Button>
+                                                        )}
                                                     </p>
                                                 )}
                                             </div>
