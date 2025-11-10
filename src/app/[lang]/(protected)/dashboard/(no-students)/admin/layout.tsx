@@ -33,6 +33,10 @@ export default async function AdminLayout({
             label: dict.admin.layout.guides,
             href: PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
         },
+        {
+            label: dict.admin.layout.community,
+            href: PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
+        },
     ];
 
     return (

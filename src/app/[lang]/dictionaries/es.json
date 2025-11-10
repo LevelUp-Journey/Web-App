@@ -695,7 +695,8 @@
         "layout": {
             "general": "General",
             "challenges": "Desafíos",
-            "guides": "Guías"
+            "guides": "Guías",
+            "community": "Comunidad"
         },
         "dashboard": {
             "title": "Panel de Administración — Actividad Reciente",
@@ -711,6 +712,7 @@
         },
         "community": {
             "title": "Gestión de Comunidad",
+            "subtitle": "Gestiona y supervisa todas las comunidades de la plataforma",
             "create": "Crear Comunidad",
             "loading": "Cargando comunidades",
             "loadingDescription": "Preparando tus herramientas de gestión de comunidad.",
@@ -718,7 +720,26 @@
             "noCommunities": "Aún no hay comunidades",
             "noCommunitiesDescription": "Crea tu primera comunidad para comenzar.",
             "retry": "Reintentar",
-            "permissionsError": "No se pudieron verificar los permisos"
+            "permissionsError": "No se pudieron verificar los permisos",
+            "createForm": {
+                "title": "Personaliza Tu Comunidad",
+                "subtitle": "Dale personalidad a tu nueva comunidad con un nombre y un ícono. Siempre puedes cambiarlo después.",
+                "nameLabel": "Nombre de la Comunidad",
+                "namePlaceholder": "Ingresa el nombre de la comunidad",
+                "descriptionLabel": "Descripción de la Comunidad",
+                "descriptionPlaceholder": "Describe tu comunidad",
+                "descriptionHelper": "Cuéntale a la gente de qué trata esta comunidad",
+                "termsText": "Al crear una comunidad, aceptas las Directrices de la Comunidad.",
+                "submitButton": "Crear",
+                "cancelConfirm": "¿Estás seguro de que quieres cancelar? Se perderá todo el progreso.",
+                "errorCreating": "Error al crear la comunidad. Por favor, inténtalo de nuevo.",
+                "validation": {
+                    "nameRequired": "El nombre de la comunidad es obligatorio",
+                    "nameMax": "El nombre de la comunidad no debe exceder los 100 caracteres",
+                    "descriptionMin": "La descripción debe tener al menos 10 caracteres",
+                    "descriptionMax": "La descripción no debe exceder los 500 caracteres"
+                }
+            }
         },
         "challenges": {
             "title": "Mis Desafíos",
