@@ -156,7 +156,9 @@ export default function ChallengeCard({
                                                 challenge.id,
                                             )}
                                         >
-                                            Edit Challenge
+                                            {dict?.challenges?.cards
+                                                ?.editChallenge ||
+                                                "Edit Challenge"}
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
@@ -165,7 +167,9 @@ export default function ChallengeCard({
                                         }
                                         className="text-destructive focus:text-destructive cursor-pointer"
                                     >
-                                        Delete Challenge
+                                        {dict?.challenges?.cards
+                                            ?.deleteChallenge ||
+                                            "Delete Challenge"}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -177,19 +181,23 @@ export default function ChallengeCard({
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>
-                                            Delete Challenge
+                                            {dict?.challenges?.alerts
+                                                ?.deleteChallenge?.title ||
+                                                "Delete Challenge"}
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Are you sure you want to delete "
-                                            {challenge.name}"? This action
-                                            cannot be undone.
+                                            {dict?.challenges?.alerts?.deleteChallenge?.description?.replace(
+                                                "this challenge",
+                                                `"${challenge.name}"`,
+                                            ) ||
+                                                `Are you sure you want to delete "${challenge.name}"? This action cannot be undone.`}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel
                                             disabled={isDeleting}
                                         >
-                                            Cancel
+                                            {dict?.common?.cancel || "Cancel"}
                                         </AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={handleDelete}
@@ -197,8 +205,11 @@ export default function ChallengeCard({
                                             className="bg-destructive hover:bg-destructive/90"
                                         >
                                             {isDeleting
-                                                ? "Deleting..."
-                                                : "Delete"}
+                                                ? dict?.challenges?.buttons
+                                                      ?.deleting ||
+                                                  "Deleting..."
+                                                : dict?.challenges?.buttons
+                                                      ?.delete || "Delete"}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

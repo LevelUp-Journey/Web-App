@@ -1,11 +1,14 @@
 import { ChallengeStatus } from "@/lib/consts";
 import type { Challenge } from "../entities/challenge.entity";
 import {
+    addGuideToChallenge,
     createChallengeAction,
     deleteChallengeAction,
     getChallengeByIdAction,
     getChallengesByTeacherIdAction,
     getPublicChallengesAction,
+    removeGuideFromChallenge,
+    searchChallengesAction,
     updateChallengeAction,
 } from "../server/challenge.actions";
 import { ChallengeAssembler } from "./challenge.assembler";
@@ -217,6 +220,95 @@ export class ChallengeController {
         } catch (error) {
             console.error(`Error deleting challenge ${challengeId}:`, error);
             return false;
+        }
+    }
+
+    /**
+     * Add a guide to a challenge
+     * @returns true if added successfully, false otherwise
+     */
+    public static async addGuideToChallenge(
+        challengeId: string,
+        guideId: string,
+    ): Promise<boolean> {
+        console.log(
+            `[ChallengeController] Adding guide ${guideId} to challenge ${challengeId}`,
+        );
+        try {
+            const response = await addGuideToChallenge(challengeId, guideId);
+
+            if (response.status === 200 || response.status === 201) {
+                console.log(
+                    `[ChallengeController] Successfully added guide ${guideId} to challenge ${challengeId}`,
+                );
+                return true;
+            }
+
+            console.error("Failed to add guide to challenge:", response);
+            return false;
+        } catch (error) {
+            console.error(
+                `Error adding guide ${guideId} to challenge ${challengeId}:`,
+                error,
+            );
+            return false;
+        }
+    }
+
+    /**
+     * Remove a guide from a challenge
+     * @returns true if removed successfully, false otherwise
+     */
+    public static async removeGuideFromChallenge(
+        challengeId: string,
+        guideId: string,
+    ): Promise<boolean> {
+        console.log(
+            `[ChallengeController] Removing guide ${guideId} from challenge ${challengeId}`,
+        );
+        try {
+            const response = await removeGuideFromChallenge(
+                challengeId,
+                guideId,
+            );
+
+            if (response.status === 200 || response.status === 204) {
+                console.log(
+                    `[ChallengeController] Successfully removed guide ${guideId} from challenge ${challengeId}`,
+                );
+                return true;
+            }
+
+            console.error("Failed to remove guide from challenge:", response);
+            return false;
+        } catch (error) {
+            console.error(
+                `Error removing guide ${guideId} from challenge ${challengeId}:`,
+                error,
+            );
+            return false;
+        }
+    }
+
+    /**
+     * Search challenges by name
+     * @returns Array of challenges matching the search, empty array if search fails
+     */
+    public static async searchChallenges(name: string): Promise<Challenge[]> {
+        try {
+            const response = await searchChallengesAction(name);
+
+            if (response.status === 200 && response.data) {
+                return ChallengeAssembler.toEntitiesFromResponse(
+                    response.data as ChallengeResponse[],
+                );
+            }
+
+            console.error("Failed to search challenges:", response);
+            return [];
+        } catch (error) {
+            console.error("Error searching challenges:", error);
+            return [];
         }
     }
 }

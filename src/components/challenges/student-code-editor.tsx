@@ -2,6 +2,7 @@
 
 import {
     ArrowLeft,
+    BookOpen,
     CheckCircle,
     Lock,
     Play,
@@ -15,12 +16,27 @@ import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAutoSave } from "@/hooks/challenges/use-auto-save";
 import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
@@ -32,6 +48,7 @@ import type { CodeVersion } from "@/services/internal/challenges/challenge/entit
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
 import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
+import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
@@ -39,6 +56,7 @@ interface StudentCodeEditorProps {
     tests: VersionTest[];
     serializedDescription: SerializeResult | null;
     solution: SolutionResponse | null;
+    guides: GuideResponse[];
 }
 
 /**
@@ -65,12 +83,18 @@ export default function StudentCodeEditor({
     tests,
     serializedDescription,
     solution,
+    guides,
 }: StudentCodeEditorProps) {
     const dict = useDictionary();
     // Estado de la UI
     const [activeTab, setActiveTab] = useState<"description" | "tests">(
         "description",
     );
+
+    // Estado de intentos y guías
+    const [attemptCount, setAttemptCount] = useState(0);
+    const [showGuidesModal, setShowGuidesModal] = useState(false);
+    const [selectedGuideId, setSelectedGuideId] = useState<string>("");
 
     // ID de la solución (inmutable)
     const solutionId = solution?.id || null;
@@ -120,9 +144,19 @@ export default function StudentCodeEditor({
         },
         onError: (error) => {
             console.error("Error submitting solution:", error);
-            toast.error("Failed to submit solution");
+            toast.error(
+                dict?.challenges?.editor?.failedToSubmitSolution ||
+                    "Failed to submit solution",
+            );
         },
     });
+
+    // Verificar si se deben mostrar las guías después de un envío fallido
+    const maxAttempts = Math.max(
+        2,
+        Math.min(5, challenge.maxAttemptsBeforeGuides ?? 3),
+    );
+    const shouldShowGuides = attemptCount >= maxAttempts && guides.length > 0;
 
     /**
      * Manejador de guardado manual
@@ -130,7 +164,10 @@ export default function StudentCodeEditor({
     const handleManualSave = async () => {
         try {
             await saveManually();
-            toast.success("Code saved successfully!");
+            toast.success(
+                dict?.challenges?.editor?.codeSavedSuccessfully ||
+                    "Code saved successfully!",
+            );
         } catch (error) {
             console.error("Error saving code:", error);
             toast.error(dict?.errors?.saving?.code || "Failed to save code");
@@ -143,8 +180,30 @@ export default function StudentCodeEditor({
     const handleSubmit = async () => {
         try {
             await submit();
+            // Incrementar contador de intentos después del envío
+            setAttemptCount((prev) => prev + 1);
         } catch {
             // El error ya se maneja en el hook
+        }
+    };
+
+    /**
+     * Manejador para abrir el modal de guías
+     */
+    const handleOpenGuidesModal = () => {
+        setShowGuidesModal(true);
+    };
+
+    /**
+     * Manejador para seleccionar una guía
+     */
+    const handleGuideSelect = (guideId: string) => {
+        setSelectedGuideId(guideId);
+        // Aquí podrías navegar a la guía o abrirla en una nueva pestaña
+        // Por ahora solo mostramos un toast
+        const selectedGuide = guides.find((g) => g.id === guideId);
+        if (selectedGuide) {
+            toast.success(`Opening guide: ${selectedGuide.title}`);
         }
     };
 
@@ -152,10 +211,13 @@ export default function StudentCodeEditor({
      * Obtiene el texto del botón de guardado según el estado
      */
     const getSaveButtonText = (): string => {
-        if (isManualSaving) return "Saving...";
-        if (saveStatus === "saved") return "Saved";
-        if (saveStatus === "error") return "Error";
-        return "Save";
+        if (isManualSaving)
+            return dict?.challenges?.editor?.saving || "Saving...";
+        if (saveStatus === "saved")
+            return dict?.challenges?.editor?.saved || "Saved";
+        if (saveStatus === "error")
+            return dict?.challenges?.editor?.error || "Error";
+        return dict?.common?.save || "Save";
     };
 
     /**
@@ -183,16 +245,48 @@ export default function StudentCodeEditor({
                     <Link
                         href={PATHS.DASHBOARD.ROOT}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                        aria-label="Back to dashboard"
+                        aria-label={
+                            dict?.challenges?.editor?.backToDashboard ||
+                            "Back to dashboard"
+                        }
                     >
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
 
-                    <div>
-                        <h1 className="text-2xl font-bold">{challenge.name}</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {challenge.experiencePoints} XP
-                        </p>
+                    <div className="flex items-center gap-4">
+                        <div>
+                            <h1 className="text-2xl font-bold">
+                                {challenge.name}
+                            </h1>
+                            <p className="text-sm text-muted-foreground">
+                                {challenge.experiencePoints} XP
+                            </p>
+                        </div>
+
+                        {/* Selector de guías (solo visible después de superar intentos) */}
+                        {shouldShowGuides && (
+                            <div className="flex items-center gap-2">
+                                <BookOpen className="h-4 w-4 text-muted-foreground" />
+                                <Select
+                                    value={selectedGuideId}
+                                    onValueChange={handleGuideSelect}
+                                >
+                                    <SelectTrigger className="w-48">
+                                        <SelectValue placeholder="Select a guide..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {guides.map((guide) => (
+                                            <SelectItem
+                                                key={guide.id}
+                                                value={guide.id}
+                                            >
+                                                {guide.title}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -200,7 +294,8 @@ export default function StudentCodeEditor({
                     {/* Indicador de auto-guardado */}
                     {saveStatus === "saving" && (
                         <span className="text-sm text-muted-foreground animate-pulse">
-                            Auto-saving...
+                            {dict?.challenges?.editor?.autoSaving ||
+                                "Auto-saving..."}
                         </span>
                     )}
 
@@ -210,7 +305,10 @@ export default function StudentCodeEditor({
                         disabled={isSaveDisabled}
                         variant={getSaveButtonVariant()}
                         size="sm"
-                        aria-label="Save code manually"
+                        aria-label={
+                            dict?.challenges?.editor?.saveCodeManually ||
+                            "Save code manually"
+                        }
                     >
                         <Save className="h-4 w-4" />
                         {getSaveButtonText()}
@@ -222,13 +320,63 @@ export default function StudentCodeEditor({
                         disabled={isSubmitDisabled}
                         variant="default"
                         size="sm"
-                        aria-label="Run code and submit solution"
+                        aria-label={
+                            dict?.challenges?.editor?.runCodeAndSubmit ||
+                            "Run code and submit solution"
+                        }
                     >
                         <Play className="h-4 w-4" />
-                        {isSubmitting ? "Executing..." : "Run Code"}
+                        {isSubmitting
+                            ? dict?.challenges?.editor?.executing ||
+                              "Executing..."
+                            : dict?.challenges?.editor?.runCode || "Run Code"}
                     </Button>
                 </div>
             </header>
+
+            {/* Modal de guías */}
+            {shouldShowGuides && (
+                <Dialog
+                    open={showGuidesModal}
+                    onOpenChange={setShowGuidesModal}
+                >
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Need Help?</DialogTitle>
+                            <DialogDescription>
+                                If you're having difficulties with this
+                                challenge, check out these helpful guides.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            {guides.map((guide) => (
+                                <div
+                                    key={guide.id}
+                                    className="flex items-center justify-between p-3 border rounded-lg"
+                                >
+                                    <div>
+                                        <h4 className="font-medium">
+                                            {guide.title}
+                                        </h4>
+                                        <p className="text-sm text-muted-foreground">
+                                            {guide.description}
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                            handleGuideSelect(guide.id)
+                                        }
+                                    >
+                                        View Guide
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
 
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -261,10 +409,14 @@ export default function StudentCodeEditor({
                         >
                             <TabsList className="m-4">
                                 <TabsTrigger value="description">
-                                    Description
+                                    {dict?.challenges?.editor?.descriptionTab ||
+                                        "Description"}
                                 </TabsTrigger>
                                 <TabsTrigger value="tests">
-                                    Test Cases ({tests.length})
+                                    {dict?.challenges?.editor?.testCasesTab?.replace(
+                                        "{count}",
+                                        tests.length.toString(),
+                                    ) || `Test Cases (${tests.length})`}
                                 </TabsTrigger>
                             </TabsList>
 
@@ -276,7 +428,9 @@ export default function StudentCodeEditor({
                                 <div className="space-y-4">
                                     <div>
                                         <h3 className="text-lg font-semibold mb-2">
-                                            Challenge Description
+                                            {dict?.challenges?.editor
+                                                ?.challengeDescription ||
+                                                "Challenge Description"}
                                         </h3>
                                         <div className="p-4 rounded-md prose prose-sm dark:prose-invert max-w-none">
                                             {serializedDescription ? (
@@ -287,7 +441,9 @@ export default function StudentCodeEditor({
                                                 />
                                             ) : (
                                                 <p className="text-muted-foreground">
-                                                    No description available.
+                                                    {dict?.challenges?.editor
+                                                        ?.noDescriptionAvailable ||
+                                                        "No description available."}
                                                 </p>
                                             )}
                                         </div>
@@ -302,7 +458,8 @@ export default function StudentCodeEditor({
                             >
                                 <div className="space-y-4">
                                     <h3 className="text-lg font-semibold">
-                                        Test Cases
+                                        {dict?.challenges?.editor?.testCases ||
+                                            "Test Cases"}
                                     </h3>
 
                                     {/* Resultados de envío */}
@@ -317,41 +474,54 @@ export default function StudentCodeEditor({
                                         >
                                             <div className="space-y-2">
                                                 <p className="font-medium">
-                                                    Submission Results:{" "}
-                                                    <span
-                                                        className={
-                                                            submitResult.passedTests ===
-                                                            submitResult.totalTests
-                                                                ? "text-green-600 dark:text-green-400"
-                                                                : "text-red-600 dark:text-red-400"
-                                                        }
-                                                    >
-                                                        {
-                                                            submitResult.passedTests
-                                                        }
-                                                        /
-                                                        {
-                                                            submitResult.totalTests
-                                                        }{" "}
-                                                        tests passed
-                                                    </span>
+                                                    {dict?.challenges?.editor?.submissionResults
+                                                        ?.replace(
+                                                            "{passed}",
+                                                            submitResult.passedTests.toString(),
+                                                        )
+                                                        .replace(
+                                                            "{total}",
+                                                            submitResult.totalTests.toString(),
+                                                        ) ||
+                                                        `Submission Results: ${submitResult.passedTests}/${submitResult.totalTests} tests passed`}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
-                                                    Time taken:{" "}
-                                                    {submitResult.timeTaken}ms
+                                                    {dict?.challenges?.editor?.timeTaken?.replace(
+                                                        "{time}",
+                                                        submitResult.timeTaken.toString(),
+                                                    ) ||
+                                                        `Time taken: ${submitResult.timeTaken}ms`}
                                                 </p>
                                                 {submitResult.passedTests ===
                                                 submitResult.totalTests ? (
                                                     <p className="text-green-600 dark:text-green-400 font-medium flex items-center gap-2">
                                                         <CheckCircle className="h-5 w-5" />
-                                                        All tests passed!
-                                                        Congratulations!
+                                                        {dict?.challenges
+                                                            ?.editor
+                                                            ?.allTestsPassed ||
+                                                            "All tests passed! Congratulations!"}
                                                     </p>
                                                 ) : (
                                                     <p className="text-red-600 dark:text-red-400 font-medium flex items-center gap-2">
                                                         <XCircle className="h-5 w-5" />
-                                                        Some tests failed. Keep
-                                                        trying!
+                                                        {dict?.challenges
+                                                            ?.editor
+                                                            ?.someTestsFailed ||
+                                                            "Some tests failed. Keep trying!"}
+                                                        {/* Mostrar botón de guías si se superaron los intentos */}
+                                                        {shouldShowGuides && (
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={
+                                                                    handleOpenGuidesModal
+                                                                }
+                                                                className="ml-2"
+                                                            >
+                                                                <BookOpen className="h-4 w-4 mr-1" />
+                                                                Get Help
+                                                            </Button>
+                                                        )}
                                                     </p>
                                                 )}
                                             </div>
@@ -361,7 +531,9 @@ export default function StudentCodeEditor({
                                     {/* Lista de tests */}
                                     {tests.length === 0 ? (
                                         <p className="text-muted-foreground text-sm">
-                                            No test cases available.
+                                            {dict?.challenges?.editor
+                                                ?.noTestCasesAvailable ||
+                                                "No test cases available."}
                                         </p>
                                     ) : (
                                         <div className="space-y-2">
@@ -396,35 +568,44 @@ export default function StudentCodeEditor({
                                                                     <Lock className="h-4 w-4 text-muted-foreground" />
                                                                 )}
                                                                 <span>
-                                                                    Test Case{" "}
-                                                                    {index + 1}
+                                                                    {dict?.challenges?.editor?.testCase?.replace(
+                                                                        "{number}",
+                                                                        (
+                                                                            index +
+                                                                            1
+                                                                        ).toString(),
+                                                                    ) ||
+                                                                        `Test Case ${index + 1}`}
                                                                 </span>
                                                                 {test.isSecret && (
                                                                     <span className="text-xs text-muted-foreground">
-                                                                        (Secret)
+                                                                        {dict
+                                                                            ?.challenges
+                                                                            ?.editor
+                                                                            ?.secret ||
+                                                                            "(Secret)"}
                                                                     </span>
                                                                 )}
                                                             </ItemTitle>
 
                                                             {test.isSecret ? (
                                                                 <div className="text-sm text-muted-foreground mt-2">
-                                                                    This is a
-                                                                    secret test
-                                                                    used to
-                                                                    validate
-                                                                    your
-                                                                    solution.
-                                                                    Input and
-                                                                    expected
-                                                                    output are
-                                                                    hidden.
+                                                                    {dict
+                                                                        ?.challenges
+                                                                        ?.editor
+                                                                        ?.secretTestDescription ||
+                                                                        "This is a secret test used to validate your solution. Input and expected output are hidden."}
                                                                 </div>
                                                             ) : (
                                                                 <div className="mt-2 space-y-2">
                                                                     {/* Input */}
                                                                     <div>
                                                                         <p className="text-sm font-medium mb-1">
-                                                                            Input:
+                                                                            {dict
+                                                                                ?.challenges
+                                                                                ?.editor
+                                                                                ?.input ||
+                                                                                "Input:"}
                                                                         </p>
                                                                         <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
                                                                             {
@@ -437,8 +618,11 @@ export default function StudentCodeEditor({
                                                                     {submitResult ? (
                                                                         <div>
                                                                             <p className="text-sm font-medium mb-1">
-                                                                                Expected
-                                                                                Output:
+                                                                                {dict
+                                                                                    ?.challenges
+                                                                                    ?.editor
+                                                                                    ?.expectedOutput ||
+                                                                                    "Expected Output:"}
                                                                             </p>
                                                                             <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
                                                                                 {
@@ -450,15 +634,11 @@ export default function StudentCodeEditor({
                                                                         <div className="flex items-center gap-2 text-muted-foreground text-sm">
                                                                             <Lock className="h-3 w-3" />
                                                                             <p>
-                                                                                Expected
-                                                                                output
-                                                                                is
-                                                                                hidden
-                                                                                until
-                                                                                you
-                                                                                submit
-                                                                                your
-                                                                                solution
+                                                                                {dict
+                                                                                    ?.challenges
+                                                                                    ?.editor
+                                                                                    ?.expectedOutputHidden ||
+                                                                                    "Expected output is hidden until you submit your solution"}
                                                                             </p>
                                                                         </div>
                                                                     )}

@@ -1,4 +1,5 @@
 import {
+    addChallengeToGuideAction,
     createGuideAction,
     createPageAction,
     deleteGuideAction,
@@ -12,6 +13,8 @@ import {
     getPageByIdAction,
     getTeachersGuidesAction,
     getTeachersGuidesPaginatedAction,
+    removeChallengeFromGuideAction,
+    searchGuideAction,
     updateGuideAction,
     updateGuideStatusAction,
     updatePageAction,
@@ -24,15 +27,19 @@ import type {
     GetGuidePagesByGuideIdRequest,
     GetPageByIdRequest,
     GuideResponse,
+    SearchGuideRequest,
+    SearchGuidesResponse,
     UpdateGuideRequest,
     UpdateGuideStatusRequest,
     UpdatePageRequest,
 } from "./guide.response";
 
 export class GuideController {
-    public static async getAllGuides(): Promise<GuideResponse[]> {
+    public static async getAllGuides(
+        forParam?: string,
+    ): Promise<GuideResponse[]> {
         try {
-            const response = await getAllGuidesAction();
+            const response = await getAllGuidesAction(forParam);
             return response;
         } catch (error) {
             console.error("Error in GuideController.getAllGuides:", error);
@@ -42,9 +49,10 @@ export class GuideController {
 
     public static async getGuidesPaginated(
         request?: GetGuidesPaginatedRequest,
+        forParam?: string,
     ): Promise<GetGuidesResponseFormat | null> {
         try {
-            const response = await getGuidesPaginatedAction(request);
+            const response = await getGuidesPaginatedAction(request, forParam);
             return response;
         } catch (error) {
             console.error(
@@ -171,5 +179,37 @@ export class GuideController {
             );
             return null;
         }
+    }
+
+    public static async searchGuides(
+        request: SearchGuideRequest,
+    ): Promise<GuideResponse[]> {
+        try {
+            const response: SearchGuidesResponse =
+                await searchGuideAction(request);
+            return response.content;
+        } catch (error) {
+            console.error("Error in GuideController.searchGuides:", error);
+            return [];
+        }
+    }
+
+    public static async addChallengeToGuide(
+        guideId: string,
+        challengeId: string,
+    ): Promise<GuideResponse> {
+        const response = await addChallengeToGuideAction(guideId, challengeId);
+        return response;
+    }
+
+    public static async removeChallengeFromGuide(
+        guideId: string,
+        challengeId: string,
+    ): Promise<GuideResponse> {
+        const response = await removeChallengeFromGuideAction(
+            guideId,
+            challengeId,
+        );
+        return response;
     }
 }

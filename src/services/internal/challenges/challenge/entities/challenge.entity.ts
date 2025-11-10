@@ -10,6 +10,8 @@ export interface Challenge {
     status: ChallengeStatus;
     tags: ChallengeTag[];
     stars: ChallengeStar[];
+    guides: string[]; // Guide IDs
+    maxAttemptsBeforeGuides?: number;
 }
 
 export interface ChallengeTag {

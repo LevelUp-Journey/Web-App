@@ -13,8 +13,5 @@ export default async function NoStudentsLayout({
     if (isUserStudent) {
         redirect(PATHS.UNAUTHORIZED);
     }
-    const userId = await AuthController.getUserId();
-    console.log("USER ID:", userId);
-
     return children;
 }

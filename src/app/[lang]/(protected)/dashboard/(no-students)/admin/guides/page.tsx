@@ -82,11 +82,14 @@ export default function GuidesPage() {
             setLoading(true);
             setError(null);
             try {
-                const response = await GuideController.getGuidesPaginated({
-                    page: currentPage,
-                    size: pageSize,
-                    sort: "createdAt,desc",
-                });
+                const response = await GuideController.getGuidesPaginated(
+                    {
+                        page: currentPage,
+                        size: pageSize,
+                        sort: "createdAt,desc",
+                    },
+                    "dashboard",
+                );
 
                 if (response) {
                     setGuides(response.content);

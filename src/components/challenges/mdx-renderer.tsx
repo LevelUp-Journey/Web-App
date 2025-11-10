@@ -1,6 +1,7 @@
 "use client";
 
 import { hydrate, type SerializeResult } from "next-mdx-remote-client/csr";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useMDXComponents } from "../../../mdx-components";
 
 interface MdxRendererProps {
@@ -9,10 +10,12 @@ interface MdxRendererProps {
 
 export default function MdxRenderer({ serializedSource }: MdxRendererProps) {
     const components = useMDXComponents();
+    const dict = useDictionary();
     if (!serializedSource) {
         return (
             <p className="text-muted-foreground italic">
-                No description provided.
+                {dict?.challenges?.messages?.noDescription ||
+                    "No description provided."}
             </p>
         );
     }
@@ -20,7 +23,11 @@ export default function MdxRenderer({ serializedSource }: MdxRendererProps) {
     if ("error" in serializedSource) {
         return (
             <p className="text-red-500 italic">
-                Error rendering description: {serializedSource.error.message}
+                {dict?.challenges?.messages?.errorRenderingDescription?.replace(
+                    "{error}",
+                    serializedSource.error.message,
+                ) ||
+                    `Error rendering description: ${serializedSource.error.message}`}
             </p>
         );
     }
