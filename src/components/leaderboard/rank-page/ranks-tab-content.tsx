@@ -7,8 +7,9 @@ import { RankingOverview } from "./ranking-overview";
 import { RanksByScore } from "./ranks-by-score";
 import { GeneralRules } from "./general-rules";
 import { Penalization } from "./penalization";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 
-export function RanksTabContent() {
+export function RanksTabContent({ dict }: { dict: Dictionary }) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -30,11 +31,11 @@ export function RanksTabContent() {
 
     return (
         <div className="space-y-8">
-            <RanksList />
-            <RankingOverview />
-            <RanksByScore />
-            <GeneralRules />
-            <Penalization />
+            <RanksList dict={dict} />
+            <RankingOverview dict={dict} />
+            <RanksByScore dict={dict} />
+            <GeneralRules dict={dict} />
+            <Penalization dict={dict} />
         </div>
     );
 }

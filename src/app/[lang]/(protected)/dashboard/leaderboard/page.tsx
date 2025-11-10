@@ -27,15 +27,15 @@ export default async function LeaderboardPage({
                 </TabsList>
 
                 <TabsContent value="leaderboard" className="mt-6">
-                    <LeaderboardContent />
+                    <LeaderboardContent dict={dict} />
                 </TabsContent>
 
                 <TabsContent value="myrank" className="mt-6">
-                    <MyRankContent />
+                    <MyRankContent dict={dict} />
                 </TabsContent>
 
                 <TabsContent value="ranks" className="mt-6">
-                    <RanksTabContent />
+                    <RanksTabContent dict={dict} />
                 </TabsContent>
             </Tabs>
         </div>

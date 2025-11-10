@@ -1,12 +1,15 @@
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+
 const DIFFICULTY_LEVELS = [
-    { label: "EASY", points: 5 },
-    { label: "MEDIUM", points: 10 },
-    { label: "HARD", points: 20 },
-    { label: "EXPERT", points: 40 },
+    { key: "easy", label: "EASY", points: 5 },
+    { key: "medium", label: "MEDIUM", points: 10 },
+    { key: "hard", label: "HARD", points: 20 },
+    { key: "expert", label: "EXPERT", points: 40 },
 ];
 
 const SCORING_RULES = [
     {
+        key: "difficultyCeiling",
         title: "Difficulty Sets the Ceiling",
         summary:
             "Every challenge ships with a fixed max score. Difficulty only raises that ceiling — your time determines what you take home.",
@@ -16,6 +19,7 @@ const SCORING_RULES = [
         ],
     },
     {
+        key: "correctnessFirst",
         title: "Correctness First",
         summary:
             "Scoring is binary on accuracy. Only fully green test suites move on to time-based math.",
@@ -25,6 +29,7 @@ const SCORING_RULES = [
         ],
     },
     {
+        key: "timePercentage",
         title: "Time Controls The Percentage",
         summary:
             "Once correctness is locked, the clock slots you into a payout tier relative to the challenge ceiling.",
@@ -34,6 +39,7 @@ const SCORING_RULES = [
         ],
     },
     {
+        key: "minimumScore",
         title: "Minimum Guaranteed Score",
         summary:
             "Passing all tests never feels wasted time. Even the slowest clean solution gives back 20% of the challenge cap.",
@@ -43,6 +49,7 @@ const SCORING_RULES = [
         ],
     },
     {
+        key: "timeTracking",
         title: "How We Track Time",
         summary:
             "The timer covers the full build-measure-learn loop, not just the final run button.",
@@ -52,6 +59,7 @@ const SCORING_RULES = [
         ],
     },
     {
+        key: "summaryHierarchy",
         title: "Summary Hierarchy",
         summary:
             "Two-step mental checklist: be correct, then be timely. Everything else flows from there.",
@@ -63,7 +71,7 @@ const SCORING_RULES = [
     },
 ];
 
-export function GeneralRules({ className = "" }: { className?: string }) {
+export function GeneralRules({ className = "", dict }: { className?: string; dict: Dictionary }) {
     return (
         <section
             className={`w-full ${className}`}
@@ -73,42 +81,46 @@ export function GeneralRules({ className = "" }: { className?: string }) {
                 id="general-rules-heading"
                 className="text-xl font-semibold mb-4"
             >
-                Scoring Rules Overview
+                {dict.leaderboard.rankingSystem.rules.title}
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-                Quick guide to how LevelUp Journey translates difficulty, correctness, and time into leaderboard points.
+                {dict.leaderboard.rankingSystem.rules.description}
             </p>
 
             <div className="mb-6 flex flex-wrap gap-2 text-xs font-medium text-muted-foreground">
                 {DIFFICULTY_LEVELS.map((level) => (
                     <span
-                        key={level.label}
+                        key={level.key}
                         className="rounded-full bg-muted px-3 py-1 text-[11px] uppercase tracking-wide"
                     >
-                        {level.label} → {level.points} pts
+                        {dict.leaderboard.rankingSystem.rules.difficultyLevels[level.key as keyof typeof dict.leaderboard.rankingSystem.rules.difficultyLevels]}
                     </span>
                 ))}
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-                {SCORING_RULES.map((rule) => (
-                    <article
-                        key={rule.title}
-                        className="rounded-lg border border-border bg-card/40 p-4 shadow-sm"
-                    >
-                        <h4 className="text-base font-semibold mb-2">
-                            {rule.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mb-3">
-                            {rule.summary}
-                        </p>
-                        <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground/90">
-                            {rule.items.map((item) => (
-                                <li key={item}>{item}</li>
-                            ))}
-                        </ul>
-                    </article>
-                ))}
+                {SCORING_RULES.map((rule) => {
+                    const sectionKey = rule.key as keyof typeof dict.leaderboard.rankingSystem.rules.sections;
+                    const section = dict.leaderboard.rankingSystem.rules.sections[sectionKey];
+                    return (
+                        <article
+                            key={rule.key}
+                            className="rounded-lg border border-border bg-card/40 p-4 shadow-sm"
+                        >
+                            <h4 className="text-base font-semibold mb-2">
+                                {section.title}
+                            </h4>
+                            <p className="text-sm text-muted-foreground mb-3">
+                                {section.summary}
+                            </p>
+                            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground/90">
+                                {section.items.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
+                        </article>
+                    );
+                })}
             </div>
         </section>
     );
