@@ -3,14 +3,8 @@
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import CommunityCard from "@/components/cards/community-card";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
 import {
     Empty,
     EmptyContent,
@@ -197,33 +191,10 @@ export default function CommunityPage() {
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {communities.map((community) => (
-                        <Card key={community.id} className="hover:shadow-lg transition-shadow">
-                            <CardHeader>
-                                {community.imageUrl && (
-                                    <div className="w-full h-32 mb-4 rounded-md overflow-hidden bg-muted">
-                                        <img
-                                            src={community.imageUrl}
-                                            alt={community.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                )}
-                                <CardTitle>{community.name}</CardTitle>
-                                <CardDescription>
-                                    {community.description}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                                    <span>
-                                        Created:{" "}
-                                        {new Date(
-                                            community.createdAt,
-                                        ).toLocaleDateString()}
-                                    </span>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <CommunityCard
+                            key={community.id}
+                            community={community}
+                        />
                     ))}
                 </div>
             )}
