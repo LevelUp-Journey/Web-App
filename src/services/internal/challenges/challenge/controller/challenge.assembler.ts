@@ -20,6 +20,7 @@ const ChallengeValidator = z.object({
     status: z.enum(ChallengeStatus),
     tags: z.array(ChallengeTagValidator),
     guides: z.array(z.string()),
+    maxAttemptsBeforeGuides: z.number().min(0).max(100).nullish(),
 });
 
 const ChallengeStarValidator = z.object({
@@ -58,6 +59,7 @@ export class ChallengeAssembler {
                 };
             }),
             guides: challenge.guides,
+            maxAttemptsBeforeGuides: challenge.maxAttemptsBeforeGuides ?? 3,
         };
     }
 

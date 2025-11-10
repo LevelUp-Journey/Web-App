@@ -62,6 +62,10 @@ const formSchema = z.object({
             MAX_CHALLENGE_EXPERIENCE_POINTS,
             `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
         ),
+    maxAttemptsBeforeGuides: z
+        .number()
+        .min(0, "Max attempts before guides must be at least 0.")
+        .max(100, "Max attempts before guides must be at most 100."),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -113,6 +117,7 @@ export default function ChallengeEditing({
                     challengeData.difficulty ?? ChallengeDifficulty.EASY
                 ],
             ),
+            maxAttemptsBeforeGuides: challengeData.maxAttemptsBeforeGuides ?? 3,
         },
     });
     useEffect(() => {
@@ -130,6 +135,7 @@ export default function ChallengeEditing({
                     challengeData.difficulty ?? ChallengeDifficulty.EASY
                 ],
             ),
+            maxAttemptsBeforeGuides: challengeData.maxAttemptsBeforeGuides ?? 3,
         });
         setSelectedGuideIds(challengeData.guides);
     }, [challengeData, form]);
@@ -199,6 +205,7 @@ export default function ChallengeEditing({
                     experiencePoints: data.experiencePoints,
                     difficulty: data.difficulty,
                     tags: tagNames.length > 0 ? tagNames : undefined,
+                    maxAttemptsBeforeGuides: data.maxAttemptsBeforeGuides,
                 },
             );
 
@@ -712,6 +719,51 @@ export default function ChallengeEditing({
                                     value="guides"
                                     className="space-y-6 mt-6"
                                 >
+                                    <Controller
+                                        name="maxAttemptsBeforeGuides"
+                                        control={form.control}
+                                        render={({ field, fieldState }) => (
+                                            <Field
+                                                data-invalid={
+                                                    fieldState.invalid
+                                                }
+                                            >
+                                                <FieldLabel
+                                                    htmlFor={field.name}
+                                                >
+                                                    {dict?.challenges?.messages
+                                                        ?.edit
+                                                        ?.maxAttemptsBeforeGuides ||
+                                                        "Max Attempts Before Guides"}
+                                                </FieldLabel>
+                                                <Input
+                                                    {...field}
+                                                    id={field.name}
+                                                    type="number"
+                                                    min={0}
+                                                    max={100}
+                                                    aria-invalid={
+                                                        fieldState.invalid
+                                                    }
+                                                    placeholder="3"
+                                                    autoComplete="off"
+                                                />
+                                                <FieldDescription>
+                                                    {dict?.challenges?.messages
+                                                        ?.edit
+                                                        ?.maxAttemptsBeforeGuidesDescription ||
+                                                        "Number of attempts allowed before guides become available."}
+                                                </FieldDescription>
+                                                {fieldState.invalid && (
+                                                    <FieldError
+                                                        errors={[
+                                                            fieldState.error,
+                                                        ]}
+                                                    />
+                                                )}
+                                            </Field>
+                                        )}
+                                    />
                                     <Field>
                                         <FieldLabel>
                                             {dict?.challenges?.messages?.edit

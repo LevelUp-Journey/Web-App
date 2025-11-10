@@ -16,14 +16,14 @@ export default function MonacoEditor({
     language,
     readOnly = false,
 }: MonacoEditorProps) {
-    const { theme } = useTheme();
+    const { resolvedTheme } = useTheme();
     return (
         <Editor
             height="100%"
             language={language}
             value={value}
             onChange={onChange}
-            theme={theme === "dark" ? "vs-dark" : "light"}
+            theme={resolvedTheme === "dark" ? "vs-dark" : "light"}
             className="rounded-md overflow-hidden border"
             options={{
                 minimap: { enabled: false },

@@ -86,6 +86,10 @@ export default function CreateChallengePage() {
                 ) ||
                     `Experience points must be at most ${MAX_CHALLENGE_EXPERIENCE_POINTS}.`,
             ),
+        maxAttemptsBeforeGuides: z
+            .number()
+            .min(0, "Max attempts before guides must be at least 0.")
+            .max(100, "Max attempts before guides must be at most 100."),
     });
 
     type FormData = z.infer<typeof formSchema>;
@@ -98,6 +102,7 @@ export default function CreateChallengePage() {
             difficulty: ChallengeDifficulty.EASY,
             experiencePoints:
                 CHALLENGE_DIFFICULTY_MAX_XP[ChallengeDifficulty.EASY],
+            maxAttemptsBeforeGuides: 3,
         },
     });
     const difficulty = form.watch("difficulty");
@@ -179,6 +184,7 @@ export default function CreateChallengePage() {
             difficulty: data.difficulty,
             tagIds,
             guideIds: selectedGuideIds,
+            maxAttemptsBeforeGuides: data.maxAttemptsBeforeGuides,
         };
 
         try {
@@ -528,6 +534,40 @@ export default function CreateChallengePage() {
                                 value="guides"
                                 className="space-y-6 mt-6"
                             >
+                                <Controller
+                                    name="maxAttemptsBeforeGuides"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field
+                                            data-invalid={fieldState.invalid}
+                                        >
+                                            <FieldLabel htmlFor={field.name}>
+                                                Max Attempts Before Guides
+                                            </FieldLabel>
+                                            <Input
+                                                {...field}
+                                                id={field.name}
+                                                type="number"
+                                                min={0}
+                                                max={100}
+                                                aria-invalid={
+                                                    fieldState.invalid
+                                                }
+                                                placeholder="3"
+                                                autoComplete="off"
+                                            />
+                                            <FieldDescription>
+                                                Number of attempts allowed
+                                                before guides become available.
+                                            </FieldDescription>
+                                            {fieldState.invalid && (
+                                                <FieldError
+                                                    errors={[fieldState.error]}
+                                                />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
                                 <Field>
                                     <FieldLabel>Search Guides</FieldLabel>
                                     <Input

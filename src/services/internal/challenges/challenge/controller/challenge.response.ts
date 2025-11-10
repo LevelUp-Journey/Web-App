@@ -9,6 +9,7 @@ export interface ChallengeResponse {
     tags: ChallengeTagResponse[];
     stars: ChallengeStarResponse[];
     guides: string[]; // Guide IDs
+    maxAttemptsBeforeGuides?: number | null;
 }
 
 export interface ChallengeTagResponse {
@@ -30,6 +31,7 @@ export interface CreateChallengeRequest {
     difficulty: string;
     tagIds: string[];
     guideIds?: string[];
+    maxAttemptsBeforeGuides: number;
 }
 
 export interface UpdateChallengeRequest {
@@ -39,6 +41,7 @@ export interface UpdateChallengeRequest {
     difficulty?: string;
     status?: string;
     tags?: string[];
+    maxAttemptsBeforeGuides?: number;
 }
 
 export interface GetChallengesByTeacherIdRequest {
