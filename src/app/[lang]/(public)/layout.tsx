@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/ui/language-toggle";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 
@@ -46,7 +46,7 @@ export default function AuthLayout({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <ThemeToggle />
+                    <AnimatedThemeToggler />
                     <LanguageToggle />
                     {!isUnauthorized && (
                         <Button variant="outline" size="sm" asChild>
