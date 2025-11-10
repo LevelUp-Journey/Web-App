@@ -1,7 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
+import {
+    useParams,
+    usePathname,
+    useRouter,
+    useSearchParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -27,6 +32,8 @@ import { GuideStatus } from "@/services/internal/learning/guides/controller/guid
 export default function EditGuidePage() {
     const router = useRouter();
     const params = useParams();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const PATHS = useLocalizedPaths();
     const dict = useDictionary();
     const guideId = params.guideId as string;
@@ -63,10 +70,14 @@ export default function EditGuidePage() {
 
     type FormData = z.infer<typeof formSchema>;
 
+    const validTabs = ["pages", "challenges", "info"];
+    const initialTab = searchParams.get("tab");
     const [guide, setGuide] = useState<GuideResponse | null>(null);
     const [saving, setSaving] = useState(false);
     const [publishing, setPublishing] = useState(false);
-    const [activeTab, setActiveTab] = useState<string>("pages");
+    const [activeTab, setActiveTab] = useState<string>(
+        initialTab && validTabs.includes(initialTab) ? initialTab : "pages",
+    );
     const [relatedChallenges, setRelatedChallenges] = useState<
         { id: string; name: string; language: string }[]
     >([]);
@@ -155,6 +166,25 @@ export default function EditGuidePage() {
             loadGuide();
         }
     }, [guideId, router, PATHS, form]);
+
+    // Sync URL with activeTab
+    useEffect(() => {
+        const currentTab = searchParams.get("tab");
+        if (currentTab !== activeTab) {
+            const newSearchParams = new URLSearchParams(searchParams);
+            if (
+                activeTab === "pages" &&
+                !validTabs.includes(currentTab || "")
+            ) {
+                newSearchParams.delete("tab");
+            } else {
+                newSearchParams.set("tab", activeTab);
+            }
+            router.replace(`${pathname}?${newSearchParams.toString()}`, {
+                scroll: false,
+            });
+        }
+    }, [activeTab, searchParams, router, pathname, validTabs]);
 
     const handleUpdateBasicInfo = async (data: BasicInfoFormData) => {
         setSaving(true);
