@@ -173,7 +173,7 @@ export default function ChallengeEditing({
             }
 
             toast.success(
-                dict?.challenges?.edit?.challengeUpdated ||
+                dict?.challenges?.messages?.edit?.challengeUpdated ||
                     "Challenge updated successfully!",
             );
             router.refresh();
@@ -276,7 +276,7 @@ export default function ChallengeEditing({
         );
         if (selectedGuideIds.includes(guide.id)) {
             toast.info(
-                dict?.challenges?.edit?.guideAlreadySelected ||
+                dict?.challenges?.messages?.edit?.guideAlreadySelected ||
                     "Guide already selected.",
             );
             return;
@@ -288,12 +288,12 @@ export default function ChallengeEditing({
         if (success) {
             setSelectedGuideIds((prev) => [...prev, guide.id]);
             toast.success(
-                dict?.challenges?.edit?.guideAdded ||
+                dict?.challenges?.messages?.edit?.guideAdded ||
                     "Guide added to challenge successfully!",
             );
         } else {
             toast.error(
-                dict?.challenges?.edit?.guideAddFailed ||
+                dict?.challenges?.messages?.edit?.guideAddFailed ||
                     "Failed to add guide to challenge.",
             );
         }
@@ -308,12 +308,12 @@ export default function ChallengeEditing({
         if (success) {
             setSelectedGuideIds((prev) => prev.filter((id) => id !== guideId));
             toast.success(
-                dict?.challenges?.edit?.guideRemoved ||
+                dict?.challenges?.messages?.edit?.guideRemoved ||
                     "Guide removed from challenge successfully!",
             );
         } else {
             toast.error(
-                dict?.challenges?.edit?.guideRemoveFailed ||
+                dict?.challenges?.messages?.edit?.guideRemoveFailed ||
                     "Failed to remove guide from challenge.",
             );
         }
@@ -325,21 +325,23 @@ export default function ChallengeEditing({
             <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">
-                        {dict?.challenges?.edit?.title || "Edit Challenge"}
+                        {dict?.challenges?.messages?.edit?.title ||
+                            "Edit Challenge"}
                     </h1>
                     <p className="text-muted-foreground">
-                        {dict?.challenges?.edit?.description ||
+                        {dict?.challenges?.messages?.edit?.description ||
                             "Update the challenge details and description."}
                     </p>
                 </div>
                 <div className="flex gap-4">
                     <DeleteChallengeButton challengeId={challengeId} />
                     <Button onClick={handleAddVersion}>
-                        {dict?.challenges?.edit?.addCodeVersion ||
+                        {dict?.challenges?.messages?.edit?.addCodeVersion ||
                             "Add Code Version"}
                     </Button>
                     <Button variant="outline" onClick={handleViewSummary}>
-                        {dict?.challenges?.edit?.viewSummary || "View Summary"}
+                        {dict?.challenges?.messages?.edit?.viewSummary ||
+                            "View Summary"}
                     </Button>
                 </div>
             </header>
@@ -353,18 +355,18 @@ export default function ChallengeEditing({
                             <Tabs defaultValue="basic" className="h-full">
                                 <TabsList className="grid w-full grid-cols-3">
                                     <TabsTrigger value="basic">
-                                        {dict?.challenges?.edit
+                                        {dict?.challenges?.messages?.edit
                                             ?.basicInformation ||
                                             "Basic Information"}
                                     </TabsTrigger>
                                     <TabsTrigger value="languages">
-                                        {dict?.challenges?.edit
+                                        {dict?.challenges?.messages?.edit
                                             ?.availableLanguages ||
                                             "Available Languages"}
                                     </TabsTrigger>
                                     <TabsTrigger value="guides">
-                                        {dict?.challenges?.edit?.guides ||
-                                            "Guides"}
+                                        {dict?.challenges?.messages?.edit
+                                            ?.guides || "Guides"}
                                     </TabsTrigger>
                                 </TabsList>
                                 <TabsContent
@@ -388,7 +390,8 @@ export default function ChallengeEditing({
                                                     <FieldLabel
                                                         htmlFor={field.name}
                                                     >
-                                                        {dict?.challenges?.edit
+                                                        {dict?.challenges
+                                                            ?.messages?.edit
                                                             ?.challengeTitle ||
                                                             "Challenge Title"}
                                                     </FieldLabel>
@@ -400,7 +403,7 @@ export default function ChallengeEditing({
                                                         }
                                                         placeholder={
                                                             dict?.challenges
-                                                                ?.edit
+                                                                ?.messages?.edit
                                                                 ?.enterChallengeTitle ||
                                                             "Enter challenge title"
                                                         }
@@ -429,7 +432,8 @@ export default function ChallengeEditing({
                                                     <FieldLabel
                                                         htmlFor={field.name}
                                                     >
-                                                        {dict?.challenges?.edit
+                                                        {dict?.challenges
+                                                            ?.messages?.edit
                                                             ?.tagsCommaSeparated ||
                                                             "Tags (comma separated)"}
                                                     </FieldLabel>
@@ -441,7 +445,7 @@ export default function ChallengeEditing({
                                                         }
                                                         placeholder={
                                                             dict?.challenges
-                                                                ?.edit
+                                                                ?.messages?.edit
                                                                 ?.tagsPlaceholder ||
                                                             "e.g., JavaScript, React, Node.js"
                                                         }
@@ -470,7 +474,8 @@ export default function ChallengeEditing({
                                                     <FieldLabel
                                                         htmlFor={field.name}
                                                     >
-                                                        {dict?.challenges?.edit
+                                                        {dict?.challenges
+                                                            ?.messages?.edit
                                                             ?.difficultyLevel ||
                                                             "Difficulty Level"}
                                                     </FieldLabel>
@@ -567,12 +572,13 @@ export default function ChallengeEditing({
                                                     <FieldLabel
                                                         htmlFor={field.name}
                                                     >
-                                                        {dict?.challenges?.edit
+                                                        {dict?.challenges
+                                                            ?.messages?.edit
                                                             ?.experiencePoints ||
                                                             "Experience Points"}
                                                     </FieldLabel>
                                                     <FieldDescription>
-                                                        {dict?.challenges?.edit?.experiencePointsDescription
+                                                        {dict?.challenges?.messages?.edit?.experiencePointsDescription
                                                             ?.replace(
                                                                 "{difficulty}",
                                                                 difficulty,
@@ -587,11 +593,11 @@ export default function ChallengeEditing({
                                                         <span className="font-semibold text-foreground">
                                                             {field.value ?? 0}{" "}
                                                             {dict?.challenges
-                                                                ?.edit?.xp ||
-                                                                "XP"}
+                                                                ?.messages?.edit
+                                                                ?.xp || "XP"}
                                                         </span>
                                                         <span>
-                                                            {dict?.challenges?.edit?.maxXP?.replace(
+                                                            {dict?.challenges?.messages?.edit?.maxXP?.replace(
                                                                 "{maxXP}",
                                                                 maxExperiencePoints.toString(),
                                                             ) ||
@@ -637,11 +643,11 @@ export default function ChallengeEditing({
                                             >
                                                 {isSaving ||
                                                 form.formState.isSubmitting
-                                                    ? dict?.challenges?.edit
-                                                          ?.saving ||
+                                                    ? dict?.challenges?.messages
+                                                          ?.edit?.saving ||
                                                       "Saving..."
-                                                    : dict?.challenges?.edit
-                                                          ?.saveChanges ||
+                                                    : dict?.challenges?.messages
+                                                          ?.edit?.saveChanges ||
                                                       "Save Changes"}
                                             </Button>
                                         </div>
@@ -664,13 +670,13 @@ export default function ChallengeEditing({
                                 >
                                     <Field>
                                         <FieldLabel>
-                                            {dict?.challenges?.edit
+                                            {dict?.challenges?.messages?.edit
                                                 ?.searchGuides ||
                                                 "Search Guides"}
                                         </FieldLabel>
                                         <Input
                                             placeholder={
-                                                dict?.challenges?.edit
+                                                dict?.challenges?.messages?.edit
                                                     ?.searchGuidesPlaceholder ||
                                                 "Search guides by title..."
                                             }
@@ -680,22 +686,22 @@ export default function ChallengeEditing({
                                             }
                                         />
                                         <FieldDescription>
-                                            {dict?.challenges?.edit
+                                            {dict?.challenges?.messages?.edit
                                                 ?.searchGuidesDescription ||
                                                 "Type to search for guides. Results will appear below."}
                                         </FieldDescription>
                                     </Field>
                                     {isSearching && (
                                         <p>
-                                            {dict?.challenges?.edit
+                                            {dict?.challenges?.messages?.edit
                                                 ?.searching || "Searching..."}
                                         </p>
                                     )}
                                     {guides.length > 0 && (
                                         <div className="space-y-2">
                                             <h3 className="text-lg font-semibold">
-                                                {dict?.challenges?.edit
-                                                    ?.searchResults ||
+                                                {dict?.challenges?.messages
+                                                    ?.edit?.searchResults ||
                                                     "Search Results"}
                                             </h3>
                                             {guides.map((guide) => (
@@ -719,7 +725,8 @@ export default function ChallengeEditing({
                                                         }
                                                         size="sm"
                                                     >
-                                                        {dict?.challenges?.edit
+                                                        {dict?.challenges
+                                                            ?.messages?.edit
                                                             ?.add || "+"}
                                                     </Button>
                                                 </div>
@@ -729,8 +736,8 @@ export default function ChallengeEditing({
                                     {selectedGuideIds.length > 0 && (
                                         <div className="space-y-2">
                                             <h3 className="text-lg font-semibold">
-                                                {dict?.challenges?.edit
-                                                    ?.selectedGuides ||
+                                                {dict?.challenges?.messages
+                                                    ?.edit?.selectedGuides ||
                                                     "Selected Guides"}
                                             </h3>
                                             {selectedGuideIds.map((guideId) => (
@@ -740,7 +747,7 @@ export default function ChallengeEditing({
                                                 >
                                                     <div>
                                                         <p className="font-medium">
-                                                            {dict?.challenges?.edit?.guideId?.replace(
+                                                            {dict?.challenges?.messages?.edit?.guideId?.replace(
                                                                 "{id}",
                                                                 guideId,
                                                             ) ||
@@ -756,7 +763,8 @@ export default function ChallengeEditing({
                                                         size="sm"
                                                         variant="destructive"
                                                     >
-                                                        {dict?.challenges?.edit
+                                                        {dict?.challenges
+                                                            ?.messages?.edit
                                                             ?.remove ||
                                                             "Remove"}
                                                     </Button>

@@ -68,7 +68,8 @@ export default function ChallengeSummary({
             {isTeacher && (
                 <div className="text-sm text-muted-foreground mb-4">
                     <strong>
-                        {dict?.challenges?.summary?.status || "Status:"}
+                        {dict?.challenges?.messages?.summary?.status ||
+                            "Status:"}
                     </strong>{" "}
                     {challenge.status}
                 </div>
@@ -98,7 +99,8 @@ export default function ChallengeSummary({
                         {isTeacher && (
                             <div className="text-sm text-muted-foreground">
                                 <strong>
-                                    {dict?.challenges?.summary?.xp || "XP:"}
+                                    {dict?.challenges?.messages?.summary?.xp ||
+                                        "XP:"}
                                 </strong>{" "}
                                 {challenge.experiencePoints}
                             </div>
@@ -131,10 +133,10 @@ export default function ChallengeSummary({
                         >
                             <ChevronRight className="h-4 w-4 mr-2" />
                             {isStarting
-                                ? dict?.challenges?.summary?.starting ||
-                                  "Starting..."
-                                : dict?.challenges?.summary?.startChallenge ||
-                                  "Start Challenge"}
+                                ? dict?.challenges?.messages?.summary
+                                      ?.starting || "Starting..."
+                                : dict?.challenges?.messages?.summary
+                                      ?.startChallenge || "Start Challenge"}
                         </Button>
                     )}
                 </CardHeader>
@@ -152,7 +154,8 @@ export default function ChallengeSummary({
                 {/* Description */}
                 <div>
                     <h4 className="text-xl font-semibold text-muted-foreground mb-4">
-                        {dict?.challenges?.summary?.overview || "Overview"}
+                        {dict?.challenges?.messages?.summary?.overview ||
+                            "Overview"}
                     </h4>
                     <MdxRenderer serializedSource={serializedMarkdown} />
                 </div>
