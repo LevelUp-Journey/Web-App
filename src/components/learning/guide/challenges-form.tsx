@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { ChallengeReference } from "@/services/internal/learning/guides/controller/guide.response";
@@ -34,6 +35,11 @@ export function ChallengesForm({
     const [removingChallengeId, setRemovingChallengeId] = useState<
         string | null
     >(null);
+
+    // Update currentChallenges when initialChallenges changes
+    useEffect(() => {
+        setCurrentChallenges(initialChallenges);
+    }, [initialChallenges]);
 
     // Search challenges
     const handleSearch = useCallback(async (query: string) => {
@@ -71,9 +77,16 @@ export function ChallengesForm({
                 guideId,
                 challenge.id,
             );
+            // Fetch language
+            const codeVersions =
+                await CodeVersionController.getCodeVersionsByChallengeId(
+                    challenge.id,
+                );
+            const language =
+                codeVersions.length > 0 ? codeVersions[0].language : "Unknown";
             setCurrentChallenges((prev) => [
                 ...prev,
-                { id: challenge.id, name: challenge.name },
+                { id: challenge.id, name: challenge.name, language },
             ]);
             setSearchResults((prev) =>
                 prev.filter((c) => c.id !== challenge.id),
@@ -140,6 +153,9 @@ export function ChallengesForm({
                                         <h4 className="font-medium text-sm truncate">
                                             {challenge.name}
                                         </h4>
+                                        <p className="text-xs text-muted-foreground">
+                                            {challenge.language}
+                                        </p>
                                     </div>
                                     <Button
                                         size="sm"

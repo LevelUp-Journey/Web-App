@@ -80,6 +80,7 @@ export class GuideController {
     ): Promise<GuideResponse | null> {
         try {
             const response = await getGuideByIdAction(guideId);
+            console.log("Response for getGuideById:", response);
             return response;
         } catch (error) {
             console.error("Error in GuideController.getGuideById:", error);

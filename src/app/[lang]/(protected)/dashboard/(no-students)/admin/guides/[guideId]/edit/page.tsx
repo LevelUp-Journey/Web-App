@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type {
     GuideResponse,
@@ -65,6 +67,9 @@ export default function EditGuidePage() {
     const [saving, setSaving] = useState(false);
     const [publishing, setPublishing] = useState(false);
     const [activeTab, setActiveTab] = useState<string>("pages");
+    const [relatedChallenges, setRelatedChallenges] = useState<
+        { id: string; name: string; language: string }[]
+    >([]);
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -91,6 +96,44 @@ export default function EditGuidePage() {
                         cover: response.coverImage || "",
                         topicIds: response.topics.map((t) => t.id),
                     });
+
+                    // Fetch related challenges
+                    try {
+                        if (
+                            response.relatedChallenges &&
+                            response.relatedChallenges.length > 0
+                        ) {
+                            const challenges = [];
+                            for (const challengeId of response.relatedChallenges) {
+                                const challenge =
+                                    await ChallengeController.getChallengeById(
+                                        challengeId,
+                                    );
+                                if (challenge) {
+                                    const codeVersions =
+                                        await CodeVersionController.getCodeVersionsByChallengeId(
+                                            challengeId,
+                                        );
+                                    const language =
+                                        codeVersions.length > 0
+                                            ? codeVersions[0].language
+                                            : "Unknown";
+                                    challenges.push({
+                                        id: challenge.id,
+                                        name: challenge.name,
+                                        language,
+                                    });
+                                }
+                            }
+                            setRelatedChallenges(challenges);
+                        }
+                    } catch (error) {
+                        console.error(
+                            "Error fetching related challenges:",
+                            error,
+                        );
+                        setRelatedChallenges([]);
+                    }
                 } else {
                     alert(
                         dict?.admin?.guides?.editGuide?.notFound ||
@@ -246,7 +289,7 @@ export default function EditGuidePage() {
                                 value="challenges"
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                             >
-                                Challenges ({guide?.challenges?.length || 0})
+                                Challenges ({relatedChallenges.length})
                             </TabsTrigger>
                             <TabsTrigger
                                 value="info"
@@ -280,7 +323,7 @@ export default function EditGuidePage() {
                         >
                             <ChallengesForm
                                 guideId={guideId}
-                                initialChallenges={guide?.challenges || []}
+                                initialChallenges={relatedChallenges}
                                 onFinish={handleFinish}
                                 onGuideUpdate={setGuide}
                             />
