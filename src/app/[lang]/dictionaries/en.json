@@ -997,7 +997,8 @@
     "sidebar": {
         "groups": {
             "home": "Home",
-            "administrative": "Administrative"
+            "administrative": "Administrative",
+            "community": "Community"
         }
     },
     "legal": {

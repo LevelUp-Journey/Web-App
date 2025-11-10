@@ -6,6 +6,7 @@ import {
     Settings,
     ShieldUser,
     Trophy,
+    Users,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -59,6 +60,11 @@ export default async function AppSidebar({
             title: dict.navigation.guides,
             url: PATHS.DASHBOARD.GUIDES.ROOT,
             icon: Library,
+        },
+        {
+            title: dict.sidebar.groups.community,
+            url: PATHS.DASHBOARD.COMMUNITY.ROOT,
+            icon: Users,
         },
     ];
 

@@ -998,7 +998,8 @@
     "sidebar": {
         "groups": {
             "home": "Inicio",
-            "administrative": "Administrativo"
+            "administrative": "Administrativo",
+            "community": "Comunidad"
         }
     },
     "legal": {
