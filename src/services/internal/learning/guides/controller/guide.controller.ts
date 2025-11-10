@@ -1,4 +1,5 @@
 import {
+    addChallengeToGuideAction,
     createGuideAction,
     createPageAction,
     deleteGuideAction,
@@ -12,6 +13,7 @@ import {
     getPageByIdAction,
     getTeachersGuidesAction,
     getTeachersGuidesPaginatedAction,
+    removeChallengeFromGuideAction,
     searchGuideAction,
     updateGuideAction,
     updateGuideStatusAction,
@@ -190,5 +192,24 @@ export class GuideController {
             console.error("Error in GuideController.searchGuides:", error);
             return [];
         }
+    }
+
+    public static async addChallengeToGuide(
+        guideId: string,
+        challengeId: string,
+    ): Promise<GuideResponse> {
+        const response = await addChallengeToGuideAction(guideId, challengeId);
+        return response;
+    }
+
+    public static async removeChallengeFromGuide(
+        guideId: string,
+        challengeId: string,
+    ): Promise<GuideResponse> {
+        const response = await removeChallengeFromGuideAction(
+            guideId,
+            challengeId,
+        );
+        return response;
     }
 }

@@ -1,3 +1,8 @@
+export interface ChallengeReference {
+    id: string;
+    name: string;
+}
+
 export interface CreateGuideRequest {
     title: string;
     description: string;
@@ -21,6 +26,7 @@ export interface GuideResponse {
         name: string;
     }[];
     pages: PageResponse[];
+    challenges: ChallengeReference[];
     createdAt: string;
     updatedAt: string;
 }

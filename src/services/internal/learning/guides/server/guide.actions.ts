@@ -243,3 +243,25 @@ export async function searchGuideAction(request: SearchGuideRequest) {
         await API_GATEWAY_HTTP.get<LearningResponse<SearchGuidesResponse>>(url);
     return response.data.data;
 }
+
+export async function addChallengeToGuideAction(
+    guideId: string,
+    challengeId: string,
+) {
+    const response = await API_GATEWAY_HTTP.post<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}/challenges/${challengeId}`);
+
+    return response.data.data;
+}
+
+export async function removeChallengeFromGuideAction(
+    guideId: string,
+    challengeId: string,
+) {
+    const response = await API_GATEWAY_HTTP.delete<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}/challenges/${challengeId}`);
+
+    return response.data.data;
+}

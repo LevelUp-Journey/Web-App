@@ -8,6 +8,7 @@ import {
     getChallengesByTeacherIdAction,
     getPublicChallengesAction,
     removeGuideFromChallenge,
+    searchChallengesAction,
     updateChallengeAction,
 } from "../server/challenge.actions";
 import { ChallengeAssembler } from "./challenge.assembler";
@@ -286,6 +287,28 @@ export class ChallengeController {
                 error,
             );
             return false;
+        }
+    }
+
+    /**
+     * Search challenges by name
+     * @returns Array of challenges matching the search, empty array if search fails
+     */
+    public static async searchChallenges(name: string): Promise<Challenge[]> {
+        try {
+            const response = await searchChallengesAction(name);
+
+            if (response.status === 200 && response.data) {
+                return ChallengeAssembler.toEntitiesFromResponse(
+                    response.data as ChallengeResponse[],
+                );
+            }
+
+            console.error("Failed to search challenges:", response);
+            return [];
+        } catch (error) {
+            console.error("Error searching challenges:", error);
+            return [];
         }
     }
 }

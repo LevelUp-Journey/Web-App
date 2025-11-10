@@ -9,6 +9,7 @@ import {
     BasicInfoForm,
     type BasicInfoFormData,
 } from "@/components/learning/guide/basic-info-form";
+import { ChallengesForm } from "@/components/learning/guide/challenges-form";
 import { PagesForm } from "@/components/learning/guide/pages-form";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -242,6 +243,12 @@ export default function EditGuidePage() {
                                 {guide?.pagesCount || 0})
                             </TabsTrigger>
                             <TabsTrigger
+                                value="challenges"
+                                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+                            >
+                                Challenges ({guide?.challenges?.length || 0})
+                            </TabsTrigger>
+                            <TabsTrigger
                                 value="info"
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                             >
@@ -264,6 +271,18 @@ export default function EditGuidePage() {
                                     })) || []
                                 }
                                 onFinish={handleFinish}
+                            />
+                        </TabsContent>
+
+                        <TabsContent
+                            value="challenges"
+                            className="flex-1 mt-0 overflow-y-auto"
+                        >
+                            <ChallengesForm
+                                guideId={guideId}
+                                initialChallenges={guide?.challenges || []}
+                                onFinish={handleFinish}
+                                onGuideUpdate={setGuide}
                             />
                         </TabsContent>
 
