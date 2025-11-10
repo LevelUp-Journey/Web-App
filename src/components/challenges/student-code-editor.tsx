@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { SerializeResult } from "next-mdx-remote-client/csr";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
@@ -37,10 +38,18 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useAutoSave } from "@/hooks/challenges/use-auto-save";
 import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
 import { useDictionary } from "@/hooks/use-dictionary";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { CONSTS, ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
@@ -85,6 +94,8 @@ export default function StudentCodeEditor({
     solution,
     guides,
 }: StudentCodeEditorProps) {
+    const router = useRouter();
+    const PATHS = useLocalizedPaths();
     const dict = useDictionary();
     // Estado de la UI
     const [activeTab, setActiveTab] = useState<"description" | "tests">(
@@ -93,7 +104,6 @@ export default function StudentCodeEditor({
 
     // Estado de intentos y guías
     const [attemptCount, setAttemptCount] = useState(0);
-    const [showGuidesModal, setShowGuidesModal] = useState(false);
     const [selectedGuideId, setSelectedGuideId] = useState<string>("");
 
     // ID de la solución (inmutable)
@@ -188,23 +198,12 @@ export default function StudentCodeEditor({
     };
 
     /**
-     * Manejador para abrir el modal de guías
-     */
-    const handleOpenGuidesModal = () => {
-        setShowGuidesModal(true);
-    };
-
-    /**
      * Manejador para seleccionar una guía
      */
     const handleGuideSelect = (guideId: string) => {
         setSelectedGuideId(guideId);
-        // Aquí podrías navegar a la guía o abrirla en una nueva pestaña
-        // Por ahora solo mostramos un toast
-        const selectedGuide = guides.find((g) => g.id === guideId);
-        if (selectedGuide) {
-            toast.success(`Opening guide: ${selectedGuide.title}`);
-        }
+        // Redirigir a la página de la guía
+        router.push(PATHS.DASHBOARD.GUIDES.VIEW(guideId));
     };
 
     /**
@@ -253,40 +252,11 @@ export default function StudentCodeEditor({
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
 
-                    <div className="flex items-center gap-4">
-                        <div>
-                            <h1 className="text-2xl font-bold">
-                                {challenge.name}
-                            </h1>
-                            <p className="text-sm text-muted-foreground">
-                                {challenge.experiencePoints} XP
-                            </p>
-                        </div>
-
-                        {/* Selector de guías (solo visible después de superar intentos) */}
-                        {shouldShowGuides && (
-                            <div className="flex items-center gap-2">
-                                <BookOpen className="h-4 w-4 text-muted-foreground" />
-                                <Select
-                                    value={selectedGuideId}
-                                    onValueChange={handleGuideSelect}
-                                >
-                                    <SelectTrigger className="w-48">
-                                        <SelectValue placeholder="Select a guide..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {guides.map((guide) => (
-                                            <SelectItem
-                                                key={guide.id}
-                                                value={guide.id}
-                                            >
-                                                {guide.title}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        )}
+                    <div>
+                        <h1 className="text-2xl font-bold">{challenge.name}</h1>
+                        <p className="text-sm text-muted-foreground">
+                            {challenge.experiencePoints} XP
+                        </p>
                     </div>
                 </div>
 
@@ -298,6 +268,45 @@ export default function StudentCodeEditor({
                                 "Auto-saving..."}
                         </span>
                     )}
+
+                    {/* Selector de guías con tooltip */}
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="flex items-center gap-2">
+                                    <BookOpen className="h-4 w-4 text-muted-foreground" />
+                                    <Select
+                                        value={selectedGuideId}
+                                        onValueChange={handleGuideSelect}
+                                        disabled={!shouldShowGuides}
+                                    >
+                                        <SelectTrigger
+                                            className="w-48"
+                                            disabled={!shouldShowGuides}
+                                        >
+                                            <SelectValue placeholder="Select a guide..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {guides.map((guide) => (
+                                                <SelectItem
+                                                    key={guide.id}
+                                                    value={guide.id}
+                                                >
+                                                    {guide.title}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>
+                                    {dict?.challenges?.editor?.keepTrying ||
+                                        "Keep trying on your own! You've got this."}
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
 
                     {/* Botón de guardado manual */}
                     <Button
@@ -334,31 +343,34 @@ export default function StudentCodeEditor({
                 </div>
             </header>
 
-            {/* Modal de guías */}
-            {shouldShowGuides && (
-                <Dialog
-                    open={showGuidesModal}
-                    onOpenChange={setShowGuidesModal}
-                >
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Need Help?</DialogTitle>
-                            <DialogDescription>
-                                If you're having difficulties with this
-                                challenge, check out these helpful guides.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4">
+            {/* Modal de guías - se muestra automáticamente después de maxAttempts */}
+            <Dialog
+                open={shouldShowGuides}
+                onOpenChange={() => {}} // No permitir cerrar manualmente
+            >
+                <DialogContent className="max-h-[80vh] overflow-hidden">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {dict?.challenges?.editor?.needHelp ||
+                                "Having trouble?"}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {dict?.challenges?.editor?.checkGuides ||
+                                "If you're stuck, these guides can help you understand the solution."}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <ScrollArea className="max-h-64">
+                        <div className="space-y-4 pr-4">
                             {guides.map((guide) => (
                                 <div
                                     key={guide.id}
                                     className="flex items-center justify-between p-3 border rounded-lg"
                                 >
-                                    <div>
-                                        <h4 className="font-medium">
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="font-medium truncate">
                                             {guide.title}
                                         </h4>
-                                        <p className="text-sm text-muted-foreground">
+                                        <p className="text-sm text-muted-foreground line-clamp-2">
                                             {guide.description}
                                         </p>
                                     </div>
@@ -368,15 +380,17 @@ export default function StudentCodeEditor({
                                         onClick={() =>
                                             handleGuideSelect(guide.id)
                                         }
+                                        className="ml-3 shrink-0"
                                     >
-                                        View Guide
+                                        {dict?.challenges?.editor?.viewGuide ||
+                                            "View Guide"}
                                     </Button>
                                 </div>
                             ))}
                         </div>
-                    </DialogContent>
-                </Dialog>
-            )}
+                    </ScrollArea>
+                </DialogContent>
+            </Dialog>
 
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -508,20 +522,7 @@ export default function StudentCodeEditor({
                                                             ?.editor
                                                             ?.someTestsFailed ||
                                                             "Some tests failed. Keep trying!"}
-                                                        {/* Mostrar botón de guías si se superaron los intentos */}
-                                                        {shouldShowGuides && (
-                                                            <Button
-                                                                variant="outline"
-                                                                size="sm"
-                                                                onClick={
-                                                                    handleOpenGuidesModal
-                                                                }
-                                                                className="ml-2"
-                                                            >
-                                                                <BookOpen className="h-4 w-4 mr-1" />
-                                                                Get Help
-                                                            </Button>
-                                                        )}
+                                                        {/* El modal se muestra automáticamente */}
                                                     </p>
                                                 )}
                                             </div>

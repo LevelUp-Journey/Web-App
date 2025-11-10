@@ -153,7 +153,8 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
                                 {
                                     duration: 400,
                                     easing: "ease-in-out",
-                                    pseudoElement: "::view-transition-new(root)",
+                                    pseudoElement:
+                                        "::view-transition-new(root)",
                                 },
                             );
                         }}

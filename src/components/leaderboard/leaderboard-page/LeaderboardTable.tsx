@@ -11,7 +11,10 @@ interface LeaderboardTableProps {
     dict: Dictionary;
 }
 
-export function LeaderboardTable({ selectedRank, dict }: LeaderboardTableProps) {
+export function LeaderboardTable({
+    selectedRank,
+    dict,
+}: LeaderboardTableProps) {
     const {
         usersWithProfiles,
         loading,
@@ -29,7 +32,9 @@ export function LeaderboardTable({ selectedRank, dict }: LeaderboardTableProps) 
         return (
             <div className="flex flex-col items-center justify-center py-16">
                 <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">{dict.leaderboard.loading.leaderboard}</p>
+                <p className="text-muted-foreground">
+                    {dict.leaderboard.loading.leaderboard}
+                </p>
             </div>
         );
     }

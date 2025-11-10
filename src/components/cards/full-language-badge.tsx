@@ -58,7 +58,10 @@ const FullLanguageBadge: React.FC<FullLanguageBadgeProps> = ({
     const dict = useDictionary();
 
     // Get the display name from dictionary, fallback to the original language if not mapped
-    const languageKey = language.toLowerCase().replace(/_plus_plus/g, "pp").replace(/_/g, "");
+    const languageKey = language
+        .toLowerCase()
+        .replace(/_plus_plus/g, "pp")
+        .replace(/_/g, "");
     const displayName = dict?.challenges?.languages?.[languageKey] || language;
 
     return (

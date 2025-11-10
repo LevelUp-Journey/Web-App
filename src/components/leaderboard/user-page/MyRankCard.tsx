@@ -31,7 +31,10 @@ const RANK_ICONS: Record<string, string> = {
 
 function rankDescription(rank: string, dict: Dictionary) {
     const rankKey = rank.toLowerCase() as keyof typeof dict.leaderboard.ranks;
-    return dict.leaderboard.ranks[rankKey]?.description || dict.leaderboard.ranks.bronze.description;
+    return (
+        dict.leaderboard.ranks[rankKey]?.description ||
+        dict.leaderboard.ranks.bronze.description
+    );
 }
 
 export default function MyRankCard({ dict }: { dict: Dictionary }) {
@@ -66,7 +69,9 @@ export default function MyRankCard({ dict }: { dict: Dictionary }) {
         return (
             <div className="flex flex-col items-center justify-center py-16">
                 <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">{dict.leaderboard.loading.rank}</p>
+                <p className="text-muted-foreground">
+                    {dict.leaderboard.loading.rank}
+                </p>
             </div>
         );
     }

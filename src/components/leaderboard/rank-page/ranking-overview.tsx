@@ -1,6 +1,12 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
-export function RankingOverview({ className = "", dict }: { className?: string; dict: Dictionary }) {
+export function RankingOverview({
+    className = "",
+    dict,
+}: {
+    className?: string;
+    dict: Dictionary;
+}) {
     return (
         <section
             className={`w-full ${className}`}
