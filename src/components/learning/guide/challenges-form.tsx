@@ -99,14 +99,13 @@ export function ChallengesForm({
 
         setRemovingChallengeId(challengeId);
         try {
-            const updatedGuide = await GuideController.removeChallengeFromGuide(
+            await GuideController.removeChallengeFromGuide(
                 guideId,
                 challengeId,
             );
             setCurrentChallenges((prev) =>
                 prev.filter((c) => c.id !== challengeId),
             );
-            onGuideUpdate?.(updatedGuide);
         } catch (error) {
             console.error("Error removing challenge:", error);
             alert("Error removing challenge. Please try again.");

@@ -263,7 +263,7 @@ export default function EditGuidePage() {
                             <PagesForm
                                 guideId={guideId}
                                 initialPages={
-                                    guide?.pages.map((p) => ({
+                                    guide?.pages?.map((p) => ({
                                         id: p.id,
                                         content: p.content,
                                         orderNumber: p.orderNumber,

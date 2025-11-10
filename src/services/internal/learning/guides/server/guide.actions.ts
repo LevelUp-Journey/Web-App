@@ -258,10 +258,8 @@ export async function addChallengeToGuideAction(
 export async function removeChallengeFromGuideAction(
     guideId: string,
     challengeId: string,
-) {
-    const response = await API_GATEWAY_HTTP.delete<
-        LearningResponse<GuideResponse>
-    >(`/guides/${guideId}/challenges/${challengeId}`);
-
-    return response.data.data;
+): Promise<void> {
+    await API_GATEWAY_HTTP.delete(
+        `/guides/${guideId}/challenges/${challengeId}`,
+    );
 }

@@ -205,11 +205,7 @@ export class GuideController {
     public static async removeChallengeFromGuide(
         guideId: string,
         challengeId: string,
-    ): Promise<GuideResponse> {
-        const response = await removeChallengeFromGuideAction(
-            guideId,
-            challengeId,
-        );
-        return response;
+    ): Promise<void> {
+        await removeChallengeFromGuideAction(guideId, challengeId);
     }
 }
