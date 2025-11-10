@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
-import type { UsersByRankResponse } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
+import type {
+    CompetitiveProfile,
+    UsersByRankResponse,
+} from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
 import { LeaderboardController } from "@/services/internal/profiles/leaderboard/controller/leaderboard.controller";
-import type { LeaderboardResponse } from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
-import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
-import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
+import type {
+    LeaderboardEntry,
+    LeaderboardResponse,
+} from "@/services/internal/profiles/leaderboard/entities/leaderboard.entity";
 
 export interface UserWithProfile {
     id: string;
@@ -14,10 +18,31 @@ export interface UserWithProfile {
     totalPoints: number;
     currentRank?: string; // Optional for leaderboard entries
     leaderboardPosition?: number;
-    profile?: ProfileResponse;
+    username: string;
+    avatarUrl?: string;
+    position?: number;
 }
 
 const ITEMS_PER_PAGE = 20;
+
+interface ProfileExtras {
+    username?: string;
+    profile?: {
+        username?: string;
+        profileUrl?: string;
+        currentRank?: string;
+    };
+    user?: { username?: string };
+    profileImageUrl?: string;
+    avatarUrl?: string;
+    rank?: string;
+    leaderboardPosition?: number;
+    position?: number;
+}
+
+type LeaderboardSourceEntry =
+    | (LeaderboardEntry & Partial<ProfileExtras>)
+    | (CompetitiveProfile & Partial<ProfileExtras>);
 
 export function useLeaderboardData(selectedRank: string) {
     const [usersData, setUsersData] = useState<
@@ -30,8 +55,9 @@ export function useLeaderboardData(selectedRank: string) {
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
-        // Reset to first page when rank changes
-        setCurrentPage(0);
+        if (selectedRank) {
+            setCurrentPage(0);
+        }
     }, [selectedRank]);
 
     useEffect(() => {
@@ -41,15 +67,13 @@ export function useLeaderboardData(selectedRank: string) {
                 const offset = currentPage * ITEMS_PER_PAGE;
 
                 let data: UsersByRankResponse | LeaderboardResponse;
-                let userEntries: any[];
-                let totalCount: number;
+                let userEntries: LeaderboardSourceEntry[];
 
                 if (selectedRank === "TOP500") {
                     const leaderboardResponse =
                         await LeaderboardController.getTop500(offset);
                     data = leaderboardResponse;
                     userEntries = leaderboardResponse.entries || [];
-                    totalCount = leaderboardResponse.totalUsers || 0;
                 } else {
                     const rankResponse =
                         await CompetitiveController.getUsersByRank(
@@ -58,70 +82,55 @@ export function useLeaderboardData(selectedRank: string) {
                         );
                     data = rankResponse;
                     userEntries = rankResponse.profiles || [];
-                    totalCount = rankResponse.totalUsers || 0;
                 }
                 setUsersData(data);
 
-                // Validate that userEntries is an array
                 if (!Array.isArray(userEntries)) {
                     console.error("userEntries is not an array:", userEntries);
                     setUsersWithProfiles([]);
                     return;
                 }
 
-                // For TOP500, fetch competitive profiles to get currentRank
-                let entriesWithRank = [...userEntries];
-                if (selectedRank === "TOP500") {
-                    const rankPromises = userEntries.map(async (entry) => {
-                        try {
-                            const competitiveProfile =
-                                await CompetitiveController.getCompetitiveProfile(
-                                    entry.userId,
-                                );
-                            return {
-                                ...entry,
-                                currentRank: competitiveProfile.currentRank,
-                            };
-                        } catch (error) {
-                            console.error(
-                                `Failed to fetch competitive profile for user ${entry.userId}:`,
-                                error,
-                            );
-                            return {
-                                ...entry,
-                                currentRank: "BRONZE", // Default fallback
-                            };
-                        }
-                    });
-                    entriesWithRank = await Promise.all(rankPromises);
-                }
+                const enrichedEntries = userEntries.map((entry) => {
+                    const leaderboardPosition =
+                        typeof entry.leaderboardPosition === "number"
+                            ? entry.leaderboardPosition
+                            : typeof entry.position === "number"
+                              ? entry.position
+                              : undefined;
 
-                // Fetch user profiles for each entry
-                const profilePromises = entriesWithRank.map(async (entry) => {
-                    try {
-                        const userProfile =
-                            await ProfileController.getProfileByUserId(
-                                entry.userId,
-                            );
-                        return {
-                            ...entry,
-                            profile: userProfile,
-                        };
-                    } catch (error) {
-                        console.error(
-                            `Failed to fetch profile for user ${entry.userId}:`,
-                            error,
-                        );
-                        return {
-                            ...entry,
-                            profile: undefined,
-                        };
-                    }
+                    const username =
+                        entry.username ||
+                        entry.profile?.username ||
+                        entry.user?.username ||
+                        entry.userId;
+
+                    const displayPosition =
+                        typeof entry.position === "number"
+                            ? entry.position
+                            : leaderboardPosition;
+
+                    return {
+                        id: entry.id,
+                        userId: entry.userId,
+                        totalPoints: entry.totalPoints,
+                        currentRank:
+                            entry.currentRank ||
+                            entry.rank ||
+                            entry.profile?.currentRank ||
+                            "BRONZE",
+                        leaderboardPosition,
+                        username,
+                        avatarUrl:
+                            entry.profile?.profileUrl ||
+                            entry.profileImageUrl ||
+                            entry.avatarUrl ||
+                            undefined,
+                        position: displayPosition,
+                    };
                 });
 
-                const usersWithProfilesData =
-                    await Promise.all(profilePromises);
-                setUsersWithProfiles(usersWithProfilesData);
+                setUsersWithProfiles(enrichedEntries);
             } catch (error) {
                 console.error("Failed to fetch users:", error);
                 setUsersData(null);
