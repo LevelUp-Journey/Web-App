@@ -694,7 +694,8 @@
         "layout": {
             "general": "General",
             "challenges": "Challenges",
-            "guides": "Guides"
+            "guides": "Guides",
+            "community": "Community"
         },
         "dashboard": {
             "title": "Admin Dashboard — Recent Activity",
@@ -710,6 +711,7 @@
         },
         "community": {
             "title": "Community Management",
+            "subtitle": "Manage and oversee all communities in the platform",
             "create": "Create Community",
             "loading": "Loading communities",
             "loadingDescription": "Preparing your community management tools.",
@@ -717,7 +719,26 @@
             "noCommunities": "No communities yet",
             "noCommunitiesDescription": "Create your first community to get started.",
             "retry": "Retry",
-            "permissionsError": "Unable to verify permissions"
+            "permissionsError": "Unable to verify permissions",
+            "createForm": {
+                "title": "Customize Your Community",
+                "subtitle": "Give your new community a personality with a name and an icon. You can always change it later.",
+                "nameLabel": "Community Name",
+                "namePlaceholder": "Enter community name",
+                "descriptionLabel": "Community Description",
+                "descriptionPlaceholder": "Describe your community",
+                "descriptionHelper": "Tell people what this community is about",
+                "termsText": "By creating a community, you agree to the Community Guidelines.",
+                "submitButton": "Create",
+                "cancelConfirm": "Are you sure you want to cancel? All progress will be lost.",
+                "errorCreating": "Error creating community. Please try again.",
+                "validation": {
+                    "nameRequired": "Community name is required",
+                    "nameMax": "Community name must not exceed 50 characters",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 150 characters"
+                }
+            }
         },
         "challenges": {
             "title": "My Challenges",
@@ -976,7 +997,8 @@
     "sidebar": {
         "groups": {
             "home": "Home",
-            "administrative": "Administrative"
+            "administrative": "Administrative",
+            "community": "Community"
         }
     },
     "legal": {
