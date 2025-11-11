@@ -108,9 +108,10 @@ export const useGuideEditorStore = create<GuideEditorState>((set) => ({
             },
             pages: normalizedPages,
             activePageId:
-                state.activePageId && normalizedPages.some((p) => p.id === state.activePageId)
+                state.activePageId &&
+                normalizedPages.some((p) => p.id === state.activePageId)
                     ? state.activePageId
-                    : normalizedPages[0]?.id ?? null,
+                    : (normalizedPages[0]?.id ?? null),
             relatedChallenges: normalizedChallenges,
         }));
     },
@@ -127,9 +128,10 @@ export const useGuideEditorStore = create<GuideEditorState>((set) => ({
                   }
                 : state.guide,
             activePageId:
-                state.activePageId && normalizedPages.some((p) => p.id === state.activePageId)
+                state.activePageId &&
+                normalizedPages.some((p) => p.id === state.activePageId)
                     ? state.activePageId
-                    : normalizedPages[0]?.id ?? null,
+                    : (normalizedPages[0]?.id ?? null),
         }));
     },
 

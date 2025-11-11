@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 interface PostWithDetails extends Post {

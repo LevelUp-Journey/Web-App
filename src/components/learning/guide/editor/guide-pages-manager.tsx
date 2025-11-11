@@ -17,23 +17,13 @@ import {
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Check, GripVertical, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import {
-    Check,
-    GripVertical,
-    Loader2,
-    Plus,
-    Save,
-    Trash2,
-} from "lucide-react";
-import {
-    memo,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
-import { ShadcnTemplate, type ShadcnTemplateRef } from "@/components/challenges/editor/lexkitEditor";
+    ShadcnTemplate,
+    type ShadcnTemplateRef,
+} from "@/components/challenges/editor/lexkitEditor";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDictionary } from "@/hooks/use-dictionary";
@@ -56,7 +46,14 @@ interface SortablePageItemProps {
 }
 
 const SortablePageItem = memo(
-    ({ page, index, isActive, isDisabled, onSelect, onDelete }: SortablePageItemProps) => {
+    ({
+        page,
+        index,
+        isActive,
+        isDisabled,
+        onSelect,
+        onDelete,
+    }: SortablePageItemProps) => {
         const {
             attributes,
             listeners,
@@ -102,7 +99,9 @@ const SortablePageItem = memo(
                 >
                     <div className="font-medium">Page {index + 1}</div>
                     <p className="text-xs text-muted-foreground truncate">
-                        {page.content ? page.content.replace(/[#*`_>\-]/g, "").slice(0, 80) : "Empty page"}
+                        {page.content
+                            ? page.content.replace(/[#*`_>-]/g, "").slice(0, 80)
+                            : "Empty page"}
                     </p>
                 </button>
 
@@ -137,18 +136,20 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
         setActivePageId,
         setReordering,
         setPageOperationPending,
-    } = useGuideEditorStore((state) => ({
-        guide: state.guide,
-        pages: state.pages,
-        activePageId: state.activePageId,
-        isReordering: state.isReordering,
-        isPageOperationPending: state.isPageOperationPending,
-        applyGuideResponse: state.applyGuideResponse,
-        setPages: state.setPages,
-        setActivePageId: state.setActivePageId,
-        setReordering: state.setReordering,
-        setPageOperationPending: state.setPageOperationPending,
-    }));
+    } = useGuideEditorStore(
+        useShallow((state) => ({
+            guide: state.guide,
+            pages: state.pages,
+            activePageId: state.activePageId,
+            isReordering: state.isReordering,
+            isPageOperationPending: state.isPageOperationPending,
+            applyGuideResponse: state.applyGuideResponse,
+            setPages: state.setPages,
+            setActivePageId: state.setActivePageId,
+            setReordering: state.setReordering,
+            setPageOperationPending: state.setPageOperationPending,
+        })),
+    );
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -258,7 +259,9 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
             });
 
             applyGuideResponse(response);
-            const newPage = response.pages.find((page) => page.orderNumber === nextOrder);
+            const newPage = response.pages.find(
+                (page) => page.orderNumber === nextOrder,
+            );
             if (newPage) {
                 setActivePageId(newPage.id);
             }
@@ -271,7 +274,15 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
         } finally {
             setPageOperationPending(false);
         }
-    }, [applyGuideResponse, dict, guide, hasUnsavedChanges, pages, setActivePageId, setPageOperationPending]);
+    }, [
+        applyGuideResponse,
+        dict,
+        guide,
+        hasUnsavedChanges,
+        pages,
+        setActivePageId,
+        setPageOperationPending,
+    ]);
 
     const handleSavePage = useCallback(async () => {
         if (!guide || !activePage) return;
@@ -280,10 +291,14 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
         setIsSaving(true);
         try {
             const content = editorRef.current?.getMarkdown() ?? "";
-            const response = await GuideController.updatePage(guide.id, activePage.id, {
-                content,
-                orderNumber: activePage.orderNumber,
-            });
+            const response = await GuideController.updatePage(
+                guide.id,
+                activePage.id,
+                {
+                    content,
+                    orderNumber: activePage.orderNumber,
+                },
+            );
             applyGuideResponse(response);
             setInitialContent(content);
             draftContentRef.current = content;
@@ -377,9 +392,8 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                     ),
                 );
 
-                const refreshedGuide = await GuideController.getGuideById(
-                    guideId,
-                );
+                const refreshedGuide =
+                    await GuideController.getGuideById(guideId);
                 if (refreshedGuide) {
                     applyGuideResponse(refreshedGuide);
                 }
@@ -452,7 +466,8 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                                                 isPageOperationPending ||
                                                 isReordering ||
                                                 isSaving ||
-                                                (isDeleting && deletingPageId === page.id)
+                                                (isDeleting &&
+                                                    deletingPageId === page.id)
                                             }
                                             onSelect={handleSelectPage}
                                             onDelete={handleDeletePage}
@@ -473,20 +488,27 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                                 <h2 className="text-lg font-semibold">
                                     {dict?.admin?.guides?.editGuide?.pages?.title?.replace(
                                         "{number}",
-                                        (pages.findIndex((p) => p.id === activePageId) + 1).toString(),
-                                    ) || `Page ${pages.findIndex((p) => p.id === activePageId) + 1}`}
+                                        (
+                                            pages.findIndex(
+                                                (p) => p.id === activePageId,
+                                            ) + 1
+                                        ).toString(),
+                                    ) ||
+                                        `Page ${pages.findIndex((p) => p.id === activePageId) + 1}`}
                                 </h2>
                                 <p className="text-xs text-muted-foreground">
                                     {hasUnsavedChanges ? (
                                         <span className="flex items-center gap-1 text-amber-600">
                                             <Loader2 className="h-3 w-3 animate-spin" />
-                                            {dict?.admin?.guides?.editGuide?.pages?.unsaved ||
+                                            {dict?.admin?.guides?.editGuide
+                                                ?.pages?.unsaved ||
                                                 "Unsaved changes"}
                                         </span>
                                     ) : (
                                         <span className="flex items-center gap-1 text-emerald-600">
                                             <Check className="h-3 w-3" />
-                                            {dict?.admin?.guides?.editGuide?.pages?.saved ||
+                                            {dict?.admin?.guides?.editGuide
+                                                ?.pages?.saved ||
                                                 "All changes saved"}
                                         </span>
                                     )}
@@ -500,12 +522,16 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                                     disabled={isSaving || !hasUnsavedChanges}
                                     onClick={() => {
                                         if (!editorRef.current) return;
-                                        editorRef.current.injectMarkdown(initialContent);
-                                        draftContentRef.current = initialContent;
+                                        editorRef.current.injectMarkdown(
+                                            initialContent,
+                                        );
+                                        draftContentRef.current =
+                                            initialContent;
                                         setHasUnsavedChanges(false);
                                     }}
                                 >
-                                    {dict?.admin?.guides?.editGuide?.pages?.discard || "Discard"}
+                                    {dict?.admin?.guides?.editGuide?.pages
+                                        ?.discard || "Discard"}
                                 </Button>
                                 <Button
                                     type="button"
@@ -516,14 +542,14 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                                     {isSaving ? (
                                         <>
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            {dict?.admin?.guides?.editGuide?.pages?.saving ||
-                                                "Saving"}
+                                            {dict?.admin?.guides?.editGuide
+                                                ?.pages?.saving || "Saving"}
                                         </>
                                     ) : (
                                         <>
                                             <Save className="mr-2 h-4 w-4" />
-                                            {dict?.admin?.guides?.editGuide?.pages?.save ||
-                                                "Save"}
+                                            {dict?.admin?.guides?.editGuide
+                                                ?.pages?.save || "Save"}
                                         </>
                                     )}
                                 </Button>
@@ -542,11 +568,12 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                         <Plus className="h-10 w-10" />
                         <div className="space-y-1">
                             <h3 className="text-base font-medium text-foreground">
-                                {dict?.admin?.guides?.editGuide?.pages?.noSelectionTitle ||
-                                    "No page selected"}
+                                {dict?.admin?.guides?.editGuide?.pages
+                                    ?.noSelectionTitle || "No page selected"}
                             </h3>
                             <p className="text-sm">
-                                {dict?.admin?.guides?.editGuide?.pages?.noSelectionDescription ||
+                                {dict?.admin?.guides?.editGuide?.pages
+                                    ?.noSelectionDescription ||
                                     "Select a page from the list or create a new one to start editing."}
                             </p>
                         </div>
@@ -556,7 +583,8 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
                             disabled={isPageOperationPending}
                         >
                             <Plus className="mr-2 h-4 w-4" />
-                            {dict?.admin?.guides?.editGuide?.pages?.add || "Add page"}
+                            {dict?.admin?.guides?.editGuide?.pages?.add ||
+                                "Add page"}
                         </Button>
                     </div>
                 )}

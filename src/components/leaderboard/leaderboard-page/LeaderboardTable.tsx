@@ -1,10 +1,10 @@
 "use client";
 
-import { useLeaderboardData } from "@/hooks/use-leaderboard-data";
-import { getLeaderboardColumns } from "./leaderboard-columns";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { DataTable } from "@/components/ui/data-table";
 import { Spinner } from "@/components/ui/spinner";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { useLeaderboardData } from "@/hooks/use-leaderboard-data";
+import { getLeaderboardColumns } from "./leaderboard-columns";
 
 interface LeaderboardTableProps {
     selectedRank: string;

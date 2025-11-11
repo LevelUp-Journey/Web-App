@@ -1,9 +1,11 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     Empty,
     EmptyContent,
@@ -13,11 +15,9 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
-import Image from "next/image";
-import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import type { CompetitiveProfile } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 const RANK_ICONS: Record<string, string> = {
     BRONZE: "/ranks-trophies/trophy-bronze.svg",

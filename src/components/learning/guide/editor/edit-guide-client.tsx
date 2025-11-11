@@ -59,10 +59,31 @@ export function EditGuideClient({
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const normalizedInitialTab = isValidTab(initialTab)
-        ? initialTab
-        : DEFAULT_TAB;
-    const [activeTab, setActiveTab] = useState<ValidTab>(normalizedInitialTab);
+    const [activeTab, _setActiveTab] = useState<ValidTab>(() => {
+        const tabFromUrl = searchParams.get("tab");
+        return isValidTab(tabFromUrl) ? tabFromUrl : (isValidTab(initialTab) ? initialTab : DEFAULT_TAB);
+    });
+
+    const setActiveTab = useCallback((newTab: ValidTab) => {
+        _setActiveTab(newTab);
+        const params = new URLSearchParams(searchParams.toString());
+        if (newTab === DEFAULT_TAB) {
+            params.delete("tab");
+        } else {
+            params.set("tab", newTab);
+        }
+        const newUrl = params.size ? `${pathname}?${params.toString()}` : pathname;
+        router.replace(newUrl, { scroll: false });
+    }, [pathname, router, searchParams]);
+
+    // Sync activeTab with URL changes (e.g., browser back/forward)
+    useEffect(() => {
+        const tabFromUrl = searchParams.get("tab");
+        const newTab = isValidTab(tabFromUrl) ? tabFromUrl : DEFAULT_TAB;
+        if (newTab !== activeTab) {
+            _setActiveTab(newTab);
+        }
+    }, [searchParams, activeTab]);
 
     const initialize = useGuideEditorStore((state) => state.initialize);
     const resetStore = useGuideEditorStore((state) => state.reset);
@@ -142,35 +163,6 @@ export function EditGuideClient({
             });
         }
     }, [guideFromStore, form]);
-
-    useEffect(() => {
-        const currentFromQuery = searchParams.get("tab");
-        if (isValidTab(currentFromQuery) && currentFromQuery !== activeTab) {
-            setActiveTab(currentFromQuery);
-        }
-    }, [searchParams, activeTab]);
-
-    useEffect(() => {
-        const currentTab = searchParams.get("tab");
-        if (
-            currentTab === activeTab ||
-            (!currentTab && activeTab === DEFAULT_TAB)
-        ) {
-            return;
-        }
-
-        const params = new URLSearchParams(searchParams.toString());
-        if (activeTab === DEFAULT_TAB) {
-            params.delete("tab");
-        } else {
-            params.set("tab", activeTab);
-        }
-
-        router.replace(
-            params.size ? `${pathname}?${params.toString()}` : pathname,
-            { scroll: false },
-        );
-    }, [activeTab, pathname, router, searchParams]);
 
     const currentGuide = guideFromStore ?? guide;
     const challengeList = mapChallenges(relatedChallenges, challenges);

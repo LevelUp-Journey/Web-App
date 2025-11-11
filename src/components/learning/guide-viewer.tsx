@@ -266,7 +266,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                                         </div>
                                         <Button asChild variant="outline">
                                             <Link
-                                                href={PATHS.CHALLENGES.VIEW(
+                                                href={PATHS.DASHBOARD.CHALLENGES.VIEW(
                                                     challenge.id,
                                                 )}
                                                 className="flex items-center gap-2"

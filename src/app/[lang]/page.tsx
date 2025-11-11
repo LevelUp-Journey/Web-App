@@ -1,11 +1,11 @@
 import { BookOpen, Code2, Target, Trophy, Users, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Separator } from "@/components/ui/separator";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { getDictionary } from "@/lib/i18n";
 import { getLocalizedPaths } from "@/lib/paths";

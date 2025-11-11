@@ -8,8 +8,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
-import type { ChallengeReference } from "@/services/internal/learning/guides/controller/guide.response";
-import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
+import type {
+    ChallengeReference,
+    GuideResponse,
+} from "@/services/internal/learning/guides/controller/guide.response";
 
 function extractGuideChallenges(
     guide: GuideResponse | null,

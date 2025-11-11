@@ -2,9 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/ui/language-toggle";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 

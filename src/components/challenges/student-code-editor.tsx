@@ -10,8 +10,8 @@ import {
     XCircle,
 } from "lucide-react";
 import Link from "next/link";
-import type { SerializeResult } from "next-mdx-remote-client/csr";
 import { useRouter } from "next/navigation";
+import type { SerializeResult } from "next-mdx-remote-client/csr";
 import { useState } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
@@ -31,6 +31,7 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     Select,
     SelectContent,
@@ -38,7 +39,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Tooltip,
