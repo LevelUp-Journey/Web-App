@@ -51,9 +51,7 @@ export default function CreateGuidePage() {
             ),
     });
 
-    type FormData = z.infer<typeof formSchema>;
-
-    const form = useForm<FormData>({
+    const form = useForm<BasicInfoFormData, any, BasicInfoFormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
