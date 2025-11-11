@@ -18,8 +18,8 @@ import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import type { Dictionary } from "@/lib/i18n";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import {
-    GuideStatus,
     type GuideResponse,
+    GuideStatus,
 } from "@/services/internal/learning/guides/controller/guide.response";
 import {
     type GuideEditorChallengeSummary,
@@ -59,7 +59,9 @@ export function EditGuideClient({
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const normalizedInitialTab = isValidTab(initialTab) ? initialTab : DEFAULT_TAB;
+    const normalizedInitialTab = isValidTab(initialTab)
+        ? initialTab
+        : DEFAULT_TAB;
     const [activeTab, setActiveTab] = useState<ValidTab>(normalizedInitialTab);
 
     const initialize = useGuideEditorStore((state) => state.initialize);
@@ -150,7 +152,10 @@ export function EditGuideClient({
 
     useEffect(() => {
         const currentTab = searchParams.get("tab");
-        if (currentTab === activeTab || (!currentTab && activeTab === DEFAULT_TAB)) {
+        if (
+            currentTab === activeTab ||
+            (!currentTab && activeTab === DEFAULT_TAB)
+        ) {
             return;
         }
 
@@ -252,7 +257,7 @@ export function EditGuideClient({
         } finally {
             setPublishing(false);
         }
-    }, [PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT, applyGuideResponse, currentGuide?.id, dict, router, setPublishing]);
+    }, [applyGuideResponse, currentGuide?.id, dict, router, setPublishing]);
 
     return (
         <section className="flex h-full flex-col">
@@ -274,7 +279,8 @@ export function EditGuideClient({
                                 disabled={
                                     isPublishing ||
                                     !currentGuide ||
-                                    currentGuide.status === GuideStatus.PUBLISHED
+                                    currentGuide.status ===
+                                        GuideStatus.PUBLISHED
                                 }
                             >
                                 {isPublishing
@@ -285,7 +291,8 @@ export function EditGuideClient({
                                 variant="outline"
                                 onClick={() =>
                                     router.push(
-                                        PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
+                                        PATHS.DASHBOARD.ADMINISTRATION.GUIDES
+                                            .ROOT,
                                     )
                                 }
                             >
@@ -300,7 +307,9 @@ export function EditGuideClient({
                 <div className="container mx-auto h-full max-w-6xl">
                     <Tabs
                         value={activeTab}
-                        onValueChange={(value) => setActiveTab(value as ValidTab)}
+                        onValueChange={(value) =>
+                            setActiveTab(value as ValidTab)
+                        }
                         className="flex h-full flex-col"
                     >
                         <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
@@ -315,8 +324,9 @@ export function EditGuideClient({
                                 value="challenges"
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
                             >
-                                {dict?.admin?.guides?.editGuide?.tabs?.challenges ||
-                                    "Challenges"} ({challengeList.length})
+                                {dict?.admin?.guides?.editGuide?.tabs
+                                    ?.challenges || "Challenges"}{" "}
+                                ({challengeList.length})
                             </TabsTrigger>
                             <TabsTrigger
                                 value="info"
@@ -326,21 +336,30 @@ export function EditGuideClient({
                             </TabsTrigger>
                         </TabsList>
 
-                        <TabsContent value="pages" className="mt-0 flex-1 overflow-hidden">
+                        <TabsContent
+                            value="pages"
+                            className="mt-0 flex-1 overflow-hidden"
+                        >
                             <div className="flex h-full flex-col">
                                 <div className="flex-1 overflow-hidden">
                                     <GuidePagesManager guideId={guide.id} />
                                 </div>
                                 <div className="flex justify-end border-t px-4 py-3">
-                                    <Button variant="outline" onClick={handleFinish}>
-                                        {dict?.admin?.guides?.editGuide?.pages?.done ||
-                                            "Done"}
+                                    <Button
+                                        variant="outline"
+                                        onClick={handleFinish}
+                                    >
+                                        {dict?.admin?.guides?.editGuide?.pages
+                                            ?.done || "Done"}
                                     </Button>
                                 </div>
                             </div>
                         </TabsContent>
 
-                        <TabsContent value="challenges" className="mt-0 flex-1 overflow-hidden">
+                        <TabsContent
+                            value="challenges"
+                            className="mt-0 flex-1 overflow-hidden"
+                        >
                             <div className="flex h-full flex-col">
                                 <div className="flex-1 overflow-hidden">
                                     <ChallengesForm
@@ -353,14 +372,23 @@ export function EditGuideClient({
                             </div>
                         </TabsContent>
 
-                        <TabsContent value="info" className="mt-0 flex-1 overflow-y-auto">
+                        <TabsContent
+                            value="info"
+                            className="mt-0 flex-1 overflow-y-auto"
+                        >
                             <div className="mx-auto max-w-3xl p-6">
                                 <div className="mb-6">
                                     <h2 className="text-xl font-semibold">
-                                        {dict?.admin?.guides?.editGuide?.basicInfo?.title}
+                                        {
+                                            dict?.admin?.guides?.editGuide
+                                                ?.basicInfo?.title
+                                        }
                                     </h2>
                                     <p className="mt-1 text-muted-foreground">
-                                        {dict?.admin?.guides?.editGuide?.basicInfo?.subtitle}
+                                        {
+                                            dict?.admin?.guides?.editGuide
+                                                ?.basicInfo?.subtitle
+                                        }
                                     </p>
                                 </div>
                                 <BasicInfoForm
@@ -369,10 +397,12 @@ export function EditGuideClient({
                                     onCancel={handleCancel}
                                     isSubmitting={isSaving}
                                     submitButtonText={
-                                        dict?.admin?.guides?.editGuide?.basicInfo?.update
+                                        dict?.admin?.guides?.editGuide
+                                            ?.basicInfo?.update
                                     }
                                     submitButtonLoadingText={
-                                        dict?.admin?.guides?.editGuide?.basicInfo?.updating
+                                        dict?.admin?.guides?.editGuide
+                                            ?.basicInfo?.updating
                                     }
                                 />
                             </div>

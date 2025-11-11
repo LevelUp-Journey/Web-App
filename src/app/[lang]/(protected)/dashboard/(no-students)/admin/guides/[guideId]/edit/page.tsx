@@ -1,22 +1,24 @@
 import { redirect } from "next/navigation";
 import { EditGuideClient } from "@/components/learning/guide/editor/edit-guide-client";
+import { getLocalizedPaths } from "@/lib/paths";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { ChallengeReference } from "@/services/internal/learning/guides/controller/guide.response";
 import type { GuideEditorChallengeSummary } from "@/stores/guide-editor-store";
-import { getLocalizedPaths } from "@/lib/paths";
 
 interface EditGuidePageProps {
-    params: {
+    params: Promise<{
         lang: string;
         guideId: string;
-    };
-    searchParams: {
+    }>;
+    searchParams: Promise<{
         tab?: string;
-    };
+    }>;
 }
 
 function mapGuideChallenges(
-    challenges: (GuideEditorChallengeSummary | ChallengeReference)[] | undefined,
+    challenges:
+        | (GuideEditorChallengeSummary | ChallengeReference)[]
+        | undefined,
 ): GuideEditorChallengeSummary[] {
     if (!challenges?.length) {
         return [];
@@ -33,9 +35,10 @@ export default async function EditGuidePage({
     params,
     searchParams,
 }: EditGuidePageProps) {
-    const { lang, guideId } = params;
-    const PATHS = getLocalizedPaths(lang);
+    const { lang, guideId } = await params;
+    const { tab } = await searchParams;
 
+    const PATHS = getLocalizedPaths(lang);
     const guide = await GuideController.getGuideById(guideId);
 
     if (!guide) {
@@ -48,7 +51,7 @@ export default async function EditGuidePage({
         <EditGuideClient
             guide={guide}
             challenges={challenges}
-            initialTab={searchParams?.tab}
+            initialTab={tab}
         />
     );
 }
