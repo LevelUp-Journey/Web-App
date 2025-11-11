@@ -7,8 +7,10 @@ import {
     ChevronLeft,
     ChevronRight,
     Heart,
+    Play,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { serialize } from "next-mdx-remote-client/serialize";
 import { useEffect, useState } from "react";
@@ -20,8 +22,11 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useGuide } from "@/hooks/use-guide";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { mdxOptions } from "@/lib/mdx-config";
 import { cn } from "@/lib/utils";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
@@ -36,6 +41,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     const searchParams = useSearchParams();
     const pageParam = searchParams.get("page");
     const dict = useDictionary();
+    const PATHS = useLocalizedPaths();
 
     // Usar hook personalizado para manejar el guide
     const { guide: storedGuide, author: storedAuthor } = useGuide({
@@ -43,6 +49,10 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         guide,
         author,
     });
+
+    // Estado para los challenges relacionados
+    const [relatedChallenges, setRelatedChallenges] = useState<Challenge[]>([]);
+    const [loadingChallenges, setLoadingChallenges] = useState(false);
 
     // Determinar el índice de página actual basado en la URL
     const pageNumber = pageParam ? parseInt(pageParam, 10) : null;
@@ -71,6 +81,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         : null;
     const hasPreviousPage = currentPageIndex > 0;
     const hasNextPage = currentPageIndex < storedGuide.pagesCount - 1;
+    const isLastPage = currentPageIndex === storedGuide.pagesCount - 1;
 
     const handleNextPage = () => {
         if (hasNextPage) {
@@ -106,6 +117,37 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
+
+    // Fetch related challenges
+    useEffect(() => {
+        const fetchRelatedChallenges = async () => {
+            if (
+                storedGuide.relatedChallenges &&
+                storedGuide.relatedChallenges.length > 0
+            ) {
+                setLoadingChallenges(true);
+                try {
+                    const challenges = [];
+                    for (const challengeId of storedGuide.relatedChallenges) {
+                        const challenge =
+                            await ChallengeController.getChallengeById(
+                                challengeId,
+                            );
+                        if (challenge) {
+                            challenges.push(challenge);
+                        }
+                    }
+                    setRelatedChallenges(challenges);
+                } catch (error) {
+                    console.error("Error fetching related challenges:", error);
+                } finally {
+                    setLoadingChallenges(false);
+                }
+            }
+        };
+
+        fetchRelatedChallenges();
+    }, [storedGuide.relatedChallenges]);
 
     // Si hay un parámetro de página pero no es válido, mostrar mensaje de error
     if (pageNumber !== null && !isValidPage) {
@@ -193,6 +235,53 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                     <article className="prose prose-neutral dark:prose-invert max-w-none">
                         <PageContent content={currentPage.content} />
                     </article>
+
+                    {/* Challenges Section - Only on last page */}
+                    {isLastPage && relatedChallenges.length > 0 && (
+                        <div className="mt-12 pt-8 border-t">
+                            <h2 className="text-2xl font-bold mb-6">
+                                {dict?.guides?.viewer?.practiceSection ||
+                                    "Now you're ready to put it into practice:"}
+                            </h2>
+                            <div className="space-y-4">
+                                {relatedChallenges.map((challenge) => (
+                                    <div
+                                        key={challenge.id}
+                                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                                    >
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold">
+                                                {challenge.name}
+                                            </h3>
+                                            <p className="text-sm text-muted-foreground">
+                                                {challenge.experiencePoints} XP
+                                                •{" "}
+                                                {challenge.difficulty ||
+                                                    "Unknown"}{" "}
+                                                •{" "}
+                                                {challenge.tags
+                                                    .map((tag) => tag.name)
+                                                    .join(", ") || "No tags"}
+                                            </p>
+                                        </div>
+                                        <Button asChild variant="outline">
+                                            <Link
+                                                href={PATHS.CHALLENGES.VIEW(
+                                                    challenge.id,
+                                                )}
+                                                className="flex items-center gap-2"
+                                            >
+                                                <Play className="h-4 w-4" />
+                                                {dict?.guides?.viewer
+                                                    ?.startChallenge ||
+                                                    "Start Challenge"}
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Navigation */}
                     <div className="flex items-center justify-between mt-12 pt-8 border-t">
