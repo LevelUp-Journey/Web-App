@@ -2,8 +2,9 @@
 
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CommunityCard from "@/components/cards/community-card";
+import CommunityCardWithActions from "@/components/community/community-card-with-actions";
 import { Button } from "@/components/ui/button";
 import {
     Empty,
@@ -22,6 +23,7 @@ import type { Community } from "@/services/internal/community/entities/community
 
 export default function CommunityPage() {
     const dict = useDictionary();
+    const router = useRouter();
     const [userRole, setUserRole] = useState<string | null>(null);
     const [permissionsChecked, setPermissionsChecked] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -191,9 +193,10 @@ export default function CommunityPage() {
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {communities.map((community) => (
-                        <CommunityCard
+                        <CommunityCardWithActions
                             key={community.id}
                             community={community}
+                            onEdit={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.EDIT(community.id))}
                         />
                     ))}
                 </div>

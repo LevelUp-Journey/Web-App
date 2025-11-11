@@ -5,12 +5,10 @@ import type { Community } from "@/services/internal/community/entities/community
 
 interface CommunityCardProps {
     community: Community;
-    onClick?: () => void;
 }
 
 export default function CommunityCard({
     community,
-    onClick,
 }: CommunityCardProps) {
     const [bannerColor, setBannerColor] = useState<string>("#6b7280");
     const imgRef = useRef<HTMLImageElement>(null);
@@ -80,10 +78,7 @@ export default function CommunityCard({
     };
 
     return (
-        <div
-            className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
-            onClick={onClick}
-        >
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-lg transition-shadow group">
             {/* Banner Section - No padding, fills entire width */}
             <div
                 className="h-32 w-full relative"
@@ -110,7 +105,7 @@ export default function CommunityCard({
 
             {/* Content Section with padding */}
             <div className="pt-10 pb-3 px-6">
-                <h3 className="text-lg font-bold group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-bold">
                     {community.name}
                 </h3>
             </div>
