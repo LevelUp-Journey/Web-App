@@ -24,6 +24,18 @@ import { CloudinaryController } from "@/services/external/cloudinary/cloudinary.
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { CreateCommunityRequest } from "@/services/internal/community/server/community.actions";
 
+// Community form limits - easily configurable
+const COMMUNITY_LIMITS = {
+    NAME: {
+        MIN: 1,
+        MAX: 50,
+    },
+    DESCRIPTION: {
+        MIN: 10,
+        MAX: 150,
+    },
+} as const;
+
 export default function CreateCommunityPage() {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
@@ -37,26 +49,26 @@ export default function CreateCommunityPage() {
         name: z
             .string()
             .min(
-                1,
+                COMMUNITY_LIMITS.NAME.MIN,
                 dict?.admin.community.createForm?.validation?.nameRequired ||
                     "Community name is required",
             )
             .max(
-                100,
+                COMMUNITY_LIMITS.NAME.MAX,
                 dict?.admin.community.createForm?.validation?.nameMax ||
-                    "Community name must not exceed 100 characters",
+                    `Community name must not exceed ${COMMUNITY_LIMITS.NAME.MAX} characters`,
             ),
         description: z
             .string()
             .min(
-                10,
+                COMMUNITY_LIMITS.DESCRIPTION.MIN,
                 dict?.admin.community.createForm?.validation?.descriptionMin ||
-                    "Description must be at least 10 characters",
+                    `Description must be at least ${COMMUNITY_LIMITS.DESCRIPTION.MIN} characters`,
             )
             .max(
-                500,
+                COMMUNITY_LIMITS.DESCRIPTION.MAX,
                 dict?.admin.community.createForm?.validation?.descriptionMax ||
-                    "Description must not exceed 500 characters",
+                    `Description must not exceed ${COMMUNITY_LIMITS.DESCRIPTION.MAX} characters`,
             ),
         imageUrl: z.string().optional(),
     });
@@ -212,17 +224,23 @@ export default function CreateCommunityPage() {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-sm font-bold uppercase text-muted-foreground">
-                                        {dict?.admin.community.createForm
-                                            ?.nameLabel || "Community Name"}{" "}
-                                        <span className="text-destructive">
-                                            *
+                                    <div className="flex items-center justify-between">
+                                        <FormLabel className="text-sm font-bold uppercase text-muted-foreground">
+                                            {dict?.admin.community.createForm
+                                                ?.nameLabel || "Community Name"}{" "}
+                                            <span className="text-destructive">
+                                                *
+                                            </span>
+                                        </FormLabel>
+                                        <span className="text-xs text-muted-foreground">
+                                            {field.value?.length || 0}/{COMMUNITY_LIMITS.NAME.MAX}
                                         </span>
-                                    </FormLabel>
+                                    </div>
                                     <FormControl>
                                         <Input
                                             {...field}
                                             disabled={saving}
+                                            maxLength={COMMUNITY_LIMITS.NAME.MAX}
                                             className="bg-background border-input"
                                             placeholder={
                                                 dict?.admin.community.createForm
@@ -242,18 +260,24 @@ export default function CreateCommunityPage() {
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-sm font-bold uppercase text-muted-foreground">
-                                        {dict?.admin.community.createForm
-                                            ?.descriptionLabel ||
-                                            "Community Description"}{" "}
-                                        <span className="text-destructive">
-                                            *
+                                    <div className="flex items-center justify-between">
+                                        <FormLabel className="text-sm font-bold uppercase text-muted-foreground">
+                                            {dict?.admin.community.createForm
+                                                ?.descriptionLabel ||
+                                                "Community Description"}{" "}
+                                            <span className="text-destructive">
+                                                *
+                                            </span>
+                                        </FormLabel>
+                                        <span className="text-xs text-muted-foreground">
+                                            {field.value?.length || 0}/{COMMUNITY_LIMITS.DESCRIPTION.MAX}
                                         </span>
-                                    </FormLabel>
+                                    </div>
                                     <FormControl>
                                         <Textarea
                                             {...field}
                                             disabled={saving}
+                                            maxLength={COMMUNITY_LIMITS.DESCRIPTION.MAX}
                                             rows={4}
                                             className="bg-background border-input resize-none"
                                             placeholder={

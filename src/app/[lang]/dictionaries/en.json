@@ -734,9 +734,9 @@
                 "errorCreating": "Error creating community. Please try again.",
                 "validation": {
                     "nameRequired": "Community name is required",
-                    "nameMax": "Community name must not exceed 100 characters",
+                    "nameMax": "Community name must not exceed 50 characters",
                     "descriptionMin": "Description must be at least 10 characters",
-                    "descriptionMax": "Description must not exceed 500 characters"
+                    "descriptionMax": "Description must not exceed 150 characters"
                 }
             }
         },

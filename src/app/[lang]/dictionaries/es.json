@@ -735,9 +735,9 @@
                 "errorCreating": "Error al crear la comunidad. Por favor, inténtalo de nuevo.",
                 "validation": {
                     "nameRequired": "El nombre de la comunidad es obligatorio",
-                    "nameMax": "El nombre de la comunidad no debe exceder los 100 caracteres",
+                    "nameMax": "El nombre de la comunidad no debe exceder los 50 caracteres",
                     "descriptionMin": "La descripción debe tener al menos 10 caracteres",
-                    "descriptionMax": "La descripción no debe exceder los 500 caracteres"
+                    "descriptionMax": "La descripción no debe exceder los 150 caracteres"
                 }
             }
         },
