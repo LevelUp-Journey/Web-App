@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import ChallengeCard from "@/components/cards/challenge-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,7 @@ export default async function AdminChallengesPage({
     params: Promise<{ lang: string }>;
 }) {
     const { lang } = await params;
+    const dict = await getDictionary(lang as "en" | "es");
     const PATHS = getLocalizedPaths(lang);
 
     try {
@@ -47,10 +49,12 @@ export default async function AdminChallengesPage({
             return (
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-xl font-semibold">My Challenges</h2>
+                        <h2 className="text-xl font-semibold">
+                            {dict.admin.challenges.title}
+                        </h2>
                         <Button asChild>
                             <Link href={PATHS.DASHBOARD.CHALLENGES.CREATE}>
-                                Create New Challenge
+                                {dict.admin.challenges.createNew}
                             </Link>
                         </Button>
                     </div>
@@ -59,16 +63,17 @@ export default async function AdminChallengesPage({
                             <EmptyMedia variant="icon">
                                 <AlertCircle />
                             </EmptyMedia>
-                            <EmptyTitle>No challenges yet</EmptyTitle>
+                            <EmptyTitle>
+                                {dict.admin.challenges.noChallenges}
+                            </EmptyTitle>
                             <EmptyDescription>
-                                Start by creating your first challenge for the
-                                community.
+                                {dict.admin.challenges.noChallengesDescription}
                             </EmptyDescription>
                         </EmptyHeader>
                         <EmptyContent>
                             <Button asChild>
                                 <Link href={PATHS.DASHBOARD.CHALLENGES.CREATE}>
-                                    Create Challenge
+                                    {dict.admin.challenges.create}
                                 </Link>
                             </Button>
                         </EmptyContent>
@@ -80,10 +85,12 @@ export default async function AdminChallengesPage({
         return (
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold">My Challenges</h2>
+                    <h2 className="text-xl font-semibold">
+                        {dict.admin.challenges.title}
+                    </h2>
                     <Button asChild>
                         <Link href={PATHS.DASHBOARD.CHALLENGES.CREATE}>
-                            Create New Challenge
+                            {dict.admin.challenges.createNew}
                         </Link>
                     </Button>
                 </div>
@@ -92,7 +99,9 @@ export default async function AdminChallengesPage({
                         <ChallengeCard
                             key={challenge.id}
                             challenge={challenge}
-                            codeVersions={codeVersionsMap.get(challenge.id) || []}
+                            codeVersions={
+                                codeVersionsMap.get(challenge.id) || []
+                            }
                             adminMode={true}
                             className="w-full"
                         />
@@ -107,16 +116,15 @@ export default async function AdminChallengesPage({
                     <EmptyMedia variant="icon">
                         <AlertCircle />
                     </EmptyMedia>
-                    <EmptyTitle>Unable to load challenges</EmptyTitle>
+                    <EmptyTitle>{dict.admin.challenges.error}</EmptyTitle>
                     <EmptyDescription>
-                        Something went wrong while fetching your challenges.
-                        Please try again.
+                        {dict.admin.challenges.errorDescription}
                     </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
                     <Button asChild>
                         <Link href={PATHS.DASHBOARD.CHALLENGES.CREATE}>
-                            Create Challenge
+                            {dict.admin.challenges.create}
                         </Link>
                     </Button>
                 </EmptyContent>

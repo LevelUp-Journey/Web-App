@@ -12,6 +12,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useDictionary } from "@/hooks/use-dictionary";
 
 interface BreadcrumbItemData {
     label: string;
@@ -43,32 +44,34 @@ async function fetchResourceName(
 }
 
 // Mapeo de segmentos a nombres amigables
-const SEGMENT_LABELS: Record<string, string> = {
-    dashboard: "Dashboard",
-    profile: "Profile",
-    challenges: "Challenges",
-    create: "Create",
-    versions: "Versions",
-    tests: "Tests",
-    community: "Community",
-    post: "Post",
-    leaderboard: "Leaderboard",
-    settings: "Settings",
-    help: "Help",
-    admin: "Administration",
-    courses: "Courses",
-    guides: "Guides",
-    edit: "Edit",
-    auth: "Auth",
-    "sign-in": "Sign In",
-    "sign-up": "Sign Up",
-    legal: "Legal",
-    "privacy-policy": "Privacy Policy",
-    terms: "Terms of Service",
-};
+const getSegmentLabels = (dict: any): Record<string, string> => ({
+    dashboard: dict?.navigationIndicator.dashboard || "Dashboard",
+    profile: dict?.navigationIndicator.profile || "Profile",
+    challenges: dict?.navigationIndicator.challenges || "Challenges",
+    create: dict?.navigationIndicator.create || "Create",
+    versions: dict?.navigationIndicator.versions || "Versions",
+    tests: dict?.navigationIndicator.tests || "Tests",
+    community: dict?.navigationIndicator.community || "Community",
+    post: dict?.navigationIndicator.post || "Post",
+    leaderboard: dict?.navigationIndicator.leaderboard || "Leaderboard",
+    settings: dict?.navigationIndicator.settings || "Settings",
+    help: dict?.navigationIndicator.help || "Help",
+    admin: dict?.navigationIndicator.admin || "Administration",
+    courses: dict?.navigationIndicator.courses || "Courses",
+    guides: dict?.navigationIndicator.guides || "Guides",
+    edit: dict?.navigationIndicator.edit || "Edit",
+    auth: dict?.navigationIndicator.auth || "Auth",
+    "sign-in": dict?.navigationIndicator.signIn || "Sign In",
+    "sign-up": dict?.navigationIndicator.signUp || "Sign Up",
+    legal: dict?.navigationIndicator.legal || "Legal",
+    "privacy-policy":
+        dict?.navigationIndicator.privacyPolicy || "Privacy Policy",
+    terms: dict?.navigationIndicator.terms || "Terms of Service",
+});
 
 export function Breadcrumbs() {
     const pathname = usePathname();
+    const dict = useDictionary();
     const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItemData[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -78,9 +81,13 @@ export function Breadcrumbs() {
 
             const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}\//, "/");
             const segments = pathWithoutLocale.split("/").filter(Boolean);
+            const SEGMENT_LABELS = getSegmentLabels(dict);
 
             const items: BreadcrumbItemData[] = [
-                { label: "Home", href: "/dashboard" },
+                {
+                    label: dict?.navigationIndicator.home || "Home",
+                    href: "/dashboard",
+                },
             ];
 
             let currentPath = "";
@@ -126,22 +133,22 @@ export function Breadcrumbs() {
                     const contextLabel =
                         SEGMENT_LABELS[context] || context || "Item";
                     items.push({
-                        label: `Create ${contextLabel.slice(0, -1)}`,
+                        label: `${dict?.navigationIndicator.create || "Create"} ${contextLabel.slice(0, -1)}`,
                         href: fullPath,
                     });
                 } else if (segment === "edit") {
                     items.push({
-                        label: "Edit",
+                        label: dict?.navigationIndicator.edit || "Edit",
                         href: fullPath,
                     });
                 } else if (segment === "versions") {
                     items.push({
-                        label: "Versions",
+                        label: dict?.navigationIndicator.versions || "Versions",
                         href: fullPath,
                     });
                 } else if (segment === "tests") {
                     items.push({
-                        label: "Tests",
+                        label: dict?.navigationIndicator.tests || "Tests",
                         href: fullPath,
                     });
                 } else {
@@ -207,15 +214,20 @@ export function Breadcrumbs() {
 // Versión simplificada sin fetching (más rápida)
 export function NavigationIndicator() {
     const pathname = usePathname();
+    const dict = useDictionary();
 
     if (!pathname) return null;
 
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}\//, "/");
     const segments = pathWithoutLocale.split("/").filter(Boolean);
     const locale = pathname.match(/^\/([a-z]{2})\//)?.[1] || "en";
+    const SEGMENT_LABELS = getSegmentLabels(dict);
 
     const breadcrumbs: BreadcrumbItemData[] = [
-        { label: "Home", href: `/${locale}/dashboard` },
+        {
+            label: dict?.navigationIndicator.home || "Home",
+            href: `/${locale}/dashboard`,
+        },
     ];
 
     let currentPath = "";
@@ -228,7 +240,10 @@ export function NavigationIndicator() {
         // Ignorar IDs
         if (/^[a-f0-9-]{36}$/.test(segment) || /^\d+$/.test(segment)) {
             const prevSegment = segments[i - 1];
-            const label = SEGMENT_LABELS[prevSegment]?.slice(0, -1) || "Detail";
+            const label =
+                SEGMENT_LABELS[prevSegment]?.slice(0, -1) ||
+                dict?.navigationIndicator.detail ||
+                "Detail";
             breadcrumbs.push({
                 label,
                 href: fullPath,
@@ -241,12 +256,12 @@ export function NavigationIndicator() {
             const context = segments[i - 1];
             const contextLabel = SEGMENT_LABELS[context] || context || "Item";
             breadcrumbs.push({
-                label: `Create ${contextLabel.slice(0, -1)}`,
+                label: `${dict?.navigationIndicator.create || "Create"} ${contextLabel.slice(0, -1)}`,
                 href: fullPath,
             });
         } else if (segment === "edit") {
             breadcrumbs.push({
-                label: "Edit",
+                label: dict?.navigationIndicator.edit || "Edit",
                 href: fullPath,
             });
         } else {

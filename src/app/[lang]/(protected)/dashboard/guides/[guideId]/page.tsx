@@ -1,15 +1,15 @@
-import { Calendar, Heart } from "lucide-react";
-import Image from "next/image";
+import { getDictionary } from "@/app/[lang]/dictionaries";
+import { GuideViewer } from "@/components/learning/guide-viewer";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
-import { GuideViewer } from "@/components/learning/guide-viewer";
 
 interface GuidePageProps {
-    params: Promise<{ guideId: string }>;
+    params: Promise<{ guideId: string; lang: string }>;
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {
-    const { guideId } = await params;
+    const { guideId, lang } = await params;
+    const dict = await getDictionary(lang as "en" | "es");
 
     // Fetch guide and author in parallel
     const guide = await GuideController.getGuideById(guideId);
@@ -17,25 +17,22 @@ export default async function GuidePage({ params }: GuidePageProps) {
     if (!guide) {
         return (
             <div className="container mx-auto px-4 py-8">
-                <p>Guide not found</p>
+                <p>{dict.guides.notFound}</p>
             </div>
         );
     }
 
-    const author = await ProfileController.getProfileByUserId(guide.authorIds[0]); // Get first author
+    const author = await ProfileController.getProfileByUserId(
+        guide.authorIds[0],
+    ); // Get first author
 
     if (!author) {
         return (
             <div className="container mx-auto px-4 py-8">
-                <p>Author profile not available</p>
+                <p>{dict.guides.authorNotAvailable}</p>
             </div>
         );
     }
 
-    return (
-        <GuideViewer
-            guide={guide}
-            author={author}
-        />
-    );
+    return <GuideViewer guide={guide} author={author} />;
 }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
@@ -21,6 +22,7 @@ export default function VersionEditingForm({
     codeVersion,
 }: VersionEditingFormProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [language, setLanguage] = useState(codeVersion.language);
     const [initialCode, setInitialCode] = useState(codeVersion.initialCode);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,11 +39,22 @@ export default function VersionEditingForm({
                     functionName: codeVersion.functionName || null,
                 },
             );
-            toast.success("Code version updated successfully");
-            router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(challengeId, codeVersion.id));
+            toast.success(
+                dict?.challenges?.messages?.codeVersionUpdated ||
+                    "Code version updated successfully",
+            );
+            router.push(
+                PATHS.DASHBOARD.CHALLENGES.VERSIONS.EDIT(
+                    challengeId,
+                    codeVersion.id,
+                ),
+            );
         } catch (error) {
             console.error("Error updating code version:", error);
-            toast.error("Failed to update code version");
+            toast.error(
+                dict?.errors?.updating?.codeVersion ||
+                    "Failed to update code version",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -50,16 +63,24 @@ export default function VersionEditingForm({
     return (
         <section className="h-screen flex flex-col p-4 container mx-auto">
             <header className="shrink-0 p-6 border-b">
-                <h1 className="text-3xl font-bold mb-2">Edit Code Version</h1>
+                <h1 className="text-3xl font-bold mb-2">
+                    {dict?.challenges?.codeVersions?.editCodeVersion ||
+                        "Edit Code Version"}
+                </h1>
                 <p className="text-muted-foreground">
-                    Update the language and initial code for this code version.
+                    {dict?.challenges?.codeVersions
+                        ?.updateCodeVersionDescription ||
+                        "Update the language and initial code for this code version."}
                 </p>
             </header>
 
             <div className="flex-1 overflow-hidden p-6">
                 <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
                     <div>
-                        <Label htmlFor="language">Language</Label>
+                        <Label htmlFor="language">
+                            {dict?.challenges?.codeVersions?.language ||
+                                "Language"}
+                        </Label>
                         <Input
                             id="language"
                             value={language}
@@ -68,7 +89,10 @@ export default function VersionEditingForm({
                         />
                     </div>
                     <div>
-                        <Label htmlFor="initialCode">Initial Code</Label>
+                        <Label htmlFor="initialCode">
+                            {dict?.challenges?.codeVersions?.initialCode ||
+                                "Initial Code"}
+                        </Label>
                         <Textarea
                             id="initialCode"
                             value={initialCode}
@@ -80,15 +104,18 @@ export default function VersionEditingForm({
                     <div className="flex gap-4">
                         <Button type="submit" disabled={isSubmitting}>
                             {isSubmitting
-                                ? "Updating..."
-                                : "Update Code Version"}
+                                ? dict?.challenges?.codeVersions?.updating ||
+                                  "Updating..."
+                                : dict?.challenges?.codeVersions
+                                      ?.updateCodeVersion ||
+                                  "Update Code Version"}
                         </Button>
                         <Button
                             type="button"
                             variant="outline"
                             onClick={() => router.back()}
                         >
-                            Cancel
+                            {dict?.common?.cancel || "Cancel"}
                         </Button>
                     </div>
                 </form>

@@ -1,11 +1,11 @@
+import { UserCircle2Icon } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import { SearchInput } from "../searching/search-input";
 import { Separator } from "../ui/separator";
+import { SidebarTrigger } from "../ui/sidebar";
 import { NavUser } from "./nav-user";
 import { NavigationIndicator } from "./navigation-indicator";
-import { SidebarTrigger } from "../ui/sidebar";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { UserCircle2Icon } from "lucide-react";
 
 export async function SidebarContentHeader() {
     const profile = await ProfileController.getCurrentUserProfile();
@@ -13,7 +13,7 @@ export async function SidebarContentHeader() {
     // If profile service is down, we still show the header but without user info
     if (!profile) {
         return (
-            <header className="w-full flex px-4 items-center justify-between border-b h-14">
+            <header className="w-full flex px-4 items-center justify-between border-b h-14 sticky top-0 bg-background z-10">
                 <div className="flex items-center">
                     <SidebarTrigger />
                     <NavigationIndicator />
@@ -34,7 +34,7 @@ export async function SidebarContentHeader() {
     }
 
     return (
-        <header className="w-full flex px-4 items-center justify-between border-b h-14">
+        <header className="w-full flex px-4 items-center justify-between border-b h-14 sticky top-0 bg-background z-10">
             <div className="flex items-center">
                 <SidebarTrigger />
                 <NavigationIndicator />

@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import type { SerializeResult } from "next-mdx-remote-client/csr";
 import { serialize } from "next-mdx-remote-client/serialize";
 import StudentCodeEditor from "@/components/challenges/student-code-editor";
+import { mdxOptions } from "@/lib/mdx-config";
 import { PATHS } from "@/lib/paths";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
@@ -12,6 +13,8 @@ import type { CodeVersion } from "@/services/internal/challenges/challenge/entit
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";
 import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 import { getSolutionByChallengeIdAndCodeVersionIdAction } from "@/services/internal/challenges/solutions/server/solutions.actions";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
+import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 
 interface PageProps {
     params: Promise<{
@@ -45,6 +48,9 @@ export default async function StudentEditorPage({ params }: PageProps) {
             fetchSolution(challengeId, codeVersionId),
         ]);
 
+        // Fetch guides after getting challenge (since we need guide IDs)
+        const guides = await fetchGuides(challenge);
+
         // Validación de datos críticos
         if (!challenge || !codeVersion) {
             notFound();
@@ -63,6 +69,7 @@ export default async function StudentEditorPage({ params }: PageProps) {
                     tests={tests}
                     serializedDescription={serializedDescription}
                     solution={solution}
+                    guides={guides}
                 />
             </div>
         );
@@ -158,6 +165,34 @@ async function fetchSolution(
 }
 
 /**
+ * Obtiene las guías relacionadas al challenge
+ */
+async function fetchGuides(
+    challenge: Challenge | null,
+): Promise<GuideResponse[]> {
+    if (!challenge || !challenge.guides || challenge.guides.length === 0) {
+        return [];
+    }
+
+    try {
+        // Fetch guides by their IDs
+        const guidePromises = challenge.guides.map((guideId) =>
+            GuideController.getGuideById(guideId),
+        );
+
+        const guides = await Promise.all(guidePromises);
+        // Filter out null results (failed fetches)
+        return guides.filter((guide): guide is GuideResponse => guide !== null);
+    } catch (error) {
+        console.error(
+            `Error fetching guides for challenge ${challenge.id}:`,
+            error,
+        );
+        return [];
+    }
+}
+
+/**
  * Serializa la descripción del challenge en formato MDX
  */
 async function serializeDescription(
@@ -168,7 +203,10 @@ async function serializeDescription(
     }
 
     try {
-        const serialized = await serialize({ source: description });
+        const serialized = await serialize({
+            source: description,
+            ...mdxOptions,
+        });
         return serialized;
     } catch (error) {
         console.error("Error serializing challenge description:", error);

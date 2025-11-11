@@ -1,7 +1,10 @@
+"use client";
+
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useDictionary } from "@/hooks/use-dictionary";
 
 export interface CourseGuideFullResponse {
     id: string;
@@ -17,6 +20,7 @@ export default function CourseGuideCard({
 }: {
     guide: CourseGuideFullResponse;
 }) {
+    const dict = useDictionary();
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString("es-ES", {
@@ -58,7 +62,8 @@ export default function CourseGuideCard({
                         </div>
 
                         <p className="text-sm text-gray-600 mb-3">
-                            Creado el {formatDate(guide.createdAt)}
+                            {dict?.challenges?.cards?.createdOn || "Created on"}{" "}
+                            {formatDate(guide.createdAt)}
                         </p>
 
                         {/* Likes */}
@@ -67,8 +72,8 @@ export default function CourseGuideCard({
                             <span className="text-sm font-medium">
                                 {guide.totalLikes}{" "}
                                 {guide.totalLikes === 1
-                                    ? "me gusta"
-                                    : "me gusta"}
+                                    ? dict?.challenges?.cards?.like || "like"
+                                    : dict?.challenges?.cards?.likes || "likes"}
                             </span>
                         </div>
                     </div>

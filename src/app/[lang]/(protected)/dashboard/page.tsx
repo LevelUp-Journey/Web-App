@@ -1,12 +1,18 @@
-"use client";
-
-import { ChallengesSection } from "@/components/dashboard/challenges-section";
-import { Button } from "@/components/ui/button";
-import UniversityAnnouncements from "@/components/dashboard/university-announcements";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { ChallengesSection } from "@/components/dashboard/challenges-section";
+import UniversityAnnouncements from "@/components/dashboard/university-announcements";
+import { Button } from "@/components/ui/button";
+import { getDictionary } from "@/lib/i18n";
 
-export default function DashboardPage() {
+export default async function DashboardPage({
+    params,
+}: {
+    params: Promise<{ lang: string }>;
+}) {
+    const { lang } = await params;
+    const dict = await getDictionary(lang as "en" | "es");
+
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Announcements */}
@@ -18,7 +24,9 @@ export default function DashboardPage() {
                 <div className="lg:col-span-2 space-y-6">
                     {/* Up Next Card */}
                     <div>
-                        <h3 className="text-xl font-semibold mb-3">Up Next</h3>
+                        <h3 className="text-xl font-semibold mb-3">
+                            {dict.dashboardPage.upNext.title}
+                        </h3>
                         <div className="bg-card border rounded-lg p-6 shadow-sm">
                             <div className="flex items-start gap-6 h-full">
                                 <Image
@@ -30,14 +38,30 @@ export default function DashboardPage() {
                                 />
                                 <div className="flex-1 flex flex-col justify-between h-full min-h-[200px]">
                                     <div className="flex-1">
-                                        <h4 className="text-xl font-semibold mb-3">Plan your learning journey</h4>
+                                        <h4 className="text-xl font-semibold mb-3">
+                                            {
+                                                dict.dashboardPage.upNext.card
+                                                    .title
+                                            }
+                                        </h4>
                                         <p className="text-muted-foreground text-base leading-relaxed">
-                                            Explore guided learning paths and curated courses designed for UPC students.
+                                            {
+                                                dict.dashboardPage.upNext.card
+                                                    .description
+                                            }
                                         </p>
                                     </div>
                                     <div className="mt-auto pt-4">
                                         <Link href="/dashboard/guides">
-                                            <Button size="lg" className="px-6 py-3">Explore Guides</Button>
+                                            <Button
+                                                size="lg"
+                                                className="px-6 py-3"
+                                            >
+                                                {
+                                                    dict.dashboardPage.upNext
+                                                        .card.button
+                                                }
+                                            </Button>
                                         </Link>
                                     </div>
                                 </div>
@@ -47,8 +71,18 @@ export default function DashboardPage() {
 
                     {/* Featured Challenges Section */}
                     <div className="space-y-4">
-                        <h2 className="text-xl font-semibold">Featured Challenges</h2>
-                        <ChallengesSection />
+                        <h2 className="text-xl font-semibold">
+                            {dict.dashboardPage.featuredChallenges}
+                        </h2>
+                        <ChallengesSection
+                            translations={{
+                                loading: dict.challenges.loading,
+                                error: dict.challenges.errorFetching,
+                                errorDescription:
+                                    dict.challenges.errorDescription,
+                                retry: dict.challenges.retry,
+                            }}
+                        />
                     </div>
                 </div>
 
@@ -56,23 +90,35 @@ export default function DashboardPage() {
                 <div className="space-y-6">
                     {/* Streak Card */}
                     <div>
-                        <h3 className="text-xl font-semibold mb-3">Streak</h3>
+                        <h3 className="text-xl font-semibold mb-3">
+                            {dict.dashboardPage.streak.title}
+                        </h3>
                         <div className="bg-card border rounded-lg p-6 shadow-sm">
                             <div className="text-center text-muted-foreground/75">
-                                <p className="text-lg font-medium">Coming Soon</p>
-                                <p className="text-sm mt-2">Track your coding consistency</p>
+                                <p className="text-lg font-medium">
+                                    {dict.dashboardPage.streak.comingSoon}
+                                </p>
+                                <p className="text-sm mt-2">
+                                    {dict.dashboardPage.streak.description}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     {/* Progress Card */}
-                       <div className="bg-card border rounded-lg p-6 shadow-sm">
+                    <div className="bg-card border rounded-lg p-6 shadow-sm">
                         <div className="text-left">
-                            <h3 className="text-xl font-semibold mb-4 text-foreground">Progress</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-foreground">
+                                {dict.dashboardPage.progress.title}
+                            </h3>
 
                             <div className="text-center text-muted-foreground/75">
-                                <p className="text-lg font-medium">Coming Soon</p>
-                                <p className="text-sm mt-2">Unlock badges and rewards for your progress</p>
+                                <p className="text-lg font-medium">
+                                    {dict.dashboardPage.progress.comingSoon}
+                                </p>
+                                <p className="text-sm mt-2">
+                                    {dict.dashboardPage.progress.description}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -80,11 +126,20 @@ export default function DashboardPage() {
                     {/* Achievements Card */}
                     <div className="bg-card border rounded-lg p-6 shadow-sm">
                         <div className="text-left">
-                            <h3 className="text-xl font-semibold mb-4 text-foreground">Achievements</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-foreground">
+                                {dict.dashboardPage.achievements.title}
+                            </h3>
 
                             <div className="text-center text-muted-foreground/75">
-                                <p className="text-lg font-medium">Coming Soon</p>
-                                <p className="text-sm mt-2">Unlock badges and rewards for your progress</p>
+                                <p className="text-lg font-medium">
+                                    {dict.dashboardPage.achievements.comingSoon}
+                                </p>
+                                <p className="text-sm mt-2">
+                                    {
+                                        dict.dashboardPage.achievements
+                                            .description
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>

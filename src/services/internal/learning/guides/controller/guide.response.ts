@@ -1,3 +1,9 @@
+export interface ChallengeReference {
+    id: string;
+    name: string;
+    language: string;
+}
+
 export interface CreateGuideRequest {
     title: string;
     description: string;
@@ -21,6 +27,8 @@ export interface GuideResponse {
         name: string;
     }[];
     pages: PageResponse[];
+    challenges: ChallengeReference[];
+    relatedChallenges: string[]; // challenges ids
     createdAt: string;
     updatedAt: string;
 }
@@ -79,4 +87,40 @@ export enum GuideStatus {
     PUBLISHED = "PUBLISHED",
     ARCHIVED = "ARCHIVED",
     ASSOCIATED_WITH_COURSE = "ASSOCIATED_WITH_COURSE",
+}
+
+export interface SearchGuideRequest {
+    title?: string;
+    authorIds?: string[];
+    topicIds?: string[];
+    likes?: number; // Minimum number of likes
+}
+
+export interface SearchGuidesResponse {
+    content: GuideResponse[];
+    pageable: {
+        pageNumber: number;
+        pageSize: number;
+        sort: {
+            empty: boolean;
+            sorted: boolean;
+            unsorted: boolean;
+        };
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+    };
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    first: boolean;
+    numberOfElements: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    empty: boolean;
 }

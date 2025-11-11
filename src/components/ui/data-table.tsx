@@ -1,24 +1,18 @@
 "use client";
 
-import * as React from "react";
 import {
-    ColumnDef,
+    type ColumnDef,
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    SortingState,
+    type SortingState,
     useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDownIcon } from "lucide-react";
+import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import {
     Table,
     TableBody,
@@ -122,7 +116,9 @@ export function DataTable<TData, TValue>({
                                         row.getIsSelected() && "selected"
                                     }
                                     className={`bg-linear-to-r from-blue-700/8 via-blue-800/5 to-transparent hover:from-blue-700/12 hover:via-blue-800/8 dark:from-blue-300/8 dark:via-blue-200/6 dark:hover:from-blue-300/12 dark:hover:via-blue-200/8 !hover:bg-transparent transition-colors ${
-                                        index % 2 === 0 ? 'from-blue-600/6 via-blue-700/4 dark:from-blue-400/6 dark:via-blue-300/4 !hover:bg-transparent' : ''
+                                        index % 2 === 0
+                                            ? "from-blue-600/6 via-blue-700/4 dark:from-blue-400/6 dark:via-blue-300/4 !hover:bg-transparent"
+                                            : ""
                                     }`}
                                 >
                                     {row.getVisibleCells().map((cell) => (

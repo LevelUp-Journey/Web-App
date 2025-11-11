@@ -1,5 +1,6 @@
+import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import { ColumnDef } from "@tanstack/react-table";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { UserWithProfile } from "@/hooks/use-leaderboard-data";
 
 const RANK_ICONS: Record<string, string> = {
@@ -14,21 +15,23 @@ const RANK_ICONS: Record<string, string> = {
 
 export const getLeaderboardColumns = (
     selectedRank: string,
+    dict: Dictionary,
 ): ColumnDef<UserWithProfile>[] => [
     {
         accessorKey: "position",
-        header: "Position",
+        header: dict.leaderboard.table.position,
         cell: ({ row }) => {
             const position =
                 selectedRank === "TOP500"
-                    ? (row.original as any).position
-                    : row.original.leaderboardPosition || "-";
-            return <div className="font-mono font-medium">#{position}</div>;
+                    ? row.original.position
+                    : row.original.leaderboardPosition;
+            const value = typeof position === "number" ? position : "-";
+            return <div className="font-mono font-medium">#{value}</div>;
         },
     },
     {
         accessorKey: "currentRank",
-        header: "Rank",
+        header: dict.leaderboard.table.rank,
         cell: ({ row }) => {
             const rank = row.original.currentRank || "BRONZE";
             return (
@@ -47,17 +50,22 @@ export const getLeaderboardColumns = (
     },
     {
         accessorKey: "username",
-        header: "Username",
+        header: dict.leaderboard.table.username,
         cell: ({ row }) => {
-            const username =
-                row.original.profile?.username ||
-                row.original.userId.substring(0, 20);
-            return <div className="font-mono font-medium">{username}</div>;
+            return (
+                <div className="font-mono font-medium">
+                    {row.original.username}
+                </div>
+            );
         },
     },
     {
         accessorKey: "totalPoints",
-        header: () => <div className="text-center font-mono">Points</div>,
+        header: () => (
+            <div className="text-center font-mono">
+                {dict.leaderboard.table.points}
+            </div>
+        ),
         cell: ({ row }) => {
             return (
                 <div className="text-center font-mono font-medium">

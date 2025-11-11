@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 type Rank = {
     id: number;
@@ -20,14 +21,20 @@ const RANKS: Rank[] = [
     },
 ];
 
-export function RanksList({ className = "" }: { className?: string }) {
+export function RanksList({
+    className = "",
+    dict,
+}: {
+    className?: string;
+    dict: Dictionary;
+}) {
     return (
         <section
             className={"w-full " + className}
             aria-labelledby="ranks-heading"
         >
             <h2 id="ranks-heading" className="text-lg font-semibold mb-4">
-                Ranking System
+                {dict.leaderboard.ui.rankingSystem}
             </h2>
 
             <div className="p-4 rounded-lg bg-muted/20 border border-muted">

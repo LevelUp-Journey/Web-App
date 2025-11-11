@@ -27,7 +27,7 @@ export interface BasicInfoFormData {
 }
 
 interface BasicInfoFormProps {
-    form: UseFormReturn<BasicInfoFormData>;
+    form: UseFormReturn<BasicInfoFormData, any, BasicInfoFormData>;
     onSubmit: (data: BasicInfoFormData) => void;
     onCancel: () => void;
     isSubmitting: boolean;

@@ -2,15 +2,18 @@ import {
     Empty,
     EmptyDescription,
     EmptyHeader,
+    EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 
-export default function AdminCommunityLoading() {
+export default function LoadingCommunity() {
     return (
-        <Empty className="min-h-[400px] gap-4">
-            <Spinner className="size-8 text-muted-foreground" />
+        <Empty className="min-h-[400px]">
             <EmptyHeader>
+                <EmptyMedia variant="icon">
+                    <Spinner className="size-6 text-muted-foreground" />
+                </EmptyMedia>
                 <EmptyTitle>Loading communities</EmptyTitle>
                 <EmptyDescription>
                     Preparing your community management tools.

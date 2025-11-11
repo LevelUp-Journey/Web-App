@@ -1,13 +1,13 @@
 "use client";
 
 import {
-    EllipsisVertical,
+    Globe,
     LogOut,
     MoonIcon,
     SunIcon,
     UserCircle2Icon,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -17,14 +17,22 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDictionary } from "@/hooks/use-dictionary";
+import { useLocale } from "@/hooks/use-locale";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 export function NavUser({ profile }: { profile: ProfileResponse }) {
     const { setTheme } = useTheme();
     const router = useRouter();
+    const pathname = usePathname();
+    const currentLocale = useLocale();
+    const dict = useDictionary();
 
     const displayName =
         `${profile.firstName || ""} ${profile.lastName || ""}`.trim();
@@ -40,6 +48,23 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
         router.push("/dashboard/account");
     };
 
+    const handleLanguageChange = (newLocale: string) => {
+        if (!pathname) return;
+
+        // Remove the current locale from the pathname
+        const pathWithoutLocale = pathname.replace(`/${currentLocale}`, "");
+
+        // Construct the new path with the new locale
+        const newPath = `/${newLocale}${pathWithoutLocale || "/"}`;
+
+        // Navigate to the new path
+        router.push(newPath);
+    };
+
+    const languages = {
+        en: { name: "English", flag: "🇺🇸" },
+        es: { name: "Español", flag: "🇪🇸" },
+    };
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -80,17 +105,57 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
                         </div>
                     </div>
                 </DropdownMenuLabel>
+
                 <DropdownMenuSeparator />
+
                 <DropdownMenuGroup>
                     <DropdownMenuItem onClick={handleAccountClick}>
                         <UserCircle2Icon />
                         Account
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        onClick={(e) => {
+                        onClick={async (e) => {
                             e.preventDefault();
-                            setTheme((prev) =>
-                                prev === "light" ? "dark" : "light",
+                            const newTheme =
+                                document.documentElement.classList.contains(
+                                    "dark",
+                                )
+                                    ? "light"
+                                    : "dark";
+
+                            // Check if browser supports startViewTransition
+                            if (!document.startViewTransition) {
+                                setTheme(newTheme);
+                                return;
+                            }
+
+                            const target = e.currentTarget as HTMLElement;
+                            await document.startViewTransition(() => {
+                                setTheme(newTheme);
+                            }).ready;
+
+                            const { top, left, width, height } =
+                                target.getBoundingClientRect();
+                            const x = left + width / 2;
+                            const y = top + height / 2;
+                            const maxRadius = Math.hypot(
+                                Math.max(left, window.innerWidth - left),
+                                Math.max(top, window.innerHeight - top),
+                            );
+
+                            document.documentElement.animate(
+                                {
+                                    clipPath: [
+                                        `circle(0px at ${x}px ${y}px)`,
+                                        `circle(${maxRadius}px at ${x}px ${y}px)`,
+                                    ],
+                                },
+                                {
+                                    duration: 400,
+                                    easing: "ease-in-out",
+                                    pseudoElement:
+                                        "::view-transition-new(root)",
+                                },
                             );
                         }}
                     >
@@ -98,7 +163,34 @@ export function NavUser({ profile }: { profile: ProfileResponse }) {
                         <MoonIcon className="hidden dark:inline" />
                         Theme
                     </DropdownMenuItem>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                            <Globe />
+                            {dict?.navigation.language || "Language"}
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            {Object.entries(languages).map(
+                                ([locale, { name, flag }]) => (
+                                    <DropdownMenuItem
+                                        key={locale}
+                                        onClick={() =>
+                                            handleLanguageChange(locale)
+                                        }
+                                        className={
+                                            currentLocale === locale
+                                                ? "bg-accent font-medium"
+                                                : ""
+                                        }
+                                    >
+                                        <span className="mr-2">{flag}</span>
+                                        {name}
+                                    </DropdownMenuItem>
+                                ),
+                            )}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
                 </DropdownMenuGroup>
+
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                     <LogOut />

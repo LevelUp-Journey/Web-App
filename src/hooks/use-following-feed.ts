@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 interface PostWithDetails extends Post {
@@ -86,10 +86,9 @@ export function useFollowingFeed() {
                             );
                         return {
                             authorId,
-                            profile:
-                                profile ?? {
-                                    username: "Unknown User",
-                                },
+                            profile: profile ?? {
+                                username: "Unknown User",
+                            },
                         };
                     } catch (error) {
                         return {
@@ -108,10 +107,9 @@ export function useFollowingFeed() {
                 const postsWithDetails: PostWithDetails[] = followingPosts.map(
                     (post) => ({
                         ...post,
-                        authorProfile:
-                            profileMap.get(post.authorId) ?? {
-                                username: "Unknown User",
-                            },
+                        authorProfile: profileMap.get(post.authorId) ?? {
+                            username: "Unknown User",
+                        },
                         community: communityMap.get(post.communityId),
                     }),
                 );

@@ -21,6 +21,7 @@ import { CPlusPlus } from "@/components/ui/svgs/cplusplus";
 import { Java } from "@/components/ui/svgs/java";
 import { Javascript } from "@/components/ui/svgs/javascript";
 import { Python } from "@/components/ui/svgs/python";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ProgrammingLanguage } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
@@ -72,6 +73,7 @@ const getMonacoLanguage = (language: ProgrammingLanguage): string => {
 
 export default function VersionEditing({ challengeId }: VersionEditingProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [selectedLanguage, setSelectedLanguage] =
         useState<ProgrammingLanguage | null>(null);
     const [initialCode, setInitialCode] = useState<string>("");
@@ -96,7 +98,10 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                     functionName: "",
                 },
             );
-            toast.success("Code version added successfully");
+            toast.success(
+                dict?.challenges?.messages?.codeVersionAdded ||
+                    "Code version added successfully",
+            );
             // Redirect to tests page with both challengeId and codeVersionId
             router.push(
                 PATHS.DASHBOARD.CHALLENGES.TESTS.NEW(
@@ -106,7 +111,10 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
             );
         } catch (error) {
             console.error("Error adding code version:", error);
-            toast.error("Failed to add code version");
+            toast.error(
+                dict?.errors?.creating?.codeVersion ||
+                    "Failed to add code version",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -118,18 +126,24 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
             <header className="shrink-0 p-6 border-b flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">
-                        Add Code Version
+                        {dict?.challenges?.codeVersions?.addCodeVersion ||
+                            "Add Code Version"}
                     </h1>
                     <p className="text-muted-foreground">
-                        Select a programming language and write the initial code
-                        for this challenge.
+                        {dict?.challenges?.codeVersions
+                            ?.addCodeVersionDescription ||
+                            "Select a programming language and write the initial code for this challenge."}
                     </p>
                 </div>
                 <Button
                     onClick={handleCreateCodeVersion}
                     disabled={!selectedLanguage || isSubmitting}
                 >
-                    {isSubmitting ? "Creating..." : "Add Code Version"}
+                    {isSubmitting
+                        ? dict?.challenges?.codeVersions?.creating ||
+                          "Creating..."
+                        : dict?.challenges?.codeVersions?.addCodeVersion ||
+                          "Add Code Version"}
                 </Button>
             </header>
 
@@ -139,7 +153,8 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                 <ResizablePanel defaultSize={30} minSize={25}>
                     <div className="h-full overflow-y-auto p-6">
                         <h2 className="text-xl font-semibold mb-4">
-                            Select Language
+                            {dict?.challenges?.codeVersions?.selectLanguage ||
+                                "Select Language"}
                         </h2>
                         <div className="space-y-2">
                             {languages.map((lang) => (
@@ -162,8 +177,12 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                                         <ItemTitle>{lang.name}</ItemTitle>
                                         <ItemDescription>
                                             {selectedLanguage === lang.key
-                                                ? "Currently selected"
-                                                : "Click to select this programming language"}
+                                                ? dict?.challenges?.codeVersions
+                                                      ?.currentlySelected ||
+                                                  "Currently selected"
+                                                : dict?.challenges?.codeVersions
+                                                      ?.clickToSelect ||
+                                                  "Click to select this programming language"}
                                         </ItemDescription>
                                     </ItemContent>
                                 </Item>
@@ -179,7 +198,8 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                     <div className="h-full flex flex-col">
                         <div className="p-4 border-b">
                             <h2 className="text-xl font-semibold">
-                                Initial Code{" "}
+                                {dict?.challenges?.codeVersions?.initialCode ||
+                                    "Initial Code"}{" "}
                                 {selectedLanguage &&
                                     `(${languages.find((l) => l.key === selectedLanguage)?.name})`}
                             </h2>
@@ -199,12 +219,14 @@ export default function VersionEditing({ challengeId }: VersionEditingProps) {
                                 <div className="h-full flex items-center justify-center text-muted-foreground">
                                     <div className="text-center">
                                         <p className="text-lg mb-2">
-                                            Select a language first
+                                            {dict?.challenges?.codeVersions
+                                                ?.selectLanguageFirst ||
+                                                "Select a language first"}
                                         </p>
                                         <p className="text-sm">
-                                            Choose a programming language from
-                                            the left panel to start editing
-                                            code.
+                                            {dict?.challenges?.codeVersions
+                                                ?.chooseLanguageDescription ||
+                                                "Choose a programming language from the left panel to start editing code."}
                                         </p>
                                     </div>
                                 </div>

@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ProfileImageUpload from "@/components/ui/profile-image-upload";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type {
     ProfileResponse,
@@ -26,6 +28,7 @@ export default function ProfileEditForm({
     onSuccess,
 }: ProfileEditFormProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [profile, setProfile] = useState<ProfileResponse | null>(null);
@@ -86,7 +89,10 @@ export default function ProfileEditForm({
 
                 if (!result) {
                     console.error("Failed to update profile");
-                    alert("Error: Could not update profile. Profile service may be unavailable.");
+                    toast.error(
+                        dict?.errors?.updating?.profileService ||
+                            "Error: Could not update profile. Profile service may be unavailable.",
+                    );
                     return;
                 }
             } else {
@@ -96,7 +102,10 @@ export default function ProfileEditForm({
 
                 if (!currentProfile) {
                     console.error("Failed to get current profile");
-                    alert("Error: Could not load profile data. Profile service may be unavailable.");
+                    toast.error(
+                        dict?.errors?.loading?.profileData ||
+                            "Error: Could not load profile data. Profile service may be unavailable.",
+                    );
                     return;
                 }
 
@@ -107,7 +116,10 @@ export default function ProfileEditForm({
 
                 if (!result) {
                     console.error("Failed to update profile");
-                    alert("Error: Could not update profile. Profile service may be unavailable.");
+                    toast.error(
+                        dict?.errors?.updating?.profileService ||
+                            "Error: Could not update profile. Profile service may be unavailable.",
+                    );
                     return;
                 }
             }
@@ -116,7 +128,10 @@ export default function ProfileEditForm({
             router.refresh();
         } catch (error) {
             console.error("Error updating profile:", error);
-            alert("Error: An unexpected error occurred while updating your profile.");
+            toast.error(
+                dict?.errors?.updating?.profile ||
+                    "Error: An unexpected error occurred while updating your profile.",
+            );
         } finally {
             setSaving(false);
         }
@@ -174,7 +189,8 @@ export default function ProfileEditForm({
                 <CardContent>
                     <div className="text-center py-8">
                         <p className="text-muted-foreground mb-4">
-                            Unable to load profile data. The profile service may be temporarily unavailable.
+                            Unable to load profile data. The profile service may
+                            be temporarily unavailable.
                         </p>
                         <Button variant="outline" onClick={onCancel}>
                             Go Back

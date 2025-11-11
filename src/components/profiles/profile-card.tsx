@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
@@ -19,6 +20,7 @@ export default function ProfileCard({
     showEditButton = false,
     onEdit,
 }: ProfileCardProps) {
+    const dict = useDictionary();
     const [profile, setProfile] = useState<ProfileResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -31,14 +33,16 @@ export default function ProfileCard({
                     await ProfileController.getCurrentUserProfile();
 
                 if (!profileData) {
-                    setError("Profile not found");
+                    setError(dict?.errors?.generic || "Profile not found");
                     return;
                 }
 
                 setProfile(profileData);
             } catch (err) {
                 console.error("Error loading profile:", err);
-                setError("Failed to load profile");
+                setError(
+                    dict?.errors?.loading?.profile || "Failed to load profile",
+                );
             } finally {
                 setLoading(false);
             }
@@ -70,7 +74,7 @@ export default function ProfileCard({
             <Card>
                 <CardContent className="p-6">
                     <div className="text-center text-muted-foreground">
-                        {error || "Profile not found"}
+                        {error || dict?.errors?.generic || "Profile not found"}
                     </div>
                 </CardContent>
             </Card>

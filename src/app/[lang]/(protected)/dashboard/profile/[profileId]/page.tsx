@@ -1,25 +1,12 @@
 "use client";
 
-import {
-    ArrowLeft,
-    MessageSquare,
-    UserMinus,
-    UserPlus,
-    Users,
-} from "lucide-react";
+import { ArrowLeft, UserMinus, UserPlus, Users } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FeedPostCard } from "@/components/community/feed-post-card";
-import ProfileCard from "@/components/profiles/profile-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CommunityController } from "@/services/internal/community/controller/community.controller";
+import { Card, CardContent } from "@/components/ui/card";
 import { PostController } from "@/services/internal/community/controller/post.controller";
-import type { Community } from "@/services/internal/community/entities/community.entity";
-import type { Post } from "@/services/internal/community/entities/post.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
@@ -30,8 +17,6 @@ export default function UserProfilePage() {
     const profileId = params.profileId as string;
 
     const [profile, setProfile] = useState<ProfileResponse | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [communities, setCommunities] = useState<Community[]>([]);
     const [isFollowing, setIsFollowing] = useState(false);
     const [followersCount, setFollowersCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
@@ -55,16 +40,7 @@ export default function UserProfilePage() {
 
             setProfile(profileData);
             setCurrentUserId(userId);
-            setPosts(userPosts);
 
-            // Load communities created by this user
-            const allCommunities = await CommunityController.getCommunities();
-            const userCommunities = allCommunities.filter(
-                (c) => c.ownerProfileId === profileId,
-            );
-            setCommunities(userCommunities);
-
-            // TODO: Load follow status, followers and following counts
             // For now, set dummy values
             setFollowersCount(0);
             setFollowingCount(0);
@@ -186,101 +162,6 @@ export default function UserProfilePage() {
                         </div>
                     </CardContent>
                 </Card>
-
-                {/* Profile Content Tabs */}
-                <Tabs defaultValue="posts" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="posts">Posts</TabsTrigger>
-                        <TabsTrigger value="communities">
-                            Communities
-                        </TabsTrigger>
-                        <TabsTrigger value="about">About</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="posts" className="space-y-4">
-                        <div className="space-y-4">
-                            {posts.length === 0 ? (
-                                <Card>
-                                    <CardContent className="p-8 text-center">
-                                        <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                                        <h3 className="text-xl font-semibold mb-2">
-                                            No posts yet
-                                        </h3>
-                                        <p className="text-muted-foreground">
-                                            This user hasn't posted anything
-                                            yet.
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            ) : (
-                                posts.map((post) => (
-                                    <FeedPostCard
-                                        key={post.id}
-                                        post={{
-                                            ...post,
-                                            authorProfile: {
-                                                username: profile.username,
-                                                profileUrl: profile.profileUrl,
-                                                firstName: profile.firstName,
-                                                lastName: profile.lastName,
-                                            },
-                                            authorProfileId: profileId,
-                                        }}
-                                    />
-                                ))
-                            )}
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value="communities" className="space-y-4">
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            {communities.length === 0 ? (
-                                <Card className="col-span-full">
-                                    <CardContent className="p-8 text-center">
-                                        <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                                        <h3 className="text-xl font-semibold mb-2">
-                                            No communities
-                                        </h3>
-                                        <p className="text-muted-foreground">
-                                            This user hasn't created any
-                                            communities yet.
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            ) : (
-                                communities.map((community) => (
-                                    <Card
-                                        key={community.id}
-                                        className="cursor-pointer hover:shadow-md transition-shadow"
-                                    >
-                                        <CardContent className="p-4">
-                                            <h3 className="font-semibold">
-                                                {community.name}
-                                            </h3>
-                                            <p className="text-sm text-muted-foreground mt-1">
-                                                {community.description}
-                                            </p>
-                                        </CardContent>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value="about">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>About</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-muted-foreground">
-                                    More information about this user will be
-                                    displayed here.
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
             </div>
         </div>
     );

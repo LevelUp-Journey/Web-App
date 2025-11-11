@@ -6,9 +6,14 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import type { Dictionary } from "@/lib/i18n";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
-export default function SignUpStep1() {
+interface SignUpStep1Props {
+    dict?: Dictionary;
+}
+
+export default function SignUpStep1({ dict }: SignUpStep1Props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,7 +24,10 @@ export default function SignUpStep1() {
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            toast.error("Passwords do not match");
+            toast.error(
+                dict?.auth.signUp.step1.passwordMismatch ||
+                    "Passwords do not match",
+            );
             return;
         }
 
@@ -40,38 +48,51 @@ export default function SignUpStep1() {
 
     return (
         <>
-            <h1 className="mb-4 text-2xl font-semibold">Sign Up</h1>
+            <h1 className="mb-4 text-2xl font-semibold">
+                {dict?.auth.signUp.step1.title || "Sign Up"}
+            </h1>
 
             <form onSubmit={handleSignUp} className="flex flex-col gap-4">
                 <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
+                    placeholder={
+                        dict?.auth.signUp.step1.emailPlaceholder || "Email"
+                    }
                     required
                 />
                 <Input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
+                    placeholder={
+                        dict?.auth.signUp.step1.passwordPlaceholder ||
+                        "Password"
+                    }
                     required
                 />
                 <Input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm Password"
+                    placeholder={
+                        dict?.auth.signUp.step1.confirmPasswordPlaceholder ||
+                        "Confirm Password"
+                    }
                     required
                 />
                 <Button type="submit" className="w-full">
-                    Next
+                    {dict?.auth.signUp.step1.nextButton || "Next"}
                 </Button>
             </form>
 
             <p className="text-sm mt-4">
-                If you already have an account,{" "}
-                <Link href={PATHS.AUTH.SIGN_IN}>Sign in</Link>
+                {dict?.auth.signUp.step1.haveAccount ||
+                    "If you already have an account,"}{" "}
+                <Link href={PATHS.AUTH.SIGN_IN}>
+                    {dict?.auth.signUp.step1.signInLink || "Sign in"}
+                </Link>
             </p>
         </>
     );

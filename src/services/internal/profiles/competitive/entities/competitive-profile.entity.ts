@@ -1,6 +1,7 @@
 export interface CompetitiveProfile {
     id: string;
     userId: string;
+    username?: string;
     totalPoints: number;
     currentRank: string;
     nextRank: string;

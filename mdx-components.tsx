@@ -67,6 +67,33 @@ export function useMDXComponents(
                 {...props}
             />
         ),
+        // Table components for GFM support
+        table: ({ children }) => (
+            <div className="overflow-x-auto mb-4">
+                <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700">
+                    {children}
+                </table>
+            </div>
+        ),
+        thead: ({ children }) => (
+            <thead className="bg-gray-100 dark:bg-gray-800">{children}</thead>
+        ),
+        tbody: ({ children }) => <tbody>{children}</tbody>,
+        tr: ({ children }) => (
+            <tr className="border-b border-gray-300 dark:border-gray-700">
+                {children}
+            </tr>
+        ),
+        th: ({ children }) => (
+            <th className="px-4 py-2 text-left font-semibold border border-gray-300 dark:border-gray-700">
+                {children}
+            </th>
+        ),
+        td: ({ children }) => (
+            <td className="px-4 py-2 border border-gray-300 dark:border-gray-700">
+                {children}
+            </td>
+        ),
         // Add any custom components here
         ...components,
     };

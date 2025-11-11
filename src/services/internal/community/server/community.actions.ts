@@ -7,8 +7,6 @@ import {
 } from "@/services/axios.config";
 
 export interface CreateCommunityRequest {
-    ownerId: string;
-    ownerProfileId: string;
     name: string;
     description: string;
     imageUrl?: string;
@@ -118,6 +116,62 @@ export async function updateCommunityAction(
         const response = await API_GATEWAY_HTTP.put(
             `/communities/${communityId}`,
             request,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function getCommunitiesByCreatorAction(
+    creatorUserId: string,
+): Promise<RequestSuccess<CommunityResponse[]> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.get(
+            `/communities/creator/${creatorUserId}`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function deleteCommunityAction(
+    communityId: string,
+): Promise<RequestSuccess<void> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.delete(
+            `/communities/${communityId}`,
         );
 
         return {

@@ -2,25 +2,11 @@
 
 import { ChevronRight, EllipsisVertical, Star } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
-import { ChallengeDifficulty, type ProgrammingLanguage } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
-import { cn } from "@/lib/utils";
-import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
-import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
-import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,6 +17,21 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
+import { useDictionary } from "@/hooks/use-dictionary";
+import { ChallengeDifficulty, type ProgrammingLanguage } from "@/lib/consts";
+import { PATHS } from "@/lib/paths";
+import { cn } from "@/lib/utils";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
+import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface ChallengeCardProps extends React.ComponentProps<"div"> {
     challenge: Challenge;
@@ -46,6 +47,7 @@ export default function ChallengeCard({
     ...props
 }: ChallengeCardProps) {
     const router = useRouter();
+    const dict = useDictionary();
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -58,7 +60,8 @@ export default function ChallengeCard({
 
             if (!deleted) {
                 toast.error(
-                    "You don't have permission to delete this challenge.",
+                    dict?.errors?.permissions?.deleteChallenge ||
+                        "You don't have permission to delete this challenge.",
                 );
                 return;
             }
@@ -66,7 +69,10 @@ export default function ChallengeCard({
             toast.success("Challenge deleted successfully");
             router.refresh();
         } catch (error) {
-            toast.error("Failed to delete challenge");
+            toast.error(
+                dict?.errors?.deleting?.challenge ||
+                    "Failed to delete challenge",
+            );
         } finally {
             setIsDeleting(false);
             setShowDeleteDialog(false);
@@ -76,14 +82,19 @@ export default function ChallengeCard({
     return (
         <Card
             key={challenge.id}
-            className={cn("hover:shadow-lg transition-shadow flex flex-col", className)}
+            className={cn(
+                "hover:shadow-lg transition-shadow flex flex-col",
+                className,
+            )}
             {...props}
         >
             {/* Badges at the top */}
             <div className="px-3 py-1 pb-0.5">
                 <div className="flex flex-wrap gap-1">
                     <ChallengeDifficultyBadge
-                        difficulty={challenge.difficulty ?? ChallengeDifficulty.EASY}
+                        difficulty={
+                            challenge.difficulty ?? ChallengeDifficulty.EASY
+                        }
                     />
                     {codeVersions.map((version) => (
                         <FullLanguageBadge
@@ -104,14 +115,25 @@ export default function ChallengeCard({
             {/* Stars at the bottom */}
             <div className="px-3 py-1 pt-0.5 flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                    <Button
+                        size={"sm"}
+                        variant={"ghost"}
+                        className="h-6 w-6 p-0"
+                    >
                         <Star className="text-yellow-400" size={14} />
                     </Button>
                     <span className="text-xs">{challenge.stars.length}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0" asChild>
-                        <Link href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}>
+                    <Button
+                        size={"sm"}
+                        variant={"ghost"}
+                        className="h-6 w-6 p-0"
+                        asChild
+                    >
+                        <Link
+                            href={PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id)}
+                        >
                             <ChevronRight size={14} />
                         </Link>
                     </Button>
@@ -119,7 +141,11 @@ export default function ChallengeCard({
                         <>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button size={"sm"} variant={"ghost"} className="h-6 w-6 p-0">
+                                    <Button
+                                        size={"sm"}
+                                        variant={"ghost"}
+                                        className="h-6 w-6 p-0"
+                                    >
                                         <EllipsisVertical size={14} />
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -130,35 +156,60 @@ export default function ChallengeCard({
                                                 challenge.id,
                                             )}
                                         >
-                                            Edit Challenge
+                                            {dict?.challenges?.cards
+                                                ?.editChallenge ||
+                                                "Edit Challenge"}
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
-                                        onClick={() => setShowDeleteDialog(true)}
+                                        onClick={() =>
+                                            setShowDeleteDialog(true)
+                                        }
                                         className="text-destructive focus:text-destructive cursor-pointer"
                                     >
-                                        Delete Challenge
+                                        {dict?.challenges?.cards
+                                            ?.deleteChallenge ||
+                                            "Delete Challenge"}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
-                            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                            <AlertDialog
+                                open={showDeleteDialog}
+                                onOpenChange={setShowDeleteDialog}
+                            >
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Delete Challenge</AlertDialogTitle>
+                                        <AlertDialogTitle>
+                                            {dict?.challenges?.alerts
+                                                ?.deleteChallenge?.title ||
+                                                "Delete Challenge"}
+                                        </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Are you sure you want to delete "{challenge.name}"? This
-                                            action cannot be undone.
+                                            {dict?.challenges?.alerts?.deleteChallenge?.description?.replace(
+                                                "this challenge",
+                                                `"${challenge.name}"`,
+                                            ) ||
+                                                `Are you sure you want to delete "${challenge.name}"? This action cannot be undone.`}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel
+                                            disabled={isDeleting}
+                                        >
+                                            {dict?.common?.cancel || "Cancel"}
+                                        </AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={handleDelete}
                                             disabled={isDeleting}
                                             className="bg-destructive hover:bg-destructive/90"
                                         >
-                                            {isDeleting ? "Deleting..." : "Delete"}
+                                            {isDeleting
+                                                ? dict?.challenges?.buttons
+                                                      ?.deleting ||
+                                                  "Deleting..."
+                                                : dict?.challenges?.buttons
+                                                      ?.delete || "Delete"}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

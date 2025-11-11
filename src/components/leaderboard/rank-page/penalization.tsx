@@ -1,4 +1,12 @@
-export function Penalization({ className = "" }: { className?: string }) {
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+
+export function Penalization({
+    className = "",
+    dict,
+}: {
+    className?: string;
+    dict: Dictionary;
+}) {
     return (
         <section
             className={`w-full ${className}`}
@@ -8,14 +16,12 @@ export function Penalization({ className = "" }: { className?: string }) {
                 id="penalization-heading"
                 className="text-xl font-semibold mb-4"
             >
-                Penalization
+                {dict.leaderboard.rankingSystem.penalization.title}
             </h3>
 
             <ul className="list-disc pl-5 space-y-3 text-sm text-muted-foreground">
                 <li>
-                    If the student reaches the maximum number of allowed
-                    attempts without success, the system may apply a penalty of
-                    25 points to the student's current score.
+                    {dict.leaderboard.rankingSystem.penalization.description}
                 </li>
             </ul>
         </section>

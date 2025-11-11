@@ -19,6 +19,8 @@ const ChallengeValidator = z.object({
     difficulty: z.nativeEnum(ChallengeDifficulty).optional(),
     status: z.enum(ChallengeStatus),
     tags: z.array(ChallengeTagValidator),
+    guides: z.array(z.string()),
+    maxAttemptsBeforeGuides: z.number().min(2).max(5).nullish(),
 });
 
 const ChallengeStarValidator = z.object({
@@ -56,6 +58,11 @@ export class ChallengeAssembler {
                     starredAt: star.starredAt,
                 };
             }),
+            guides: challenge.guides,
+            maxAttemptsBeforeGuides: Math.max(
+                2,
+                Math.min(5, challenge.maxAttemptsBeforeGuides ?? 3),
+            ),
         };
     }
 

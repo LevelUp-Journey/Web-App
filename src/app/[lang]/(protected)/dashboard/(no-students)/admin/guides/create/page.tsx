@@ -9,29 +9,49 @@ import {
     BasicInfoForm,
     type BasicInfoFormData,
 } from "@/components/learning/guide/basic-info-form";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { CreateGuideRequest } from "@/services/internal/learning/guides/controller/guide.response";
 
-const formSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z
-        .string()
-        .min(10, "Description must be at least 10 characters")
-        .max(1000, "Description must not exceed 1000 characters"),
-    cover: z.string().optional(),
-    topicIds: z.array(z.string()).min(1, "At least one topic is required"),
-});
-
-type FormData = z.infer<typeof formSchema>;
-
 export default function CreateGuidePage() {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
+    const dict = useDictionary();
     const [saving, setSaving] = useState(false);
 
-    const form = useForm<FormData>({
+    const formSchema = z.object({
+        title: z
+            .string()
+            .min(
+                1,
+                dict?.admin.guides.createGuide.validation?.titleRequired ||
+                    "Title is required",
+            ),
+        description: z
+            .string()
+            .min(
+                10,
+                dict?.admin.guides.createGuide.validation?.descriptionMin ||
+                    "Description must be at least 10 characters",
+            )
+            .max(
+                1000,
+                dict?.admin.guides.createGuide.validation?.descriptionMax ||
+                    "Description must not exceed 1000 characters",
+            ),
+        cover: z.string().optional(),
+        topicIds: z
+            .array(z.string())
+            .min(
+                1,
+                dict?.admin.guides.createGuide.validation?.topicsRequired ||
+                    "At least one topic is required",
+            ),
+    });
+
+    const form = useForm<BasicInfoFormData, any, BasicInfoFormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
@@ -62,11 +82,17 @@ export default function CreateGuidePage() {
                     `${PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT}/${response.id}/edit`,
                 );
             } else {
-                alert("Error creating guide. Please try again.");
+                alert(
+                    dict?.admin.guides.createGuide.errorCreating ||
+                        "Error creating guide. Please try again.",
+                );
             }
         } catch (error) {
             console.error("Error creating guide:", error);
-            alert("Error creating guide. Please try again.");
+            alert(
+                dict?.admin.guides.createGuide.errorCreating ||
+                    "Error creating guide. Please try again.",
+            );
         } finally {
             setSaving(false);
         }
@@ -75,7 +101,8 @@ export default function CreateGuidePage() {
     const handleCancel = () => {
         if (
             confirm(
-                "Are you sure you want to cancel? All progress will be lost.",
+                dict?.admin.guides.createGuide.cancelConfirm ||
+                    "Are you sure you want to cancel? All progress will be lost.",
             )
         ) {
             router.push(PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT);
@@ -88,11 +115,10 @@ export default function CreateGuidePage() {
                 <div className="container max-w-3xl mx-auto p-6">
                     <div className="mb-6">
                         <h1 className="text-3xl font-bold">
-                            Create a New Guide
+                            {dict?.admin.guides.createGuide.title}
                         </h1>
                         <p className="text-muted-foreground mt-2">
-                            Provide basic information about your guide. You can
-                            add pages after creation.
+                            {dict?.admin.guides.createGuide.subtitle}
                         </p>
                     </div>
                     <BasicInfoForm

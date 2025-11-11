@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
-import { LeaderboardTable } from "./LeaderboardTable";
+import { useState } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { ChevronDownIcon } from "lucide-react";
+import { LeaderboardTable } from "./LeaderboardTable";
 
 const RANKS = [
     { key: "TOP500", name: "Top 500" }, // No icon for Top 500
@@ -27,7 +28,7 @@ const RANKS = [
     { key: "BRONZE", name: "Bronze", icon: "/ranks/rank-bronze.svg" },
 ];
 
-export function LeaderboardPage() {
+export function LeaderboardPage({ dict }: { dict: Dictionary }) {
     const [selectedRank, setSelectedRank] = useState("TOP500");
 
     const selectedRankData =
@@ -56,7 +57,11 @@ export function LeaderboardPage() {
                             <ChevronDownIcon className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" side="bottom" className="ml-auto">
+                    <DropdownMenuContent
+                        align="end"
+                        side="bottom"
+                        className="ml-auto"
+                    >
                         {RANKS.map((rank) => (
                             <DropdownMenuItem
                                 key={rank.key}
@@ -80,7 +85,7 @@ export function LeaderboardPage() {
                 </DropdownMenu>
             </div>
 
-            <LeaderboardTable selectedRank={selectedRank} />
+            <LeaderboardTable selectedRank={selectedRank} dict={dict} />
         </div>
     );
 }

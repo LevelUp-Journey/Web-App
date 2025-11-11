@@ -1,5 +1,6 @@
 "use server";
 
+import axios from "axios";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import type { LearningResponse } from "../../shared";
 import type {
@@ -10,6 +11,8 @@ import type {
     GetGuidePagesByGuideIdRequest,
     GetPageByIdRequest,
     GuideResponse,
+    SearchGuideRequest,
+    SearchGuidesResponse,
     UpdateGuideRequest,
     UpdateGuideStatusRequest,
     UpdatePageRequest,
@@ -50,13 +53,17 @@ export interface GetGuidesResponseFormat {
     empty: boolean;
 }
 
-export async function getAllGuidesAction(): Promise<GuideResponse[]> {
+export async function getAllGuidesAction(
+    forParam?: string,
+): Promise<GuideResponse[]> {
     try {
-        console.log(API_GATEWAY_HTTP);
-        const response =
-            await API_GATEWAY_HTTP.get<LearningResponse<GetGuidesResponseFormat>>(
-                "/guides",
-            );
+        const params = new URLSearchParams();
+        if (forParam) params.append("for", forParam);
+
+        const response = await API_GATEWAY_HTTP.get<
+            LearningResponse<GetGuidesResponseFormat>
+        >(`/guides${forParam ? `?${params.toString()}` : ""}`);
+
         return response.data.data.content;
     } catch (error) {
         console.error("Error fetching all guides:", error);
@@ -66,6 +73,7 @@ export async function getAllGuidesAction(): Promise<GuideResponse[]> {
 
 export async function getGuidesPaginatedAction(
     request?: GetGuidesPaginatedRequest,
+    forParam?: string,
 ): Promise<GetGuidesResponseFormat | null> {
     try {
         const params = new URLSearchParams();
@@ -74,6 +82,7 @@ export async function getGuidesPaginatedAction(
         if (request?.size !== undefined)
             params.append("size", String(request.size));
         if (request?.sort) params.append("sort", request.sort);
+        if (forParam) params.append("for", forParam);
 
         const response = await API_GATEWAY_HTTP.get<
             LearningResponse<GetGuidesResponseFormat>
@@ -134,6 +143,8 @@ export async function getGuideByIdAction(
         const response = await API_GATEWAY_HTTP.get<
             LearningResponse<GuideResponse>
         >(`/guides/${guideId}`);
+
+        console.log("GUIDE RESPONSE FOR ACTION", response.data.data);
         return response.data.data;
     } catch (error) {
         console.error(`Error fetching guide ${guideId}:`, error);
@@ -214,4 +225,41 @@ export async function deletePageAction(
         LearningResponse<GuideResponse>
     >(`/guides/${request.guideId}/pages/${request.pageId}`);
     return response.data.data;
+}
+
+export async function searchGuideAction(request: SearchGuideRequest) {
+    const params = new URLSearchParams();
+    if (request.title) params.append("title", request.title);
+    if (request.likes !== undefined)
+        params.append("likes", String(request.likes));
+    if (request.authorIds) {
+        request.authorIds.forEach((id) => params.append("authorIds", id));
+    }
+    if (request.topicIds) {
+        request.topicIds.forEach((id) => params.append("topicIds", id));
+    }
+    const url = `/guides/search${params.toString() ? `?${params.toString()}` : ""}`;
+    const response =
+        await API_GATEWAY_HTTP.get<LearningResponse<SearchGuidesResponse>>(url);
+    return response.data.data;
+}
+
+export async function addChallengeToGuideAction(
+    guideId: string,
+    challengeId: string,
+) {
+    const response = await API_GATEWAY_HTTP.post<
+        LearningResponse<GuideResponse>
+    >(`/guides/${guideId}/challenges/${challengeId}`);
+
+    return response.data.data;
+}
+
+export async function removeChallengeFromGuideAction(
+    guideId: string,
+    challengeId: string,
+): Promise<void> {
+    await API_GATEWAY_HTTP.delete(
+        `/guides/${guideId}/challenges/${challengeId}`,
+    );
 }

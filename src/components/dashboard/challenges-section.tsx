@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ChallengeCard from "@/components/cards/challenge-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,9 +20,24 @@ import type { CodeVersion } from "@/services/internal/challenges/challenge/entit
 
 interface ChallengesSectionProps {
     onCountChange?: (count: number) => void;
+    translations?: {
+        loading?: string;
+        error?: string;
+        errorDescription?: string;
+        retry?: string;
+    };
 }
 
-export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}) {
+export function ChallengesSection({
+    onCountChange,
+    translations = {
+        loading: "Loading challenges...",
+        error: "Error fetching challenges",
+        errorDescription:
+            "The challenge service is temporarily unavailable. Please try again.",
+        retry: "Retry",
+    },
+}: ChallengesSectionProps = {}) {
     const [challenges, setChallenges] = useState<Challenge[]>([]);
     const [codeVersionsMap, setCodeVersionsMap] = useState<
         Map<string, CodeVersion[]>
@@ -30,7 +45,7 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
-    const loadChallenges = async () => {
+    const loadChallenges = useCallback(async () => {
         try {
             setLoading(true);
             setError(false);
@@ -50,7 +65,9 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
             setChallenges(challengesData);
 
             // Get all challenge IDs
-            const challengeIds = challengesData.map((challenge) => challenge.id);
+            const challengeIds = challengesData.map(
+                (challenge) => challenge.id,
+            );
 
             // Fetch all code versions in a single batch request
             const codeVersionsBatch =
@@ -75,17 +92,17 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
         } finally {
             setLoading(false);
         }
-    };
+    }, [onCountChange]);
 
     useEffect(() => {
         loadChallenges();
-    }, []);
+    }, [loadChallenges]);
 
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center py-16">
                 <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">Loading challenges...</p>
+                <p className="text-muted-foreground">{translations.loading}</p>
             </div>
         );
     }
@@ -97,16 +114,15 @@ export function ChallengesSection({ onCountChange }: ChallengesSectionProps = {}
                     <EmptyMedia variant="icon">
                         <AlertCircle />
                     </EmptyMedia>
-                    <EmptyTitle>Error fetching challenges</EmptyTitle>
+                    <EmptyTitle>{translations.error}</EmptyTitle>
                     <EmptyDescription>
-                        The challenge service is temporarily unavailable. Please
-                        try again.
+                        {translations.errorDescription}
                     </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
                     <Button onClick={loadChallenges} variant="outline">
                         <RefreshCw className="mr-2 h-4 w-4" />
-                        Retry
+                        {translations.retry}
                     </Button>
                 </EmptyContent>
             </Empty>

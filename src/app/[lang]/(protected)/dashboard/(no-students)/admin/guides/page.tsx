@@ -1,10 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { AlertCircle } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import GuideCard from "@/components/cards/guide-card";
 import { Button } from "@/components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
 import {
     Pagination,
     PaginationContent,
@@ -21,21 +29,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 
 export default function GuidesPage() {
+    const dict = useDictionary();
     const [userRole, setUserRole] = useState<string | null>(null);
     const [permissionsChecked, setPermissionsChecked] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -57,7 +59,10 @@ export default function GuidesPage() {
                 setUserRole(role || null);
             } catch (err) {
                 console.error("Error checking permissions:", err);
-                setError("We couldn't verify your permissions.");
+                setError(
+                    dict?.admin.guides.permissionsError ||
+                        "We couldn't verify your permissions.",
+                );
             } finally {
                 setPermissionsChecked(true);
             }
@@ -77,22 +82,31 @@ export default function GuidesPage() {
             setLoading(true);
             setError(null);
             try {
-                const response = await GuideController.getGuidesPaginated({
-                    page: currentPage,
-                    size: pageSize,
-                    sort: "createdAt,desc",
-                });
+                const response = await GuideController.getGuidesPaginated(
+                    {
+                        page: currentPage,
+                        size: pageSize,
+                        sort: "createdAt,desc",
+                    },
+                    "dashboard",
+                );
 
                 if (response) {
                     setGuides(response.content);
                     setTotalPages(response.totalPages);
                     setTotalElements(response.totalElements);
                 } else {
-                    setError("We couldn't load the guides.");
+                    setError(
+                        dict?.admin.guides.error ||
+                            "We couldn't load the guides.",
+                    );
                 }
             } catch (err) {
                 console.error("Error loading guides:", err);
-                setError("We couldn't load the guides. Please try again.");
+                setError(
+                    dict?.admin.guides.errorDescription ||
+                        "We couldn't load the guides. Please try again.",
+                );
             } finally {
                 setLoading(false);
             }
@@ -158,9 +172,9 @@ export default function GuidesPage() {
                     <EmptyMedia variant="icon">
                         <Spinner className="size-6 text-muted-foreground" />
                     </EmptyMedia>
-                    <EmptyTitle>Loading guides</EmptyTitle>
+                    <EmptyTitle>{dict?.admin.guides.loading}</EmptyTitle>
                     <EmptyDescription>
-                        Fetching the latest learning guides for you.
+                        {dict?.admin.guides.loadingDescription}
                     </EmptyDescription>
                 </EmptyHeader>
             </Empty>
@@ -176,12 +190,11 @@ export default function GuidesPage() {
                     </EmptyMedia>
                     <EmptyTitle>
                         {error
-                            ? "Unable to verify permissions"
-                            : "Access denied"}
+                            ? dict?.admin.guides.permissionsError
+                            : dict?.admin.guides.accessDenied}
                     </EmptyTitle>
                     <EmptyDescription>
-                        {error ||
-                            "You need teacher or admin permissions to manage guides."}
+                        {error || dict?.admin.guides.accessDeniedDescription}
                     </EmptyDescription>
                 </EmptyHeader>
             </Empty>
@@ -194,14 +207,16 @@ export default function GuidesPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold">Guides</h2>
+                    <h2 className="text-2xl font-bold">
+                        {dict?.admin.guides.title}
+                    </h2>
                     <p className="text-sm text-muted-foreground mt-1">
-                        Manage and create learning guides
+                        {dict?.admin.guides.subtitle}
                     </p>
                 </div>
                 <Button asChild>
                     <Link href={PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE}>
-                        Create Guide
+                        {dict?.admin.guides.create}
                     </Link>
                 </Button>
             </div>
@@ -210,27 +225,27 @@ export default function GuidesPage() {
             {!loading && totalElements > 0 && (
                 <div className="flex items-center justify-between border-b pb-4">
                     <div className="text-sm text-muted-foreground">
-                        Showing{" "}
+                        {dict?.admin.guides.showing}{" "}
                         <span className="font-medium text-foreground">
                             {currentPage * pageSize + 1}
                         </span>{" "}
-                        to{" "}
+                        {dict?.admin.guides.to}{" "}
                         <span className="font-medium text-foreground">
                             {Math.min(
                                 (currentPage + 1) * pageSize,
                                 totalElements,
                             )}
                         </span>{" "}
-                        of{" "}
+                        {dict?.admin.guides.of}{" "}
                         <span className="font-medium text-foreground">
                             {totalElements}
                         </span>{" "}
-                        guides
+                        {dict?.admin.guides.guides}
                     </div>
 
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-muted-foreground">
-                            Per page:
+                            {dict?.admin.guides.perPage}
                         </span>
                         <Select
                             value={String(pageSize)}
@@ -258,12 +273,12 @@ export default function GuidesPage() {
                         <EmptyMedia variant="icon">
                             <AlertCircle />
                         </EmptyMedia>
-                        <EmptyTitle>Unable to load guides</EmptyTitle>
+                        <EmptyTitle>{dict?.admin.guides.error}</EmptyTitle>
                         <EmptyDescription>{error}</EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
                         <Button onClick={() => window.location.reload()}>
-                            Retry
+                            {dict?.admin.guides.retry}
                         </Button>
                     </EmptyContent>
                 </Empty>
@@ -273,15 +288,19 @@ export default function GuidesPage() {
                         <EmptyMedia variant="icon">
                             <AlertCircle />
                         </EmptyMedia>
-                        <EmptyTitle>No guides yet</EmptyTitle>
+                        <EmptyTitle>{dict?.admin.guides.noGuides}</EmptyTitle>
                         <EmptyDescription>
-                            Create your first guide to start helping students.
+                            {dict?.admin.guides.noGuidesDescription}
                         </EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
                         <Button asChild>
-                            <Link href={PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE}>
-                                Create Guide
+                            <Link
+                                href={
+                                    PATHS.DASHBOARD.ADMINISTRATION.GUIDES.CREATE
+                                }
+                            >
+                                {dict?.admin.guides.create}
                             </Link>
                         </Button>
                     </EmptyContent>

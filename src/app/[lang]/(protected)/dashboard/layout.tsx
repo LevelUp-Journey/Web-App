@@ -2,19 +2,19 @@ import AppSidebar from "@/components/dashboard/app-sidebar";
 import { SidebarContentHeader } from "@/components/dashboard/sidebar-content-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
     children,
+    params,
 }: {
     children: React.ReactNode;
+    params: Promise<{ lang: string }>;
 }) {
     return (
         <SidebarProvider>
-            <AppSidebar />
-            <main className="w-full min-h-screen flex flex-col">
+            <AppSidebar params={params} />
+            <main className="w-full min-h-screen flex flex-col relative">
                 <SidebarContentHeader />
-                <div className="flex-1 bg-slate-50 dark:bg-black">
-                    {children}
-                </div>
+                <div className="flex-1">{children}</div>
             </main>
         </SidebarProvider>
     );

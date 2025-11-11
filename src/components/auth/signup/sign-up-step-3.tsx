@@ -11,33 +11,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import type { Dictionary } from "@/lib/i18n";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type {
     ProfileResponse,
     UpdateProfileRequest,
 } from "@/services/internal/profiles/profiles/controller/profile.response";
 
-// Validation schema for username
-const usernameSchema = z
-    .string()
-    .trim()
-    .min(1, "Username cannot be empty")
-    .max(30, "Username cannot exceed 30 characters")
-    .regex(
-        /^[a-zA-Z0-9]+$/,
-        "Username must contain only alphanumeric characters (letters and numbers), no spaces, maximum 30 characters",
-    );
+type FormData = {
+    username: string;
+};
 
-const formSchema = z.object({
-    username: usernameSchema,
-});
+interface SignUpStep3Props {
+    dict?: Dictionary;
+}
 
-type FormData = z.infer<typeof formSchema>;
-
-export default function SignUpStep3() {
+export default function SignUpStep3({ dict }: SignUpStep3Props) {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
+    const errorDict = useDictionary();
 
     const [userProfile, setUserProfile] = useState<ProfileResponse | null>(
         null,
@@ -45,6 +39,30 @@ export default function SignUpStep3() {
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+
+    // Validation schema for username
+    const usernameSchema = z
+        .string()
+        .trim()
+        .min(
+            1,
+            dict?.auth.signUp.step3.validation.usernameEmpty ||
+                "Username cannot be empty",
+        )
+        .max(
+            30,
+            dict?.auth.signUp.step3.validation.usernameTooLong ||
+                "Username cannot exceed 30 characters",
+        )
+        .regex(
+            /^[a-zA-Z0-9]+$/,
+            dict?.auth.signUp.step3.validation.usernameInvalid ||
+                "Username must contain only alphanumeric characters (letters and numbers), no spaces, maximum 30 characters",
+        );
+
+    const formSchema = z.object({
+        username: usernameSchema,
+    });
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -87,7 +105,10 @@ export default function SignUpStep3() {
                 setValue("username", suggestedUsername);
             } catch (error) {
                 console.error("Failed to load data:", error);
-                toast.error("Failed to load your profile. Please try again.");
+                toast.error(
+                    dict?.auth.signUp.step3.profileLoadError ||
+                        "Failed to load your profile. Please try again.",
+                );
             } finally {
                 setIsLoadingProfile(false);
             }
@@ -102,7 +123,10 @@ export default function SignUpStep3() {
 
     const onProfileUpdate = async (data: FormData) => {
         if (!userProfile) {
-            toast.error("Profile not loaded. Please try again.");
+            toast.error(
+                dict?.auth.signUp.step3.profileNotLoaded ||
+                    "Profile not loaded. Please try again.",
+            );
             return;
         }
 
@@ -130,11 +154,17 @@ export default function SignUpStep3() {
             localStorage.removeItem("signup_firstName");
             localStorage.removeItem("signup_lastName");
 
-            toast.success("Profile updated successfully!");
+            toast.success(
+                dict?.auth.signUp.step3.profileUpdateSuccess ||
+                    "Profile updated successfully!",
+            );
             router.push(PATHS.DASHBOARD.ROOT);
         } catch (error) {
             console.error("Profile update error:", error);
-            toast.error("Failed to update profile. Please try again.");
+            toast.error(
+                dict?.auth.signUp.step3.profileUpdateError ||
+                    "Failed to update profile. Please try again.",
+            );
         } finally {
             setLoading(false);
         }
@@ -150,7 +180,8 @@ export default function SignUpStep3() {
             <div className="flex flex-col items-center justify-center py-12 gap-4">
                 <Spinner className="size-6" />
                 <p className="text-sm text-muted-foreground">
-                    Loading your profile...
+                    {dict?.auth.signUp.step3.loadingProfile ||
+                        "Loading your profile..."}
                 </p>
             </div>
         );
@@ -160,10 +191,11 @@ export default function SignUpStep3() {
         return (
             <div className="flex flex-col items-center justify-center gap-4 py-8">
                 <p className="text-sm text-destructive">
-                    Failed to load your profile
+                    {dict?.auth.signUp.step3.profileLoadFailed ||
+                        "Failed to load your profile"}
                 </p>
                 <Button onClick={() => router.back()} variant="outline">
-                    Go Back
+                    {dict?.auth.signUp.step3.goBackButton || "Go Back"}
                 </Button>
             </div>
         );
@@ -177,10 +209,11 @@ export default function SignUpStep3() {
             {/* Header */}
             <div className="text-center">
                 <h1 className="mb-2 text-2xl font-semibold">
-                    Complete Your Profile
+                    {dict?.auth.signUp.step3.title || "Complete Your Profile"}
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                    Add a photo to get started
+                    {dict?.auth.signUp.step3.subtitle ||
+                        "Add a photo to get started"}
                 </p>
             </div>
 
@@ -194,12 +227,15 @@ export default function SignUpStep3() {
             {/* Username Input Section */}
             <div className="flex flex-col gap-2">
                 <Label htmlFor="username" className="text-sm font-medium">
-                    Username
+                    {dict?.auth.signUp.step3.usernameLabel || "Username"}
                 </Label>
                 <Input
                     id="username"
                     type="text"
-                    placeholder="Enter your username"
+                    placeholder={
+                        dict?.auth.signUp.step3.usernamePlaceholder ||
+                        "Enter your username"
+                    }
                     disabled={loading}
                     {...register("username")}
                 />
@@ -209,8 +245,8 @@ export default function SignUpStep3() {
                     </p>
                 )}
                 <p className="text-xs text-muted-foreground">
-                    This is how you'll appear to others. You can change this
-                    anytime.
+                    {dict?.auth.signUp.step3.usernameHelp ||
+                        "This is how you'll appear to others. You can change this anytime."}
                 </p>
             </div>
 
@@ -224,9 +260,12 @@ export default function SignUpStep3() {
                 >
                     {loading ? (
                         <>
-                            <Spinner /> Creating Profile...
+                            <Spinner />{" "}
+                            {dict?.auth.signUp.step3.creatingProfileButton ||
+                                "Creating Profile..."}
                         </>
                     ) : (
+                        dict?.auth.signUp.step3.startAdventureButton ||
                         "Start Your Adventure"
                     )}
                 </Button>
@@ -239,7 +278,7 @@ export default function SignUpStep3() {
                     className="w-full"
                     disabled={loading}
                 >
-                    Back
+                    {dict?.auth.signUp.step3.backButton || "Back"}
                 </Button>
             </div>
         </form>

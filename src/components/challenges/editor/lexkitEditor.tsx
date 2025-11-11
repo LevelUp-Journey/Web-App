@@ -1743,9 +1743,6 @@ function EditorContent({
             }));
         }
         setMode(newMode);
-        if (newMode === "visual") {
-            setTimeout(() => editor?.focus(), 100);
-        }
     };
 
     const handleMarkdownChange = (markdown: string) =>

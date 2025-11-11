@@ -1,4 +1,5 @@
-import React, { memo, useId } from "react";
+import type React from "react";
+import { memo, useId } from "react";
 
 /**
  * SvgBackground

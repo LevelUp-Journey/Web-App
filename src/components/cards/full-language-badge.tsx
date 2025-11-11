@@ -1,4 +1,7 @@
+"use client";
+
 import type React from "react";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { ProgrammingLanguage } from "@/lib/consts";
 
 interface FullLanguageBadgeProps {
@@ -7,14 +10,6 @@ interface FullLanguageBadgeProps {
 }
 
 const DEFAULT_COLOR = "bg-muted text-muted-foreground";
-
-// Mapping of language keys to display names
-const LANGUAGE_NAMES: Record<ProgrammingLanguage, string> = {
-    [ProgrammingLanguage.JAVA]: "Java",
-    [ProgrammingLanguage.PYTHON]: "Python",
-    [ProgrammingLanguage.C_PLUS_PLUS]: "C++",
-    [ProgrammingLanguage.JAVASCRIPT]: "JavaScript",
-};
 
 const FullLanguageBadge: React.FC<FullLanguageBadgeProps> = ({
     language,
@@ -60,8 +55,14 @@ const FullLanguageBadge: React.FC<FullLanguageBadgeProps> = ({
         ? scheme.selected
         : `${scheme.default} ${scheme.hover}`;
 
-    // Get the display name, fallback to the original language if not mapped
-    const displayName = LANGUAGE_NAMES[language] || language;
+    const dict = useDictionary();
+
+    // Get the display name from dictionary, fallback to the original language if not mapped
+    const languageKey = language
+        .toLowerCase()
+        .replace(/_plus_plus/g, "pp")
+        .replace(/_/g, "");
+    const displayName = dict?.challenges?.languages?.[languageKey] || language;
 
     return (
         <span

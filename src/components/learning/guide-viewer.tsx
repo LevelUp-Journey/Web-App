@@ -7,20 +7,26 @@ import {
     ChevronLeft,
     ChevronRight,
     Heart,
+    Play,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { serialize } from "next-mdx-remote-client/serialize";
 import { useEffect, useState } from "react";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
-import { GuideAuthorCard } from "@/components/learning/guide-author-card";
 import { GuideLikeButton } from "@/components/learning/guide-like-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useDictionary } from "@/hooks/use-dictionary";
 import { useGuide } from "@/hooks/use-guide";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { mdxOptions } from "@/lib/mdx-config";
 import { cn } from "@/lib/utils";
+import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
+import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
@@ -34,6 +40,8 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pageParam = searchParams.get("page");
+    const dict = useDictionary();
+    const PATHS = useLocalizedPaths();
 
     // Usar hook personalizado para manejar el guide
     const { guide: storedGuide, author: storedAuthor } = useGuide({
@@ -41,6 +49,10 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         guide,
         author,
     });
+
+    // Estado para los challenges relacionados
+    const [relatedChallenges, setRelatedChallenges] = useState<Challenge[]>([]);
+    const [loadingChallenges, setLoadingChallenges] = useState(false);
 
     // Determinar el índice de página actual basado en la URL
     const pageNumber = pageParam ? parseInt(pageParam, 10) : null;
@@ -69,36 +81,73 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
         : null;
     const hasPreviousPage = currentPageIndex > 0;
     const hasNextPage = currentPageIndex < storedGuide.pagesCount - 1;
+    const isLastPage = currentPageIndex === storedGuide.pagesCount - 1;
 
     const handleNextPage = () => {
         if (hasNextPage) {
             const nextPage = currentPageIndex + 2; // +2 porque el índice es 0-based pero la URL es 1-based
-            router.push(`?page=${nextPage}`, { scroll: false });
+            router.replace(`?page=${nextPage}`);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
     const handlePreviousPage = () => {
         if (hasPreviousPage) {
             const prevPage = currentPageIndex; // currentPageIndex ya es el anterior en 1-based
-            router.push(`?page=${prevPage}`, { scroll: false });
+            router.replace(`?page=${prevPage}`);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
     const handleBackToOverview = () => {
-        router.push(window.location.pathname, { scroll: false });
+        router.replace(window.location.pathname);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const handleStartReading = () => {
-        router.push(`?page=1`, { scroll: false });
+        router.push(`?page=1`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const handleGoToPage = (pageIndex: number) => {
         const pageNum = pageIndex + 1; // Convertir índice 0-based a número de página 1-based
         // Validar que la página está en el rango
         if (pageNum >= 1 && pageNum <= storedGuide.pagesCount) {
-            router.push(`?page=${pageNum}`, { scroll: false });
+            router.replace(`?page=${pageNum}`);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
+
+    // Fetch related challenges
+    useEffect(() => {
+        const fetchRelatedChallenges = async () => {
+            if (
+                storedGuide.relatedChallenges &&
+                storedGuide.relatedChallenges.length > 0
+            ) {
+                setLoadingChallenges(true);
+                try {
+                    const challenges = [];
+                    for (const challengeId of storedGuide.relatedChallenges) {
+                        const challenge =
+                            await ChallengeController.getChallengeById(
+                                challengeId,
+                            );
+                        if (challenge) {
+                            challenges.push(challenge);
+                        }
+                    }
+                    setRelatedChallenges(challenges);
+                } catch (error) {
+                    console.error("Error fetching related challenges:", error);
+                } finally {
+                    setLoadingChallenges(false);
+                }
+            }
+        };
+
+        fetchRelatedChallenges();
+    }, [storedGuide.relatedChallenges]);
 
     // Si hay un parámetro de página pero no es válido, mostrar mensaje de error
     if (pageNumber !== null && !isValidPage) {
@@ -107,19 +156,41 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                 <div className="text-center space-y-4">
                     <div>
                         <h2 className="text-2xl font-bold mb-2">
-                            Page Not Found
+                            {dict?.errors?.notFound || "Page Not Found"}
                         </h2>
                         <p className="text-muted-foreground">
-                            The page number {pageNumber} does not exist in this
-                            guide.
+                            {dict?.errors?.pageNotFound
+                                ?.replace("{pageNumber}", pageNumber.toString())
+                                ?.replace(
+                                    "{totalPages}",
+                                    storedGuide.pagesCount.toString(),
+                                )
+                                ?.replace(
+                                    "{pagesPlural}",
+                                    storedGuide.pagesCount !== 1 ? "s" : "",
+                                ) ||
+                                `The page number ${pageNumber} does not exist in this guide. This guide has ${storedGuide.pagesCount} page${storedGuide.pagesCount !== 1 ? "s" : ""}.`}
                         </p>
                         <p className="text-sm text-muted-foreground mt-1">
-                            This guide has {storedGuide.pagesCount} page
-                            {storedGuide.pagesCount !== 1 ? "s" : ""}.
+                            {dict?.guides?.guidePageCount
+                                ?.replace(
+                                    "{count}",
+                                    storedGuide.pagesCount.toString(),
+                                )
+                                ?.replace(
+                                    "{unit}",
+                                    storedGuide.pagesCount !== 1
+                                        ? dict?.guides?.viewer?.pagePlural ||
+                                              "pages"
+                                        : dict?.guides?.viewer?.pageSingular ||
+                                              "page",
+                                ) ||
+                                `This guide has ${storedGuide.pagesCount} page${storedGuide.pagesCount !== 1 ? "s" : ""}.`}
                         </p>
                     </div>
                     <Button onClick={handleBackToOverview}>
-                        Back to Overview
+                        {dict?.guides?.viewer?.backToOverview ||
+                            "Back to Overview"}
                     </Button>
                 </div>
             </div>
@@ -140,11 +211,20 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                                 className="flex items-center gap-2"
                             >
                                 <ArrowLeft className="h-4 w-4" />
-                                Back to Overview
+                                {dict?.guides?.viewer?.backToOverview ||
+                                    "Back to Overview"}
                             </Button>
                             <div className="text-sm text-muted-foreground">
-                                Page {currentPageIndex + 1} of{" "}
-                                {storedGuide.pagesCount}
+                                {dict?.guides?.viewer?.pageIndicator
+                                    ?.replace(
+                                        "{current}",
+                                        (currentPageIndex + 1).toString(),
+                                    )
+                                    ?.replace(
+                                        "{total}",
+                                        storedGuide.pagesCount.toString(),
+                                    ) ||
+                                    `Page ${currentPageIndex + 1} of ${storedGuide.pagesCount}`}
                             </div>
                         </div>
                     </div>
@@ -156,6 +236,53 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         <PageContent content={currentPage.content} />
                     </article>
 
+                    {/* Challenges Section - Only on last page */}
+                    {isLastPage && relatedChallenges.length > 0 && (
+                        <div className="mt-12 pt-8 border-t">
+                            <h2 className="text-2xl font-bold mb-6">
+                                {dict?.guides?.viewer?.practiceSection ||
+                                    "Now you're ready to put it into practice:"}
+                            </h2>
+                            <div className="space-y-4">
+                                {relatedChallenges.map((challenge) => (
+                                    <div
+                                        key={challenge.id}
+                                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                                    >
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold">
+                                                {challenge.name}
+                                            </h3>
+                                            <p className="text-sm text-muted-foreground">
+                                                {challenge.experiencePoints} XP
+                                                •{" "}
+                                                {challenge.difficulty ||
+                                                    "Unknown"}{" "}
+                                                •{" "}
+                                                {challenge.tags
+                                                    .map((tag) => tag.name)
+                                                    .join(", ") || "No tags"}
+                                            </p>
+                                        </div>
+                                        <Button asChild variant="outline">
+                                            <Link
+                                                href={PATHS.DASHBOARD.CHALLENGES.VIEW(
+                                                    challenge.id,
+                                                )}
+                                                className="flex items-center gap-2"
+                                            >
+                                                <Play className="h-4 w-4" />
+                                                {dict?.guides?.viewer
+                                                    ?.startChallenge ||
+                                                    "Start Challenge"}
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Navigation */}
                     <div className="flex items-center justify-between mt-12 pt-8 border-t">
                         <Button
@@ -165,7 +292,8 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             className="flex items-center gap-2"
                         >
                             <ChevronLeft className="h-4 w-4" />
-                            Previous Page
+                            {dict?.guides?.viewer?.previousPage ||
+                                "Previous Page"}
                         </Button>
 
                         <div className="flex items-center gap-2">
@@ -194,7 +322,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             disabled={!hasNextPage}
                             className="flex items-center gap-2"
                         >
-                            Next Page
+                            {dict?.guides?.viewer?.nextPage || "Next Page"}
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>
@@ -239,14 +367,34 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                             }
                             className="text-xs uppercase tracking-wider"
                         >
-                            {storedGuide.status}
+                            {dict?.guides?.viewer?.status?.[
+                                storedGuide.status.toLowerCase()
+                            ] || storedGuide.status}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                            {totalReadingTime} min read •{" "}
-                            {storedGuide.pagesCount} page
-                            {storedGuide.pagesCount !== 1 ? "s" : ""}
+                            {dict?.guides?.viewer?.minRead?.replace(
+                                "{time}",
+                                totalReadingTime.toString(),
+                            ) || `${totalReadingTime} min read`}{" "}
+                            • {storedGuide.pagesCount}{" "}
+                            {storedGuide.pagesCount !== 1
+                                ? dict?.guides?.viewer?.pagePlural || "pages"
+                                : dict?.guides?.viewer?.pageSingular || "page"}
                         </span>
                     </div>
+
+                    {/* Topics */}
+                    {storedGuide.topics && storedGuide.topics.length > 0 && (
+                        <div className="mt-4">
+                            <div className="flex flex-wrap gap-2">
+                                {storedGuide.topics.map((topic) => (
+                                    <Badge key={topic.id} variant="outline">
+                                        {topic.name}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Title */}
                     <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
@@ -291,7 +439,12 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                         {/* Likes */}
                         <div className="flex items-center gap-1.5">
                             <Heart className="h-4 w-4" />
-                            <span>{storedGuide.likesCount} likes</span>
+                            <span>
+                                {dict?.guides?.viewer?.likes?.replace(
+                                    "{count}",
+                                    storedGuide.likesCount.toString(),
+                                ) || `${storedGuide.likesCount} likes`}
+                            </span>
                         </div>
                     </div>
 
@@ -307,35 +460,21 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
                                 className="flex items-center gap-2"
                             >
                                 <BookOpen className="h-4 w-4" />
-                                Read Guide ({storedGuide.pagesCount} page
-                                {storedGuide.pagesCount !== 1 ? "s" : ""})
+                                {(() => {
+                                    const unit =
+                                        storedGuide.pagesCount !== 1
+                                            ? dict?.guides?.viewer
+                                                  ?.pagePlural || "pages"
+                                            : dict?.guides?.viewer
+                                                  ?.pageSingular || "page";
+                                    return `${dict?.guides?.viewer?.readGuide || "Read Guide"} (${storedGuide.pagesCount} ${unit})`;
+                                })()}
                             </Button>
                         )}
                     </div>
                 </header>
 
                 <Separator className="my-8" />
-
-                {/* Topics */}
-                {storedGuide.topics && storedGuide.topics.length > 0 && (
-                    <div className="mb-8">
-                        <h2 className="text-lg font-semibold mb-4">Topics</h2>
-                        <div className="flex flex-wrap gap-2">
-                            {storedGuide.topics.map((topic) => (
-                                <Badge key={topic.id} variant="outline">
-                                    {topic.name}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                <Separator className="my-8" />
-
-                {/* Author Card */}
-                <aside className="py-8">
-                    <GuideAuthorCard author={storedAuthor} />
-                </aside>
             </div>
         </div>
     );
@@ -348,7 +487,9 @@ function PageContent({ content }: { content: string }) {
     > | null>(null);
 
     useEffect(() => {
-        serialize({ source: content }).then(setSerializedContent);
+        serialize({ source: content, ...mdxOptions }).then(
+            setSerializedContent,
+        );
     }, [content]);
 
     if (!serializedContent) {
