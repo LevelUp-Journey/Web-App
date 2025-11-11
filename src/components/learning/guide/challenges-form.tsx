@@ -8,7 +8,28 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
-import type { ChallengeReference } from "@/services/internal/learning/guides/controller/guide.response";
+import type {
+    ChallengeReference,
+    GuideResponse,
+} from "@/services/internal/learning/guides/controller/guide.response";
+
+function extractGuideChallenges(
+    guide: GuideResponse | null,
+): ChallengeReference[] {
+    if (!guide?.challenges?.length) {
+        return [];
+    }
+
+    const unique = new Map<string, ChallengeReference>();
+    guide.challenges.forEach((challenge) => {
+        unique.set(challenge.id, {
+            id: challenge.id,
+            name: challenge.name,
+            language: challenge.language || "Unknown",
+        });
+    });
+    return Array.from(unique.values());
+}
 
 interface ChallengesFormProps {
     guideId: string;
@@ -34,6 +55,11 @@ export function ChallengesForm({
     const [removingChallengeId, setRemovingChallengeId] = useState<
         string | null
     >(null);
+
+    // Update currentChallenges when initialChallenges changes
+    useEffect(() => {
+        setCurrentChallenges(initialChallenges);
+    }, [initialChallenges]);
 
     // Search challenges
     const handleSearch = useCallback(async (query: string) => {
@@ -71,12 +97,10 @@ export function ChallengesForm({
                 guideId,
                 challenge.id,
             );
-            setCurrentChallenges((prev) => [
-                ...prev,
-                { id: challenge.id, name: challenge.name },
-            ]);
+            const updatedChallenges = extractGuideChallenges(updatedGuide);
+            setCurrentChallenges(updatedChallenges);
             setSearchResults((prev) =>
-                prev.filter((c) => c.id !== challenge.id),
+                prev.filter((result) => result.id !== challenge.id),
             );
             onGuideUpdate?.(updatedGuide);
         } catch (error) {
@@ -103,9 +127,16 @@ export function ChallengesForm({
                 guideId,
                 challengeId,
             );
-            setCurrentChallenges((prev) =>
-                prev.filter((c) => c.id !== challengeId),
-            );
+            const updatedGuide = await GuideController.getGuideById(guideId);
+            if (updatedGuide) {
+                const updatedChallenges = extractGuideChallenges(updatedGuide);
+                setCurrentChallenges(updatedChallenges);
+                onGuideUpdate?.(updatedGuide);
+            } else {
+                setCurrentChallenges((prev) =>
+                    prev.filter((challenge) => challenge.id !== challengeId),
+                );
+            }
         } catch (error) {
             console.error("Error removing challenge:", error);
             alert("Error removing challenge. Please try again.");
@@ -140,6 +171,9 @@ export function ChallengesForm({
                                         <h4 className="font-medium text-sm truncate">
                                             {challenge.name}
                                         </h4>
+                                        <p className="text-xs text-muted-foreground">
+                                            {challenge.language}
+                                        </p>
                                     </div>
                                     <Button
                                         size="sm"

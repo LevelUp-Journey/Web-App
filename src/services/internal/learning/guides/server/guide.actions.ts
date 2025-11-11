@@ -57,15 +57,13 @@ export async function getAllGuidesAction(
     forParam?: string,
 ): Promise<GuideResponse[]> {
     try {
-        console.log(API_GATEWAY_HTTP);
-
         const params = new URLSearchParams();
         if (forParam) params.append("for", forParam);
-        console.log(params.toString());
 
         const response = await API_GATEWAY_HTTP.get<
             LearningResponse<GetGuidesResponseFormat>
         >(`/guides${forParam ? `?${params.toString()}` : ""}`);
+
         return response.data.data.content;
     } catch (error) {
         console.error("Error fetching all guides:", error);
@@ -145,6 +143,8 @@ export async function getGuideByIdAction(
         const response = await API_GATEWAY_HTTP.get<
             LearningResponse<GuideResponse>
         >(`/guides/${guideId}`);
+
+        console.log("GUIDE RESPONSE FOR ACTION", response.data.data);
         return response.data.data;
     } catch (error) {
         console.error(`Error fetching guide ${guideId}:`, error);

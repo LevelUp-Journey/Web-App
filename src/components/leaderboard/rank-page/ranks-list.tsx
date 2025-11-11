@@ -21,7 +21,13 @@ const RANKS: Rank[] = [
     },
 ];
 
-export function RanksList({ className = "", dict }: { className?: string; dict: Dictionary }) {
+export function RanksList({
+    className = "",
+    dict,
+}: {
+    className?: string;
+    dict: Dictionary;
+}) {
     return (
         <section
             className={"w-full " + className}

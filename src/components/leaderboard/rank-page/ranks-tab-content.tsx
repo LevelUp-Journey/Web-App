@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Spinner } from "@/components/ui/spinner";
-import { RanksList } from "./ranks-list";
-import { RankingOverview } from "./ranking-overview";
-import { RanksByScore } from "./ranks-by-score";
 import { GeneralRules } from "./general-rules";
 import { Penalization } from "./penalization";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { RankingOverview } from "./ranking-overview";
+import { RanksByScore } from "./ranks-by-score";
+import { RanksList } from "./ranks-list";
 
 export function RanksTabContent({ dict }: { dict: Dictionary }) {
     const [isLoading, setIsLoading] = useState(true);

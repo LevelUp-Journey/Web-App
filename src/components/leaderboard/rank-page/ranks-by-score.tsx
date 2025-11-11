@@ -53,7 +53,13 @@ const RANKS: RankItem[] = [
     },
 ];
 
-export function RanksByScore({ className = "", dict }: { className?: string; dict: Dictionary }) {
+export function RanksByScore({
+    className = "",
+    dict,
+}: {
+    className?: string;
+    dict: Dictionary;
+}) {
     return (
         <section className={`w-full ${className}`} aria-label="Ranks by score">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 items-end">
@@ -74,7 +80,11 @@ export function RanksByScore({ className = "", dict }: { className?: string; dic
                         </div>
                         <div className="mt-2 text-sm font-medium">{r.name}</div>
                         <div className="text-xs text-muted-foreground mt-1">
-                            {dict.leaderboard.rankingSystem.byScore.ranges[r.key as keyof typeof dict.leaderboard.rankingSystem.byScore.ranges]}
+                            {
+                                dict.leaderboard.rankingSystem.byScore.ranges[
+                                    r.key as keyof typeof dict.leaderboard.rankingSystem.byScore.ranges
+                                ]
+                            }
                         </div>
                     </div>
                 ))}

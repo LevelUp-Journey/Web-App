@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
-import { LeaderboardTable } from "./LeaderboardTable";
+import { useState } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { ChevronDownIcon } from "lucide-react";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { LeaderboardTable } from "./LeaderboardTable";
 
 const RANKS = [
     { key: "TOP500", name: "Top 500" }, // No icon for Top 500

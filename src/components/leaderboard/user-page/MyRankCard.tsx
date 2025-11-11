@@ -1,9 +1,11 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     Empty,
     EmptyContent,
@@ -13,11 +15,9 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
-import Image from "next/image";
-import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { CompetitiveController } from "@/services/internal/profiles/competitive/controller/competitive.controller";
 import type { CompetitiveProfile } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 const RANK_ICONS: Record<string, string> = {
     BRONZE: "/ranks-trophies/trophy-bronze.svg",
@@ -31,7 +31,10 @@ const RANK_ICONS: Record<string, string> = {
 
 function rankDescription(rank: string, dict: Dictionary) {
     const rankKey = rank.toLowerCase() as keyof typeof dict.leaderboard.ranks;
-    return dict.leaderboard.ranks[rankKey]?.description || dict.leaderboard.ranks.bronze.description;
+    return (
+        dict.leaderboard.ranks[rankKey]?.description ||
+        dict.leaderboard.ranks.bronze.description
+    );
 }
 
 export default function MyRankCard({ dict }: { dict: Dictionary }) {
@@ -66,7 +69,9 @@ export default function MyRankCard({ dict }: { dict: Dictionary }) {
         return (
             <div className="flex flex-col items-center justify-center py-16">
                 <Spinner className="size-8 mb-4" />
-                <p className="text-muted-foreground">{dict.leaderboard.loading.rank}</p>
+                <p className="text-muted-foreground">
+                    {dict.leaderboard.loading.rank}
+                </p>
             </div>
         );
     }

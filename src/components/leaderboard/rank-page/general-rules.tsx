@@ -71,7 +71,13 @@ const SCORING_RULES = [
     },
 ];
 
-export function GeneralRules({ className = "", dict }: { className?: string; dict: Dictionary }) {
+export function GeneralRules({
+    className = "",
+    dict,
+}: {
+    className?: string;
+    dict: Dictionary;
+}) {
     return (
         <section
             className={`w-full ${className}`}
@@ -93,15 +99,24 @@ export function GeneralRules({ className = "", dict }: { className?: string; dic
                         key={level.key}
                         className="rounded-full bg-muted px-3 py-1 text-[11px] uppercase tracking-wide"
                     >
-                        {dict.leaderboard.rankingSystem.rules.difficultyLevels[level.key as keyof typeof dict.leaderboard.rankingSystem.rules.difficultyLevels]}
+                        {
+                            dict.leaderboard.rankingSystem.rules
+                                .difficultyLevels[
+                                level.key as keyof typeof dict.leaderboard.rankingSystem.rules.difficultyLevels
+                            ]
+                        }
                     </span>
                 ))}
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
                 {SCORING_RULES.map((rule) => {
-                    const sectionKey = rule.key as keyof typeof dict.leaderboard.rankingSystem.rules.sections;
-                    const section = dict.leaderboard.rankingSystem.rules.sections[sectionKey];
+                    const sectionKey =
+                        rule.key as keyof typeof dict.leaderboard.rankingSystem.rules.sections;
+                    const section =
+                        dict.leaderboard.rankingSystem.rules.sections[
+                            sectionKey
+                        ];
                     return (
                         <article
                             key={rule.key}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { User, X } from "lucide-react";
+import { useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CloudinaryController } from "@/services/external/cloudinary/cloudinary.controller";
 

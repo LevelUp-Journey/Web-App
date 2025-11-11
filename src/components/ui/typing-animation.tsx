@@ -1,7 +1,7 @@
 "use client";
 
+import { type MotionProps, motion, useInView } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, MotionProps, useInView } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
