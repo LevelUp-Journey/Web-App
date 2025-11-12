@@ -37,6 +37,25 @@
         "yes": "Yes",
         "no": "No"
     },
+    "communityCard": {
+        "followers": "Followers"
+    },
+    "communityFeed": {
+        "back": "Back to communities",
+        "loading": "Loading community...",
+        "failedToLoad": "We couldn't load this community.",
+        "failedToLoadDescription": "Please try again later.",
+        "retry": "Retry",
+        "ownerLabel": "Community owner",
+        "createdAtLabel": "Created on",
+        "postsTitle": "Community feed",
+        "postsSubtitle": "Latest posts from this community",
+        "emptyPosts": "No posts yet",
+        "emptyPostsDescription": "Be the first to share something with this community.",
+        "commentsTitle": "Comments",
+        "emptyComments": "No comments yet",
+        "unknownUser": "Unknown user"
+    },
     "auth": {
         "login": {
             "title": "Login to Your Account",

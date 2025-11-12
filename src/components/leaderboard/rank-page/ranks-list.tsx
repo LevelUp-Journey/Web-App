@@ -8,16 +8,16 @@ type Rank = {
 };
 
 const RANKS: Rank[] = [
-    { id: 1, name: "Bronze", file: "/ranks-trophies/trophy-bronze.svg" },
-    { id: 2, name: "Silver", file: "/ranks-trophies/trophy-silver.svg" },
-    { id: 3, name: "Gold", file: "/ranks-trophies/trophy-gold.svg" },
-    { id: 4, name: "Platinum", file: "/ranks-trophies/trophy-platinum.svg" },
-    { id: 5, name: "Diamond", file: "/ranks-trophies/trophy-diamond.svg" },
-    { id: 6, name: "Master", file: "/ranks-trophies/trophy-master.svg" },
+    { id: 1, name: "Bronze", file: "/ranks-trophies/trophy-bronze.webp" },
+    { id: 2, name: "Silver", file: "/ranks-trophies/trophy-silver.webp" },
+    { id: 3, name: "Gold", file: "/ranks-trophies/trophy-gold.webp" },
+    { id: 4, name: "Platinum", file: "/ranks-trophies/trophy-platinum.webp" },
+    { id: 5, name: "Diamond", file: "/ranks-trophies/trophy-diamond.webp" },
+    { id: 6, name: "Master", file: "/ranks-trophies/trophy-master.webp" },
     {
         id: 7,
         name: "Grandmaster",
-        file: "/ranks-trophies/trophy-grandmaster.svg",
+        file: "/ranks-trophies/trophy-grandmaster.webp",
     },
 ];
 

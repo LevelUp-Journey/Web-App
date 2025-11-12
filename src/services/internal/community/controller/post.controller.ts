@@ -3,6 +3,7 @@ import {
     type CreatePostRequest,
     createPostAction,
     getAllPostsAction,
+    getPostsByCommunityIdAction,
     getPostsByUserIdAction,
 } from "../server/post.actions";
 import { PostAssembler } from "./post.assembler";
@@ -14,6 +15,20 @@ export class PostController {
 
         if (response.status !== 200) {
             throw new Error(`Failed to fetch posts: ${response.data}`);
+        }
+
+        return PostAssembler.toEntitiesFromResponse(
+            response.data as PostResponse[],
+        );
+    }
+
+    static async getPostsByCommunityId(communityId: string): Promise<Post[]> {
+        const response = await getPostsByCommunityIdAction(communityId);
+
+        if (response.status !== 200) {
+            throw new Error(
+                `Failed to fetch posts by community: ${response.data}`,
+            );
         }
 
         return PostAssembler.toEntitiesFromResponse(

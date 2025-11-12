@@ -1,25 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import NextImage from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDictionary } from "@/hooks/use-dictionary";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
 interface CommunityCardProps {
     community: Community;
 }
 
-export default function CommunityCard({
-    community,
-}: CommunityCardProps) {
+export default function CommunityCard({ community }: CommunityCardProps) {
     const [bannerColor, setBannerColor] = useState<string>("#6b7280");
-    const imgRef = useRef<HTMLImageElement>(null);
+    const PATHS = useLocalizedPaths();
+    const dict = useDictionary();
+    const followerCount = community.followerCount ?? 0;
+    const followerLabel =
+        dict?.communityCard?.followers ||
+        dict?.admin?.community?.followers ||
+        "Followers";
+    const formattedFollowerCount = useMemo(
+        () => new Intl.NumberFormat().format(followerCount),
+        [followerCount],
+    );
 
-    useEffect(() => {
-        if (community.imageUrl) {
-            extractDominantColor(community.imageUrl);
-        }
-    }, [community.imageUrl]);
-
-    const extractDominantColor = (imageUrl: string) => {
+    const extractDominantColor = useCallback((imageUrl: string) => {
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = imageUrl;
@@ -75,7 +81,13 @@ export default function CommunityCard({
         img.onerror = () => {
             // Keep default color on error
         };
-    };
+    }, []);
+
+    useEffect(() => {
+        if (community.imageUrl) {
+            extractDominantColor(community.imageUrl);
+        }
+    }, [community.imageUrl, extractDominantColor]);
 
     return (
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-lg transition-shadow group">
@@ -86,13 +98,14 @@ export default function CommunityCard({
             >
                 {/* Avatar positioned at the bottom of banner */}
                 <div className="absolute -bottom-8 left-4">
-                    <div className="w-16 h-16 rounded-full border-4 border-card bg-muted overflow-hidden">
+                    <div className="w-16 h-16 rounded-full border-4 border-card bg-muted overflow-hidden relative">
                         {community.imageUrl ? (
-                            <img
-                                ref={imgRef}
+                            <NextImage
                                 src={community.imageUrl}
                                 alt={community.name}
-                                className="w-full h-full object-cover"
+                                fill
+                                sizes="64px"
+                                className="object-cover"
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground text-xl font-bold">
@@ -106,7 +119,18 @@ export default function CommunityCard({
             {/* Content Section with padding */}
             <div className="pt-10 pb-3 px-6">
                 <h3 className="text-lg font-bold">
-                    {community.name}
+                    {community.id ? (
+                        <Link
+                            href={PATHS.DASHBOARD.COMMUNITY.WITH_ID(
+                                community.id,
+                            )}
+                            className="text-foreground hover:text-primary transition-colors"
+                        >
+                            {community.name}
+                        </Link>
+                    ) : (
+                        community.name
+                    )}
                 </h3>
             </div>
 
@@ -115,9 +139,13 @@ export default function CommunityCard({
                     {community.description}
                 </p>
 
-                <div className="mt-4 text-xs text-muted-foreground">
-                    <span>
-                        Created {new Date(community.createdAt).toLocaleDateString()}
+                <div className="mt-4 text-xs text-muted-foreground flex items-center justify-between gap-4">
+                    <span className="truncate">
+                        Created{" "}
+                        {new Date(community.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="font-medium text-foreground">
+                        {formattedFollowerCount} {followerLabel}
                     </span>
                 </div>
             </div>

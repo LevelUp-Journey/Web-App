@@ -33,6 +33,34 @@ export async function getAllPostsAction(): Promise<
     }
 }
 
+export async function getPostsByCommunityIdAction(
+    communityId: string,
+): Promise<RequestSuccess<PostResponse[]> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.get(
+            `/posts/community/${communityId}`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
 export async function getPostsByUserIdAction(
     userId: string,
 ): Promise<RequestSuccess<PostResponse[]> | RequestFailure> {

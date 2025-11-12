@@ -20,13 +20,13 @@ import { CompetitiveController } from "@/services/internal/profiles/competitive/
 import type { CompetitiveProfile } from "@/services/internal/profiles/competitive/entities/competitive-profile.entity";
 
 const RANK_ICONS: Record<string, string> = {
-    BRONZE: "/ranks-trophies/trophy-bronze.svg",
-    SILVER: "/ranks-trophies/trophy-silver.svg",
-    GOLD: "/ranks-trophies/trophy-gold.svg",
-    PLATINUM: "/ranks-trophies/trophy-platinum.svg",
-    DIAMOND: "/ranks-trophies/trophy-diamond.svg",
-    MASTER: "/ranks-trophies/trophy-master.svg",
-    GRANDMASTER: "/ranks-trophies/trophy-grandmaster.svg",
+    BRONZE: "/ranks-trophies/trophy-bronze.webp",
+    SILVER: "/ranks-trophies/trophy-silver.webp",
+    GOLD: "/ranks-trophies/trophy-gold.webp",
+    PLATINUM: "/ranks-trophies/trophy-platinum.webp",
+    DIAMOND: "/ranks-trophies/trophy-diamond.webp",
+    MASTER: "/ranks-trophies/trophy-master.webp",
+    GRANDMASTER: "/ranks-trophies/trophy-grandmaster.webp",
 };
 
 function rankDescription(rank: string, dict: Dictionary) {
