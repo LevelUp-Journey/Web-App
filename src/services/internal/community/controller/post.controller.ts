@@ -8,7 +8,10 @@ import {
     getPostsByUserIdAction,
 } from "../server/post.actions";
 import { PostAssembler } from "./post.assembler";
-import type { PostResponse } from "./post.response";
+import type {
+    PaginatedPostsResponse,
+    PostResponse,
+} from "./post.response";
 
 export class PostController {
     static async getAllPosts(): Promise<Post[]> {
@@ -23,18 +26,26 @@ export class PostController {
         );
     }
 
-    static async getPostsByCommunityId(communityId: string): Promise<Post[]> {
-        const response = await getPostsByCommunityIdAction(communityId);
+    static async getPostsByCommunityId(communityId: string, page = 0, size = 20) {
+        const response = await getPostsByCommunityIdAction(
+            communityId,
+            page,
+            size,
+        );
 
         if (response.status !== 200) {
-            throw new Error(
-                `Failed to fetch posts by community: ${response.data}`,
-            );
+            throw new Error(`Failed to fetch posts: ${response.data}`);
         }
 
-        return PostAssembler.toEntitiesFromResponse(
-            response.data as PostResponse[],
-        );
+        const paginatedData = response.data as PaginatedPostsResponse;
+        
+        return {
+            posts: PostAssembler.toEntitiesFromResponse(paginatedData.content),
+            hasNext: paginatedData.hasNext,
+            totalElements: paginatedData.totalElements,
+            totalPages: paginatedData.totalPages,
+            currentPage: paginatedData.page,
+        };
     }
 
     static async getPostsByUserId(userId: string): Promise<Post[]> {

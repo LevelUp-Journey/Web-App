@@ -18,7 +18,6 @@ type ProfileSummary = {
 
 interface PostWithDetails extends Post {
     authorProfile?: ProfileSummary;
-    community?: Community;
     commentProfiles?: Record<string, ProfileSummary>;
 }
 
@@ -46,6 +45,11 @@ export function useCommunityData(communityId: string) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [reloading, setReloading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+
+    const PAGE_SIZE = 20;
 
     const buildPostsWithDetails = useCallback(
         async (
@@ -88,12 +92,11 @@ export function useCommunityData(communityId: string) {
                 profiles.map((p) => [p.authorId, p.profile]),
             );
 
-            // Combine posts with details
+            // Combine posts with details (community already comes in post from API)
             const postsWithDetails: PostWithDetails[] = communityPosts.map(
                 (post) => ({
                     ...post,
                     authorProfile: profileMap.get(post.authorId) ?? null,
-                    community: communityData,
                     commentProfiles: post.comments.reduce<
                         Record<string, ProfileSummary>
                     >((acc, comment) => {
@@ -125,15 +128,19 @@ export function useCommunityData(communityId: string) {
                     setLoading(true);
                 }
                 setError(null);
-                const [userId, userRoles, communityData, communityPosts] =
+
+                // Fetch community and posts (first page) in parallel
+                const [userId, userRoles, communityData, postsData] =
                     await Promise.all([
                         AuthController.getUserId(),
                         AuthController.getUserRoles(),
                         CommunityController.getCommunityById(communityId),
-                        PostController.getPostsByCommunityId(communityId),
+                        PostController.getPostsByCommunityId(communityId, 0, PAGE_SIZE),
                     ]);
 
                 setCurrentUserId(userId);
+                setCurrentPage(0);
+                setHasMore(postsData.hasNext); // Use hasNext from backend
 
                 // Check subscription status
                 const userSubscription =
@@ -158,15 +165,18 @@ export function useCommunityData(communityId: string) {
 
                 setCommunity(communityData);
 
+                // Fetch owner profile
                 const profile = await ProfileController.getProfileByUserId(
                     communityData.ownerId,
                 );
                 setOwnerProfile(profile ?? null);
 
                 const postsWithDetails = await buildPostsWithDetails(
-                    communityPosts,
+                    postsData.posts,
                     communityData,
                 );
+                
+                // Backend includes reactions in posts response
                 setPosts(postsWithDetails);
             } catch (err) {
                 console.error("Error loading community:", err);
@@ -179,8 +189,48 @@ export function useCommunityData(communityId: string) {
                 }
             }
         },
-        [buildPostsWithDetails, communityId],
+        [buildPostsWithDetails, communityId, PAGE_SIZE],
     );
+
+    const loadMore = useCallback(async () => {
+        if (!communityId || loadingMore || !hasMore || !community) return;
+
+        try {
+            setLoadingMore(true);
+            const nextPage = currentPage + 1;
+
+            const postsData = await PostController.getPostsByCommunityId(
+                communityId,
+                nextPage,
+                PAGE_SIZE,
+            );
+
+            // Use hasNext from backend instead of inferring
+            setHasMore(postsData.hasNext);
+            setCurrentPage(nextPage);
+
+            // Build details for new posts
+            const newPostsWithDetails = await buildPostsWithDetails(
+                postsData.posts,
+                community,
+            );
+
+            // Append to existing posts
+            setPosts((prevPosts) => [...prevPosts, ...newPostsWithDetails]);
+        } catch (err) {
+            console.error("Error loading more posts:", err);
+        } finally {
+            setLoadingMore(false);
+        }
+    }, [
+        communityId,
+        loadingMore,
+        hasMore,
+        community,
+        currentPage,
+        PAGE_SIZE,
+        buildPostsWithDetails,
+    ]);
 
     useEffect(() => {
         if (communityId) {
@@ -201,5 +251,8 @@ export function useCommunityData(communityId: string) {
         error,
         reloading,
         reload: loadData,
+        loadMore,
+        hasMore,
+        loadingMore,
     };
 }

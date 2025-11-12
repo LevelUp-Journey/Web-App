@@ -36,6 +36,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         community,
         posts,
         ownerProfile,
+        currentUserId,
         canCreatePost,
         canModerate,
         isFollowing,
@@ -44,6 +45,9 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         error,
         reloading,
         reload,
+        loadMore,
+        hasMore,
+        loadingMore,
     } = useCommunityData(communityId);
     const PATHS = useLocalizedPaths();
 
@@ -188,12 +192,34 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                 post={post}
                                 dict={dict}
                                 isAdmin={canModerate}
+                                currentUserId={currentUserId}
                                 onPostDeleted={() => reload({ silent: true })}
                                 getDisplayName={getDisplayName}
                                 getInitials={getInitials}
                                 formatDate={formatDate}
                             />
                         ))}
+                        
+                        {/* Load More Button */}
+                        {hasMore && (
+                            <div className="flex justify-center pt-4">
+                                <Button
+                                    variant="outline"
+                                    onClick={loadMore}
+                                    disabled={loadingMore}
+                                    className="gap-2"
+                                >
+                                    {loadingMore ? (
+                                        <>
+                                            <Spinner className="size-4" />
+                                            {dict?.communityFeed?.loadingMore || "Loading more..."}
+                                        </>
+                                    ) : (
+                                        dict?.communityFeed?.loadMore || "Load more posts"
+                                    )}
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 )}
             </section>

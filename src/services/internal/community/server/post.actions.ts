@@ -5,7 +5,10 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-import type { PostResponse } from "../controller/post.response";
+import type {
+    PaginatedPostsResponse,
+    PostResponse,
+} from "../controller/post.response";
 
 export async function getAllPostsAction(): Promise<
     RequestSuccess<PostResponse[]> | RequestFailure
@@ -35,10 +38,15 @@ export async function getAllPostsAction(): Promise<
 
 export async function getPostsByCommunityIdAction(
     communityId: string,
-): Promise<RequestSuccess<PostResponse[]> | RequestFailure> {
+    page = 0,
+    size = 20,
+): Promise<RequestSuccess<PaginatedPostsResponse> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.get(
             `/posts/community/${communityId}`,
+            {
+                params: { page, size },
+            },
         );
 
         return {

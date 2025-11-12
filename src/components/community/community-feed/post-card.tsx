@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Trash2 } from "lucide-react";
+import { Trash2, Heart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,12 +10,20 @@ import {
     CardContent,
     CardDescription,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { PostController } from "@/services/internal/community/controller/post.controller";
-import { CommentsSection } from "./comments-section";
 import { MarkdownContent } from "./markdown-content";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
@@ -25,14 +33,19 @@ interface Post {
     imageUrl?: string | null;
     createdAt: string;
     authorProfile?: any;
-    comments: any[];
-    commentProfiles?: Record<string, any>;
+    reactions: {
+        reactionCounts: {
+            [key: string]: number;
+        };
+        userReaction: string | null;
+    };
 }
 
 interface PostCardProps {
     post: Post;
     dict: Dictionary;
     isAdmin?: boolean;
+    currentUserId?: string;
     onPostDeleted?: () => void;
     getDisplayName: (profile: any) => string;
     getInitials: (profile: any, fallback: string) => string;
@@ -43,31 +56,108 @@ export function PostCard({
     post,
     dict,
     isAdmin = false,
+    currentUserId = "",
     onPostDeleted,
     getDisplayName,
     getInitials,
     formatDate,
 }: PostCardProps) {
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isLiking, setIsLiking] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+    // Use the new reactions structure from backend
+    const hasUserLiked = post.reactions?.userReaction === "LIKE";
+    const likeCount = post.reactions?.reactionCounts?.LIKE || 0;
 
     const handleDelete = async () => {
-        if (!confirm(dict?.communityFeed?.confirmDelete || "Are you sure you want to delete this post?")) {
-            return;
-        }
-
         try {
             setIsDeleting(true);
             await PostController.deletePost(post.id);
+            setShowDeleteDialog(false);
             onPostDeleted?.();
         } catch (error) {
             console.error("Error deleting post:", error);
-            alert(dict?.communityFeed?.deleteError || "Failed to delete post. Please try again.");
         } finally {
             setIsDeleting(false);
         }
     };
 
+    const handleToggleLike = async () => {
+        if (isLiking || !currentUserId) return;
+
+        try {
+            setIsLiking(true);
+            
+            if (hasUserLiked) {
+                // Unlike: DELETE /api/community/reactions with postId
+                const response = await fetch("/api/community/reactions", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        postId: post.id,
+                    }),
+                });
+                
+                if (!response.ok && response.status !== 404) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to unlike");
+                }
+            } else {
+                // Like: POST /api/community/reactions
+                const response = await fetch("/api/community/reactions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        postId: post.id,
+                        reactionType: "LIKE",
+                    }),
+                });
+                
+                if (!response.ok && response.status !== 409) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to like");
+                }
+            }
+            
+            // Reload to ensure UI is in sync with backend
+            onPostDeleted?.();
+        } catch (error) {
+            console.error("Error toggling like:", error);
+        } finally {
+            setIsLiking(false);
+        }
+    };
+
     return (
+        <>
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {dict?.communityFeed?.confirmDelete || "Delete Post"}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {dict?.communityFeed?.confirmDeleteDescription ||
+                                "Are you sure you want to delete this post? This action cannot be undone."}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isDeleting}>
+                            {dict?.communityFeed?.cancel || "Cancel"}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            {isDeleting
+                                ? dict?.communityFeed?.deleting || "Deleting..."
+                                : dict?.communityFeed?.delete || "Delete"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         <Card className="border-muted">
             <CardHeader className="gap-4">
                 <div className="flex items-center justify-between">
@@ -95,7 +185,7 @@ export function PostCard({
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={handleDelete}
+                            onClick={() => setShowDeleteDialog(true)}
                             disabled={isDeleting}
                             className="text-destructive hover:text-destructive hover:bg-destructive/10"
                         >
@@ -123,17 +213,23 @@ export function PostCard({
                     </div>
                 )}
 
-                <Separator />
-
-                <CommentsSection
-                    comments={post.comments}
-                    commentProfiles={post.commentProfiles}
-                    dict={dict}
-                    getDisplayName={getDisplayName}
-                    getInitials={getInitials}
-                    formatDate={formatDate}
-                />
+                {/* Reactions Section */}
+                <div className="flex items-center gap-2 pt-2">
+                    <Button
+                        variant={hasUserLiked ? "default" : "outline"}
+                        size="sm"
+                        onClick={handleToggleLike}
+                        disabled={isLiking}
+                        className="gap-1.5"
+                    >
+                        <Heart
+                            className={`size-4 ${hasUserLiked ? "fill-current" : ""}`}
+                        />
+                        <span className="text-xs">{likeCount}</span>
+                    </Button>
+                </div>
             </CardContent>
         </Card>
+        </>
     );
 }

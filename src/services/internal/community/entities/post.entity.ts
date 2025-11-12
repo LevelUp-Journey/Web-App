@@ -7,12 +7,11 @@ export interface Comment {
     createdAt: string;
 }
 
-export interface Reaction {
-    id: string;
-    postId: string;
-    userId: string;
-    reactionType: "LIKE";
-    createdAt: string;
+export interface PostReactions {
+    reactionCounts: {
+        [key: string]: number; // e.g., { "LIKE": 5 }
+    };
+    userReaction: string | null; // e.g., "LIKE" or null
 }
 
 export interface Post {
@@ -24,5 +23,5 @@ export interface Post {
     imageUrl?: string | null;
     createdAt: string;
     comments: Comment[];
-    reactions: Reaction[];
+    reactions: PostReactions;
 }
