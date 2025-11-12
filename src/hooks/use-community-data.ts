@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { UserRole } from "@/lib/consts";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
+import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
@@ -40,6 +41,8 @@ export function useCommunityData(communityId: string) {
     const [currentUserId, setCurrentUserId] = useState<string>("");
     const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
     const [canModerate, setCanModerate] = useState<boolean>(false);
+    const [isFollowing, setIsFollowing] = useState<boolean>(false);
+    const [followId, setFollowId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [reloading, setReloading] = useState(false);
@@ -132,6 +135,15 @@ export function useCommunityData(communityId: string) {
 
                 setCurrentUserId(userId);
 
+                // Check subscription status
+                const userSubscription =
+                    await SubscriptionController.getUserSubscriptionForCommunity(
+                        communityId,
+                        userId,
+                    );
+                setIsFollowing(!!userSubscription);
+                setFollowId(userSubscription?.id ?? null);
+
                 // Check if user can create posts (only TEACHER and ADMIN)
                 const hasCreatePermission =
                     userRoles.includes(UserRole.TEACHER) ||
@@ -183,6 +195,8 @@ export function useCommunityData(communityId: string) {
         currentUserId,
         canCreatePost,
         canModerate,
+        isFollowing,
+        followId,
         loading,
         error,
         reloading,
