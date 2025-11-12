@@ -37,6 +37,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         posts,
         ownerProfile,
         canCreatePost,
+        canModerate,
         loading,
         error,
         reloading,
@@ -181,6 +182,8 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                 key={post.id}
                                 post={post}
                                 dict={dict}
+                                isAdmin={canModerate}
+                                onPostDeleted={() => reload({ silent: true })}
                                 getDisplayName={getDisplayName}
                                 getInitials={getInitials}
                                 formatDate={formatDate}

@@ -125,3 +125,29 @@ export async function createPostAction(
         };
     }
 }
+
+export async function deletePostAction(
+    postId: string,
+): Promise<RequestSuccess<void> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.delete(`/posts/${postId}`);
+
+        return {
+            data: undefined,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}

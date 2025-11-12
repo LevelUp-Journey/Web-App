@@ -2,6 +2,7 @@ import type { Post } from "../entities/post.entity";
 import {
     type CreatePostRequest,
     createPostAction,
+    deletePostAction,
     getAllPostsAction,
     getPostsByCommunityIdAction,
     getPostsByUserIdAction,
@@ -58,5 +59,13 @@ export class PostController {
         return PostAssembler.toEntityFromResponse(
             response.data as PostResponse,
         );
+    }
+
+    static async deletePost(postId: string): Promise<void> {
+        const response = await deletePostAction(postId);
+
+        if (response.status !== 200 && response.status !== 204) {
+            throw new Error(`Failed to delete post: ${response.data}`);
+        }
     }
 }

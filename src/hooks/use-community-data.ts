@@ -39,6 +39,7 @@ export function useCommunityData(communityId: string) {
     );
     const [currentUserId, setCurrentUserId] = useState<string>("");
     const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
+    const [canModerate, setCanModerate] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [reloading, setReloading] = useState(false);
@@ -137,6 +138,12 @@ export function useCommunityData(communityId: string) {
                     userRoles.includes(UserRole.ADMIN);
                 setCanCreatePost(hasCreatePermission);
 
+                // Check if user can moderate (delete posts, etc.) - TEACHER and ADMIN
+                const canModerateContent =
+                    userRoles.includes(UserRole.TEACHER) ||
+                    userRoles.includes(UserRole.ADMIN);
+                setCanModerate(canModerateContent);
+
                 setCommunity(communityData);
 
                 const profile = await ProfileController.getProfileByUserId(
@@ -175,6 +182,7 @@ export function useCommunityData(communityId: string) {
         ownerProfile,
         currentUserId,
         canCreatePost,
+        canModerate,
         loading,
         error,
         reloading,

@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
+import { Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -10,6 +13,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
+import { PostController } from "@/services/internal/community/controller/post.controller";
 import { CommentsSection } from "./comments-section";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
@@ -27,6 +32,8 @@ interface Post {
 interface PostCardProps {
     post: Post;
     dict: Dictionary;
+    isAdmin?: boolean;
+    onPostDeleted?: () => void;
     getDisplayName: (profile: any) => string;
     getInitials: (profile: any, fallback: string) => string;
     formatDate: (date: string | Date) => string;
@@ -35,30 +42,68 @@ interface PostCardProps {
 export function PostCard({
     post,
     dict,
+    isAdmin = false,
+    onPostDeleted,
     getDisplayName,
     getInitials,
     formatDate,
 }: PostCardProps) {
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        if (!confirm(dict?.communityFeed?.confirmDelete || "Are you sure you want to delete this post?")) {
+            return;
+        }
+
+        try {
+            setIsDeleting(true);
+            await PostController.deletePost(post.id);
+            onPostDeleted?.();
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert(dict?.communityFeed?.deleteError || "Failed to delete post. Please try again.");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
     return (
         <Card className="border-muted">
             <CardHeader className="gap-4">
-                <div className="flex items-center gap-3">
-                    <Avatar>
-                        <AvatarImage
-                            src={post.authorProfile?.profileUrl ?? undefined}
-                            alt={getDisplayName(post.authorProfile)}
-                        />
-                        <AvatarFallback>
-                            {getInitials(post.authorProfile, post.title)}
-                        </AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <CardTitle className="text-base">{post.title}</CardTitle>
-                        <CardDescription className="text-xs">
-                            {getDisplayName(post.authorProfile)} ·{" "}
-                            {formatDate(post.createdAt)}
-                        </CardDescription>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <Avatar>
+                            <AvatarImage
+                                src={post.authorProfile?.profileUrl ?? undefined}
+                                alt={getDisplayName(post.authorProfile)}
+                            />
+                            <AvatarFallback>
+                                {getInitials(post.authorProfile, post.title)}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <CardTitle className="text-base">{post.title}</CardTitle>
+                            <CardDescription className="text-xs">
+                                {getDisplayName(post.authorProfile)} ·{" "}
+                                {formatDate(post.createdAt)}
+                            </CardDescription>
+                        </div>
                     </div>
+                    {isAdmin && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                            {isDeleting ? (
+                                <Spinner className="size-4" />
+                            ) : (
+                                <Trash2 className="size-4" />
+                            )}
+                        </Button>
+                    )}
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">

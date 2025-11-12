@@ -50,7 +50,7 @@ export function CommunityHeader({
             </div>
             <div className="relative flex flex-col gap-6 p-6 md:flex-row md:items-center">
                 <div className="flex items-center gap-4">
-                    <div className="relative h-24 w-24 rounded-2xl border-4 border-background bg-muted overflow-hidden">
+                    <div className="relative h-24 w-24 rounded-2xl overflow-hidden">
                         {community.imageUrl ? (
                             <Image
                                 src={community.imageUrl}
