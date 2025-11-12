@@ -2,6 +2,7 @@
 
 import type { ChangeEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
@@ -113,52 +114,35 @@ export function PostComposer({
         ) || `Message #${community.name}`;
 
     return (
-        <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background/95 px-3 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:px-6">
-            <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
-                <div className="flex-1 space-y-2">
-                    <div>
-                        <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                            {dict?.communityFeed?.composerTitle ||
-                                "Share an update"}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                            {dict?.communityFeed?.composerDescription ||
-                                "Messages appear in the community feed for everyone to see."}
-                        </p>
-                    </div>
-                    <Textarea
-                        ref={textareaRef}
-                        value={message}
-                        onChange={handleMessageChange}
-                        placeholder={composerPlaceholder}
-                        maxLength={MESSAGE_LIMIT}
-                        className="min-h-[72px] max-h-[240px] resize-none overflow-auto"
-                    />
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>
-                            {message.length}/{MESSAGE_LIMIT}
-                        </span>
-                        {composerError && (
-                            <span className="text-destructive">
-                                {composerError}
-                            </span>
-                        )}
-                    </div>
-                </div>
-                <div className="flex w-full flex-col items-end gap-2 sm:w-auto">
-                    <Button
-                        className="w-full sm:w-auto"
-                        onClick={handleShareMessage}
-                        disabled={isPosting || !message.trim()}
-                    >
-                        {isPosting && (
-                            <Spinner className="mr-2 size-4 text-background" />
-                        )}
-                        {dict?.communityFeed?.composerButton ||
-                            "Send message"}
-                    </Button>
-                </div>
+        <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background px-4 py-3">
+            <div className="flex items-center gap-2 w-full rounded-lg border px-3 py-2">
+                <Textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={handleMessageChange}
+                    placeholder={composerPlaceholder}
+                    maxLength={MESSAGE_LIMIT}
+                    className="flex-1 min-h-[40px] max-h-[200px] resize-none border-0 bg-transparent dark:bg-transparent p-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    rows={1}
+                />
+                <Button
+                    size="icon"
+                    onClick={handleShareMessage}
+                    disabled={isPosting || !message.trim()}
+                    className="shrink-0 h-9 w-9"
+                >
+                    {isPosting ? (
+                        <Spinner className="size-4" />
+                    ) : (
+                        <Send className="size-4" />
+                    )}
+                </Button>
             </div>
+            {composerError && (
+                <p className="mt-1 text-xs text-destructive px-3">
+                    {composerError}
+                </p>
+            )}
         </div>
     );
 }
