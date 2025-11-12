@@ -194,8 +194,6 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                 isAdmin={canModerate}
                                 currentUserId={currentUserId}
                                 onPostDeleted={() => reload({ silent: true })}
-                                getDisplayName={getDisplayName}
-                                getInitials={getInitials}
                                 formatDate={formatDate}
                             />
                         ))}

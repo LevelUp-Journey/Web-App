@@ -19,6 +19,8 @@ export interface Post {
     communityId: string;
     authorId: string;
     authorProfileId: string;
+    authorName: string; // username from backend
+    authorProfileUrl: string; // profile URL from backend
     content: string;
     imageUrl?: string | null;
     createdAt: string;

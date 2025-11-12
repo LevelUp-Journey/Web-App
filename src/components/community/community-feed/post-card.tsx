@@ -32,7 +32,8 @@ interface Post {
     content: string;
     imageUrl?: string | null;
     createdAt: string;
-    authorProfile?: any;
+    authorName: string; // username from backend
+    authorProfileUrl: string; // profile URL from backend
     reactions: {
         reactionCounts: {
             [key: string]: number;
@@ -47,8 +48,6 @@ interface PostCardProps {
     isAdmin?: boolean;
     currentUserId?: string;
     onPostDeleted?: () => void;
-    getDisplayName: (profile: any) => string;
-    getInitials: (profile: any, fallback: string) => string;
     formatDate: (date: string | Date) => string;
 }
 
@@ -58,8 +57,6 @@ export function PostCard({
     isAdmin = false,
     currentUserId = "",
     onPostDeleted,
-    getDisplayName,
-    getInitials,
     formatDate,
 }: PostCardProps) {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -164,19 +161,16 @@ export function PostCard({
                     <div className="flex items-center gap-3">
                         <Avatar>
                             <AvatarImage
-                                src={post.authorProfile?.profileUrl ?? undefined}
-                                alt={getDisplayName(post.authorProfile)}
+                                src={post.authorProfileUrl}
+                                alt={post.authorName}
                             />
                             <AvatarFallback>
-                                {getInitials(
-                                    post.authorProfile,
-                                    post.content,
-                                )}
+                                {post.authorName.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                         </Avatar>
                         <div>
                             <CardDescription className="text-xs">
-                                {getDisplayName(post.authorProfile)} ·{" "}
+                                {post.authorName} ·{" "}
                                 {formatDate(post.createdAt)}
                             </CardDescription>
                         </div>
