@@ -68,10 +68,10 @@ export class SubscriptionController {
         communityId: string,
         userId: string,
     ): Promise<SubscriptionResponse | null> {
-        const subscriptions = await this.getSubscriptionsByUser(userId);
+        const subscriptions =
+            await SubscriptionController.getSubscriptionsByUser(userId);
         return (
-            subscriptions.find((sub) => sub.communityId === communityId) ||
-            null
+            subscriptions.find((sub) => sub.communityId === communityId) || null
         );
     }
 }

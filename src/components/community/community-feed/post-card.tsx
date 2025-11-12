@@ -1,16 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Heart, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { Trash2, Heart } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-} from "@/components/ui/card";
+import { useState } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -20,12 +13,18 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+} from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import { MarkdownContent } from "./markdown-content";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 interface Post {
     id: string;
@@ -85,7 +84,7 @@ export function PostCard({
 
         try {
             setIsLiking(true);
-            
+
             if (hasUserLiked) {
                 // Unlike: DELETE /api/community/reactions with postId
                 const response = await fetch("/api/community/reactions", {
@@ -95,7 +94,7 @@ export function PostCard({
                         postId: post.id,
                     }),
                 });
-                
+
                 if (!response.ok && response.status !== 404) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || "Failed to unlike");
@@ -110,13 +109,13 @@ export function PostCard({
                         reactionType: "LIKE",
                     }),
                 });
-                
+
                 if (!response.ok && response.status !== 409) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || "Failed to like");
                 }
             }
-            
+
             // Reload to ensure UI is in sync with backend
             onPostDeleted?.();
         } catch (error) {
@@ -128,11 +127,15 @@ export function PostCard({
 
     return (
         <>
-            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialog
+                open={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>
-                            {dict?.communityFeed?.confirmDelete || "Delete Post"}
+                            {dict?.communityFeed?.confirmDelete ||
+                                "Delete Post"}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                             {dict?.communityFeed?.confirmDeleteDescription ||
@@ -155,75 +158,75 @@ export function PostCard({
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        <Card className="border-muted">
-            <CardHeader className="gap-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <Avatar>
-                            <AvatarImage
-                                src={post.authorProfileUrl}
-                                alt={post.authorName}
-                            />
-                            <AvatarFallback>
-                                {post.authorName.slice(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <CardDescription className="text-xs">
-                                {post.authorName} ·{" "}
-                                {formatDate(post.createdAt)}
-                            </CardDescription>
+            <Card className="border-muted">
+                <CardHeader className="gap-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Avatar>
+                                <AvatarImage
+                                    src={post.authorProfileUrl}
+                                    alt={post.authorName}
+                                />
+                                <AvatarFallback>
+                                    {post.authorName.slice(0, 2).toUpperCase()}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <CardDescription className="text-xs">
+                                    {post.authorName} ·{" "}
+                                    {formatDate(post.createdAt)}
+                                </CardDescription>
+                            </div>
                         </div>
+                        {isAdmin && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setShowDeleteDialog(true)}
+                                disabled={isDeleting}
+                                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            >
+                                {isDeleting ? (
+                                    <Spinner className="size-4" />
+                                ) : (
+                                    <Trash2 className="size-4" />
+                                )}
+                            </Button>
+                        )}
                     </div>
-                    {isAdmin && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setShowDeleteDialog(true)}
-                            disabled={isDeleting}
-                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                            {isDeleting ? (
-                                <Spinner className="size-4" />
-                            ) : (
-                                <Trash2 className="size-4" />
-                            )}
-                        </Button>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <MarkdownContent content={post.content} />
+
+                    {post.imageUrl && (
+                        <div className="relative rounded-lg overflow-hidden border min-h-[200px] w-full">
+                            <Image
+                                src={post.imageUrl}
+                                alt="Post image"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 600px"
+                                className="object-cover"
+                            />
+                        </div>
                     )}
-                </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <MarkdownContent content={post.content} />
 
-                {post.imageUrl && (
-                    <div className="relative rounded-lg overflow-hidden border min-h-[200px] w-full">
-                        <Image
-                            src={post.imageUrl}
-                            alt="Post image"
-                            fill
-                            sizes="(max-width: 768px) 100vw, 600px"
-                            className="object-cover"
-                        />
+                    {/* Reactions Section */}
+                    <div className="flex items-center gap-2 pt-2">
+                        <Button
+                            variant={hasUserLiked ? "default" : "outline"}
+                            size="sm"
+                            onClick={handleToggleLike}
+                            disabled={isLiking}
+                            className="gap-1.5"
+                        >
+                            <Heart
+                                className={`size-4 ${hasUserLiked ? "fill-current" : ""}`}
+                            />
+                            <span className="text-xs">{likeCount}</span>
+                        </Button>
                     </div>
-                )}
-
-                {/* Reactions Section */}
-                <div className="flex items-center gap-2 pt-2">
-                    <Button
-                        variant={hasUserLiked ? "default" : "outline"}
-                        size="sm"
-                        onClick={handleToggleLike}
-                        disabled={isLiking}
-                        className="gap-1.5"
-                    >
-                        <Heart
-                            className={`size-4 ${hasUserLiked ? "fill-current" : ""}`}
-                        />
-                        <span className="text-xs">{likeCount}</span>
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
         </>
     );
 }

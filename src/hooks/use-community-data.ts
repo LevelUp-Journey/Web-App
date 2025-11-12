@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { UserRole } from "@/lib/consts";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import { PostController } from "@/services/internal/community/controller/post.controller";
+import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
@@ -49,7 +49,11 @@ export function useCommunityData(communityId: string) {
                         AuthController.getUserId(),
                         AuthController.getUserRoles(),
                         CommunityController.getCommunityById(communityId),
-                        PostController.getPostsByCommunityId(communityId, 0, PAGE_SIZE),
+                        PostController.getPostsByCommunityId(
+                            communityId,
+                            0,
+                            PAGE_SIZE,
+                        ),
                     ]);
 
                 setCurrentUserId(userId);
@@ -99,7 +103,7 @@ export function useCommunityData(communityId: string) {
                 }
             }
         },
-        [communityId, PAGE_SIZE],
+        [communityId],
     );
 
     const loadMore = useCallback(async () => {
@@ -126,13 +130,7 @@ export function useCommunityData(communityId: string) {
         } finally {
             setLoadingMore(false);
         }
-    }, [
-        communityId,
-        loadingMore,
-        hasMore,
-        currentPage,
-        PAGE_SIZE,
-    ]);
+    }, [communityId, loadingMore, hasMore, currentPage]);
 
     useEffect(() => {
         if (communityId) {

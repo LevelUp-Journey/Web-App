@@ -109,7 +109,7 @@ export default async function AdminChallengesPage({
                 </div>
             </div>
         );
-    } catch (error) {
+    } catch (_error) {
         return (
             <Empty className="min-h-[400px]">
                 <EmptyHeader>

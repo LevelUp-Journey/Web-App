@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import {
     getAllProfilesAction,
@@ -25,7 +24,7 @@ export class ProfileController {
                 return response.data as ProfileResponse;
             }
             return null;
-        } catch (error) {
+        } catch (_error) {
             return null;
         }
     }
@@ -40,7 +39,7 @@ export class ProfileController {
                 return response.data as ProfileResponse;
             }
             return null;
-        } catch (error) {
+        } catch (_error) {
             return null;
         }
     }
@@ -55,7 +54,7 @@ export class ProfileController {
                 return response.data as ProfileResponse;
             }
             return null;
-        } catch (error) {
+        } catch (_error) {
             return null;
         }
     }
@@ -69,7 +68,7 @@ export class ProfileController {
                 return response.data as ProfileResponse;
             }
             return null;
-        } catch (error) {
+        } catch (_error) {
             return null;
         }
     }
@@ -81,7 +80,7 @@ export class ProfileController {
                 return response.data as ProfileResponse[];
             }
             return [];
-        } catch (error) {
+        } catch (_error) {
             return [];
         }
     }
@@ -95,7 +94,7 @@ export class ProfileController {
                 return response.data as ProfileResponse[];
             }
             return [];
-        } catch (error) {
+        } catch (_error) {
             return [];
         }
     }
@@ -106,7 +105,7 @@ export class ProfileController {
         try {
             const response = await searchUsersByUsernameAction(username);
             return response;
-        } catch (error) {
+        } catch (_error) {
             return [];
         }
     }

@@ -23,7 +23,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import {
@@ -51,7 +50,6 @@ import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { CONSTS, ProgrammingLanguage } from "@/lib/consts";
-import { PATHS } from "@/lib/paths";
 import type { Challenge } from "@/services/internal/challenges/challenge/entities/challenge.entity";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import type { VersionTest } from "@/services/internal/challenges/challenge/entities/version-test.entity";

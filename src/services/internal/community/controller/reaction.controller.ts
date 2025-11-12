@@ -9,25 +9,23 @@ import {
 export class ReactionController {
     static async createReaction(
         request: CreateReactionRequest,
-    ): Promise<boolean> {
+    ): Promise<Reaction | null> {
         const response = await createReactionAction(request);
 
         // 201 = Created successfully
         if (response.status === 201) {
-            return true;
+            return response.data as Reaction;
         }
 
         // 409 = User already has a reaction (conflict)
         if (response.status === 409) {
             console.warn("User already has a reaction on this post");
-            return false;
+            return null;
         }
-        
+
         // Other errors
         const errorMessage =
-            typeof response.data === "string"
-                ? response.data
-                : "Unknown error";
+            typeof response.data === "string" ? response.data : "Unknown error";
         throw new Error(`Failed to create reaction: ${errorMessage}`);
     }
 
@@ -42,7 +40,10 @@ export class ReactionController {
         return response.data as Reaction[];
     }
 
-    static async deleteReaction(userId: string, postId: string): Promise<boolean> {
+    static async deleteReaction(
+        userId: string,
+        postId: string,
+    ): Promise<boolean> {
         const response = await deleteReactionAction(userId, postId);
 
         // 204 = Deleted successfully

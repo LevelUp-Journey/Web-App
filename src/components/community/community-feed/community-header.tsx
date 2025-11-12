@@ -1,13 +1,13 @@
 "use client";
 
+import { Calendar, UserMinus, UserPlus, Users } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { UserPlus, UserMinus, Users, Calendar } from "lucide-react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 
 interface CommunityHeaderProps {
@@ -57,9 +57,7 @@ export function CommunityHeader({
         dict?.communityCard?.followers ||
         "Followers";
 
-    const followerDisplay = new Intl.NumberFormat().format(
-        localFollowerCount,
-    );
+    const followerDisplay = new Intl.NumberFormat().format(localFollowerCount);
 
     const handleToggleFollow = async () => {
         if (loading) return;
@@ -68,9 +66,10 @@ export function CommunityHeader({
         try {
             if (localIsFollowing && localFollowId) {
                 // Unsubscribe
-                const success = await SubscriptionController.deleteSubscription(
-                    localFollowId,
-                );
+                const success =
+                    await SubscriptionController.deleteSubscription(
+                        localFollowId,
+                    );
                 if (success) {
                     setLocalIsFollowing(false);
                     setLocalFollowId(null);

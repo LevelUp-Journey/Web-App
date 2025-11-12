@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
-import type { Dictionary } from "@/lib/i18n";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import {
     type GuideResponse,
@@ -61,20 +60,29 @@ export function EditGuideClient({
 
     const [activeTab, _setActiveTab] = useState<ValidTab>(() => {
         const tabFromUrl = searchParams.get("tab");
-        return isValidTab(tabFromUrl) ? tabFromUrl : (isValidTab(initialTab) ? initialTab : DEFAULT_TAB);
+        return isValidTab(tabFromUrl)
+            ? tabFromUrl
+            : isValidTab(initialTab)
+              ? initialTab
+              : DEFAULT_TAB;
     });
 
-    const setActiveTab = useCallback((newTab: ValidTab) => {
-        _setActiveTab(newTab);
-        const params = new URLSearchParams(searchParams.toString());
-        if (newTab === DEFAULT_TAB) {
-            params.delete("tab");
-        } else {
-            params.set("tab", newTab);
-        }
-        const newUrl = params.size ? `${pathname}?${params.toString()}` : pathname;
-        router.replace(newUrl, { scroll: false });
-    }, [pathname, router, searchParams]);
+    const setActiveTab = useCallback(
+        (newTab: ValidTab) => {
+            _setActiveTab(newTab);
+            const params = new URLSearchParams(searchParams.toString());
+            if (newTab === DEFAULT_TAB) {
+                params.delete("tab");
+            } else {
+                params.set("tab", newTab);
+            }
+            const newUrl = params.size
+                ? `${pathname}?${params.toString()}`
+                : pathname;
+            router.replace(newUrl, { scroll: false });
+        },
+        [pathname, router, searchParams],
+    );
 
     // Sync activeTab with URL changes (e.g., browser back/forward)
     useEffect(() => {
@@ -249,7 +257,14 @@ export function EditGuideClient({
         } finally {
             setPublishing(false);
         }
-    }, [applyGuideResponse, currentGuide?.id, dict, router, setPublishing]);
+    }, [
+        applyGuideResponse,
+        currentGuide?.id,
+        dict,
+        router,
+        setPublishing,
+        PATHS.DASHBOARD.ADMINISTRATION.GUIDES.ROOT,
+    ]);
 
     return (
         <section className="flex h-full flex-col">

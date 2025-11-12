@@ -1,5 +1,5 @@
-import type { Comment, Post } from "../entities/post.entity";
-import type { CommentResponse, PostResponse } from "./post.response";
+import type { Post } from "../entities/post.entity";
+import type { PostResponse } from "./post.response";
 
 export class PostAssembler {
     public static toEntityFromResponse(response: PostResponse): Post {

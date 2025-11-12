@@ -121,7 +121,12 @@ export default function EditCommunityPage() {
         };
 
         loadCommunity();
-    }, [communityId]);
+    }, [
+        communityId,
+        PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
+        form.setValue,
+        router.push,
+    ]);
 
     const handleImageSelect = async (
         e: React.ChangeEvent<HTMLInputElement>,

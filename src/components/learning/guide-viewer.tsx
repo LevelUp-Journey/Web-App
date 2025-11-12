@@ -52,7 +52,7 @@ export function GuideViewer({ guide, author }: GuideViewerProps) {
 
     // Estado para los challenges relacionados
     const [relatedChallenges, setRelatedChallenges] = useState<Challenge[]>([]);
-    const [loadingChallenges, setLoadingChallenges] = useState(false);
+    const [_loadingChallenges, setLoadingChallenges] = useState(false);
 
     // Determinar el índice de página actual basado en la URL
     const pageNumber = pageParam ? parseInt(pageParam, 10) : null;

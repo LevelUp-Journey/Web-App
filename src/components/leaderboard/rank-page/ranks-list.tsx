@@ -30,7 +30,7 @@ export function RanksList({
 }) {
     return (
         <section
-            className={"w-full " + className}
+            className={`w-full ${className}`}
             aria-labelledby="ranks-heading"
         >
             <h2 id="ranks-heading" className="text-lg font-semibold mb-4">

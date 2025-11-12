@@ -84,7 +84,9 @@ export default function CreateCommunityPage() {
         },
     });
 
-    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageSelect = async (
+        e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -227,20 +229,24 @@ export default function CreateCommunityPage() {
                                     <div className="flex items-center justify-between">
                                         <FormLabel className="text-sm font-bold uppercase text-muted-foreground">
                                             {dict?.admin.community.createForm
-                                                ?.nameLabel || "Community Name"}{" "}
+                                                ?.nameLabel ||
+                                                "Community Name"}{" "}
                                             <span className="text-destructive">
                                                 *
                                             </span>
                                         </FormLabel>
                                         <span className="text-xs text-muted-foreground">
-                                            {field.value?.length || 0}/{COMMUNITY_LIMITS.NAME.MAX}
+                                            {field.value?.length || 0}/
+                                            {COMMUNITY_LIMITS.NAME.MAX}
                                         </span>
                                     </div>
                                     <FormControl>
                                         <Input
                                             {...field}
                                             disabled={saving}
-                                            maxLength={COMMUNITY_LIMITS.NAME.MAX}
+                                            maxLength={
+                                                COMMUNITY_LIMITS.NAME.MAX
+                                            }
                                             className="bg-background border-input"
                                             placeholder={
                                                 dict?.admin.community.createForm
@@ -270,14 +276,17 @@ export default function CreateCommunityPage() {
                                             </span>
                                         </FormLabel>
                                         <span className="text-xs text-muted-foreground">
-                                            {field.value?.length || 0}/{COMMUNITY_LIMITS.DESCRIPTION.MAX}
+                                            {field.value?.length || 0}/
+                                            {COMMUNITY_LIMITS.DESCRIPTION.MAX}
                                         </span>
                                     </div>
                                     <FormControl>
                                         <Textarea
                                             {...field}
                                             disabled={saving}
-                                            maxLength={COMMUNITY_LIMITS.DESCRIPTION.MAX}
+                                            maxLength={
+                                                COMMUNITY_LIMITS.DESCRIPTION.MAX
+                                            }
                                             rows={4}
                                             className="bg-background border-input resize-none"
                                             placeholder={
@@ -317,7 +326,7 @@ export default function CreateCommunityPage() {
                                 {saving
                                     ? dict?.common?.loading || "Creating..."
                                     : dict?.admin.community.createForm
-                                            ?.submitButton || "Create"}
+                                          ?.submitButton || "Create"}
                             </Button>
                         </div>
                     </form>

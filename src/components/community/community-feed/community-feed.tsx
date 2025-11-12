@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useMemo } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -11,7 +12,6 @@ import { CommunityHeader } from "./community-header";
 import { CommunityState } from "./community-state";
 import { PostCard } from "./post-card";
 import { PostComposer } from "./post-composer";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 interface CommunityFeedProps {
     communityId: string;
@@ -28,8 +28,8 @@ type ProfileLike =
     | null
     | undefined;
 
-const MESSAGE_LIMIT = 500;
-const COMPOSER_MAX_HEIGHT = 240;
+const _MESSAGE_LIMIT = 500;
+const _COMPOSER_MAX_HEIGHT = 240;
 
 export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
     const {
@@ -51,12 +51,12 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
     } = useCommunityData(communityId);
     const PATHS = useLocalizedPaths();
 
-    const followerLabel =
+    const _followerLabel =
         dict?.communityFeed?.followersLabel ||
         dict?.communityCard?.followers ||
         "Followers";
 
-    const followerDisplay = useMemo(() => {
+    const _followerDisplay = useMemo(() => {
         const count = community?.followerCount ?? 0;
         return new Intl.NumberFormat().format(count);
     }, [community?.followerCount]);
@@ -197,7 +197,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                 formatDate={formatDate}
                             />
                         ))}
-                        
+
                         {/* Load More Button */}
                         {hasMore && (
                             <div className="flex justify-center pt-4">
@@ -210,10 +210,12 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                     {loadingMore ? (
                                         <>
                                             <Spinner className="size-4" />
-                                            {dict?.communityFeed?.loadingMore || "Loading more..."}
+                                            {dict?.communityFeed?.loadingMore ||
+                                                "Loading more..."}
                                         </>
                                     ) : (
-                                        dict?.communityFeed?.loadMore || "Load more posts"
+                                        dict?.communityFeed?.loadMore ||
+                                        "Load more posts"
                                     )}
                                 </Button>
                             </div>

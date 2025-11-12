@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 
 export async function DELETE(
-    request: Request,
+    _request: Request,
     { params }: { params: Promise<{ postId: string }> },
 ) {
     try {

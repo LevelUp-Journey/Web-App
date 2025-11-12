@@ -21,7 +21,9 @@ export async function DELETE(
         }
 
         return NextResponse.json(
-            { error: "This endpoint is deprecated. Use DELETE /api/community/reactions with postId in body" },
+            {
+                error: "This endpoint is deprecated. Use DELETE /api/community/reactions with postId in body",
+            },
             { status: 410 }, // 410 Gone
         );
     } catch (error) {

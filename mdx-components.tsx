@@ -1,5 +1,4 @@
 import type { MDXComponents } from "mdx/types";
-import Image, { type ImageProps } from "next/image";
 
 /**
  * This file allows you to provide custom React components
@@ -64,6 +63,7 @@ export function useMDXComponents(
             <img
                 sizes="100vw"
                 style={{ width: "100%", height: "auto" }}
+                alt=""
                 {...props}
             />
         ),

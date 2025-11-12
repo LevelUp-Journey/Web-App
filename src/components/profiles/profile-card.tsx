@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDictionary } from "@/hooks/use-dictionary";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 import { Skeleton } from "../ui/skeleton";
@@ -49,7 +48,7 @@ export default function ProfileCard({
         };
 
         loadProfile();
-    }, []);
+    }, [dict?.errors?.generic, dict?.errors?.loading?.profile]);
 
     if (loading) {
         return (

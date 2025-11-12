@@ -26,7 +26,6 @@ import {
 import { useDictionary } from "@/hooks/use-dictionary";
 import { getReadableLanguageName } from "@/lib/consts";
 import { PATHS } from "@/lib/paths";
-import { ChallengeController } from "@/services/internal/challenges/challenge/controller/challenge.controller";
 import { CodeVersionController } from "@/services/internal/challenges/challenge/controller/code-version.controller";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";

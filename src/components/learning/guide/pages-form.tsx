@@ -206,7 +206,8 @@ export function PagesForm({
             newPages.forEach((p) => {
                 // Asegurar que orderNumber sea válido
                 const validOrderNumber =
-                    isNaN(p.orderNumber) || !isFinite(p.orderNumber)
+                    Number.isNaN(p.orderNumber) ||
+                    !Number.isFinite(p.orderNumber)
                         ? 1
                         : p.orderNumber;
                 pagesMap.set(p.id, { ...p, orderNumber: validOrderNumber });
@@ -240,7 +241,7 @@ export function PagesForm({
         newPages.forEach((p) => {
             // Asegurar que orderNumber sea válido
             const validOrderNumber =
-                isNaN(p.orderNumber) || !isFinite(p.orderNumber)
+                Number.isNaN(p.orderNumber) || !Number.isFinite(p.orderNumber)
                     ? 1
                     : p.orderNumber;
             pagesMap.set(p.id, { ...p, orderNumber: validOrderNumber });
@@ -267,7 +268,8 @@ export function PagesForm({
                     id: p.id,
                     content: p.content,
                     orderNumber:
-                        isNaN(p.orderNumber) || !isFinite(p.orderNumber)
+                        Number.isNaN(p.orderNumber) ||
+                        !Number.isFinite(p.orderNumber)
                             ? 1
                             : p.orderNumber,
                 }));
@@ -287,14 +289,14 @@ export function PagesForm({
         if (initialPages.length > 0) {
             replacePagesCompletely(initialPages);
         }
-    }, []); // Solo una vez al montar
+    }, [initialPages, replacePagesCompletely]); // Solo una vez al montar
 
     // Auto-select first page when pages change
     useEffect(() => {
         if (pages.length > 0 && !selectedPageId) {
             setSelectedPageId(pages[0].id);
         }
-    }, [pages.length, selectedPageId]);
+    }, [pages.length, selectedPageId, pages[0].id]);
 
     // Load content into editor when selection changes
     useEffect(() => {
@@ -358,7 +360,7 @@ export function PagesForm({
             // Filtrar valores NaN para evitar problemas de cálculo
             const validOrderNumbers = pages
                 .map((p) => p.orderNumber)
-                .filter((num) => !isNaN(num) && isFinite(num));
+                .filter((num) => !Number.isNaN(num) && Number.isFinite(num));
 
             const nextOrderNumber =
                 validOrderNumbers.length > 0
@@ -381,7 +383,8 @@ export function PagesForm({
                     id: p.id,
                     content: p.content,
                     orderNumber:
-                        isNaN(p.orderNumber) || !isFinite(p.orderNumber)
+                        Number.isNaN(p.orderNumber) ||
+                        !Number.isFinite(p.orderNumber)
                             ? 1
                             : p.orderNumber,
                 }));
@@ -402,8 +405,8 @@ export function PagesForm({
                     id: pageResponse.id,
                     content: pageResponse.content,
                     orderNumber:
-                        isNaN(pageResponse.orderNumber) ||
-                        !isFinite(pageResponse.orderNumber)
+                        Number.isNaN(pageResponse.orderNumber) ||
+                        !Number.isFinite(pageResponse.orderNumber)
                             ? nextOrderNumber
                             : pageResponse.orderNumber,
                 };

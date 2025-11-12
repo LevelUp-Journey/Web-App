@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Button } from "@/components/ui/button";
 import {
     Empty,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 interface CommunityStateProps {
     state: "loading" | "error";
@@ -20,11 +20,7 @@ interface CommunityStateProps {
     onRetry?: () => void;
 }
 
-export function CommunityState({
-    state,
-    dict,
-    onRetry,
-}: CommunityStateProps) {
+export function CommunityState({ state, dict, onRetry }: CommunityStateProps) {
     const PATHS = useLocalizedPaths();
 
     return (
