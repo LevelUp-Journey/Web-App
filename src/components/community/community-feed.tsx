@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import type { ChangeEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -44,6 +44,7 @@ type ProfileLike =
     | undefined;
 
 const MESSAGE_LIMIT = 500;
+const COMPOSER_MAX_HEIGHT = 240;
 
 export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
     const {
@@ -60,6 +61,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
     const [message, setMessage] = useState("");
     const [isPosting, setIsPosting] = useState(false);
     const [composerError, setComposerError] = useState<string | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const followerLabel =
         dict?.communityFeed?.followersLabel ||
@@ -115,6 +117,30 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         void reload();
     }, [reload]);
 
+    const updateTextareaHeight = useCallback(() => {
+        if (!textareaRef.current) return;
+        const textarea = textareaRef.current;
+        textarea.style.height = "auto";
+        const newHeight = Math.min(textarea.scrollHeight, COMPOSER_MAX_HEIGHT);
+        textarea.style.height = `${newHeight}px`;
+    }, []);
+
+    useEffect(() => {
+        if (!canCreatePost) return;
+        updateTextareaHeight();
+    }, [canCreatePost, updateTextareaHeight]);
+
+    const handleMessageChange = useCallback(
+        (event: ChangeEvent<HTMLTextAreaElement>) => {
+            const nextValue = event.target.value.slice(0, MESSAGE_LIMIT);
+            setMessage(nextValue);
+            requestAnimationFrame(() => {
+                updateTextareaHeight();
+            });
+        },
+        [updateTextareaHeight],
+    );
+
     const handleShareMessage = useCallback(async () => {
         if (!community || !message.trim()) return;
         try {
@@ -152,6 +178,9 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
             }
 
             setMessage("");
+            requestAnimationFrame(() => {
+                updateTextareaHeight();
+            });
             await reload({ silent: true });
         } catch (err) {
             console.error("Error sharing message:", err);
@@ -164,7 +193,13 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         } finally {
             setIsPosting(false);
         }
-    }, [community, dict?.communityFeed?.composerError, message, reload]);
+    }, [
+        community,
+        dict?.communityFeed?.composerError,
+        message,
+        reload,
+        updateTextareaHeight,
+    ]);
 
     const renderState = (state: "loading" | "error"): React.ReactElement => (
         <Empty className="min-h-[400px]">
@@ -225,7 +260,11 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         ) || `Message #${community.name}`;
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
+        <div
+            className={`container mx-auto p-6 space-y-6 ${
+                canCreatePost ? "pb-44 sm:pb-52" : ""
+            }`}
+        >
             <Button variant="ghost" asChild>
                 <Link href={PATHS.DASHBOARD.COMMUNITY.ROOT}>
                     ← {dict?.communityFeed?.back || "Back to communities"}
@@ -478,53 +517,53 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
             </section>
 
             {canCreatePost && (
-                <Card className="border-dashed">
-                    <CardHeader>
-                        <CardTitle>
-                            {dict?.communityFeed?.composerTitle ||
-                                "Share an update"}
-                        </CardTitle>
-                        <CardDescription>
-                            {dict?.communityFeed?.composerDescription ||
-                                "Messages appear in the community feed for everyone to see."}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                        <Textarea
-                            value={message}
-                            onChange={(event) =>
-                                setMessage(
-                                    event.target.value.slice(0, MESSAGE_LIMIT),
-                                )
-                            }
-                            placeholder={composerPlaceholder}
-                            maxLength={MESSAGE_LIMIT}
-                            className="min-h-[120px]"
-                        />
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                            <span>
-                                {message.length}/{MESSAGE_LIMIT}
-                            </span>
-                            {composerError && (
-                                <span className="text-destructive">
-                                    {composerError}
+                <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background/95 px-3 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:px-6">
+                    <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
+                        <div className="flex-1 space-y-2">
+                            <div>
+                                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                                    {dict?.communityFeed?.composerTitle ||
+                                        "Share an update"}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    {dict?.communityFeed?.composerDescription ||
+                                        "Messages appear in the community feed for everyone to see."}
+                                </p>
+                            </div>
+                            <Textarea
+                                ref={textareaRef}
+                                value={message}
+                                onChange={handleMessageChange}
+                                placeholder={composerPlaceholder}
+                                maxLength={MESSAGE_LIMIT}
+                                className="min-h-[72px] max-h-[240px] resize-none overflow-auto"
+                            />
+                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                                <span>
+                                    {message.length}/{MESSAGE_LIMIT}
                                 </span>
-                            )}
+                                {composerError && (
+                                    <span className="text-destructive">
+                                        {composerError}
+                                    </span>
+                                )}
+                            </div>
                         </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-end">
-                        <Button
-                            onClick={handleShareMessage}
-                            disabled={isPosting || !message.trim()}
-                        >
-                            {isPosting && (
-                                <Spinner className="mr-2 size-4 text-background" />
-                            )}
-                            {dict?.communityFeed?.composerButton ||
-                                "Send message"}
-                        </Button>
-                    </CardFooter>
-                </Card>
+                        <div className="flex w-full flex-col items-end gap-2 sm:w-auto">
+                            <Button
+                                className="w-full sm:w-auto"
+                                onClick={handleShareMessage}
+                                disabled={isPosting || !message.trim()}
+                            >
+                                {isPosting && (
+                                    <Spinner className="mr-2 size-4 text-background" />
+                                )}
+                                {dict?.communityFeed?.composerButton ||
+                                    "Send message"}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
