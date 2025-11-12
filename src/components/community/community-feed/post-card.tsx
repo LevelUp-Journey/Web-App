@@ -16,11 +16,11 @@ import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import { CommentsSection } from "./comments-section";
+import { MarkdownContent } from "./markdown-content";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 interface Post {
     id: string;
-    title: string;
     content: string;
     imageUrl?: string | null;
     createdAt: string;
@@ -78,11 +78,13 @@ export function PostCard({
                                 alt={getDisplayName(post.authorProfile)}
                             />
                             <AvatarFallback>
-                                {getInitials(post.authorProfile, post.title)}
+                                {getInitials(
+                                    post.authorProfile,
+                                    post.content,
+                                )}
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <CardTitle className="text-base">{post.title}</CardTitle>
                             <CardDescription className="text-xs">
                                 {getDisplayName(post.authorProfile)} ·{" "}
                                 {formatDate(post.createdAt)}
@@ -107,13 +109,13 @@ export function PostCard({
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
-                <p className="text-sm leading-relaxed">{post.content}</p>
+                <MarkdownContent content={post.content} />
 
                 {post.imageUrl && (
                     <div className="relative rounded-lg overflow-hidden border min-h-[200px] w-full">
                         <Image
                             src={post.imageUrl}
-                            alt={post.title}
+                            alt="Post image"
                             fill
                             sizes="(max-width: 768px) 100vw, 600px"
                             className="object-cover"

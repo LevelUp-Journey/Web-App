@@ -93,11 +93,8 @@ export async function getPostsByUserIdAction(
 
 export interface CreatePostRequest {
     communityId: string;
-    authorId: string;
-    authorProfileId: string;
-    title: string;
     content: string;
-    imageUrl?: string;
+    imageUrl?: string | null;
 }
 
 export async function createPostAction(

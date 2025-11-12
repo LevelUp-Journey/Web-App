@@ -1,8 +1,9 @@
 export interface Comment {
     id: string;
     authorId: string;
+    authorProfileId: string;
     content: string;
-    imageUrl?: string;
+    imageUrl?: string | null;
     createdAt: string;
 }
 
@@ -18,10 +19,9 @@ export interface Post {
     id: string;
     communityId: string;
     authorId: string;
-    title: string;
+    authorProfileId: string;
     content: string;
-    imageUrl?: string; // Keep for backward compatibility
-    imageUrls?: string[]; // New field for multiple images
+    imageUrl?: string | null;
     createdAt: string;
     comments: Comment[];
     reactions: Reaction[];
