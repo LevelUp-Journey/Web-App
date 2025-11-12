@@ -2,12 +2,29 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useCallback, useMemo, useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
 import { useCommunityData } from "@/hooks/use-community-data";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 
@@ -26,91 +43,186 @@ type ProfileLike =
     | null
     | undefined;
 
+const MESSAGE_LIMIT = 500;
+
 export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
-    const { community, posts, ownerProfile, loading, error } =
-        useCommunityData(communityId);
+    const {
+        community,
+        posts,
+        ownerProfile,
+        canCreatePost,
+        loading,
+        error,
+        reloading,
+        reload,
+    } = useCommunityData(communityId);
     const PATHS = useLocalizedPaths();
+    const [message, setMessage] = useState("");
+    const [isPosting, setIsPosting] = useState(false);
+    const [composerError, setComposerError] = useState<string | null>(null);
 
-    const getDisplayName = (profile: ProfileLike) => {
-        if (!profile) {
+    const followerLabel =
+        dict?.communityFeed?.followersLabel ||
+        dict?.communityCard?.followers ||
+        "Followers";
+
+    const followerDisplay = useMemo(() => {
+        const count = community?.followerCount ?? 0;
+        return new Intl.NumberFormat().format(count);
+    }, [community?.followerCount]);
+
+    const getDisplayName = useCallback(
+        (profile: ProfileLike) => {
+            if (!profile) {
+                return dict?.communityFeed?.unknownUser || "Unknown user";
+            }
+            const firstName = profile.firstName?.trim();
+            const lastName = profile.lastName?.trim();
+            const fullName = [firstName, lastName].filter(Boolean).join(" ");
+            if (fullName.length > 0) {
+                return fullName;
+            }
+            if (profile.username) {
+                return `@${profile.username}`;
+            }
             return dict?.communityFeed?.unknownUser || "Unknown user";
-        }
-        const firstName = profile.firstName?.trim();
-        const lastName = profile.lastName?.trim();
-        const fullName = [firstName, lastName].filter(Boolean).join(" ");
-        if (fullName.length > 0) {
-            return fullName;
-        }
-        if (profile.username) {
-            return `@${profile.username}`;
-        }
-        return dict?.communityFeed?.unknownUser || "Unknown user";
-    };
+        },
+        [dict?.communityFeed?.unknownUser],
+    );
 
-    const getInitials = (profile: ProfileLike, fallback: string) => {
-        if (profile?.firstName || profile?.lastName) {
-            return `${profile.firstName?.[0] ?? ""}${profile.lastName?.[0] ?? ""}`.toUpperCase();
-        }
-        if (profile?.username) {
-            return profile.username.charAt(0).toUpperCase();
-        }
-        return fallback.charAt(0).toUpperCase();
-    };
+    const getInitials = useCallback(
+        (profile: ProfileLike, fallback: string) => {
+            if (profile?.firstName || profile?.lastName) {
+                return `${profile.firstName?.[0] ?? ""}${profile.lastName?.[0] ?? ""}`.toUpperCase();
+            }
+            if (profile?.username) {
+                return profile.username.charAt(0).toUpperCase();
+            }
+            return fallback.charAt(0).toUpperCase();
+        },
+        [],
+    );
 
-    const formatDate = (date: string | Date) =>
-        new Date(date).toLocaleDateString(undefined, {
+    const formatDate = useCallback((date: string | Date) => {
+        return new Date(date).toLocaleDateString(undefined, {
             year: "numeric",
             month: "short",
             day: "numeric",
         });
+    }, []);
+
+    const handleRetry = useCallback(() => {
+        void reload();
+    }, [reload]);
+
+    const handleShareMessage = useCallback(async () => {
+        if (!community || !message.trim()) return;
+        try {
+            setIsPosting(true);
+            setComposerError(null);
+
+            const content = message.trim();
+            const title = content.slice(0, 60) || `Message #${community.name}`;
+
+            const response = await fetch("/api/community/posts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    communityId: community.id,
+                    title,
+                    content,
+                }),
+            });
+
+            if (!response.ok) {
+                let errorMessage =
+                    dict?.communityFeed?.composerError ||
+                    "We couldn't share your message. Please try again.";
+                try {
+                    const data = (await response.json()) as { error?: string };
+                    if (data?.error) {
+                        errorMessage = data.error;
+                    }
+                } catch {
+                    // ignore JSON parsing errors
+                }
+                throw new Error(errorMessage);
+            }
+
+            setMessage("");
+            await reload({ silent: true });
+        } catch (err) {
+            console.error("Error sharing message:", err);
+            setComposerError(
+                err instanceof Error
+                    ? err.message
+                    : dict?.communityFeed?.composerError ||
+                          "We couldn't share your message. Please try again.",
+            );
+        } finally {
+            setIsPosting(false);
+        }
+    }, [community, dict?.communityFeed?.composerError, message, reload]);
+
+    const renderState = (state: "loading" | "error"): React.ReactElement => (
+        <Empty className="min-h-[400px]">
+            <EmptyHeader>
+                <EmptyMedia variant="icon">
+                    <Spinner className="size-6 text-muted-foreground" />
+                </EmptyMedia>
+                <EmptyTitle>
+                    {state === "loading"
+                        ? dict?.communityFeed?.loadingTitle ||
+                          "Loading community"
+                        : dict?.communityFeed?.failedToLoad ||
+                          "We couldn't load this community"}
+                </EmptyTitle>
+                <EmptyDescription>
+                    {state === "loading"
+                        ? dict?.communityFeed?.loadingDescription ||
+                          "Hang tight while we fetch the latest activity."
+                        : dict?.communityFeed?.failedToLoadDescription ||
+                          "Something went wrong. Try again in a moment."}
+                </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+                <div className="flex flex-col gap-3 w-full">
+                    {state === "error" && (
+                        <Button variant="secondary" onClick={handleRetry}>
+                            {dict?.communityFeed?.retry || "Retry"}
+                        </Button>
+                    )}
+                    <Button variant="outline" asChild>
+                        <Link href={PATHS.DASHBOARD.COMMUNITY.ROOT}>
+                            {dict?.communityFeed?.back || "Back to communities"}
+                        </Link>
+                    </Button>
+                </div>
+            </EmptyContent>
+        </Empty>
+    );
 
     if (loading) {
         return (
             <div className="container mx-auto p-6">
-                <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-                    <Spinner className="size-8 text-muted-foreground" />
-                    <p className="text-muted-foreground text-sm">
-                        {dict?.communityFeed?.loading ||
-                            dict?.common?.loading ||
-                            "Loading..."}
-                    </p>
-                </div>
+                {renderState("loading")}
             </div>
         );
     }
 
     if (error || !community) {
         return (
-            <div className="container mx-auto p-6">
-                <Card>
-                    <CardContent className="p-8 text-center space-y-4">
-                        <p className="text-lg font-semibold">
-                            {dict?.communityFeed?.failedToLoad ||
-                                "We couldn't load this community."}
-                        </p>
-                        <p className="text-muted-foreground">
-                            {dict?.communityFeed?.failedToLoadDescription ||
-                                "Please try again later."}
-                        </p>
-                        <div className="flex justify-center gap-3">
-                            <Button
-                                variant="secondary"
-                                onClick={() => window.location.reload()}
-                            >
-                                {dict?.communityFeed?.retry || "Retry"}
-                            </Button>
-                            <Button asChild>
-                                <Link href={PATHS.DASHBOARD.COMMUNITY.ROOT}>
-                                    {dict?.communityFeed?.back ??
-                                        "Back to communities"}
-                                </Link>
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+            <div className="container mx-auto p-6">{renderState("error")}</div>
         );
     }
+
+    const composerPlaceholder =
+        dict?.communityFeed?.composerPlaceholder?.replace(
+            "{community}",
+            community.name,
+        ) || `Message #${community.name}`;
 
     return (
         <div className="container mx-auto p-6 space-y-6">
@@ -120,77 +232,105 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                 </Link>
             </Button>
 
-            <Card>
-                <CardContent className="p-6 space-y-6">
+            <section className="relative overflow-hidden rounded-2xl border bg-card">
+                <div className="absolute inset-0 opacity-50 blur-3xl">
+                    <div className="absolute -right-16 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-primary/20" />
+                    <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-muted/40" />
+                </div>
+                <div className="relative flex flex-col gap-6 p-6 md:flex-row md:items-center">
                     <div className="flex items-center gap-4">
-                        <div className="h-16 w-16 rounded-full border bg-muted flex items-center justify-center overflow-hidden relative">
+                        <div className="relative h-24 w-24 rounded-2xl border-4 border-background bg-muted overflow-hidden">
                             {community.imageUrl ? (
                                 <Image
                                     src={community.imageUrl}
                                     alt={community.name}
                                     fill
-                                    sizes="64px"
+                                    sizes="96px"
                                     className="object-cover"
                                 />
                             ) : (
-                                <span className="text-2xl font-semibold">
+                                <div className="flex h-full w-full items-center justify-center text-3xl font-bold text-muted-foreground">
                                     {community.name.charAt(0).toUpperCase()}
-                                </span>
+                                </div>
                             )}
                         </div>
-                        <div>
-                            <h1 className="text-2xl font-bold">
+                    </div>
+                    <div className="flex-1 space-y-5">
+                        <div className="space-y-2">
+                            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                                {dict?.communityFeed?.heroLabel || "Community"}
+                            </p>
+                            <h1 className="text-3xl font-bold text-balance">
                                 {community.name}
                             </h1>
-                            <p className="text-muted-foreground">
+                            <p className="text-sm text-muted-foreground md:text-base">
                                 {community.description}
                             </p>
                         </div>
-                    </div>
-                    <Separator />
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div className="flex items-center gap-3">
-                            <Avatar className="h-12 w-12">
-                                <AvatarImage
-                                    src={ownerProfile?.profileUrl}
-                                    alt={getDisplayName(ownerProfile)}
-                                />
-                                <AvatarFallback>
-                                    {getInitials(ownerProfile, community.name)}
-                                </AvatarFallback>
-                            </Avatar>
+                        <div className="grid gap-4 sm:grid-cols-3">
                             <div>
-                                <p className="text-xs uppercase text-muted-foreground tracking-wide">
-                                    {dict?.communityFeed?.ownerLabel ||
-                                        "Community owner"}
+                                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                                    {followerLabel}
+                                </p>
+                                <p className="text-xl font-semibold">
+                                    {followerDisplay}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Avatar className="h-12 w-12">
+                                    <AvatarImage
+                                        src={ownerProfile?.profileUrl}
+                                        alt={getDisplayName(ownerProfile)}
+                                    />
+                                    <AvatarFallback>
+                                        {getInitials(
+                                            ownerProfile,
+                                            community.name,
+                                        )}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                                        {dict?.communityFeed?.ownerLabel ||
+                                            "Community owner"}
+                                    </p>
+                                    <p className="font-semibold">
+                                        {getDisplayName(ownerProfile)}
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                                    {dict?.communityFeed?.createdAtLabel ||
+                                        "Created on"}
                                 </p>
                                 <p className="font-semibold">
-                                    {getDisplayName(ownerProfile)}
+                                    {formatDate(community.createdAt)}
                                 </p>
                             </div>
                         </div>
-                        <div className="text-sm text-muted-foreground">
-                            <p className="uppercase tracking-wide text-xs">
-                                {dict?.communityFeed?.createdAtLabel ||
-                                    "Created on"}
-                            </p>
-                            <p className="font-medium text-foreground">
-                                {formatDate(community.createdAt)}
-                            </p>
-                        </div>
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </section>
 
             <section className="space-y-4">
-                <div>
-                    <h2 className="text-xl font-semibold">
-                        {dict?.communityFeed?.postsTitle || "Community feed"}
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                        {dict?.communityFeed?.postsSubtitle ||
-                            "Latest posts from this community"}
-                    </p>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 className="text-xl font-semibold">
+                            {dict?.communityFeed?.postsTitle ||
+                                "Community feed"}
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                            {dict?.communityFeed?.postsSubtitle ||
+                                "Latest posts from this community"}
+                        </p>
+                    </div>
+                    {reloading && (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Spinner className="size-4" />
+                            {dict?.communityFeed?.refreshing || "Refreshing"}
+                        </div>
+                    )}
                 </div>
 
                 {posts.length === 0 ? (
@@ -209,8 +349,8 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                 ) : (
                     <div className="space-y-6">
                         {posts.map((post) => (
-                            <Card key={post.id}>
-                                <CardHeader className="flex flex-col gap-2">
+                            <Card key={post.id} className="border-muted">
+                                <CardHeader className="gap-4">
                                     <div className="flex items-center gap-3">
                                         <Avatar>
                                             <AvatarImage
@@ -234,12 +374,12 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                             <CardTitle className="text-base">
                                                 {post.title}
                                             </CardTitle>
-                                            <p className="text-xs text-muted-foreground">
+                                            <CardDescription className="text-xs">
                                                 {getDisplayName(
                                                     post.authorProfile,
                                                 )}{" "}
                                                 · {formatDate(post.createdAt)}
-                                            </p>
+                                            </CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
@@ -336,6 +476,56 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                     </div>
                 )}
             </section>
+
+            {canCreatePost && (
+                <Card className="border-dashed">
+                    <CardHeader>
+                        <CardTitle>
+                            {dict?.communityFeed?.composerTitle ||
+                                "Share an update"}
+                        </CardTitle>
+                        <CardDescription>
+                            {dict?.communityFeed?.composerDescription ||
+                                "Messages appear in the community feed for everyone to see."}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        <Textarea
+                            value={message}
+                            onChange={(event) =>
+                                setMessage(
+                                    event.target.value.slice(0, MESSAGE_LIMIT),
+                                )
+                            }
+                            placeholder={composerPlaceholder}
+                            maxLength={MESSAGE_LIMIT}
+                            className="min-h-[120px]"
+                        />
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                            <span>
+                                {message.length}/{MESSAGE_LIMIT}
+                            </span>
+                            {composerError && (
+                                <span className="text-destructive">
+                                    {composerError}
+                                </span>
+                            )}
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end">
+                        <Button
+                            onClick={handleShareMessage}
+                            disabled={isPosting || !message.trim()}
+                        >
+                            {isPosting && (
+                                <Spinner className="mr-2 size-4 text-background" />
+                            )}
+                            {dict?.communityFeed?.composerButton ||
+                                "Send message"}
+                        </Button>
+                    </CardFooter>
+                </Card>
+            )}
         </div>
     );
 }

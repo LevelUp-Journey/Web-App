@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { UserRole } from "@/lib/consts";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import { PostController } from "@/services/internal/community/controller/post.controller";
@@ -41,11 +41,85 @@ export function useCommunityData(communityId: string) {
     const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [reloading, setReloading] = useState(false);
 
-    useEffect(() => {
-        const loadData = async () => {
+    const buildPostsWithDetails = useCallback(
+        async (
+            communityPosts: Post[],
+            communityData: Community,
+        ): Promise<PostWithDetails[]> => {
+            // Get unique author IDs across posts and comments
+            const authorIds = [
+                ...new Set([
+                    ...communityPosts.map((p) => p.authorId),
+                    ...communityPosts.flatMap((post) =>
+                        post.comments.map((comment) => comment.authorId),
+                    ),
+                ]),
+            ];
+
+            // Get profiles for all authors
+            const profilePromises = authorIds.map(async (authorId) => {
+                try {
+                    const profile =
+                        await ProfileController.getProfileByUserId(authorId);
+                    return {
+                        authorId,
+                        profile: toProfileSummary(profile),
+                    };
+                } catch (error) {
+                    console.error(
+                        `Error loading profile for ${authorId}:`,
+                        error,
+                    );
+                    return {
+                        authorId,
+                        profile: null,
+                    };
+                }
+            });
+
+            const profiles = await Promise.all(profilePromises);
+            const profileMap = new Map(
+                profiles.map((p) => [p.authorId, p.profile]),
+            );
+
+            // Combine posts with details
+            const postsWithDetails: PostWithDetails[] = communityPosts.map(
+                (post) => ({
+                    ...post,
+                    authorProfile: profileMap.get(post.authorId) ?? null,
+                    community: communityData,
+                    commentProfiles: post.comments.reduce<
+                        Record<string, ProfileSummary>
+                    >((acc, comment) => {
+                        acc[comment.authorId] =
+                            profileMap.get(comment.authorId) ?? null;
+                        return acc;
+                    }, {}),
+                }),
+            );
+
+            postsWithDetails.sort(
+                (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime(),
+            );
+
+            return postsWithDetails;
+        },
+        [],
+    );
+
+    const loadData = useCallback(
+        async (options?: { silent?: boolean }) => {
+            if (!communityId) return;
             try {
-                setLoading(true);
+                if (options?.silent) {
+                    setReloading(true);
+                } else {
+                    setLoading(true);
+                }
                 setError(null);
                 const [userId, userRoles, communityData, communityPosts] =
                     await Promise.all([
@@ -70,78 +144,30 @@ export function useCommunityData(communityId: string) {
                 );
                 setOwnerProfile(profile ?? null);
 
-                // Get unique author IDs across posts and comments
-                const authorIds = [
-                    ...new Set([
-                        ...communityPosts.map((p) => p.authorId),
-                        ...communityPosts.flatMap((post) =>
-                            post.comments.map((comment) => comment.authorId),
-                        ),
-                    ]),
-                ];
-
-                // Get profiles for all authors
-                const profilePromises = authorIds.map(async (authorId) => {
-                    try {
-                        const profile =
-                            await ProfileController.getProfileByUserId(
-                                authorId,
-                            );
-                        return {
-                            authorId,
-                            profile: toProfileSummary(profile),
-                        };
-                    } catch (error) {
-                        console.error(
-                            `Error loading profile for ${authorId}:`,
-                            error,
-                        );
-                        return {
-                            authorId,
-                            profile: null,
-                        };
-                    }
-                });
-
-                const profiles = await Promise.all(profilePromises);
-                const profileMap = new Map(
-                    profiles.map((p) => [p.authorId, p.profile]),
+                const postsWithDetails = await buildPostsWithDetails(
+                    communityPosts,
+                    communityData,
                 );
-
-                // Combine posts with details
-                const postsWithDetails: PostWithDetails[] = communityPosts.map(
-                    (post) => ({
-                        ...post,
-                        authorProfile: profileMap.get(post.authorId) ?? null,
-                        community: communityData,
-                        commentProfiles: post.comments.reduce<
-                            Record<string, ProfileSummary>
-                        >((acc, comment) => {
-                            acc[comment.authorId] =
-                                profileMap.get(comment.authorId) ?? null;
-                            return acc;
-                        }, {}),
-                    }),
-                );
-
-                // Sort by creation date (newest first)
-                postsWithDetails.sort(
-                    (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime(),
-                );
-
                 setPosts(postsWithDetails);
             } catch (err) {
                 console.error("Error loading community:", err);
                 setError("Failed to load community data");
             } finally {
-                setLoading(false);
+                if (options?.silent) {
+                    setReloading(false);
+                } else {
+                    setLoading(false);
+                }
             }
-        };
+        },
+        [buildPostsWithDetails, communityId],
+    );
 
-        if (communityId) loadData();
-    }, [communityId]);
+    useEffect(() => {
+        if (communityId) {
+            loadData();
+        }
+    }, [communityId, loadData]);
 
     return {
         community,
@@ -151,5 +177,7 @@ export function useCommunityData(communityId: string) {
         canCreatePost,
         loading,
         error,
+        reloading,
+        reload: loadData,
     };
 }

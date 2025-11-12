@@ -43,18 +43,28 @@
     "communityFeed": {
         "back": "Back to communities",
         "loading": "Loading community...",
+        "loadingTitle": "Loading community",
+        "loadingDescription": "Hang tight while we fetch the latest activity.",
         "failedToLoad": "We couldn't load this community.",
         "failedToLoadDescription": "Please try again later.",
         "retry": "Retry",
+        "heroLabel": "Community",
         "ownerLabel": "Community owner",
         "createdAtLabel": "Created on",
+        "followersLabel": "Followers",
         "postsTitle": "Community feed",
         "postsSubtitle": "Latest posts from this community",
+        "refreshing": "Refreshing",
         "emptyPosts": "No posts yet",
         "emptyPostsDescription": "Be the first to share something with this community.",
         "commentsTitle": "Comments",
         "emptyComments": "No comments yet",
-        "unknownUser": "Unknown user"
+        "unknownUser": "Unknown user",
+        "composerTitle": "Share an update",
+        "composerDescription": "Messages appear in the community feed for everyone to see.",
+        "composerPlaceholder": "Message #{community}",
+        "composerButton": "Send message",
+        "composerError": "We couldn't share your message. Please try again."
     },
     "auth": {
         "login": {
