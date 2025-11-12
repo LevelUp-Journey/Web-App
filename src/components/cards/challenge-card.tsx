@@ -3,7 +3,7 @@
 import { ChevronRight, EllipsisVertical, Star } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 import FullLanguageBadge from "@/components/cards/full-language-badge";
@@ -50,6 +50,33 @@ export default function ChallengeCard({
     const dict = useDictionary();
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [isLiked, setIsLiked] = useState(challenge.userLiked ?? false);
+    const [likesCount, setLikesCount] = useState(
+        challenge.likesCount ?? challenge.stars.length,
+    );
+
+    useEffect(() => {
+        setIsLiked(challenge.userLiked ?? false);
+        setLikesCount(challenge.likesCount ?? challenge.stars.length);
+    }, [challenge.userLiked, challenge.likesCount, challenge.stars.length]);
+
+    const handleLike = async () => {
+        const wasLiked = isLiked;
+        setIsLiked(!wasLiked);
+        setLikesCount((prev) => (wasLiked ? prev - 1 : prev + 1));
+
+        try {
+            if (wasLiked) {
+                await ChallengeController.unlikeChallenge(challenge.id);
+            } else {
+                await ChallengeController.likeChallenge(challenge.id);
+            }
+        } catch (error) {
+            setIsLiked(wasLiked);
+            setLikesCount((prev) => (wasLiked ? prev + 1 : prev - 1));
+            console.error("Failed to toggle like", error);
+        }
+    };
 
     const handleDelete = async () => {
         try {
@@ -113,11 +140,15 @@ export default function ChallengeCard({
 
                 {/* Stars at the bottom */}
                 <div className="flex items-center justify-between">
-                    <Button size={"sm"} variant={"ghost"}>
-                        <Star className="text-yellow-400" size={14} />
-                        <span className="text-xs">
-                            {challenge.stars.length}
-                        </span>
+                    <Button size={"sm"} variant={"ghost"} onClick={handleLike}>
+                        <Star
+                            className={cn(
+                                "text-yellow-400",
+                                isLiked && "fill-current",
+                            )}
+                            size={14}
+                        />
+                        <span className="text-xs">{likesCount}</span>
                     </Button>
                     <div className="flex items-center gap-1">
                         <Button size={"icon"} variant={"ghost"} asChild>

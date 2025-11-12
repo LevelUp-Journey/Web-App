@@ -63,6 +63,8 @@ export class ChallengeAssembler {
                 2,
                 Math.min(5, challenge.maxAttemptsBeforeGuides ?? 3),
             ),
+            likesCount: challenge.likesCount,
+            userLiked: challenge.userLiked,
         };
     }
 

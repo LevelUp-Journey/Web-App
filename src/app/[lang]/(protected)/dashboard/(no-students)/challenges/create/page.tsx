@@ -119,23 +119,13 @@ export default function CreateChallengePage() {
         }
         debounceRef.current = setTimeout(async () => {
             if (searchTerm.trim()) {
-                console.log(
-                    `[CreateChallengePage] Searching guides with term: ${searchTerm}`,
-                );
                 setIsSearching(true);
                 try {
                     const results = await GuideController.searchGuides({
                         title: searchTerm,
                     });
-                    console.log(
-                        `[CreateChallengePage] Found ${results?.length || 0} guides`,
-                    );
                     setGuides(results || []);
                 } catch (error) {
-                    console.error(
-                        "[CreateChallengePage] Error searching guides:",
-                        error,
-                    );
                     setGuides([]);
                 } finally {
                     setIsSearching(false);
@@ -153,16 +143,12 @@ export default function CreateChallengePage() {
     }, [searchTerm]);
 
     const handleSelectGuide = (guide: GuideResponse) => {
-        console.log(
-            `[CreateChallengePage] Selecting guide: ${guide.id} - ${guide.title}`,
-        );
         setSelectedGuideIds((prev) =>
             prev.includes(guide.id) ? prev : [...prev, guide.id],
         );
     };
 
     const handleRemoveGuide = (guideId: string) => {
-        console.log(`[CreateChallengePage] Removing guide: ${guideId}`);
         setSelectedGuideIds((prev) => prev.filter((id) => id !== guideId));
     };
 
@@ -188,9 +174,6 @@ export default function CreateChallengePage() {
         };
 
         try {
-            console.log(
-                `[CreateChallengePage] Creating challenge with guideIds: ${selectedGuideIds.join(", ")}`,
-            );
             const challenge =
                 await ChallengeController.createChallenge(request);
             toast.success(
@@ -199,7 +182,6 @@ export default function CreateChallengePage() {
             );
             router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challenge.id));
         } catch (error) {
-            console.error("Error creating challenge:", error);
             toast.error(
                 dict?.createChallenge.messages.error ||
                     "Failed to create challenge. Please try again.",
