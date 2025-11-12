@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Calendar, EllipsisVertical, Heart, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +16,7 @@ import { useDictionary } from "@/hooks/use-dictionary";
 import { PATHS } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 import type { Guide } from "@/services/internal/learning/guides/domain/guide.entity";
+import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
 interface GuideCardProps extends React.ComponentProps<"div"> {
     guide: Guide;
@@ -28,6 +30,14 @@ export default function GuideCard({
     ...props
 }: GuideCardProps) {
     const dict = useDictionary();
+    const [isLiked, setIsLiked] = useState(guide.likedByRequester);
+    const [likesCount, setLikesCount] = useState(guide.likesCount);
+
+    useEffect(() => {
+        setIsLiked(guide.likedByRequester);
+        setLikesCount(guide.likesCount);
+    }, [guide.likedByRequester, guide.likesCount]);
+
     const formattedDate = new Date(guide.createdAt).toLocaleDateString(
         "en-US",
         {
@@ -36,6 +46,24 @@ export default function GuideCard({
             day: "numeric",
         },
     );
+
+    const handleLikeGuide = async (guideId: string) => {
+        const wasLiked = isLiked;
+        setIsLiked(!wasLiked);
+        setLikesCount((prev) => (wasLiked ? prev - 1 : prev + 1));
+
+        try {
+            if (wasLiked) {
+                await GuideController.unlikeGuide(guideId);
+            } else {
+                await GuideController.likeGuide(guideId);
+            }
+        } catch (error) {
+            setIsLiked(wasLiked);
+            setLikesCount((prev) => (wasLiked ? prev + 1 : prev - 1));
+            console.error("Failed to toggle like", error);
+        }
+    };
 
     return (
         <Card
@@ -78,12 +106,20 @@ export default function GuideCard({
                     </Link>
                 </CardTitle>
                 <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 text-sm">
-                        <Button size="icon" variant="ghost">
-                            <Heart className="text-red-400" size={18} />
-                            {guide.likesCount}
-                        </Button>
-                    </div>
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() => handleLikeGuide(guide.id)}
+                    >
+                        <Heart
+                            className={cn(
+                                "text-red-400",
+                                isLiked && "fill-current",
+                            )}
+                            size={18}
+                        />
+                        {likesCount}
+                    </Button>
                     {adminMode && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

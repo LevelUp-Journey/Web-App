@@ -263,3 +263,13 @@ export async function removeChallengeFromGuideAction(
         `/guides/${guideId}/challenges/${challengeId}`,
     );
 }
+
+export async function likeGuideAction(guideId: string) {
+    const response = await API_GATEWAY_HTTP.post(`/guides/${guideId}/likes`);
+    return response.data;
+}
+
+export async function unlikeGuideAction(guideId: string) {
+    const response = await API_GATEWAY_HTTP.delete(`/guides/${guideId}/likes`);
+    return response.data;
+}
