@@ -11,6 +11,7 @@ export class CommunityAssembler {
             description: response.description,
             imageUrl: response.imageUrl,
             createdAt: new Date(response.createdAt),
+            followerCount: response.followerCount ?? 0,
         };
     }
 
