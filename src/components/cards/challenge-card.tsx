@@ -110,7 +110,7 @@ export default function ChallengeCard({
         <Card
             key={challenge.id}
             className={cn(
-                "hover:shadow-lg transition-shadow flex flex-col py-4 gap-2",
+                "hover:shadow-lg transition-shadow flex flex-col py-4 gap-2 rounded-none",
                 className,
             )}
             {...props}
