@@ -1,5 +1,5 @@
 import { getDictionary, type Locale } from "@/app/[lang]/dictionaries";
-import { CommunityFeed } from "@/components/community/community-feed";
+import { CommunityFeed } from "@/components/community/community-feed/community-feed";
 
 export default async function CommunityFeedPage({
     params,
