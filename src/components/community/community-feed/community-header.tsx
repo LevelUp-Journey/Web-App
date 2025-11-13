@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useSubscriptionContext } from "@/contexts/subscription-context";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 
 interface CommunityHeaderProps {
@@ -45,6 +46,7 @@ export function CommunityHeader({
     getInitials,
     formatDate,
 }: CommunityHeaderProps) {
+    const { refreshSubscriptions } = useSubscriptionContext();
     const [loading, setLoading] = useState(false);
     const [localIsFollowing, setLocalIsFollowing] = useState(isFollowing);
     const [localFollowId, setLocalFollowId] = useState(followId);
@@ -75,6 +77,7 @@ export function CommunityHeader({
                     setLocalFollowId(null);
                     setLocalFollowerCount((prev) => Math.max(0, prev - 1));
                     onFollowUpdated();
+                    refreshSubscriptions(); // Update sidebar
                 }
             } else {
                 // Subscribe
@@ -87,6 +90,7 @@ export function CommunityHeader({
                     setLocalFollowId(subscription.id);
                     setLocalFollowerCount((prev) => prev + 1);
                     onFollowUpdated();
+                    refreshSubscriptions(); // Update sidebar
                 }
             }
         } catch (error) {

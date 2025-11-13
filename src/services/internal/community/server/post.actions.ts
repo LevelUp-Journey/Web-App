@@ -99,6 +99,36 @@ export async function getPostsByUserIdAction(
     }
 }
 
+export async function getFeedPostsAction(
+    userId: string,
+    limit = 20,
+    offset = 0,
+): Promise<RequestSuccess<PostResponse[]> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.get(`/posts/feed/${userId}`, {
+            params: { limit, offset },
+        });
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
 export interface CreatePostRequest {
     communityId: string;
     content: string;

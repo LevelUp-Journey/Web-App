@@ -4,6 +4,7 @@ import {
     createPostAction,
     deletePostAction,
     getAllPostsAction,
+    getFeedPostsAction,
     getPostsByCommunityIdAction,
     getPostsByUserIdAction,
 } from "../server/post.actions";
@@ -54,6 +55,22 @@ export class PostController {
 
         if (response.status !== 200) {
             throw new Error(`Failed to fetch posts by user: ${response.data}`);
+        }
+
+        return PostAssembler.toEntitiesFromResponse(
+            response.data as PostResponse[],
+        );
+    }
+
+    static async getFeedPosts(
+        userId: string,
+        limit = 20,
+        offset = 0,
+    ): Promise<Post[]> {
+        const response = await getFeedPostsAction(userId, limit, offset);
+
+        if (response.status !== 200) {
+            throw new Error(`Failed to fetch feed posts: ${response.data}`);
         }
 
         return PostAssembler.toEntitiesFromResponse(

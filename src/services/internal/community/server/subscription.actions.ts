@@ -10,7 +10,21 @@ export interface SubscriptionResponse {
     id: string;
     userId: string;
     communityId: string;
+    communityName: string;
+    communityImageUrl?: string;
     createdAt: string;
+}
+
+export interface PaginatedSubscriptionResponse {
+    content: SubscriptionResponse[];
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    first: boolean;
+    last: boolean;
+    hasNext: boolean;
+    hasPrevious: boolean;
 }
 
 export interface CreateSubscriptionRequest {
@@ -101,10 +115,15 @@ export async function getSubscriptionsByCommunityAction(
 
 export async function getSubscriptionsByUserAction(
     userId: string,
-): Promise<RequestSuccess<SubscriptionResponse[]> | RequestFailure> {
+    page: number = 0,
+    size: number = 20,
+): Promise<RequestSuccess<PaginatedSubscriptionResponse> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.get(
             `/subscriptions/user/${userId}`,
+            {
+                params: { page, size },
+            },
         );
 
         return {
