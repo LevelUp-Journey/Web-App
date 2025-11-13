@@ -13,6 +13,7 @@ export function useUserSubscriptions() {
     );
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     const loadSubscriptions = useCallback(async () => {
         try {
@@ -38,9 +39,20 @@ export function useUserSubscriptions() {
         }
     }, []);
 
+    // Initial load
     useEffect(() => {
-        loadSubscriptions();
-    }, [loadSubscriptions, subscriptionKey]); // Re-run when subscriptionKey changes
+        if (isInitialLoad) {
+            loadSubscriptions();
+            setIsInitialLoad(false);
+        }
+    }, [isInitialLoad, loadSubscriptions]);
+
+    // Only reload when subscriptionKey changes (not on initial mount)
+    useEffect(() => {
+        if (!isInitialLoad && subscriptionKey > 0) {
+            loadSubscriptions();
+        }
+    }, [subscriptionKey, loadSubscriptions, isInitialLoad])
 
     return {
         subscriptions,

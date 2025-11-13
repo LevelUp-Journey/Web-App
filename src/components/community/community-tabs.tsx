@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { DiscoverTab } from "@/components/community/discover-tab";
+import { SubscriptionsSidebar } from "@/components/community/community-feed/subscriptions-sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type CommunityTabValue = "feed" | "discover" | "profile";
@@ -40,40 +41,45 @@ export function CommunityTabs({ dict }: CommunityTabsProps) {
     );
 
     return (
-        <Tabs
-            value={activeTab}
-            onValueChange={handleTabChange}
-            className="w-full"
-        >
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="feed">{tabLabels.feed}</TabsTrigger>
-                <TabsTrigger value="discover">{tabLabels.discover}</TabsTrigger>
-                <TabsTrigger value="profile">{tabLabels.profile}</TabsTrigger>
-            </TabsList>
+        <div className="relative">
+            <Tabs
+                value={activeTab}
+                onValueChange={handleTabChange}
+                className="w-full"
+            >
+                <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="feed">{tabLabels.feed}</TabsTrigger>
+                    <TabsTrigger value="discover">{tabLabels.discover}</TabsTrigger>
+                    <TabsTrigger value="profile">{tabLabels.profile}</TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="feed" className="mt-6">
-                {shouldRender("feed") && (
-                    <div className="flex items-center justify-center min-h-[400px]">
-                        <h2 className="text-2xl font-bold text-muted-foreground">
-                            Feed Content
-                        </h2>
-                    </div>
-                )}
-            </TabsContent>
+                <TabsContent value="feed" className="mt-6">
+                    {shouldRender("feed") && (
+                        <div className="flex items-center justify-center min-h-[400px]">
+                            <h2 className="text-2xl font-bold text-muted-foreground">
+                                Feed Content
+                            </h2>
+                        </div>
+                    )}
+                </TabsContent>
 
-            <TabsContent value="discover" className="mt-6">
-                {shouldRender("discover") && <DiscoverTab />}
-            </TabsContent>
+                <TabsContent value="discover" className="mt-6">
+                    {shouldRender("discover") && <DiscoverTab />}
+                </TabsContent>
 
-            <TabsContent value="profile" className="mt-6">
-                {shouldRender("profile") && (
-                    <div className="flex items-center justify-center min-h-[400px]">
-                        <h2 className="text-2xl font-bold text-muted-foreground">
-                            Profile Content
-                        </h2>
-                    </div>
-                )}
-            </TabsContent>
-        </Tabs>
+                <TabsContent value="profile" className="mt-6">
+                    {shouldRender("profile") && (
+                        <div className="flex items-center justify-center min-h-[400px]">
+                            <h2 className="text-2xl font-bold text-muted-foreground">
+                                Profile Content
+                            </h2>
+                        </div>
+                    )}
+                </TabsContent>
+            </Tabs>
+
+            {/* Subscriptions Sidebar - visible across all tabs */}
+            <SubscriptionsSidebar />
+        </div>
     );
 }
