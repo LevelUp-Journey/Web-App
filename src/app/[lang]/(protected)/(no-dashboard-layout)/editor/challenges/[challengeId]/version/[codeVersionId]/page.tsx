@@ -15,6 +15,8 @@ import type { SolutionResponse } from "@/services/internal/challenges/solutions/
 import { getSolutionByChallengeIdAndCodeVersionIdAction } from "@/services/internal/challenges/solutions/server/solutions.actions";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
+import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 interface PageProps {
     params: Promise<{
@@ -34,8 +36,10 @@ interface PageProps {
 export default async function StudentEditorPage({ params }: PageProps) {
     const { challengeId, codeVersionId } = await params;
 
+    const profile = await ProfileController.getCurrentUserProfile();
+
     // Validación de parámetros
-    if (!challengeId || !codeVersionId) {
+    if (!challengeId || !codeVersionId || !profile) {
         notFound();
     }
 
@@ -70,6 +74,7 @@ export default async function StudentEditorPage({ params }: PageProps) {
                     serializedDescription={serializedDescription}
                     solution={solution}
                     guides={guides}
+                    profile={profile}
                 />
             </div>
         );

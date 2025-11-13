@@ -56,6 +56,8 @@ import type { VersionTest } from "@/services/internal/challenges/challenge/entit
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
 import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
+import { NavUser } from "../dashboard/nav-user";
+import { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;
@@ -64,6 +66,7 @@ interface StudentCodeEditorProps {
     serializedDescription: SerializeResult | null;
     solution: SolutionResponse | null;
     guides: GuideResponse[];
+    profile: ProfileResponse;
 }
 
 /**
@@ -91,6 +94,7 @@ export default function StudentCodeEditor({
     serializedDescription,
     solution,
     guides,
+    profile,
 }: StudentCodeEditorProps) {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
@@ -252,7 +256,7 @@ export default function StudentCodeEditor({
 
                     <div>
                         <h1 className="text-2xl font-bold">{challenge.name}</h1>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm">
                             {challenge.experiencePoints} XP
                         </p>
                     </div>
@@ -261,7 +265,7 @@ export default function StudentCodeEditor({
                 <div className="flex items-center gap-2">
                     {/* Indicador de auto-guardado */}
                     {saveStatus === "saving" && (
-                        <span className="text-sm text-muted-foreground animate-pulse">
+                        <span className="text-sm animate-pulse">
                             {dict?.challenges?.editor?.autoSaving ||
                                 "Auto-saving..."}
                         </span>
@@ -272,7 +276,6 @@ export default function StudentCodeEditor({
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div className="flex items-center gap-2">
-                                    <BookOpen className="h-4 w-4 text-muted-foreground" />
                                     <Select
                                         value={selectedGuideId}
                                         onValueChange={handleGuideSelect}
@@ -311,7 +314,6 @@ export default function StudentCodeEditor({
                         onClick={handleManualSave}
                         disabled={isSaveDisabled}
                         variant={getSaveButtonVariant()}
-                        size="sm"
                         aria-label={
                             dict?.challenges?.editor?.saveCodeManually ||
                             "Save code manually"
@@ -326,11 +328,11 @@ export default function StudentCodeEditor({
                         onClick={handleSubmit}
                         disabled={isSubmitDisabled}
                         variant="default"
-                        size="sm"
                         aria-label={
                             dict?.challenges?.editor?.runCodeAndSubmit ||
                             "Run code and submit solution"
                         }
+                        className="bg-green-800 hover:bg-green-700 dark:bg-green-400 dark:text-secondary dark:hover:bg-green-500"
                     >
                         <Play className="h-4 w-4" />
                         {isSubmitting
@@ -338,6 +340,7 @@ export default function StudentCodeEditor({
                               "Executing..."
                             : dict?.challenges?.editor?.runCode || "Run Code"}
                     </Button>
+                    <NavUser profile={profile} />
                 </div>
             </header>
 
@@ -395,7 +398,7 @@ export default function StudentCodeEditor({
                 {/* Left Panel - Monaco Editor */}
                 <ResizablePanel defaultSize={70} minSize={50} maxSize={80}>
                     <div className="h-full flex flex-col">
-                        <div className="flex-1 overflow-hidden p-4">
+                        <div className="flex-1 overflow-hidden p-4 bg-muted dark:bg-transparent">
                             <MonacoEditor
                                 language={getMonacoLanguage(
                                     codeVersion.language as ProgrammingLanguage,

@@ -258,3 +258,57 @@ export async function searchChallengesAction(
         };
     }
 }
+
+export async function likeChallengeAction(
+    challengeId: string,
+): Promise<RequestSuccess<boolean> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.post(
+            `/challenges/${challengeId}/likes`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as AxiosError;
+
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function unlikeChallengeAction(
+    challengeId: string,
+): Promise<RequestSuccess<boolean> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.delete(
+            `/challenges/${challengeId}/likes`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
