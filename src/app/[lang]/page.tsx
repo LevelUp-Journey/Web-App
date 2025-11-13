@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { getDictionary } from "@/lib/i18n";
 import { getLocalizedPaths } from "@/lib/paths";
+import { LightRays } from "@/components/ui/light-rays";
 
 export default async function Home({
     params,
@@ -57,63 +58,64 @@ export default async function Home({
                 </div>
             </header>
 
+            <section className="py-16 md:py-24 text-center">
+                <LightRays />
+                <div className="max-w-4xl mx-auto space-y-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
+                        <span className="text-sm font-medium text-foreground">
+                            {dict.landing.hero.badge}
+                        </span>
+                    </div>
+
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-tight">
+                        {dict.landing.hero.title}
+                        <br />
+                        <span className="text-primary">
+                            {dict.landing.hero.titleHighlight}
+                        </span>
+                    </h1>
+
+                    <div className="text-xl sm:text-2xl md:text-3xl font-semibold h-12 flex items-center justify-center">
+                        <TypingAnimation
+                            words={[
+                                "JavaScript",
+                                "Python",
+                                "Java",
+                                "React",
+                                "Node.js",
+                                "C++",
+                                "SQL",
+                                "TypeScript",
+                            ]}
+                            className="text-muted-foreground"
+                            typeSpeed={100}
+                            deleteSpeed={50}
+                            pauseDelay={2000}
+                            loop={true}
+                        />
+                    </div>
+
+                    <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                        {dict.landing.hero.description}
+                    </p>
+
+                    {/* CTA Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-6">
+                        <Button
+                            size="lg"
+                            className="text-base h-12 w-full sm:w-auto"
+                            asChild
+                        >
+                            <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
+                                {dict.landing.hero.cta}
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </section>
+
             {/* Hero Section */}
             <main className="container mx-auto px-4 sm:px-6">
-                <section className="py-16 md:py-24 text-center">
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
-                            <span className="text-sm font-medium text-foreground">
-                                {dict.landing.hero.badge}
-                            </span>
-                        </div>
-
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-tight">
-                            {dict.landing.hero.title}
-                            <br />
-                            <span className="text-primary">
-                                {dict.landing.hero.titleHighlight}
-                            </span>
-                        </h1>
-
-                        <div className="text-xl sm:text-2xl md:text-3xl font-semibold h-12 flex items-center justify-center">
-                            <TypingAnimation
-                                words={[
-                                    "JavaScript",
-                                    "Python",
-                                    "Java",
-                                    "React",
-                                    "Node.js",
-                                    "C++",
-                                    "SQL",
-                                    "TypeScript",
-                                ]}
-                                className="text-muted-foreground"
-                                typeSpeed={100}
-                                deleteSpeed={50}
-                                pauseDelay={2000}
-                                loop={true}
-                            />
-                        </div>
-
-                        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            {dict.landing.hero.description}
-                        </p>
-
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-3 justify-center pt-6">
-                            <Button
-                                size="lg"
-                                className="text-base h-12 w-full sm:w-auto"
-                                asChild
-                            >
-                                <Link href={PATHS.AUTH.SIGN_UP.ROOT}>
-                                    {dict.landing.hero.cta}
-                                </Link>
-                            </Button>
-                        </div>
-                    </div>
-                </section>
-
                 {/* Quick Stats */}
                 <section className="py-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
