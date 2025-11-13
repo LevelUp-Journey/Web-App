@@ -47,7 +47,9 @@ export function CommunityTabs({ dict }: CommunityTabsProps) {
                 className="w-full"
             >
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="discover">{tabLabels.discover}</TabsTrigger>
+                    <TabsTrigger value="discover">
+                        {tabLabels.discover}
+                    </TabsTrigger>
                     <TabsTrigger value="feed">{tabLabels.feed}</TabsTrigger>
                 </TabsList>
 

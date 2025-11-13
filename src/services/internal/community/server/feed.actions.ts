@@ -1,9 +1,6 @@
 "use server";
 
-import type {
-    RequestFailure,
-    RequestSuccess,
-} from "@/services/axios.config";
+import type { RequestFailure, RequestSuccess } from "@/services/axios.config";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
 
 export interface FeedItemReactions {
