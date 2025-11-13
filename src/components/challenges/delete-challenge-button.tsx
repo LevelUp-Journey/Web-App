@@ -50,7 +50,7 @@ export default function DeleteChallengeButton({
                     "Challenge deleted successfully",
             );
             router.push(PATHS.DASHBOARD.ADMINISTRATION.ROOT);
-        } catch (error) {
+        } catch (_error) {
             toast.error(
                 dict?.errors?.deleting?.challenge ||
                     "Failed to delete challenge",

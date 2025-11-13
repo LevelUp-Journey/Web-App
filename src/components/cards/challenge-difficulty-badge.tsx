@@ -10,7 +10,7 @@ interface ChallengeDifficultyBadgeProps {
     selected?: boolean;
 }
 
-const DEFAULT_COLOR = "bg-muted text-muted-foreground";
+const _DEFAULT_COLOR = "bg-muted text-muted-foreground";
 
 // Colores por nivel de dificultad (modo claro / oscuro)
 const COLOR_SCHEMES: Record<

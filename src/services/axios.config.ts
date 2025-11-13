@@ -8,6 +8,10 @@ export const API_GATEWAY_HTTP = axios.create({
     baseURL: ENV.SERVICES.API_GATEWAY.BASE_URL,
 });
 
+export const COMMUNITY_HTTP = axios.create({
+    baseURL: ENV.SERVICES.COMMUNITY.BASE_URL,
+});
+
 API_GATEWAY_HTTP.interceptors.request.use(async (config) => {
     const authTokens = await getAuthTokenAction();
     if (authTokens && authTokens.token !== "NO_TOKEN_FOUND") {

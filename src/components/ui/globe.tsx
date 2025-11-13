@@ -94,12 +94,16 @@ export function Globe({
             },
         });
 
-        setTimeout(() => (canvasRef.current!.style.opacity = "1"), 0);
+        setTimeout(() => {
+            if (canvasRef.current?.style) {
+                canvasRef.current.style.opacity = "1";
+            }
+        }, 0);
         return () => {
             globe.destroy();
             window.removeEventListener("resize", onResize);
         };
-    }, [rs, config]);
+    }, [rs, config, phi, width]);
 
     return (
         <div

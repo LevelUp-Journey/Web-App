@@ -26,6 +26,7 @@ export interface CommunityResponse {
     description: string;
     imageUrl?: string;
     createdAt: string;
+    followerCount?: number;
 }
 
 export async function createCommunityAction(

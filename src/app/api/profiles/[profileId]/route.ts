@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 
 export async function GET(
-    request: NextRequest,
+    _request: NextRequest,
     { params }: { params: Promise<{ profileId: string }> },
 ) {
     try {

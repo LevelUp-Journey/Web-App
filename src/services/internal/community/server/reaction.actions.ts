@@ -17,7 +17,10 @@ export async function createReactionAction(
     request: CreateReactionRequest,
 ): Promise<RequestSuccess<Reaction> | RequestFailure> {
     try {
-        const response = await API_GATEWAY_HTTP.post("/reactions", request);
+        // Use new endpoint: POST /reactions/user/{userId}/post/{postId}
+        const response = await API_GATEWAY_HTTP.post(
+            `/reactions/user/${request.userId}/post/${request.postId}`,
+        );
 
         return {
             data: response.data,
@@ -76,11 +79,13 @@ export async function getReactionsByPostIdAction(
 }
 
 export async function deleteReactionAction(
-    reactionId: string,
+    userId: string,
+    postId: string,
 ): Promise<RequestSuccess<void> | RequestFailure> {
     try {
+        // Use new endpoint: DELETE /reactions/user/{userId}/post/{postId}
         const response = await API_GATEWAY_HTTP.delete(
-            `/reactions/${reactionId}`,
+            `/reactions/user/${userId}/post/${postId}`,
         );
 
         return {

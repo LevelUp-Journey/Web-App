@@ -1,6 +1,7 @@
 import AppSidebar from "@/components/dashboard/app-sidebar";
 import { SidebarContentHeader } from "@/components/dashboard/sidebar-content-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { SubscriptionProvider } from "@/contexts/subscription-context";
 
 export default async function ProtectedLayout({
     children,
@@ -10,12 +11,14 @@ export default async function ProtectedLayout({
     params: Promise<{ lang: string }>;
 }) {
     return (
-        <SidebarProvider>
-            <AppSidebar params={params} />
-            <main className="w-full min-h-screen flex flex-col relative">
-                <SidebarContentHeader />
-                <div className="flex-1">{children}</div>
-            </main>
-        </SidebarProvider>
+        <SubscriptionProvider>
+            <SidebarProvider>
+                <AppSidebar params={params} />
+                <main className="w-full min-h-screen flex flex-col relative">
+                    <SidebarContentHeader />
+                    <div className="flex-1">{children}</div>
+                </main>
+            </SidebarProvider>
+        </SubscriptionProvider>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ChallengeCard from "@/components/cards/challenge-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,7 @@ export function ChallengesPageSection({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
-    const loadChallenges = async () => {
+    const loadChallenges = useCallback(async () => {
         try {
             setLoading(true);
             setError(false);
@@ -80,11 +80,11 @@ export function ChallengesPageSection({
         } finally {
             setLoading(false);
         }
-    };
+    }, [onCountChange]);
 
     useEffect(() => {
         loadChallenges();
-    }, []);
+    }, [loadChallenges]);
 
     if (loading) {
         return (

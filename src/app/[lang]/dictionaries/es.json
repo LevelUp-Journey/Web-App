@@ -37,6 +37,56 @@
         "yes": "Sí",
         "no": "No"
     },
+    "help": {
+        "title": "Ayuda",
+        "suggestionsTitle": "Sugerencias y Comentarios",
+        "description": "Envía tus sugerencias, dudas, preguntas, comentarios o cualquier comentario de forma totalmente anónima. Tu opinión nos ayuda a mejorar la plataforma.",
+        "label": "Sugerencia",
+        "placeholder": "Escribe tu sugerencia aquí...",
+        "submitButton": "Enviar Sugerencia",
+        "successToast": "¡Sugerencia enviada! Gracias por tu feedback.",
+        "validation": {
+            "required": "La sugerencia es requerida."
+        }
+    },
+    "feedback": {
+        "title": "Comentarios de Usuarios",
+        "description": "Ver y gestionar sugerencias y comentarios de usuarios.",
+        "noSuggestions": "No hay sugerencias aún.",
+        "table": {
+            "date": "Fecha",
+            "suggestion": "Sugerencia"
+        }
+    },
+    "communityCard": {
+        "followers": "Seguidores"
+    },
+    "communityFeed": {
+        "back": "Volver a comunidades",
+        "loading": "Cargando comunidad...",
+        "loadingTitle": "Cargando comunidad",
+        "loadingDescription": "Espera mientras obtenemos la actividad más reciente.",
+        "failedToLoad": "No pudimos cargar esta comunidad.",
+        "failedToLoadDescription": "Inténtalo de nuevo más tarde.",
+        "retry": "Reintentar",
+        "heroLabel": "Comunidad",
+        "ownerLabel": "Propietario de la comunidad",
+        "createdAtLabel": "Creada el",
+        "followersLabel": "Seguidores",
+        "postsTitle": "Feed de la comunidad",
+        "postsSubtitle": "Últimas publicaciones de esta comunidad",
+        "refreshing": "Actualizando",
+        "emptyPosts": "Aún no hay publicaciones",
+        "emptyPostsDescription": "Sé el primero en compartir algo con esta comunidad.",
+        "commentsTitle": "Comentarios",
+        "emptyComments": "Todavía no hay comentarios",
+        "unknownUser": "Usuario desconocido",
+        "composerTitle": "Comparte una actualización",
+        "composerDescription": "Los mensajes aparecen en el feed de la comunidad y todos pueden verlos.",
+        "composerPlaceholder": "Mensaje #{community}",
+        "composerButton": "Enviar mensaje",
+        "composerError": "No pudimos enviar tu mensaje. Inténtalo de nuevo."
+    },
     "auth": {
         "login": {
             "title": "Inicia sesión en tu cuenta",
@@ -696,7 +746,8 @@
             "general": "General",
             "challenges": "Desafíos",
             "guides": "Guías",
-            "community": "Comunidad"
+            "community": "Comunidad",
+            "feedback": "Feedback"
         },
         "dashboard": {
             "title": "Panel de Administración — Actividad Reciente",

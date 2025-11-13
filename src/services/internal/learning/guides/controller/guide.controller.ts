@@ -18,6 +18,8 @@ import {
     updateGuideAction,
     updateGuideStatusAction,
     updatePageAction,
+    likeGuideAction,
+    unlikeGuideAction,
 } from "../server/guide.actions";
 import type {
     CreateGuideRequest,
@@ -208,5 +210,15 @@ export class GuideController {
         challengeId: string,
     ): Promise<void> {
         await removeChallengeFromGuideAction(guideId, challengeId);
+    }
+
+    public static async likeGuide(guideId: string) {
+        const response = await likeGuideAction(guideId);
+        return response;
+    }
+
+    public static async unlikeGuide(guideId: string) {
+        const response = await unlikeGuideAction(guideId);
+        return response;
     }
 }

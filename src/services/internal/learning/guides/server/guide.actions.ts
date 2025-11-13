@@ -1,6 +1,5 @@
 "use server";
 
-import axios from "axios";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import type { LearningResponse } from "../../shared";
 import type {
@@ -262,4 +261,14 @@ export async function removeChallengeFromGuideAction(
     await API_GATEWAY_HTTP.delete(
         `/guides/${guideId}/challenges/${challengeId}`,
     );
+}
+
+export async function likeGuideAction(guideId: string) {
+    const response = await API_GATEWAY_HTTP.post(`/guides/${guideId}/likes`);
+    return response.data;
+}
+
+export async function unlikeGuideAction(guideId: string) {
+    const response = await API_GATEWAY_HTTP.delete(`/guides/${guideId}/likes`);
+    return response.data;
 }

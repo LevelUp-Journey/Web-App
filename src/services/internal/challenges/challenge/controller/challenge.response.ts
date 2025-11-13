@@ -10,6 +10,8 @@ export interface ChallengeResponse {
     stars: ChallengeStarResponse[];
     guides: string[]; // Guide IDs
     maxAttemptsBeforeGuides?: number | null;
+    userLiked: boolean;
+    likesCount: number;
 }
 
 export interface ChallengeTagResponse {

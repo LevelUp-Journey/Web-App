@@ -62,7 +62,7 @@ export function CoverDropzone({
                 setIsUploading(false);
             }
         },
-        [onImageUrlChange],
+        [onImageUrlChange, onChange],
     );
 
     const onDrop = useCallback(
@@ -84,7 +84,7 @@ export function CoverDropzone({
             }
             setIsDragActive(false);
         },
-        [uploadImageToCloudinary, onImageUrlChange, onChange],
+        [uploadImageToCloudinary],
     );
 
     const {

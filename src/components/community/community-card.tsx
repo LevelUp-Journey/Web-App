@@ -1,25 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import NextImage from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDictionary } from "@/hooks/use-dictionary";
+import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
 interface CommunityCardProps {
     community: Community;
 }
 
-export default function CommunityCard({
-    community,
-}: CommunityCardProps) {
+export default function CommunityCard({ community }: CommunityCardProps) {
     const [bannerColor, setBannerColor] = useState<string>("#6b7280");
-    const imgRef = useRef<HTMLImageElement>(null);
+    const PATHS = useLocalizedPaths();
+    const dict = useDictionary();
+    const followerCount = community.followerCount ?? 0;
+    const followerLabel =
+        dict?.communityCard?.followers ||
+        dict?.admin?.community?.followers ||
+        "Followers";
+    const formattedFollowerCount = useMemo(
+        () => new Intl.NumberFormat().format(followerCount),
+        [followerCount],
+    );
 
-    useEffect(() => {
-        if (community.imageUrl) {
-            extractDominantColor(community.imageUrl);
-        }
-    }, [community.imageUrl]);
-
-    const extractDominantColor = (imageUrl: string) => {
+    const extractDominantColor = useCallback((imageUrl: string) => {
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = imageUrl;
@@ -75,10 +83,16 @@ export default function CommunityCard({
         img.onerror = () => {
             // Keep default color on error
         };
-    };
+    }, []);
+
+    useEffect(() => {
+        if (community.imageUrl) {
+            extractDominantColor(community.imageUrl);
+        }
+    }, [community.imageUrl, extractDominantColor]);
 
     return (
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-lg transition-shadow group">
+        <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
             {/* Banner Section - No padding, fills entire width */}
             <div
                 className="h-32 w-full relative"
@@ -86,41 +100,51 @@ export default function CommunityCard({
             >
                 {/* Avatar positioned at the bottom of banner */}
                 <div className="absolute -bottom-8 left-4">
-                    <div className="w-16 h-16 rounded-full border-4 border-card bg-muted overflow-hidden">
-                        {community.imageUrl ? (
-                            <img
-                                ref={imgRef}
-                                src={community.imageUrl}
-                                alt={community.name}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground text-xl font-bold">
-                                {community.name.charAt(0).toUpperCase()}
-                            </div>
-                        )}
-                    </div>
+                    <Avatar className="w-16 h-16 border-4 border-card rounded-lg">
+                        <AvatarImage
+                            src={community.imageUrl ?? undefined}
+                            alt={community.name}
+                        />
+                        <AvatarFallback className="text-xl font-bold">
+                            {community.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
                 </div>
             </div>
 
             {/* Content Section with padding */}
-            <div className="pt-10 pb-3 px-6">
+            <CardContent className="pt-10 pb-3">
                 <h3 className="text-lg font-bold">
-                    {community.name}
+                    {community.id ? (
+                        <Link
+                            href={PATHS.DASHBOARD.COMMUNITY.WITH_ID(
+                                community.id,
+                            )}
+                            className="text-foreground hover:text-primary transition-colors"
+                        >
+                            {community.name}
+                        </Link>
+                    ) : (
+                        community.name
+                    )}
                 </h3>
-            </div>
+            </CardContent>
 
-            <div className="px-6 pb-6">
+            <CardContent className="pt-0">
                 <p className="text-sm text-muted-foreground line-clamp-2">
                     {community.description}
                 </p>
 
-                <div className="mt-4 text-xs text-muted-foreground">
-                    <span>
-                        Created {new Date(community.createdAt).toLocaleDateString()}
+                <div className="mt-4 text-xs text-muted-foreground flex items-center justify-between gap-4">
+                    <span className="truncate">
+                        Created{" "}
+                        {new Date(community.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="font-medium text-foreground">
+                        {formattedFollowerCount} {followerLabel}
                     </span>
                 </div>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 }

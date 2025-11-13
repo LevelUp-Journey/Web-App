@@ -54,7 +54,7 @@ export function AvatarDropzone({
                 setIsUploading(false);
             }
         },
-        [onImageUrlChange],
+        [onImageUrlChange, dict?.errors?.uploading?.image],
     );
 
     const onDrop = useCallback(
@@ -80,7 +80,7 @@ export function AvatarDropzone({
             }
             setIsDragActive(false);
         },
-        [uploadImageToCloudinary],
+        [uploadImageToCloudinary, dict?.errors?.validation?.fileRejected],
     );
 
     const {

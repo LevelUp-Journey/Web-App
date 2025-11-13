@@ -7,8 +7,10 @@ import {
     getChallengeByIdAction,
     getChallengesByTeacherIdAction,
     getPublicChallengesAction,
+    likeChallengeAction,
     removeGuideFromChallenge,
     searchChallengesAction,
+    unlikeChallengeAction,
     updateChallengeAction,
 } from "../server/challenge.actions";
 import { ChallengeAssembler } from "./challenge.assembler";
@@ -26,7 +28,7 @@ export class ChallengeError extends Error {
         public originalError?: unknown,
     ) {
         super(message);
-        this.name = "ChallengeError " + statusCode + " :";
+        this.name = `ChallengeError ${statusCode} :`;
     }
 }
 
@@ -309,6 +311,40 @@ export class ChallengeController {
         } catch (error) {
             console.error("Error searching challenges:", error);
             return [];
+        }
+    }
+
+    public static async likeChallenge(challengeId: string): Promise<boolean> {
+        try {
+            const response = await likeChallengeAction(challengeId);
+
+            if (response.status === 201 && response.data) {
+                return response.data as boolean;
+            }
+
+            console.error("Failed to like challenge:", response);
+            return false;
+        } catch (error) {
+            console.error("Error liking challenge:", error);
+            return false;
+        }
+    }
+
+    public static async unlikeChallenge(challengeId: string): Promise<boolean> {
+        try {
+            const response = await unlikeChallengeAction(challengeId);
+
+            console.log("RESPONSE", response);
+
+            if (response.status === 204) {
+                return response.data as boolean;
+            }
+
+            console.error("Failed to unlike challenge:", response);
+            return false;
+        } catch (error) {
+            console.error("Error unliking challenge:", error);
+            return false;
         }
     }
 }

@@ -167,7 +167,7 @@ export function Breadcrumbs() {
         }
 
         generateBreadcrumbs();
-    }, [pathname]);
+    }, [pathname, dict]);
 
     if (loading || breadcrumbs.length <= 1) {
         return null;

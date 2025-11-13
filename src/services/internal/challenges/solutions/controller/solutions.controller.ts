@@ -15,7 +15,7 @@ export class SolutionsController {
         try {
             const response = await createSolutionAction(request);
             return response;
-        } catch (e) {
+        } catch (_e) {
             return false;
         }
     }
@@ -46,6 +46,8 @@ export class SolutionsController {
     public static async submitSolution(solutionId: string) {
         try {
             const response = await submitSolutionAction(solutionId);
+            console.log("Solution submitted successfully");
+            console.log("Response:", response);
             return response;
         } catch (e) {
             console.log(e);

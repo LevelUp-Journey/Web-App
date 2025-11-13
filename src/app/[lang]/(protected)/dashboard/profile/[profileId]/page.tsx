@@ -2,7 +2,7 @@
 
 import { ArrowLeft, UserMinus, UserPlus, Users } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,16 +23,12 @@ export default function UserProfilePage() {
     const [loading, setLoading] = useState(true);
     const [currentUserId, setCurrentUserId] = useState<string>("");
 
-    useEffect(() => {
-        loadData();
-    }, [profileId]);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         if (!profileId) return;
 
         try {
             setLoading(true);
-            const [profileData, userId, userPosts] = await Promise.all([
+            const [profileData, userId, _userPosts] = await Promise.all([
                 ProfileController.getProfileById(profileId),
                 AuthController.getUserId(),
                 PostController.getPostsByUserId(profileId),
@@ -50,7 +46,11 @@ export default function UserProfilePage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [profileId]);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
 
     const handleFollow = async () => {
         // TODO: Implement follow/unfollow functionality

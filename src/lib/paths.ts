@@ -71,6 +71,9 @@ export function getLocalizedPaths(locale: string) {
                     EDIT: (id: string) =>
                         `/${locale}/dashboard/admin/guides/${id}/edit`,
                 },
+                FEEDBACK: {
+                    ROOT: `/${locale}/dashboard/admin/feedback`,
+                },
             },
             COURSES: {
                 ROOT: `/${locale}/dashboard/courses`,
