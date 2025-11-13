@@ -12,11 +12,6 @@ export function useReactions(postId: string) {
     const [isLoading, setIsLoading] = useState(false);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-    useEffect(() => {
-        loadReactions();
-        loadCurrentUser();
-    }, [postId]);
-
     const loadReactions = async () => {
         try {
             const reactionsData =
@@ -36,6 +31,11 @@ export function useReactions(postId: string) {
             setCurrentUserId(null);
         }
     };
+
+    useEffect(() => {
+        loadReactions();
+        loadCurrentUser();
+    }, [loadCurrentUser, loadReactions]);
 
     useEffect(() => {
         if (currentUserId && reactions.length >= 0) {
@@ -65,7 +65,7 @@ export function useReactions(postId: string) {
         try {
             if (userReaction) {
                 // Remove reaction
-                await ReactionController.deleteReaction(userReaction.id);
+                await ReactionController.deleteReaction(currentUserId, postId);
                 setReactions((prev) =>
                     prev.filter((r) => r.id !== userReaction.id),
                 );
@@ -77,8 +77,10 @@ export function useReactions(postId: string) {
                     userId: currentUserId,
                     reactionType: "LIKE",
                 });
-                setReactions((prev) => [...prev, newReaction]);
-                setUserReaction(newReaction);
+                if (newReaction) {
+                    setReactions((prev) => [...prev, newReaction]);
+                    setUserReaction(newReaction);
+                }
             }
         } catch (error) {
             console.error("Failed to toggle reaction:", error);

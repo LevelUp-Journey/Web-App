@@ -6,4 +6,5 @@ export interface Community {
     description: string;
     imageUrl?: string;
     createdAt: Date;
+    followerCount: number;
 }

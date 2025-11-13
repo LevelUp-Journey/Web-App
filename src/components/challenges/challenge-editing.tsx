@@ -93,7 +93,7 @@ export default function ChallengeEditing({
         useState<Challenge>(initialChallenge);
     const [isSaving, setIsSaving] = useState(false);
 
-    const [codeVersions, setCodeVersions] =
+    const [codeVersions, _setCodeVersions] =
         useState<CodeVersion[]>(initialCodeVersions);
 
     // Guides tab state
@@ -181,7 +181,7 @@ export default function ChallengeEditing({
 
         loadSelectedGuides();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedGuideIds.length, selectedGuideIds.join(",")]);
+    }, [selectedGuideIds.length, selectedGuideIds.map]);
 
     const difficulty = form.watch("difficulty");
     const maxExperiencePoints = CHALLENGE_DIFFICULTY_MAX_XP[difficulty];
@@ -242,7 +242,7 @@ export default function ChallengeEditing({
         }
     });
 
-    const handleDelete = async () => {};
+    const _handleDelete = async () => {};
 
     const handleViewSummary = () => {
         router.push(`?`);

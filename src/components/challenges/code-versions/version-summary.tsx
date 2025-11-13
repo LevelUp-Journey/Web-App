@@ -1,5 +1,6 @@
 import { useDictionary } from "@/hooks/use-dictionary";
 import { getReadableLanguageName } from "@/lib/consts";
+import { Card, CardContent } from "@/components/ui/card";
 import type { CodeVersion } from "@/services/internal/challenges/challenge/entities/code-version.entity";
 
 interface VersionSummaryProps {
@@ -40,16 +41,15 @@ export default function VersionSummary({
                         {codeVersions.length > 0 ? (
                             <div className="space-y-2">
                                 {codeVersions.map((version) => (
-                                    <div
-                                        key={version.id}
-                                        className="p-4 border rounded-lg bg-card"
-                                    >
-                                        <h3 className="font-medium">
-                                            {getReadableLanguageName(
-                                                version.language,
-                                            )}
-                                        </h3>
-                                    </div>
+                                    <Card key={version.id}>
+                                        <CardContent className="p-4">
+                                            <h3 className="font-medium">
+                                                {getReadableLanguageName(
+                                                    version.language,
+                                                )}
+                                            </h3>
+                                        </CardContent>
+                                    </Card>
                                 ))}
                             </div>
                         ) : (

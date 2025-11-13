@@ -2,7 +2,6 @@ import { SearchIcon } from "lucide-react";
 import {
     InputGroup,
     InputGroupAddon,
-    InputGroupButton,
     InputGroupInput,
 } from "../ui/input-group";
 

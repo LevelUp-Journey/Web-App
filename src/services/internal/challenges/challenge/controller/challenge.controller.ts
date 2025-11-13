@@ -28,7 +28,7 @@ export class ChallengeError extends Error {
         public originalError?: unknown,
     ) {
         super(message);
-        this.name = "ChallengeError " + statusCode + " :";
+        this.name = `ChallengeError ${statusCode} :`;
     }
 }
 

@@ -99,9 +99,8 @@ export default function EditCommunityPage() {
         const loadCommunity = async () => {
             try {
                 setLoading(true);
-                const community = await CommunityController.getCommunityById(
-                    communityId,
-                );
+                const community =
+                    await CommunityController.getCommunityById(communityId);
 
                 if (community) {
                     form.setValue("name", community.name);
@@ -122,7 +121,12 @@ export default function EditCommunityPage() {
         };
 
         loadCommunity();
-    }, [communityId]);
+    }, [
+        communityId,
+        PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT,
+        form.setValue,
+        router.push,
+    ]);
 
     const handleImageSelect = async (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -194,6 +198,7 @@ export default function EditCommunityPage() {
         ownerId: "",
         ownerProfileId: "",
         createdAt: new Date(),
+        followerCount: 0,
     };
 
     if (loading) {
@@ -201,7 +206,9 @@ export default function EditCommunityPage() {
             <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
                 <div className="text-center">
                     <Spinner className="size-8 mx-auto mb-4" />
-                    <p className="text-muted-foreground">Loading community...</p>
+                    <p className="text-muted-foreground">
+                        Loading community...
+                    </p>
                 </div>
             </div>
         );
@@ -330,7 +337,10 @@ export default function EditCommunityPage() {
                                             </FormLabel>
                                             <span className="text-xs text-muted-foreground">
                                                 {field.value?.length || 0}/
-                                                {COMMUNITY_LIMITS.DESCRIPTION.MAX}
+                                                {
+                                                    COMMUNITY_LIMITS.DESCRIPTION
+                                                        .MAX
+                                                }
                                             </span>
                                         </div>
                                         <FormControl>

@@ -9,7 +9,7 @@ import cloudinary from "./cloudinary.config";
 export async function generateCloudinarySignature(
     paramsToSign: Record<string, string | number>,
 ): Promise<{ signature: string; timestamp: number }> {
-    const timestamp = Math.round(new Date().getTime() / 1000);
+    const timestamp = Math.round(Date.now() / 1000);
     const signature = cloudinary.utils.api_sign_request(
         {
             ...paramsToSign,

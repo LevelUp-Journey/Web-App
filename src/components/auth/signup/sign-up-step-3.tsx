@@ -31,7 +31,7 @@ interface SignUpStep3Props {
 export default function SignUpStep3({ dict }: SignUpStep3Props) {
     const router = useRouter();
     const PATHS = useLocalizedPaths();
-    const errorDict = useDictionary();
+    const _errorDict = useDictionary();
 
     const [userProfile, setUserProfile] = useState<ProfileResponse | null>(
         null,
@@ -115,7 +115,7 @@ export default function SignUpStep3({ dict }: SignUpStep3Props) {
         };
 
         loadData();
-    }, [router, setValue, PATHS]);
+    }, [router, setValue, PATHS, dict?.auth.signUp.step3.profileLoadError]);
 
     const handleImageUrlChange = (url: string) => {
         setImageUrl(url);

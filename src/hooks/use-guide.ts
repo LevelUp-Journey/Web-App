@@ -26,7 +26,7 @@ export function useGuide({ guideId, guide, author }: UseGuideOptions) {
                 hasSavedRef.current = true;
             }
         }
-    }, [guideId, setGuideData, getGuideData]);
+    }, [guideId, setGuideData, getGuideData, author, guide]);
 
     // Obtener datos de la store
     const storedData = getGuideData(guideId);

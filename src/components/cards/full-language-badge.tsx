@@ -9,6 +9,8 @@ interface FullLanguageBadgeProps {
     selected?: boolean;
 }
 
+const _DEFAULT_COLOR = "bg-muted text-muted-foreground";
+
 const FullLanguageBadge: React.FC<FullLanguageBadgeProps> = ({
     language,
     selected = false,

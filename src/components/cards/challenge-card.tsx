@@ -95,7 +95,7 @@ export default function ChallengeCard({
 
             toast.success("Challenge deleted successfully");
             router.refresh();
-        } catch (error) {
+        } catch (_error) {
             toast.error(
                 dict?.errors?.deleting?.challenge ||
                     "Failed to delete challenge",

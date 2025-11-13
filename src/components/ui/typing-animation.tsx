@@ -158,7 +158,6 @@ export function TypingAnimation({
                 return "▌";
             case "underscore":
                 return "_";
-            case "line":
             default:
                 return "|";
         }

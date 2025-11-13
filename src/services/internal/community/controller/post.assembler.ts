@@ -1,5 +1,5 @@
-import type { Comment, Post } from "../entities/post.entity";
-import type { CommentResponse, PostResponse } from "./post.response";
+import type { Post } from "../entities/post.entity";
+import type { PostResponse } from "./post.response";
 
 export class PostAssembler {
     public static toEntityFromResponse(response: PostResponse): Post {
@@ -7,26 +7,26 @@ export class PostAssembler {
             id: response.id,
             communityId: response.communityId,
             authorId: response.authorId,
-            title: response.title,
+            authorProfileId: response.authorProfileId,
+            authorName: response.authorName, // username from backend
+            authorProfileUrl: response.authorProfileUrl, // profile URL from backend
             content: response.content,
-            imageUrl: response.imageUrl,
+            imageUrl: response.imageUrl ?? null,
             createdAt: response.createdAt,
-            comments: response.comments.map((comment) => ({
-                id: comment.id,
-                authorId: comment.authorId,
-                content: comment.content,
-                imageUrl: comment.imageUrl,
-                createdAt: comment.createdAt,
-            })),
-            reactions: response.reactions
-                ? response.reactions.map((reaction) => ({
-                      id: reaction.id,
-                      postId: reaction.postId,
-                      userId: reaction.userId,
-                      reactionType: reaction.reactionType,
-                      createdAt: reaction.createdAt,
+            comments: response.comments
+                ? response.comments.map((comment) => ({
+                      id: comment.id,
+                      authorId: comment.authorId,
+                      authorProfileId: comment.authorProfileId,
+                      content: comment.content,
+                      imageUrl: comment.imageUrl ?? null,
+                      createdAt: comment.createdAt,
                   }))
                 : [],
+            reactions: {
+                reactionCounts: response.reactions?.reactionCounts || {},
+                userReaction: response.reactions?.userReaction || null,
+            },
         };
     }
 
