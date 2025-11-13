@@ -27,6 +27,6 @@
 
 /* Remove any default textarea focus outlines that might interfere with theme */
 textarea:focus {
-    outline: none !important;
-    box-shadow: none !important;
+    outline: none;
+    box-shadow: none;
 }

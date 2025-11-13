@@ -69,7 +69,7 @@ export default function GuidesPage() {
         };
 
         checkPermissions();
-    }, []);
+    }, [dict?.admin.guides.permissionsError]);
 
     useEffect(() => {
         if (!permissionsChecked) return;
@@ -113,7 +113,14 @@ export default function GuidesPage() {
         };
 
         loadGuides();
-    }, [permissionsChecked, userRole, currentPage, pageSize]);
+    }, [
+        permissionsChecked,
+        userRole,
+        currentPage,
+        pageSize,
+        dict?.admin.guides.error,
+        dict?.admin.guides.errorDescription,
+    ]);
 
     const handlePageChange = (page: number) => {
         if (page >= 0 && page < totalPages) {

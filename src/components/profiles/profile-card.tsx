@@ -5,11 +5,10 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useDictionary } from "@/hooks/use-dictionary";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
-import { Skeleton } from "../ui/skeleton";
 
 interface ProfileCardProps {
     showEditButton?: boolean;
@@ -49,19 +48,17 @@ export default function ProfileCard({
         };
 
         loadProfile();
-    }, []);
+    }, [dict?.errors?.generic, dict?.errors?.loading?.profile]);
 
     if (loading) {
         return (
             <Card>
                 <CardContent className="p-6">
-                    <div className="animate-pulse space-y-4">
-                        <div className="flex items-center space-x-4">
-                            <Skeleton className="w-16 h-16 rounded-full"></Skeleton>
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 rounded w-32"></Skeleton>
-                                <Skeleton className="h-4 rounded w-24"></Skeleton>
-                            </div>
+                    <div className="flex items-center space-x-4">
+                        <Skeleton className="w-16 h-16 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-32" />
+                            <Skeleton className="h-4 w-24" />
                         </div>
                     </div>
                 </CardContent>

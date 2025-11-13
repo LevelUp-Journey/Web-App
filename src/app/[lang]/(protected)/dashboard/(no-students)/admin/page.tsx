@@ -99,7 +99,7 @@ export default async function AdminPage({
                 </section>
             </div>
         );
-    } catch (error) {
+    } catch (_error) {
         return (
             <Empty className="min-h-[400px]">
                 <EmptyHeader>

@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GuideCard from "@/components/cards/guide-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,7 @@ export function GuidesSection() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
-    const loadGuides = async () => {
+    const loadGuides = useCallback(async () => {
         try {
             setLoading(true);
             setError(false);
@@ -42,11 +42,11 @@ export function GuidesSection() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         loadGuides();
-    }, []);
+    }, [loadGuides]);
 
     if (loading) {
         return (

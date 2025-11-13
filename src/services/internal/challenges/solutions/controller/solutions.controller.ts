@@ -15,7 +15,7 @@ export class SolutionsController {
         try {
             const response = await createSolutionAction(request);
             return response;
-        } catch (e) {
+        } catch (_e) {
             return false;
         }
     }

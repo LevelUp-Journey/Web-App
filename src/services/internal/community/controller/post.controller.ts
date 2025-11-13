@@ -4,14 +4,12 @@ import {
     createPostAction,
     deletePostAction,
     getAllPostsAction,
+    getFeedPostsAction,
     getPostsByCommunityIdAction,
     getPostsByUserIdAction,
 } from "../server/post.actions";
 import { PostAssembler } from "./post.assembler";
-import type {
-    PaginatedPostsResponse,
-    PostResponse,
-} from "./post.response";
+import type { PaginatedPostsResponse, PostResponse } from "./post.response";
 
 export class PostController {
     static async getAllPosts(): Promise<Post[]> {
@@ -26,7 +24,11 @@ export class PostController {
         );
     }
 
-    static async getPostsByCommunityId(communityId: string, page = 0, size = 20) {
+    static async getPostsByCommunityId(
+        communityId: string,
+        page = 0,
+        size = 20,
+    ) {
         const response = await getPostsByCommunityIdAction(
             communityId,
             page,
@@ -38,7 +40,7 @@ export class PostController {
         }
 
         const paginatedData = response.data as PaginatedPostsResponse;
-        
+
         return {
             posts: PostAssembler.toEntitiesFromResponse(paginatedData.content),
             hasNext: paginatedData.hasNext,
@@ -53,6 +55,22 @@ export class PostController {
 
         if (response.status !== 200) {
             throw new Error(`Failed to fetch posts by user: ${response.data}`);
+        }
+
+        return PostAssembler.toEntitiesFromResponse(
+            response.data as PostResponse[],
+        );
+    }
+
+    static async getFeedPosts(
+        userId: string,
+        limit = 20,
+        offset = 0,
+    ): Promise<Post[]> {
+        const response = await getFeedPostsAction(userId, limit, offset);
+
+        if (response.status !== 200) {
+            throw new Error(`Failed to fetch feed posts: ${response.data}`);
         }
 
         return PostAssembler.toEntitiesFromResponse(

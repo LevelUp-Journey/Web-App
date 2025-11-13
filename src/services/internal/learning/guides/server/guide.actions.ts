@@ -1,6 +1,5 @@
 "use server";
 
-import axios from "axios";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
 import type { LearningResponse } from "../../shared";
 import type {

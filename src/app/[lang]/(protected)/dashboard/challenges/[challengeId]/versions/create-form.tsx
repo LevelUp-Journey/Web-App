@@ -197,10 +197,11 @@ export default function CreateCodeVersionForm({
                 </Button>
                 <h1 className="text-2xl font-semibold">
                     {(() => {
+                        const langKey = selectedLanguage?.toLowerCase() || "";
                         const langName =
-                            dict?.challenges?.languages?.[
-                                selectedLanguage!.toLowerCase()
-                            ] || getReadableLanguageName(selectedLanguage!);
+                            (langKey &&
+                                dict?.challenges?.languages?.[langKey]) ||
+                            getReadableLanguageName(selectedLanguage || "");
                         return (
                             dict?.challenges?.codeVersions?.createForm?.createTitle?.replace(
                                 "{language}",

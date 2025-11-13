@@ -1,17 +1,18 @@
 "use client";
 
-import type { ChangeEvent } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
-    Send,
     Bold,
-    Italic,
-    Strikethrough,
     Code,
+    Italic,
     Link as LinkIcon,
     List,
     ListOrdered,
+    Send,
+    Strikethrough,
 } from "lucide-react";
+import type { ChangeEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +22,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 interface PostComposerProps {
     community: {
@@ -75,8 +75,7 @@ export function PostComposer({
             const textarea = textareaRef.current;
             const start = textarea.selectionStart;
             const end = textarea.selectionEnd;
-            const selectedText =
-                message.substring(start, end) || placeholder;
+            const selectedText = message.substring(start, end) || placeholder;
             const newText =
                 message.substring(0, start) +
                 before +
@@ -89,7 +88,8 @@ export function PostComposer({
             // Set cursor position
             setTimeout(() => {
                 textarea.focus();
-                const newCursorPos = start + before.length + selectedText.length;
+                const newCursorPos =
+                    start + before.length + selectedText.length;
                 textarea.setSelectionRange(newCursorPos, newCursorPos);
                 updateTextareaHeight();
             }, 0);
@@ -103,7 +103,13 @@ export function PostComposer({
             setIsPosting(true);
             setComposerError(null);
 
-            const content = message.trim();
+            // Preserve line breaks by replacing single newlines with double spaces + newline (Markdown convention)
+            // This ensures proper line break rendering in Markdown
+            const content = message
+                .split('\n')
+                .map(line => line.trimEnd())
+                .join('\n')
+                .trim();
 
             const response = await fetch("/api/community/posts", {
                 method: "POST",
@@ -147,7 +153,13 @@ export function PostComposer({
         } finally {
             setIsPosting(false);
         }
-    }, [community, dict?.communityFeed?.composerError, message, onPostCreated, updateTextareaHeight]);
+    }, [
+        community,
+        dict?.communityFeed?.composerError,
+        message,
+        onPostCreated,
+        updateTextareaHeight,
+    ]);
 
     const composerPlaceholder =
         dict?.communityFeed?.composerPlaceholder?.replace(

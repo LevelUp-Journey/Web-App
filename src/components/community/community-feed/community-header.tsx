@@ -1,13 +1,14 @@
 "use client";
 
+import { Calendar, UserMinus, UserPlus, Users } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { UserPlus, UserMinus, Users, Calendar } from "lucide-react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { useSubscriptionContext } from "@/contexts/subscription-context";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 
 interface CommunityHeaderProps {
@@ -45,6 +46,7 @@ export function CommunityHeader({
     getInitials,
     formatDate,
 }: CommunityHeaderProps) {
+    const { refreshSubscriptions } = useSubscriptionContext();
     const [loading, setLoading] = useState(false);
     const [localIsFollowing, setLocalIsFollowing] = useState(isFollowing);
     const [localFollowId, setLocalFollowId] = useState(followId);
@@ -57,9 +59,7 @@ export function CommunityHeader({
         dict?.communityCard?.followers ||
         "Followers";
 
-    const followerDisplay = new Intl.NumberFormat().format(
-        localFollowerCount,
-    );
+    const followerDisplay = new Intl.NumberFormat().format(localFollowerCount);
 
     const handleToggleFollow = async () => {
         if (loading) return;
@@ -68,14 +68,16 @@ export function CommunityHeader({
         try {
             if (localIsFollowing && localFollowId) {
                 // Unsubscribe
-                const success = await SubscriptionController.deleteSubscription(
-                    localFollowId,
-                );
+                const success =
+                    await SubscriptionController.deleteSubscription(
+                        localFollowId,
+                    );
                 if (success) {
                     setLocalIsFollowing(false);
                     setLocalFollowId(null);
                     setLocalFollowerCount((prev) => Math.max(0, prev - 1));
                     onFollowUpdated();
+                    refreshSubscriptions(); // Update sidebar
                 }
             } else {
                 // Subscribe
@@ -88,6 +90,7 @@ export function CommunityHeader({
                     setLocalFollowId(subscription.id);
                     setLocalFollowerCount((prev) => prev + 1);
                     onFollowUpdated();
+                    refreshSubscriptions(); // Update sidebar
                 }
             }
         } catch (error) {
@@ -180,7 +183,7 @@ export function CommunityHeader({
 
                     {/* Owner */}
                     <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
+                        <Avatar className="h-10 w-10 rounded-lg">
                             <AvatarImage
                                 src={ownerProfile?.profileUrl ?? undefined}
                                 alt={getDisplayName(ownerProfile)}

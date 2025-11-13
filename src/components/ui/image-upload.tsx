@@ -19,8 +19,8 @@ export default function ImageUpload({
     label = "Image",
 }: ImageUploadProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [isUploading, setIsUploading] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState<string | undefined>(value);
+    const [_isUploading, setIsUploading] = useState(false);
+    const [_previewUrl, _setPreviewUrl] = useState<string | undefined>(value);
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

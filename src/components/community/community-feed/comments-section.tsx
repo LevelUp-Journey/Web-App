@@ -1,8 +1,7 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Comment {
     id: string;
@@ -48,7 +47,7 @@ export function CommentsSection({
                                 className="rounded-md border p-3"
                             >
                                 <div className="flex items-center gap-3">
-                                    <Avatar className="h-8 w-8">
+                                    <Avatar className="h-8 w-8 rounded-lg">
                                         <AvatarImage
                                             src={
                                                 commenterProfile?.profileUrl ??

@@ -1,35 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { UserRole } from "@/lib/consts";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
-import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import { PostController } from "@/services/internal/community/controller/post.controller";
+import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
 import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
-type ProfileSummary = {
-    username?: string;
-    profileUrl?: string;
-    firstName?: string;
-    lastName?: string;
-} | null;
-
-interface PostWithDetails extends Post {
-    authorProfile?: ProfileSummary;
-    commentProfiles?: Record<string, ProfileSummary>;
-}
-
-const toProfileSummary = (profile: ProfileResponse | null): ProfileSummary =>
-    profile
-        ? {
-              username: profile.username,
-              profileUrl: profile.profileUrl,
-              firstName: profile.firstName,
-              lastName: profile.lastName,
-          }
-        : null;
+// PostWithDetails is now just an alias since posts come with author info from backend
+interface PostWithDetails extends Post {}
 
 export function useCommunityData(communityId: string) {
     const [community, setCommunity] = useState<Community | null>(null);
@@ -51,73 +32,6 @@ export function useCommunityData(communityId: string) {
 
     const PAGE_SIZE = 20;
 
-    const buildPostsWithDetails = useCallback(
-        async (
-            communityPosts: Post[],
-            communityData: Community,
-        ): Promise<PostWithDetails[]> => {
-            // Get unique author IDs across posts and comments
-            const authorIds = [
-                ...new Set([
-                    ...communityPosts.map((p) => p.authorId),
-                    ...communityPosts.flatMap((post) =>
-                        post.comments.map((comment) => comment.authorId),
-                    ),
-                ]),
-            ];
-
-            // Get profiles for all authors
-            const profilePromises = authorIds.map(async (authorId) => {
-                try {
-                    const profile =
-                        await ProfileController.getProfileByUserId(authorId);
-                    return {
-                        authorId,
-                        profile: toProfileSummary(profile),
-                    };
-                } catch (error) {
-                    console.error(
-                        `Error loading profile for ${authorId}:`,
-                        error,
-                    );
-                    return {
-                        authorId,
-                        profile: null,
-                    };
-                }
-            });
-
-            const profiles = await Promise.all(profilePromises);
-            const profileMap = new Map(
-                profiles.map((p) => [p.authorId, p.profile]),
-            );
-
-            // Combine posts with details (community already comes in post from API)
-            const postsWithDetails: PostWithDetails[] = communityPosts.map(
-                (post) => ({
-                    ...post,
-                    authorProfile: profileMap.get(post.authorId) ?? null,
-                    commentProfiles: post.comments.reduce<
-                        Record<string, ProfileSummary>
-                    >((acc, comment) => {
-                        acc[comment.authorId] =
-                            profileMap.get(comment.authorId) ?? null;
-                        return acc;
-                    }, {}),
-                }),
-            );
-
-            postsWithDetails.sort(
-                (a, b) =>
-                    new Date(b.createdAt).getTime() -
-                    new Date(a.createdAt).getTime(),
-            );
-
-            return postsWithDetails;
-        },
-        [],
-    );
-
     const loadData = useCallback(
         async (options?: { silent?: boolean }) => {
             if (!communityId) return;
@@ -135,7 +49,11 @@ export function useCommunityData(communityId: string) {
                         AuthController.getUserId(),
                         AuthController.getUserRoles(),
                         CommunityController.getCommunityById(communityId),
-                        PostController.getPostsByCommunityId(communityId, 0, PAGE_SIZE),
+                        PostController.getPostsByCommunityId(
+                            communityId,
+                            0,
+                            PAGE_SIZE,
+                        ),
                     ]);
 
                 setCurrentUserId(userId);
@@ -171,13 +89,9 @@ export function useCommunityData(communityId: string) {
                 );
                 setOwnerProfile(profile ?? null);
 
-                const postsWithDetails = await buildPostsWithDetails(
-                    postsData.posts,
-                    communityData,
-                );
-                
-                // Backend includes reactions in posts response
-                setPosts(postsWithDetails);
+                // Posts now come with author data from backend (authorName, authorProfileUrl)
+                // No need to fetch profiles separately! 🎉
+                setPosts(postsData.posts);
             } catch (err) {
                 console.error("Error loading community:", err);
                 setError("Failed to load community data");
@@ -189,11 +103,11 @@ export function useCommunityData(communityId: string) {
                 }
             }
         },
-        [buildPostsWithDetails, communityId, PAGE_SIZE],
+        [communityId],
     );
 
     const loadMore = useCallback(async () => {
-        if (!communityId || loadingMore || !hasMore || !community) return;
+        if (!communityId || loadingMore || !hasMore) return;
 
         try {
             setLoadingMore(true);
@@ -209,28 +123,14 @@ export function useCommunityData(communityId: string) {
             setHasMore(postsData.hasNext);
             setCurrentPage(nextPage);
 
-            // Build details for new posts
-            const newPostsWithDetails = await buildPostsWithDetails(
-                postsData.posts,
-                community,
-            );
-
-            // Append to existing posts
-            setPosts((prevPosts) => [...prevPosts, ...newPostsWithDetails]);
+            // Posts come with author data, just append them
+            setPosts((prevPosts) => [...prevPosts, ...postsData.posts]);
         } catch (err) {
             console.error("Error loading more posts:", err);
         } finally {
             setLoadingMore(false);
         }
-    }, [
-        communityId,
-        loadingMore,
-        hasMore,
-        community,
-        currentPage,
-        PAGE_SIZE,
-        buildPostsWithDetails,
-    ]);
+    }, [communityId, loadingMore, hasMore, currentPage]);
 
     useEffect(() => {
         if (communityId) {

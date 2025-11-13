@@ -257,7 +257,7 @@ type ExtensionNames = (typeof extensions)[number]["name"];
 // Custom hook for image handling
 function useImageHandlers(
     commands: EditorCommands,
-    editor: LexicalEditor | null,
+    _editor: LexicalEditor | null,
 ) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -1370,6 +1370,7 @@ function Toolbar({
                                                                     parseInt(
                                                                         e.target
                                                                             .value,
+                                                                        10,
                                                                     ) || 1,
                                                             }),
                                                         )
@@ -1411,6 +1412,7 @@ function Toolbar({
                                                                     parseInt(
                                                                         e.target
                                                                             .value,
+                                                                        10,
                                                                     ) || 1,
                                                             }),
                                                         )
@@ -1624,7 +1626,7 @@ function EditorContent({
     } = useEditor();
     const [mode, setMode] = useState<EditorMode>("visual");
     const [content, setContent] = useState({ markdown: "" });
-    const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+    const [_commandPaletteOpen, setCommandPaletteOpen] = useState(false);
     const [linkDialogOpen, setLinkDialogOpen] = useState(false);
     const [imageDialogOpen, setImageDialogOpen] = useState(false);
     const [linkInitial, setLinkInitial] = useState({ url: "" });
@@ -1655,7 +1657,7 @@ function EditorContent({
             },
             getMarkdown: () => commandsRef.current.exportToMarkdown(),
         }),
-        [], // No dependencies to prevent recreation
+        [editor], // No dependencies to prevent recreation
     );
 
     const { handlers: imageHandlers } = useImageHandlers(commands, editor);

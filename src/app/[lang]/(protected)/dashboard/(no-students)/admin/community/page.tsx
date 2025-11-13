@@ -17,9 +17,9 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export default function CommunityPage() {
     const dict = useDictionary();
@@ -51,7 +51,7 @@ export default function CommunityPage() {
         };
 
         checkPermissions();
-    }, []);
+    }, [dict?.admin.community.permissionsError]);
 
     useEffect(() => {
         if (!permissionsChecked) return;
@@ -89,7 +89,7 @@ export default function CommunityPage() {
         };
 
         loadCommunities();
-    }, [permissionsChecked, userRole]);
+    }, [permissionsChecked, userRole, dict?.admin.community.error]);
 
     if (!permissionsChecked || loading) {
         return (
@@ -142,7 +142,9 @@ export default function CommunityPage() {
                     </p>
                 </div>
                 <Button asChild>
-                    <Link href={PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE}>
+                    <Link
+                        href={PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE}
+                    >
                         {dict?.admin.community.create}
                     </Link>
                 </Button>
@@ -196,7 +198,13 @@ export default function CommunityPage() {
                         <CommunityCardWithActions
                             key={community.id}
                             community={community}
-                            onEdit={() => router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.EDIT(community.id))}
+                            onEdit={() =>
+                                router.push(
+                                    PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.EDIT(
+                                        community.id,
+                                    ),
+                                )
+                            }
                         />
                     ))}
                 </div>

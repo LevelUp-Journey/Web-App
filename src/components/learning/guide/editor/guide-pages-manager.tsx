@@ -197,7 +197,7 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
         setInitialContent(content);
         setHasUnsavedChanges(false);
         ensureEditorBlur();
-    }, [activePageId, activePage, ensureEditorBlur]);
+    }, [activePage, ensureEditorBlur]);
 
     // Poll editor to detect content changes without relying on focus events
     useEffect(() => {

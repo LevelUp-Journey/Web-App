@@ -1,5 +1,5 @@
-import type { Comment, Post } from "../entities/post.entity";
-import type { CommentResponse, PostResponse } from "./post.response";
+import type { Post } from "../entities/post.entity";
+import type { PostResponse } from "./post.response";
 
 export class PostAssembler {
     public static toEntityFromResponse(response: PostResponse): Post {
@@ -8,6 +8,8 @@ export class PostAssembler {
             communityId: response.communityId,
             authorId: response.authorId,
             authorProfileId: response.authorProfileId,
+            authorName: response.authorName, // username from backend
+            authorProfileUrl: response.authorProfileUrl, // profile URL from backend
             content: response.content,
             imageUrl: response.imageUrl ?? null,
             createdAt: response.createdAt,

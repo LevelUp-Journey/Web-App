@@ -1,9 +1,8 @@
 "use client";
 
-import Editor from "@monaco-editor/react";
 import { Plus, TestTube } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -119,20 +118,7 @@ export default function VersionTestsManager({
     const [customValidationCode, setCustomValidationCode] = useState("");
     const [isSecret, setIsSecret] = useState(true);
 
-    useEffect(() => {
-        loadTests();
-    }, []);
-
-    useEffect(() => {
-        if (defaultTestId && tests.length > 0) {
-            const test = tests.find((t) => t.id === defaultTestId);
-            if (test) {
-                handleSelectTest(test);
-            }
-        }
-    }, [tests, defaultTestId]);
-
-    const loadTests = async () => {
+    const loadTests = useCallback(async () => {
         try {
             const loadedTests =
                 await VersionTestController.getVersionTestsByChallengeIdAndCodeVersionId(
@@ -144,7 +130,30 @@ export default function VersionTestsManager({
             console.error("Error loading tests:", error);
             toast.error(dict?.errors?.loading?.tests || "Failed to load tests");
         }
-    };
+    }, [challengeId, codeVersionId, dict?.errors?.loading?.tests]);
+
+    const handleSelectTest = useCallback((test: VersionTest) => {
+        setSelectedTest(test);
+        setIsCreating(false);
+        setInput(test.input);
+        setExpectedOutput(test.expectedOutput);
+        setFailureMessage(test.failureMessage || "");
+        setCustomValidationCode(test.customValidationCode || "");
+        setIsSecret(test.isSecret);
+    }, []);
+
+    useEffect(() => {
+        loadTests();
+    }, [loadTests]);
+
+    useEffect(() => {
+        if (defaultTestId && tests.length > 0) {
+            const test = tests.find((t) => t.id === defaultTestId);
+            if (test) {
+                handleSelectTest(test);
+            }
+        }
+    }, [tests, defaultTestId, handleSelectTest]);
 
     const handleCreateTest = () => {
         setIsCreating(true);
@@ -156,16 +165,6 @@ export default function VersionTestsManager({
             getCustomValidationTemplate(language, `test_${Date.now()}`),
         );
         setIsSecret(true);
-    };
-
-    const handleSelectTest = (test: VersionTest) => {
-        setIsCreating(false);
-        setSelectedTest(test);
-        setInput(test.input);
-        setExpectedOutput(test.expectedOutput);
-        setFailureMessage(test.failureMessage);
-        setCustomValidationCode(test.customValidationCode);
-        setIsSecret(test.isSecret);
     };
 
     const handleSaveBasic = async () => {
@@ -346,9 +345,9 @@ export default function VersionTestsManager({
                         <Button
                             onClick={() =>
                                 router.push(
-                                    PATHS.DASHBOARD.CHALLENGES.VIEW(
+                                    `${PATHS.DASHBOARD.CHALLENGES.VIEW(
                                         challengeId,
-                                    ) + "?editing=true",
+                                    )}?editing=true`,
                                 )
                             }
                         >

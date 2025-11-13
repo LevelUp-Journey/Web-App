@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 
 interface CommunityCardProps {
@@ -90,7 +92,7 @@ export default function CommunityCard({ community }: CommunityCardProps) {
     }, [community.imageUrl, extractDominantColor]);
 
     return (
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-lg transition-shadow group">
+        <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
             {/* Banner Section - No padding, fills entire width */}
             <div
                 className="h-32 w-full relative"
@@ -98,26 +100,20 @@ export default function CommunityCard({ community }: CommunityCardProps) {
             >
                 {/* Avatar positioned at the bottom of banner */}
                 <div className="absolute -bottom-8 left-4">
-                    <div className="w-16 h-16 rounded-full border-4 border-card bg-muted overflow-hidden relative">
-                        {community.imageUrl ? (
-                            <NextImage
-                                src={community.imageUrl}
-                                alt={community.name}
-                                fill
-                                sizes="64px"
-                                className="object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground text-xl font-bold">
-                                {community.name.charAt(0).toUpperCase()}
-                            </div>
-                        )}
-                    </div>
+                    <Avatar className="w-16 h-16 border-4 border-card rounded-lg">
+                        <AvatarImage
+                            src={community.imageUrl ?? undefined}
+                            alt={community.name}
+                        />
+                        <AvatarFallback className="text-xl font-bold">
+                            {community.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
                 </div>
             </div>
 
             {/* Content Section with padding */}
-            <div className="pt-10 pb-3 px-6">
+            <CardContent className="pt-10 pb-3">
                 <h3 className="text-lg font-bold">
                     {community.id ? (
                         <Link
@@ -132,9 +128,9 @@ export default function CommunityCard({ community }: CommunityCardProps) {
                         community.name
                     )}
                 </h3>
-            </div>
+            </CardContent>
 
-            <div className="px-6 pb-6">
+            <CardContent className="pt-0">
                 <p className="text-sm text-muted-foreground line-clamp-2">
                     {community.description}
                 </p>
@@ -148,7 +144,7 @@ export default function CommunityCard({ community }: CommunityCardProps) {
                         {formattedFollowerCount} {followerLabel}
                     </span>
                 </div>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 }

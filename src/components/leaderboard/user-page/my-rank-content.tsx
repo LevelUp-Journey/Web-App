@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import MyRankCard from "@/components/leaderboard/user-page/MyRankCard";
 
