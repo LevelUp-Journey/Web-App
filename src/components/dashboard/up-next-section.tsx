@@ -5,18 +5,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 interface UpNextSectionProps {
     dict: any; // Dictionary type from getDictionary
 }
 
 export default function UpNextSection({ dict }: UpNextSectionProps) {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
+    const [hasCheckedStorage, setHasCheckedStorage] = useState(false);
 
     useEffect(() => {
         const dismissed = localStorage.getItem("upNextDismissed") === "true";
         setIsVisible(!dismissed);
+        setHasCheckedStorage(true);
     }, []);
 
     const handleDismiss = () => {
@@ -26,8 +27,10 @@ export default function UpNextSection({ dict }: UpNextSectionProps) {
         }
     };
 
+    if (!hasCheckedStorage || !isVisible) return null;
+
     return (
-        <div className={cn(isVisible ? "" : "hidden")}>
+        <div>
             <h3 className="text-xl font-semibold mb-3">
                 {dict.dashboardPage.upNext.title}
             </h3>
