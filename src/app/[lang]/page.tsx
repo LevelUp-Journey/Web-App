@@ -78,12 +78,12 @@ export default async function Home({
                     <div className="text-xl sm:text-2xl md:text-3xl font-semibold h-12 flex items-center justify-center">
                         <TypingAnimation
                             words={[
+                                "C++",
                                 "JavaScript",
                                 "Python",
                                 "Java",
                                 "React",
                                 "Node.js",
-                                "C++",
                                 "SQL",
                                 "TypeScript",
                             ]}
