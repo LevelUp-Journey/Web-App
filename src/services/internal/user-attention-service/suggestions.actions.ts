@@ -14,3 +14,14 @@ export async function sendSuggestionAction(suggestion: string): Promise<void> {
         console.error(error);
     }
 }
+
+export async function getAllSuggestionsAction() {
+    try {
+        const response = await API_GATEWAY_HTTP.get("/suggestions");
+
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}

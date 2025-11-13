@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useDictionary } from "@/hooks/use-dictionary";
+import { sendSuggestionAction } from "@/services/internal/user-attention-service/suggestions.actions";
 
 export default function HelpPage() {
     const dict = useDictionary();
@@ -34,12 +35,16 @@ export default function HelpPage() {
         },
     });
 
-    function onSubmit(_values: z.infer<typeof formSchema>) {
-        // Here you could send to API, but for now just toast
-        if (dict) {
-            toast.success(dict.help.successToast);
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {
+            await sendSuggestionAction(values.suggestion);
+            if (dict) {
+                toast.success(dict.help.successToast);
+            }
+            form.reset();
+        } catch (error) {
+            toast.error("Error sending suggestion");
         }
-        form.reset();
     }
 
     if (!dict) {

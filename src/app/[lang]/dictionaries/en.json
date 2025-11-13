@@ -49,6 +49,15 @@
             "required": "The suggestion is required."
         }
     },
+    "feedback": {
+        "title": "User Feedback",
+        "description": "View and manage user suggestions and feedback.",
+        "noSuggestions": "No suggestions yet.",
+        "table": {
+            "date": "Date",
+            "suggestion": "Suggestion"
+        }
+    },
     "communityCard": {
         "followers": "Followers"
     },
@@ -736,7 +745,8 @@
             "general": "General",
             "challenges": "Challenges",
             "guides": "Guides",
-            "community": "Community"
+            "community": "Community",
+            "feedback": "Feedback"
         },
         "dashboard": {
             "title": "Admin Dashboard — Recent Activity",

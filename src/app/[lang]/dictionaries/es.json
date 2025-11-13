@@ -49,6 +49,15 @@
             "required": "La sugerencia es requerida."
         }
     },
+    "feedback": {
+        "title": "Comentarios de Usuarios",
+        "description": "Ver y gestionar sugerencias y comentarios de usuarios.",
+        "noSuggestions": "No hay sugerencias aún.",
+        "table": {
+            "date": "Fecha",
+            "suggestion": "Sugerencia"
+        }
+    },
     "communityCard": {
         "followers": "Seguidores"
     },
@@ -737,7 +746,8 @@
             "general": "General",
             "challenges": "Desafíos",
             "guides": "Guías",
-            "community": "Comunidad"
+            "community": "Comunidad",
+            "feedback": "Feedback"
         },
         "dashboard": {
             "title": "Panel de Administración — Actividad Reciente",

@@ -70,6 +70,15 @@ export interface Dictionary {
             required: string;
         };
     };
+    feedback: {
+        title: string;
+        description: string;
+        noSuggestions: string;
+        table: {
+            date: string;
+            suggestion: string;
+        };
+    };
     leaderboard: {
         ranking: string;
         myRank: string;
