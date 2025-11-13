@@ -1,5 +1,5 @@
 import { getUserFeedAction } from "../server/feed.actions";
-import type { FeedResponse } from "./feed.response";
+import type { FeedResponse } from "../server/feed.actions";
 
 export class FeedController {
     static async getUserFeed(

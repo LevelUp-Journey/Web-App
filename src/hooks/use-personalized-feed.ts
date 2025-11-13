@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import type { FeedItemResponse } from "@/services/internal/community/controller/feed.response";
+import type { FeedItem } from "@/services/internal/community/server/feed.actions";
 import { FeedController } from "@/services/internal/community/controller/feed.controller";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
-export type FeedItem = FeedItemResponse;
+export type FeedItemResponse = FeedItem;
 
 interface UsePersonalizedFeedOptions {
     limit?: number;
