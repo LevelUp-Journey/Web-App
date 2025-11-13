@@ -4,6 +4,8 @@ import { SubscriptionController } from "@/services/internal/community/controller
 import type { SubscriptionResponse } from "@/services/internal/community/server/subscription.actions";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
+const MAX_SUBSCRIPTIONS = 20; // Limit sidebar subscriptions for performance
+
 export function useUserSubscriptions() {
     const { subscriptionKey } = useSubscriptionContext();
     const [subscriptions, setSubscriptions] = useState<SubscriptionResponse[]>(
@@ -22,7 +24,7 @@ export function useUserSubscriptions() {
                 await SubscriptionController.getSubscriptionsByUser(
                     userId,
                     0,
-                    100, // Load all subscriptions for sidebar
+                    MAX_SUBSCRIPTIONS, // Limit for sidebar performance
                 );
 
             // API now returns community name and image directly
@@ -30,6 +32,7 @@ export function useUserSubscriptions() {
         } catch (err) {
             console.error("Error loading subscriptions:", err);
             setError("Failed to load subscriptions");
+            setSubscriptions([]); // Clear on error
         } finally {
             setLoading(false);
         }
