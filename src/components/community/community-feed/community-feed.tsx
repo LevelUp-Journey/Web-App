@@ -12,7 +12,6 @@ import { CommunityHeader } from "./community-header";
 import { CommunityState } from "./community-state";
 import { PostCard } from "./post-card";
 import { PostComposer } from "./post-composer";
-import { SubscriptionsSidebar } from "./subscriptions-sidebar";
 
 interface CommunityFeedProps {
     communityId: string;
@@ -237,7 +236,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
             </div>
 
             {/* Right sidebar with subscriptions */}
-            <SubscriptionsSidebar currentCommunityId={communityId} />
+            {/* <SubscriptionsSidebar currentCommunityId={communityId} /> */}
         </>
     );
 }
