@@ -162,7 +162,7 @@ export function PostCard({
                 <CardHeader className="gap-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Avatar>
+                            <Avatar className="rounded-lg">
                                 <AvatarImage
                                     src={post.authorProfileUrl}
                                     alt={post.authorName}

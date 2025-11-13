@@ -17,6 +17,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
     Tooltip,
@@ -170,24 +171,25 @@ export default function CodeVersionsList({
     return (
         <div className="space-y-3">
             {codeVersions.map((version) => (
-                <div
+                <Card
                     key={version.id}
-                    className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent/50 transition-colors shadow-sm"
+                    className="hover:bg-accent/50 transition-colors shadow-sm"
                 >
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
-                            <Code className="h-4 w-4 text-primary" />
+                    <CardContent className="flex items-center justify-between p-4">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
+                                <Code className="h-4 w-4 text-primary" />
+                            </div>
+                            <div>
+                                <span className="font-semibold text-foreground">
+                                    {getReadableLanguageName(version.language)}
+                                </span>
+                                <p className="text-sm text-muted-foreground">
+                                    {dict?.challenges?.codeVersions?.language ||
+                                        "Programming Language"}
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <span className="font-semibold text-foreground">
-                                {getReadableLanguageName(version.language)}
-                            </span>
-                            <p className="text-sm text-muted-foreground">
-                                {dict?.challenges?.codeVersions?.language ||
-                                    "Programming Language"}
-                            </p>
-                        </div>
-                    </div>
                     <div className="flex gap-2">
                         {isTeacher ? (
                             <>
@@ -277,7 +279,8 @@ export default function CodeVersionsList({
                             </>
                         ) : null}
                     </div>
-                </div>
+                    </CardContent>
+                </Card>
             ))}
             {codeVersions.length === 0 && (
                 <div className="text-center py-8">
