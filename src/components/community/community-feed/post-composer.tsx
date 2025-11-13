@@ -103,7 +103,13 @@ export function PostComposer({
             setIsPosting(true);
             setComposerError(null);
 
-            const content = message.trim();
+            // Preserve line breaks by replacing single newlines with double spaces + newline (Markdown convention)
+            // This ensures proper line break rendering in Markdown
+            const content = message
+                .split('\n')
+                .map(line => line.trimEnd())
+                .join('\n')
+                .trim();
 
             const response = await fetch("/api/community/posts", {
                 method: "POST",
