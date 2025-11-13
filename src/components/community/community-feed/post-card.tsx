@@ -62,9 +62,13 @@ export function PostCard({
     const [isLiking, setIsLiking] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-    // Use the new reactions structure from backend
-    const hasUserLiked = post.reactions?.userReaction === "LIKE";
-    const likeCount = post.reactions?.reactionCounts?.LIKE || 0;
+    // Use local state for reactions to avoid reloading the entire page
+    const [hasUserLiked, setHasUserLiked] = useState(
+        post.reactions?.userReaction === "LIKE",
+    );
+    const [likeCount, setLikeCount] = useState(
+        post.reactions?.reactionCounts?.LIKE || 0,
+    );
 
     const handleDelete = async () => {
         try {
@@ -85,7 +89,15 @@ export function PostCard({
         try {
             setIsLiking(true);
 
+            // Optimistic update
+            const wasLiked = hasUserLiked;
+            const previousCount = likeCount;
+
             if (hasUserLiked) {
+                // Optimistically update UI
+                setHasUserLiked(false);
+                setLikeCount((prev) => Math.max(0, prev - 1));
+
                 // Unlike: DELETE /api/community/reactions with postId
                 const response = await fetch("/api/community/reactions", {
                     method: "DELETE",
@@ -96,10 +108,17 @@ export function PostCard({
                 });
 
                 if (!response.ok && response.status !== 404) {
+                    // Revert on error
+                    setHasUserLiked(wasLiked);
+                    setLikeCount(previousCount);
                     const errorData = await response.json();
                     throw new Error(errorData.error || "Failed to unlike");
                 }
             } else {
+                // Optimistically update UI
+                setHasUserLiked(true);
+                setLikeCount((prev) => prev + 1);
+
                 // Like: POST /api/community/reactions
                 const response = await fetch("/api/community/reactions", {
                     method: "POST",
@@ -111,13 +130,13 @@ export function PostCard({
                 });
 
                 if (!response.ok && response.status !== 409) {
+                    // Revert on error
+                    setHasUserLiked(wasLiked);
+                    setLikeCount(previousCount);
                     const errorData = await response.json();
                     throw new Error(errorData.error || "Failed to like");
                 }
             }
-
-            // Reload to ensure UI is in sync with backend
-            onPostDeleted?.();
         } catch (error) {
             console.error("Error toggling like:", error);
         } finally {
