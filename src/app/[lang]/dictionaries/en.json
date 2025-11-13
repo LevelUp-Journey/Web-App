@@ -37,6 +37,18 @@
         "yes": "Yes",
         "no": "No"
     },
+    "help": {
+        "title": "Help",
+        "suggestionsTitle": "Suggestions and Comments",
+        "description": "Send your suggestions, doubts, questions, feedback or any comment anonymously. Your opinion helps us improve the platform.",
+        "label": "Suggestion",
+        "placeholder": "Write your suggestion here...",
+        "submitButton": "Send Suggestion",
+        "successToast": "Suggestion sent! Thanks for your feedback.",
+        "validation": {
+            "required": "The suggestion is required."
+        }
+    },
     "communityCard": {
         "followers": "Followers"
     },

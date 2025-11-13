@@ -2,7 +2,6 @@
 
 import {
     ArrowLeft,
-    BookOpen,
     CheckCircle,
     Lock,
     Play,
@@ -56,8 +55,8 @@ import type { VersionTest } from "@/services/internal/challenges/challenge/entit
 import { SolutionsController } from "@/services/internal/challenges/solutions/controller/solutions.controller";
 import type { SolutionResponse } from "@/services/internal/challenges/solutions/controller/solutions.response";
 import type { GuideResponse } from "@/services/internal/learning/guides/controller/guide.response";
+import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 import { NavUser } from "../dashboard/nav-user";
-import { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
 
 interface StudentCodeEditorProps {
     challenge: Challenge;

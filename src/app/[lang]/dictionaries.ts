@@ -58,6 +58,18 @@ export interface Dictionary {
         yes: string;
         no: string;
     };
+    help: {
+        title: string;
+        suggestionsTitle: string;
+        description: string;
+        label: string;
+        placeholder: string;
+        submitButton: string;
+        successToast: string;
+        validation: {
+            required: string;
+        };
+    };
     leaderboard: {
         ranking: string;
         myRank: string;
