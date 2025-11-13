@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { SuggestionController } from "@/services/internal/user-attention-service/suggestion.controller";
 
+export const dynamic = "force-dynamic";
+
 type Suggestion = {
     date: string;
     suggestion: string;
@@ -23,7 +25,7 @@ export default async function FeedbackPage({
     const dict = await getDictionary(lang as "en" | "es");
 
     const suggestions: Suggestion[] =
-        await SuggestionController.getAllSuggestions();
+        (await SuggestionController.getAllSuggestions()) || [];
 
     return (
         <div className="space-y-6">

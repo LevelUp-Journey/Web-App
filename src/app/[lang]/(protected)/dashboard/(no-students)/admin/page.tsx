@@ -13,6 +13,8 @@ import { ChallengeController } from "@/services/internal/challenges/challenge/co
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { GuideController } from "@/services/internal/learning/guides/controller/guide.controller";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage({
     params,
 }: {
