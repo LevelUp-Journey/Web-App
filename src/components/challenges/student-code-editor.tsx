@@ -270,43 +270,45 @@ export default function StudentCodeEditor({
                         </span>
                     )}
 
-                    {/* Selector de guías con tooltip */}
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <div className="flex items-center gap-2">
-                                    <Select
-                                        value={selectedGuideId}
-                                        onValueChange={handleGuideSelect}
-                                        disabled={!shouldShowGuides}
-                                    >
-                                        <SelectTrigger
-                                            className="w-48"
+                    {/* Selector de guías con tooltip - solo mostrar si hay guías disponibles */}
+                    {guides.length > 0 && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <div className="flex items-center gap-2">
+                                        <Select
+                                            value={selectedGuideId}
+                                            onValueChange={handleGuideSelect}
                                             disabled={!shouldShowGuides}
                                         >
-                                            <SelectValue placeholder="Select a guide..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {guides.map((guide) => (
-                                                <SelectItem
-                                                    key={guide.id}
-                                                    value={guide.id}
-                                                >
-                                                    {guide.title}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>
-                                    {dict?.challenges?.editor?.keepTrying ||
-                                        "Keep trying on your own! You've got this."}
-                                </p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                                            <SelectTrigger
+                                                className="w-48"
+                                                disabled={!shouldShowGuides}
+                                            >
+                                                <SelectValue placeholder="Select a guide..." />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {guides.map((guide) => (
+                                                    <SelectItem
+                                                        key={guide.id}
+                                                        value={guide.id}
+                                                    >
+                                                        {guide.title}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>
+                                        {dict?.challenges?.editor?.keepTrying ||
+                                            "Keep trying on your own! You've got this."}
+                                    </p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
 
                     {/* Botón de guardado manual */}
                     <Button
@@ -344,53 +346,55 @@ export default function StudentCodeEditor({
             </header>
 
             {/* Modal de guías - se muestra automáticamente después de maxAttempts */}
-            <Dialog
-                open={shouldShowGuides}
-                onOpenChange={() => {}} // No permitir cerrar manualmente
-            >
-                <DialogContent className="max-h-[80vh] overflow-hidden">
-                    <DialogHeader>
-                        <DialogTitle>
-                            {dict?.challenges?.editor?.needHelp ||
-                                "Having trouble?"}
-                        </DialogTitle>
-                        <DialogDescription>
-                            {dict?.challenges?.editor?.checkGuides ||
-                                "If you're stuck, these guides can help you understand the solution."}
-                        </DialogDescription>
-                    </DialogHeader>
-                    <ScrollArea className="max-h-64">
-                        <div className="space-y-4 pr-4">
-                            {guides.map((guide) => (
-                                <div
-                                    key={guide.id}
-                                    className="flex items-center justify-between p-3 border rounded-lg"
-                                >
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="font-medium truncate">
-                                            {guide.title}
-                                        </h4>
-                                        <p className="text-sm text-muted-foreground line-clamp-2">
-                                            {guide.description}
-                                        </p>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() =>
-                                            handleGuideSelect(guide.id)
-                                        }
-                                        className="ml-3 shrink-0"
+            {guides.length > 0 && (
+                <Dialog
+                    open={shouldShowGuides}
+                    onOpenChange={() => {}} // No permitir cerrar manualmente
+                >
+                    <DialogContent className="max-h-[80vh] overflow-hidden">
+                        <DialogHeader>
+                            <DialogTitle>
+                                {dict?.challenges?.editor?.needHelp ||
+                                    "Having trouble?"}
+                            </DialogTitle>
+                            <DialogDescription>
+                                {dict?.challenges?.editor?.checkGuides ||
+                                    "If you're stuck, these guides can help you understand the solution."}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <ScrollArea className="max-h-64">
+                            <div className="space-y-4 pr-4">
+                                {guides.map((guide) => (
+                                    <div
+                                        key={guide.id}
+                                        className="flex items-center justify-between p-3 border rounded-lg"
                                     >
-                                        {dict?.challenges?.editor?.viewGuide ||
-                                            "View Guide"}
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    </ScrollArea>
-                </DialogContent>
-            </Dialog>
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-medium truncate">
+                                                {guide.title}
+                                            </h4>
+                                            <p className="text-sm text-muted-foreground line-clamp-2">
+                                                {guide.description}
+                                            </p>
+                                        </div>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                handleGuideSelect(guide.id)
+                                            }
+                                            className="ml-3 shrink-0"
+                                        >
+                                            {dict?.challenges?.editor
+                                                ?.viewGuide || "View Guide"}
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </DialogContent>
+                </Dialog>
+            )}
 
             {/* Resizable panels */}
             <ResizablePanelGroup direction="horizontal" className="h-full">
