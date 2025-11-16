@@ -136,7 +136,11 @@
                 "nextButton": "Next",
                 "haveAccount": "If you already have an account,",
                 "signInLink": "Sign in",
-                "passwordMismatch": "Passwords do not match"
+                "passwordMismatch": "Passwords do not match",
+                "continueWithEmail": "Continue with Email",
+                "orSeparator": "Or",
+                "continueWithGoogle": "Continue with Google",
+                "continueWithGithub": "Continue with Github"
             },
             "step2": {
                 "title": "Tell Us About Yourself",

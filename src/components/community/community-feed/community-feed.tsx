@@ -135,96 +135,101 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                     canCreatePost ? "pb-44 sm:pb-52" : ""
                 }`}
             >
-                    <Button variant="ghost" asChild>
-                        <Link href={PATHS.DASHBOARD.COMMUNITY.ROOT}>
-                            ← {dict?.communityFeed?.back || "Back to communities"}
-                        </Link>
-                    </Button>
+                <Button variant="ghost" asChild>
+                    <Link href={PATHS.DASHBOARD.COMMUNITY.ROOT}>
+                        ← {dict?.communityFeed?.back || "Back to communities"}
+                    </Link>
+                </Button>
 
-                    <CommunityHeader
-                        community={community}
-                        ownerProfile={ownerProfile}
-                        dict={dict}
-                        isFollowing={isFollowing}
-                        followId={followId}
-                        onFollowUpdated={() => reload({ silent: true })}
-                        getDisplayName={getDisplayName}
-                        getInitials={getInitials}
-                        formatDate={formatDate}
-                    />
+                <CommunityHeader
+                    community={community}
+                    ownerProfile={ownerProfile}
+                    dict={dict}
+                    isFollowing={isFollowing}
+                    followId={followId}
+                    onFollowUpdated={() => reload({ silent: true })}
+                    getDisplayName={getDisplayName}
+                    getInitials={getInitials}
+                    formatDate={formatDate}
+                />
 
-                    <section className="space-y-4">
-                        <div className="flex flex-wrap items-center justify-between gap-3">
-                            <div>
-                                <h2 className="text-xl font-semibold">
-                                    {dict?.communityFeed?.postsTitle ||
-                                        "Community feed"}
-                                </h2>
-                                <p className="text-sm text-muted-foreground">
-                                    {dict?.communityFeed?.postsSubtitle ||
-                                        "Latest posts from this community"}
-                                </p>
+                <section className="space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 className="text-xl font-semibold">
+                                {dict?.communityFeed?.postsTitle ||
+                                    "Community feed"}
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                                {dict?.communityFeed?.postsSubtitle ||
+                                    "Latest posts from this community"}
+                            </p>
+                        </div>
+                        {reloading && (
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Spinner className="size-4" />
+                                {dict?.communityFeed?.refreshing ||
+                                    "Refreshing"}
                             </div>
-                            {reloading && (
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <Spinner className="size-4" />
-                                    {dict?.communityFeed?.refreshing || "Refreshing"}
+                        )}
+                    </div>
+
+                    {posts.length === 0 ? (
+                        <Card>
+                            <CardContent className="p-8 text-center space-y-2">
+                                <p className="font-semibold">
+                                    {dict?.communityFeed?.emptyPosts ||
+                                        "No posts yet"}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    {dict?.communityFeed
+                                        ?.emptyPostsDescription ||
+                                        "Be the first to share something with this community."}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        <div className="space-y-6">
+                            {posts.map((post) => (
+                                <PostCard
+                                    key={post.id}
+                                    post={post}
+                                    dict={dict}
+                                    isAdmin={canModerate}
+                                    currentUserId={currentUserId}
+                                    onPostDeleted={() =>
+                                        reload({ silent: true })
+                                    }
+                                    formatDate={formatDate}
+                                />
+                            ))}
+
+                            {/* Load More Button */}
+                            {hasMore && (
+                                <div className="flex justify-center pt-4">
+                                    <Button
+                                        variant="outline"
+                                        onClick={loadMore}
+                                        disabled={loadingMore}
+                                        className="gap-2"
+                                    >
+                                        {loadingMore ? (
+                                            <>
+                                                <Spinner className="size-4" />
+                                                {dict?.communityFeed
+                                                    ?.loadingMore ||
+                                                    "Loading more..."}
+                                            </>
+                                        ) : (
+                                            dict?.communityFeed?.loadMore ||
+                                            "Load more posts"
+                                        )}
+                                    </Button>
                                 </div>
                             )}
                         </div>
-
-                        {posts.length === 0 ? (
-                            <Card>
-                                <CardContent className="p-8 text-center space-y-2">
-                                    <p className="font-semibold">
-                                        {dict?.communityFeed?.emptyPosts ||
-                                            "No posts yet"}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        {dict?.communityFeed?.emptyPostsDescription ||
-                                            "Be the first to share something with this community."}
-                                    </p>
-                                </CardContent>
-                            </Card>
-                        ) : (
-                            <div className="space-y-6">
-                                {posts.map((post) => (
-                                    <PostCard
-                                        key={post.id}
-                                        post={post}
-                                        dict={dict}
-                                        isAdmin={canModerate}
-                                        currentUserId={currentUserId}
-                                        onPostDeleted={() => reload({ silent: true })}
-                                        formatDate={formatDate}
-                                    />
-                                ))}
-
-                                {/* Load More Button */}
-                                {hasMore && (
-                                    <div className="flex justify-center pt-4">
-                                        <Button
-                                            variant="outline"
-                                            onClick={loadMore}
-                                            disabled={loadingMore}
-                                            className="gap-2"
-                                        >
-                                            {loadingMore ? (
-                                                <>
-                                                    <Spinner className="size-4" />
-                                                    {dict?.communityFeed?.loadingMore ||
-                                                        "Loading more..."}
-                                                </>
-                                            ) : (
-                                                dict?.communityFeed?.loadMore ||
-                                                "Load more posts"
-                                            )}
-                                        </Button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </section>
+                    )}
+                </section>
 
                 {canCreatePost && (
                     <PostComposer

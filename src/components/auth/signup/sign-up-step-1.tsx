@@ -5,6 +5,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { GithubDark } from "@/components/ui/svgs/githubDark";
+import { GithubLight } from "@/components/ui/svgs/githubLight";
+import { Google } from "@/components/ui/svgs/google";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import type { Dictionary } from "@/lib/i18n";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
@@ -17,6 +21,7 @@ export default function SignUpStep1({ dict }: SignUpStep1Props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showEmailForm, setShowEmailForm] = useState(false);
 
     const router = useRouter();
     const PATHS = useLocalizedPaths();
@@ -52,40 +57,92 @@ export default function SignUpStep1({ dict }: SignUpStep1Props) {
                 {dict?.auth.signUp.step1.title || "Sign Up"}
             </h1>
 
-            <form onSubmit={handleSignUp} className="flex flex-col gap-4">
-                <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={
-                        dict?.auth.signUp.step1.emailPlaceholder || "Email"
-                    }
-                    required
-                />
-                <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder={
-                        dict?.auth.signUp.step1.passwordPlaceholder ||
-                        "Password"
-                    }
-                    required
-                />
-                <Input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder={
-                        dict?.auth.signUp.step1.confirmPasswordPlaceholder ||
-                        "Confirm Password"
-                    }
-                    required
-                />
-                <Button type="submit" className="w-full">
-                    {dict?.auth.signUp.step1.nextButton || "Next"}
-                </Button>
-            </form>
+            {!showEmailForm ? (
+                <div className="flex flex-col gap-4">
+                    <Button
+                        type="button"
+                        className="w-full"
+                        onClick={() => setShowEmailForm(true)}
+                    >
+                        {dict?.auth.signUp.step1.continueWithEmail ||
+                            "Continue with Email"}
+                    </Button>
+
+                    <Separator
+                        orientation="horizontal"
+                        className="my-6 flex justify-center items-center text-sm"
+                    >
+                        {dict?.auth.signUp.step1.orSeparator || "Or"}
+                    </Separator>
+
+                    <ul className="flex flex-col gap-2">
+                        <li>
+                            <Button
+                                variant="outline"
+                                className="w-full"
+                                onClick={() =>
+                                    AuthController.signInWithGoogle()
+                                }
+                            >
+                                <Google />{" "}
+                                {dict?.auth.signUp.step1.continueWithGoogle ||
+                                    "Continue with Google"}
+                            </Button>
+                        </li>
+
+                        <li>
+                            <Button
+                                variant="outline"
+                                className="w-full"
+                                onClick={() =>
+                                    AuthController.signInWithGithub()
+                                }
+                            >
+                                <GithubDark />
+                                <GithubLight />
+                                {dict?.auth.signUp.step1.continueWithGithub ||
+                                    "Continue with Github"}
+                            </Button>
+                        </li>
+                    </ul>
+                </div>
+            ) : (
+                <form onSubmit={handleSignUp} className="flex flex-col gap-4">
+                    <Input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={
+                            dict?.auth.signUp.step1.emailPlaceholder || "Email"
+                        }
+                        required
+                    />
+                    <Input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder={
+                            dict?.auth.signUp.step1.passwordPlaceholder ||
+                            "Password"
+                        }
+                        required
+                    />
+                    <Input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder={
+                            dict?.auth.signUp.step1
+                                .confirmPasswordPlaceholder ||
+                            "Confirm Password"
+                        }
+                        required
+                    />
+                    <Button type="submit" className="w-full">
+                        {dict?.auth.signUp.step1.nextButton || "Next"}
+                    </Button>
+                </form>
+            )}
 
             <p className="text-sm mt-4">
                 {dict?.auth.signUp.step1.haveAccount ||
