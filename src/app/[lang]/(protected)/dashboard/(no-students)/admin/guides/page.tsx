@@ -134,6 +134,50 @@ export default function GuidesPage() {
         setCurrentPage(0);
     };
 
+    const handleGuideDeleted = () => {
+        // Reload guides after deletion
+        const loadGuides = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await GuideController.getGuidesPaginated(
+                    {
+                        page: currentPage,
+                        size: pageSize,
+                        sort: "createdAt,desc",
+                    },
+                    "dashboard",
+                );
+
+                if (response) {
+                    setGuides(response.content);
+                    setTotalPages(response.totalPages);
+                    setTotalElements(response.totalElements);
+
+                    // If current page is now empty and not the first page, go to previous page
+                    if (response.content.length === 0 && currentPage > 0) {
+                        setCurrentPage(currentPage - 1);
+                    }
+                } else {
+                    setError(
+                        dict?.admin.guides.error ||
+                            "We couldn't load the guides.",
+                    );
+                }
+            } catch (err) {
+                console.error("Error loading guides:", err);
+                setError(
+                    dict?.admin.guides.errorDescription ||
+                        "We couldn't load the guides. Please try again.",
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadGuides();
+    };
+
     // Generate pagination items
     const getPaginationItems = () => {
         const items = [];
@@ -316,7 +360,12 @@ export default function GuidesPage() {
                 <>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {guides.map((guide) => (
-                            <GuideCard key={guide.id} guide={guide} adminMode />
+                            <GuideCard
+                                key={guide.id}
+                                guide={guide}
+                                adminMode
+                                onDelete={handleGuideDeleted}
+                            />
                         ))}
                     </div>
 
