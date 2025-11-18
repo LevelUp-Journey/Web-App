@@ -136,7 +136,11 @@
                 "nextButton": "Siguiente",
                 "haveAccount": "Si ya tienes una cuenta,",
                 "signInLink": "inicia sesión",
-                "passwordMismatch": "Las contraseñas no coinciden"
+                "passwordMismatch": "Las contraseñas no coinciden",
+                "continueWithEmail": "Continuar con Correo",
+                "orSeparator": "O",
+                "continueWithGoogle": "Continuar con Google",
+                "continueWithGithub": "Continuar con Github"
             },
             "step2": {
                 "title": "Cuéntanos sobre ti",
@@ -304,6 +308,12 @@
             "viewGuide": "Ver guía",
             "editGuide": "Editar guía",
             "deleteGuide": "Eliminar guía",
+            "deleteGuideTitle": "Eliminar guía",
+            "deleteGuideConfirm": "¿Estás seguro de que quieres eliminar esta guía? Esta acción no se puede deshacer.",
+            "deleteGuideError": "Error al eliminar la guía. Por favor, intenta de nuevo.",
+            "deleteGuideSuccess": "Guía eliminada exitosamente",
+            "deleting": "Eliminando...",
+            "cancel": "Cancelar",
             "editCourse": "Editar curso",
             "deleteCourse": "Eliminar curso",
             "createdOn": "Creado el",

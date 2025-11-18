@@ -52,7 +52,7 @@ export function useUserSubscriptions() {
         if (!isInitialLoad && subscriptionKey > 0) {
             loadSubscriptions();
         }
-    }, [subscriptionKey, loadSubscriptions, isInitialLoad])
+    }, [subscriptionKey, loadSubscriptions, isInitialLoad]);
 
     return {
         subscriptions,

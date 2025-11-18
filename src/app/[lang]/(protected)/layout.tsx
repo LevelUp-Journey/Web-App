@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import FloatingSuggestionButton from "@/components/ui/floating-suggestion-button";
 import { PATHS } from "@/lib/paths";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
@@ -12,5 +13,10 @@ export default async function ProtectedLayout({
         redirect(PATHS.AUTH.SIGN_IN);
     }
 
-    return <>{children}</>;
+    return (
+        <>
+            {children}
+            <FloatingSuggestionButton />
+        </>
+    );
 }

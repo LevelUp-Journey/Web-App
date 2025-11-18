@@ -259,7 +259,7 @@ export function GuidePagesManager({ guideId }: GuidePagesManagerProps) {
             });
 
             applyGuideResponse(response);
-            const newPage = response.pages.find(
+            const newPage = response.pages?.find(
                 (page) => page.orderNumber === nextOrder,
             );
             if (newPage) {

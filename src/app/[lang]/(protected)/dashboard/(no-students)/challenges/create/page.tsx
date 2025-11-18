@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -52,7 +53,7 @@ export default function CreateChallengePage() {
     // Guides tab state
     const [searchTerm, setSearchTerm] = useState("");
     const [guides, setGuides] = useState<GuideResponse[]>([]);
-    const [selectedGuideIds, setSelectedGuideIds] = useState<string[]>([]);
+    const [selectedGuides, setSelectedGuides] = useState<GuideResponse[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -143,13 +144,13 @@ export default function CreateChallengePage() {
     }, [searchTerm]);
 
     const handleSelectGuide = (guide: GuideResponse) => {
-        setSelectedGuideIds((prev) =>
-            prev.includes(guide.id) ? prev : [...prev, guide.id],
+        setSelectedGuides((prev) =>
+            prev.some((g) => g.id === guide.id) ? prev : [...prev, guide],
         );
     };
 
-    const handleRemoveGuide = (guideId: string) => {
-        setSelectedGuideIds((prev) => prev.filter((id) => id !== guideId));
+    const handleRemoveGuide = (guide: GuideResponse) => {
+        setSelectedGuides((prev) => prev.filter((g) => g.id !== guide.id));
     };
 
     const onSubmit = form.handleSubmit(async (data: FormData) => {
@@ -169,7 +170,7 @@ export default function CreateChallengePage() {
             experiencePoints: data.experiencePoints,
             difficulty: data.difficulty,
             tagIds,
-            guideIds: selectedGuideIds,
+            guideIds: selectedGuides.map((guide) => guide.id),
             maxAttemptsBeforeGuides: data.maxAttemptsBeforeGuides,
         };
 
@@ -589,32 +590,30 @@ export default function CreateChallengePage() {
                                                     }
                                                     size="sm"
                                                 >
-                                                    +You
+                                                    <Plus /> Add
                                                 </Button>
                                             </div>
                                         ))}
                                     </div>
                                 )}
-                                {selectedGuideIds.length > 0 && (
+                                {selectedGuides.length > 0 && (
                                     <div className="space-y-2">
                                         <h3 className="text-lg font-semibold">
                                             Selected Guides
                                         </h3>
-                                        {selectedGuideIds.map((guideId) => (
+                                        {selectedGuides.map((guide) => (
                                             <div
-                                                key={guideId}
+                                                key={guide.id}
                                                 className="flex items-center justify-between p-2 border rounded bg-muted"
                                             >
                                                 <div>
                                                     <p className="font-medium">
-                                                        Guide ID: {guideId}
+                                                        {guide.title}
                                                     </p>
                                                 </div>
                                                 <Button
                                                     onClick={() =>
-                                                        handleRemoveGuide(
-                                                            guideId,
-                                                        )
+                                                        handleRemoveGuide(guide)
                                                     }
                                                     size="sm"
                                                     variant="destructive"

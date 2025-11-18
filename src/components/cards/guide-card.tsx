@@ -1,9 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, EllipsisVertical, Heart, ImageIcon } from "lucide-react";
+import { Calendar, EllipsisVertical, Heart, ImageIcon, AlertTriangle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -21,17 +33,22 @@ import { GuideController } from "@/services/internal/learning/guides/controller/
 interface GuideCardProps extends React.ComponentProps<"div"> {
     guide: Guide;
     adminMode?: boolean;
+    onDelete?: () => void;
 }
 
 export default function GuideCard({
     guide,
     adminMode = false,
+    onDelete,
     className,
     ...props
 }: GuideCardProps) {
     const dict = useDictionary();
+    const router = useRouter();
     const [isLiked, setIsLiked] = useState(guide.likedByRequester);
     const [likesCount, setLikesCount] = useState(guide.likesCount);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     useEffect(() => {
         setIsLiked(guide.likedByRequester);
@@ -62,6 +79,36 @@ export default function GuideCard({
             setIsLiked(wasLiked);
             setLikesCount((prev) => (wasLiked ? prev + 1 : prev - 1));
             console.error("Failed to toggle like", error);
+        }
+    };
+
+    const handleDeleteClick = () => {
+        setShowDeleteDialog(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        setShowDeleteDialog(false);
+        setIsDeleting(true);
+
+        try {
+            await GuideController.deleteGuide({ id: guide.id });
+
+            toast.success(
+                dict?.challenges?.cards?.deleteGuideSuccess || "Guide deleted successfully"
+            );
+
+            if (onDelete) {
+                onDelete();
+            } else {
+                router.refresh();
+            }
+        } catch (error) {
+            console.error("Failed to delete guide:", error);
+            const errorMessage = dict?.challenges?.cards?.deleteGuideError ||
+                "Failed to delete guide. Please try again.";
+            toast.error(errorMessage);
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -138,9 +185,14 @@ export default function GuideCard({
                                             "Edit Guide"}
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    {dict?.challenges?.cards?.deleteGuide ||
-                                        "Delete Guide"}
+                                <DropdownMenuItem
+                                    onClick={handleDeleteClick}
+                                    disabled={isDeleting}
+                                    className="text-destructive focus:text-destructive"
+                                >
+                                    {isDeleting
+                                        ? dict?.challenges?.cards?.deleting || "Deleting..."
+                                        : dict?.challenges?.cards?.deleteGuide || "Delete Guide"}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -181,6 +233,36 @@ export default function GuideCard({
                     </div>
                 </div>
             </CardContent>
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="flex items-center gap-2">
+                            <AlertTriangle className="h-5 w-5 text-destructive" />
+                            {dict?.challenges?.cards?.deleteGuideTitle || "Delete Guide"}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {dict?.challenges?.cards?.deleteGuideConfirm ||
+                                "Are you sure you want to delete this guide? This action cannot be undone."}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isDeleting}>
+                            {dict?.challenges?.cards?.cancel || "Cancel"}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleConfirmDelete}
+                            disabled={isDeleting}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            {isDeleting
+                                ? dict?.challenges?.cards?.deleting || "Deleting..."
+                                : dict?.challenges?.cards?.deleteGuide || "Delete"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </Card>
     );
 }

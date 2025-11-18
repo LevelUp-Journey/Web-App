@@ -150,7 +150,7 @@ export function EditGuideClient({
             title: guide.title,
             description: guide.description,
             cover: guide.coverImage || "",
-            topicIds: guide.topics.map((topic) => topic.id),
+            topicIds: guide.topics?.map((topic) => topic.id) || [],
         },
     });
 
@@ -167,7 +167,7 @@ export function EditGuideClient({
                 title: guideFromStore.title,
                 description: guideFromStore.description,
                 cover: guideFromStore.coverImage || "",
-                topicIds: guideFromStore.topics.map((topic) => topic.id),
+                topicIds: guideFromStore.topics?.map((topic) => topic.id) || [],
             });
         }
     }, [guideFromStore, form]);

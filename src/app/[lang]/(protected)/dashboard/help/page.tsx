@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -19,6 +20,7 @@ import { sendSuggestionAction } from "@/services/internal/user-attention-service
 
 export default function HelpPage() {
     const dict = useDictionary();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const formSchema = dict
         ? z.object({
@@ -36,14 +38,19 @@ export default function HelpPage() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             await sendSuggestionAction(values.suggestion);
             if (dict) {
                 toast.success(dict.help.successToast);
             }
             form.reset();
-        } catch (error) {
+        } catch {
             toast.error("Error sending suggestion");
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -79,7 +86,9 @@ export default function HelpPage() {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">{dict.help.submitButton}</Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Sending..." : dict.help.submitButton}
+                    </Button>
                 </form>
             </Form>
         </div>
