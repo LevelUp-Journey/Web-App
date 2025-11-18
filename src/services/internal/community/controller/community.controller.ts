@@ -52,7 +52,14 @@ export class CommunityController {
         const response = await getMyCommunitiesAction();
 
         if (response.status !== 200) {
-            throw new Error(`Failed to fetch my communities: ${response.data}`);
+            const errorMessage = typeof response.data === 'string' 
+                ? response.data 
+                : JSON.stringify(response.data);
+            console.error('Get my communities failed:', {
+                status: response.status,
+                data: response.data
+            });
+            throw new Error(`Failed to fetch my communities: ${errorMessage}`);
         }
 
         return CommunityAssembler.toEntitiesFromResponse(

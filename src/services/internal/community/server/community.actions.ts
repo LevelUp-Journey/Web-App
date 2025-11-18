@@ -40,7 +40,7 @@ export async function createCommunityAction(
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
         console.log('Creating community - Request:', request);
-        const response = await API_GATEWAY_HTTP.post("/api/v1/communities", request);
+        const response = await API_GATEWAY_HTTP.post("/communities", request);
         console.log('Community created - Response:', response.status, response.data);
 
         return {
@@ -155,7 +155,7 @@ export async function getMyCommunitiesAction(): Promise<
 > {
     try {
         const response = await API_GATEWAY_HTTP.get(
-            "/api/v1/communities/my-communities",
+            "/communities/my-communities",
         );
 
         return {
