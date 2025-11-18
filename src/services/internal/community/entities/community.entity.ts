@@ -4,7 +4,9 @@ export interface Community {
     ownerProfileId: string;
     name: string;
     description: string;
-    imageUrl?: string;
+    bannerUrl?: string;
+    iconUrl?: string;
+    isPrivate: boolean;
     createdAt: Date;
     followerCount: number;
 }

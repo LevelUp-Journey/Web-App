@@ -9,13 +9,17 @@ import {
 export interface CreateCommunityRequest {
     name: string;
     description: string;
-    imageUrl?: string;
+    bannerUrl?: string;
+    iconUrl?: string;
+    isPrivate: boolean;
 }
 
 export interface UpdateCommunityRequest {
     name: string;
     description: string;
-    imageUrl?: string;
+    bannerUrl?: string;
+    iconUrl?: string;
+    isPrivate: boolean;
 }
 
 export interface CommunityResponse {
@@ -24,7 +28,9 @@ export interface CommunityResponse {
     ownerProfileId: string;
     name: string;
     description: string;
-    imageUrl?: string;
+    bannerUrl?: string;
+    iconUrl?: string;
+    isPrivate: boolean;
     createdAt: string;
     followerCount?: number;
 }
@@ -33,7 +39,9 @@ export async function createCommunityAction(
     request: CreateCommunityRequest,
 ): Promise<RequestSuccess<CommunityResponse> | RequestFailure> {
     try {
-        const response = await API_GATEWAY_HTTP.post("/communities", request);
+        console.log('Creating community - Request:', request);
+        const response = await API_GATEWAY_HTTP.post("/api/v1/communities", request);
+        console.log('Community created - Response:', response.status, response.data);
 
         return {
             data: response.data,
@@ -44,12 +52,15 @@ export async function createCommunityAction(
             response?: { data?: unknown; status?: number };
             message?: string;
         };
+        
+        console.error('Create community error:', {
+            status: axiosError.response?.status,
+            data: axiosError.response?.data,
+            message: axiosError.message
+        });
+        
         return {
-            data: String(
-                axiosError.response?.data ||
-                    axiosError.message ||
-                    "Unknown error",
-            ),
+            data: String(axiosError.response?.data || axiosError.message || "Unknown error"),
             status: axiosError.response?.status || 500,
         };
     }
@@ -117,6 +128,34 @@ export async function updateCommunityAction(
         const response = await API_GATEWAY_HTTP.put(
             `/communities/${communityId}`,
             request,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function getMyCommunitiesAction(): Promise<
+    RequestSuccess<CommunityResponse[]> | RequestFailure
+> {
+    try {
+        const response = await API_GATEWAY_HTTP.get(
+            "/api/v1/communities/my-communities",
         );
 
         return {

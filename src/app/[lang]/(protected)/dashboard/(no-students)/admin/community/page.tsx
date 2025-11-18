@@ -1,211 +1,121 @@
 "use client";
 
-import { AlertCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CommunityCardWithActions from "@/components/community/community-card-with-actions";
+import CommunityCard from "@/components/community/community-card";
 import { Button } from "@/components/ui/button";
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
-export default function CommunityPage() {
-    const dict = useDictionary();
-    const router = useRouter();
-    const [userRole, setUserRole] = useState<string | null>(null);
-    const [permissionsChecked, setPermissionsChecked] = useState(false);
-    const [loading, setLoading] = useState(true);
+export default function AdminCommunityPage() {
     const [communities, setCommunities] = useState<Community[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
     const PATHS = useLocalizedPaths();
+    const dict = useDictionary();
 
     useEffect(() => {
-        const checkPermissions = async () => {
+        const loadMyCommunities = async () => {
             try {
-                const roles = await AuthController.getUserRoles();
-                const role = roles.find(
-                    (r) => r === "ROLE_TEACHER" || r === "ROLE_ADMIN",
-                );
-                setUserRole(role || null);
-            } catch (err) {
-                console.error("Error checking permissions:", err);
-                setError(
-                    dict?.admin.community.permissionsError ||
-                        "We couldn't verify your permissions.",
-                );
-            } finally {
-                setPermissionsChecked(true);
-            }
-        };
-
-        checkPermissions();
-    }, [dict?.admin.community.permissionsError]);
-
-    useEffect(() => {
-        if (!permissionsChecked) return;
-        if (!userRole) {
-            setLoading(false);
-            return;
-        }
-
-        const loadCommunities = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                // Get the user ID to fetch their communities
-                const userId = await AuthController.getUserId();
-                const response =
-                    await CommunityController.getCommunitiesByCreator(userId);
-
-                if (response) {
-                    setCommunities(response);
-                } else {
-                    setError(
-                        dict?.admin.community.error ||
-                            "We couldn't load the communities.",
-                    );
-                }
-            } catch (err) {
-                console.error("Error loading communities:", err);
-                setError(
-                    dict?.admin.community.error ||
-                        "We couldn't load the communities. Please try again.",
-                );
+                setLoading(true);
+                const data = await CommunityController.getMyCommunities();
+                setCommunities(data);
+            } catch (error) {
+                console.error("Error loading my communities:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        loadCommunities();
-    }, [permissionsChecked, userRole, dict?.admin.community.error]);
+        loadMyCommunities();
+    }, []);
 
-    if (!permissionsChecked || loading) {
+    if (loading) {
         return (
-            <Empty className="min-h-[400px]">
-                <EmptyHeader>
-                    <EmptyMedia variant="icon">
-                        <Spinner className="size-6 text-muted-foreground" />
-                    </EmptyMedia>
-                    <EmptyTitle>{dict?.admin.community.loading}</EmptyTitle>
-                    <EmptyDescription>
-                        {dict?.admin.community.loadingDescription}
-                    </EmptyDescription>
-                </EmptyHeader>
-            </Empty>
+            <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+                <div className="text-center">
+                    <Spinner className="size-8 mx-auto mb-4" />
+                    <p className="text-muted-foreground">
+                        {dict?.common?.loading || "Loading communities..."}
+                    </p>
+                </div>
+            </div>
         );
     }
 
-    if (!userRole) {
-        return (
-            <Empty className="min-h-[400px]">
-                <EmptyHeader>
-                    <EmptyMedia variant="icon">
-                        <AlertCircle />
-                    </EmptyMedia>
-                    <EmptyTitle>
-                        {error
-                            ? dict?.admin.community.permissionsError
-                            : "Access Denied"}
-                    </EmptyTitle>
-                    <EmptyDescription>
-                        {error ||
-                            "You don't have permission to access this page."}
-                    </EmptyDescription>
-                </EmptyHeader>
-            </Empty>
-        );
-    }
-
-    // Main content
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="container mx-auto p-6">
+            <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-2xl font-bold">
-                        {dict?.admin.community.title}
-                    </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                        {dict?.admin.community.subtitle}
+                    <h1 className="text-3xl font-bold">
+                        {dict?.admin?.community?.title || "My Communities"}
+                    </h1>
+                    <p className="text-muted-foreground mt-1">
+                        {dict?.admin?.community?.subtitle ||
+                            "Manage your communities"}
                     </p>
                 </div>
                 <Button asChild>
                     <Link
                         href={PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE}
                     >
-                        {dict?.admin.community.create}
+                        <Plus className="w-4 h-4 mr-2" />
+                        {dict?.admin?.community?.createButton ||
+                            "Create Community"}
                     </Link>
                 </Button>
             </div>
 
-            {/* Content */}
-            {error ? (
-                <Empty className="min-h-[300px]">
-                    <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            <AlertCircle />
-                        </EmptyMedia>
-                        <EmptyTitle>{dict?.admin.community.error}</EmptyTitle>
-                        <EmptyDescription>{error}</EmptyDescription>
-                    </EmptyHeader>
-                    <EmptyContent>
-                        <Button onClick={() => window.location.reload()}>
-                            {dict?.admin.community.retry}
-                        </Button>
-                    </EmptyContent>
-                </Empty>
-            ) : communities.length === 0 ? (
-                <Empty className="min-h-[300px]">
-                    <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            <AlertCircle />
-                        </EmptyMedia>
-                        <EmptyTitle>
-                            {dict?.admin.community.noCommunities}
-                        </EmptyTitle>
-                        <EmptyDescription>
-                            {dict?.admin.community.noCommunitiesDescription}
-                        </EmptyDescription>
-                    </EmptyHeader>
-                    <EmptyContent>
-                        <Button asChild>
-                            <Link
-                                href={
-                                    PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY
-                                        .CREATE
-                                }
-                            >
-                                {dict?.admin.community.create}
-                            </Link>
-                        </Button>
-                    </EmptyContent>
-                </Empty>
-            ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {communities.map((community) => (
-                        <CommunityCardWithActions
-                            key={community.id}
-                            community={community}
-                            onEdit={() =>
-                                router.push(
-                                    PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.EDIT(
-                                        community.id,
-                                    ),
-                                )
+            {communities.length === 0 ? (
+                <div className="text-center py-12">
+                    <div className="mx-auto w-24 h-24 mb-4 rounded-full bg-muted flex items-center justify-center">
+                        <Plus className="w-12 h-12 text-muted-foreground" />
+                    </div>
+                    <h2 className="text-xl font-semibold mb-2">
+                        {dict?.admin?.community?.noCommunities?.title ||
+                            "No communities yet"}
+                    </h2>
+                    <p className="text-muted-foreground mb-6">
+                        {dict?.admin?.community?.noCommunities?.description ||
+                            "Create your first community to get started"}
+                    </p>
+                    <Button asChild>
+                        <Link
+                            href={
+                                PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.CREATE
                             }
-                        />
+                        >
+                            <Plus className="w-4 h-4 mr-2" />
+                            {dict?.admin?.community?.createButton ||
+                                "Create Community"}
+                        </Link>
+                    </Button>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {communities.map((community) => (
+                        <div key={community.id} className="relative">
+                            <CommunityCard community={community} />
+                            <div className="mt-3 flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="flex-1"
+                                    asChild
+                                >
+                                    <Link
+                                        href={PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.EDIT(
+                                            community.id,
+                                        )}
+                                    >
+                                        {dict?.common?.edit || "Edit"}
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
                     ))}
                 </div>
             )}

@@ -9,7 +9,9 @@ export class CommunityAssembler {
             ownerProfileId: response.ownerProfileId,
             name: response.name,
             description: response.description,
-            imageUrl: response.imageUrl,
+            bannerUrl: response.bannerUrl,
+            iconUrl: response.iconUrl,
+            isPrivate: response.isPrivate,
             createdAt: new Date(response.createdAt),
             followerCount: response.followerCount ?? 0,
         };

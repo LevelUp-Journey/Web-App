@@ -86,10 +86,12 @@ export default function CommunityCard({ community }: CommunityCardProps) {
     }, []);
 
     useEffect(() => {
-        if (community.imageUrl) {
-            extractDominantColor(community.imageUrl);
+        if (community.bannerUrl) {
+            extractDominantColor(community.bannerUrl);
+        } else if (community.iconUrl) {
+            extractDominantColor(community.iconUrl);
         }
-    }, [community.imageUrl, extractDominantColor]);
+    }, [community.bannerUrl, community.iconUrl, extractDominantColor]);
 
     return (
         <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
@@ -98,11 +100,19 @@ export default function CommunityCard({ community }: CommunityCardProps) {
                 className="h-32 w-full relative"
                 style={{ backgroundColor: bannerColor }}
             >
+                {community.bannerUrl && (
+                    <NextImage
+                        src={community.bannerUrl}
+                        alt={`${community.name} banner`}
+                        fill
+                        className="object-cover"
+                    />
+                )}
                 {/* Avatar positioned at the bottom of banner */}
                 <div className="absolute -bottom-8 left-4">
                     <Avatar className="w-16 h-16 border-4 border-card rounded-lg">
                         <AvatarImage
-                            src={community.imageUrl ?? undefined}
+                            src={community.iconUrl ?? undefined}
                             alt={community.name}
                         />
                         <AvatarFallback className="text-xl font-bold">

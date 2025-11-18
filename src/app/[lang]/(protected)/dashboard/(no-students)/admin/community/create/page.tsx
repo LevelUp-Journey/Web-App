@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Camera, X } from "lucide-react";
+import { Camera, X, Image } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
@@ -41,9 +42,12 @@ export default function CreateCommunityPage() {
     const PATHS = useLocalizedPaths();
     const dict = useDictionary();
     const [saving, setSaving] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string | undefined>();
-    const [isUploadingImage, setIsUploadingImage] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [iconUrl, setIconUrl] = useState<string | undefined>();
+    const [bannerUrl, setBannerUrl] = useState<string | undefined>();
+    const [isUploadingIcon, setIsUploadingIcon] = useState(false);
+    const [isUploadingBanner, setIsUploadingBanner] = useState(false);
+    const iconInputRef = useRef<HTMLInputElement>(null);
+    const bannerInputRef = useRef<HTMLInputElement>(null);
 
     const formSchema = z.object({
         name: z
@@ -70,7 +74,9 @@ export default function CreateCommunityPage() {
                 dict?.admin.community.createForm?.validation?.descriptionMax ||
                     `Description must not exceed ${COMMUNITY_LIMITS.DESCRIPTION.MAX} characters`,
             ),
-        imageUrl: z.string().optional(),
+        iconUrl: z.string().optional(),
+        bannerUrl: z.string().optional(),
+        isPrivate: z.boolean(),
     });
 
     type FormData = z.infer<typeof formSchema>;
@@ -80,37 +86,69 @@ export default function CreateCommunityPage() {
         defaultValues: {
             name: "",
             description: "",
-            imageUrl: "",
+            iconUrl: "",
+            bannerUrl: "",
+            isPrivate: false,
         },
     });
 
-    const handleImageSelect = async (
+    const handleIconSelect = async (
         e: React.ChangeEvent<HTMLInputElement>,
     ) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setIsUploadingImage(true);
+        setIsUploadingIcon(true);
         try {
             const uploadedUrl = await CloudinaryController.uploadImage(
                 file,
                 "community-avatars",
             );
-            setImageUrl(uploadedUrl);
-            form.setValue("imageUrl", uploadedUrl);
+            setIconUrl(uploadedUrl);
+            form.setValue("iconUrl", uploadedUrl);
         } catch (error) {
-            console.error("Error uploading image:", error);
-            alert("Error uploading image. Please try again.");
+            console.error("Error uploading icon:", error);
+            alert("Error uploading icon. Please try again.");
         } finally {
-            setIsUploadingImage(false);
+            setIsUploadingIcon(false);
         }
     };
 
-    const handleRemoveImage = () => {
-        setImageUrl(undefined);
-        form.setValue("imageUrl", "");
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
+    const handleBannerSelect = async (
+        e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploadingBanner(true);
+        try {
+            const uploadedUrl = await CloudinaryController.uploadImage(
+                file,
+                "community-banners",
+            );
+            setBannerUrl(uploadedUrl);
+            form.setValue("bannerUrl", uploadedUrl);
+        } catch (error) {
+            console.error("Error uploading banner:", error);
+            alert("Error uploading banner. Please try again.");
+        } finally {
+            setIsUploadingBanner(false);
+        }
+    };
+
+    const handleRemoveIcon = () => {
+        setIconUrl(undefined);
+        form.setValue("iconUrl", "");
+        if (iconInputRef.current) {
+            iconInputRef.current.value = "";
+        }
+    };
+
+    const handleRemoveBanner = () => {
+        setBannerUrl(undefined);
+        form.setValue("bannerUrl", "");
+        if (bannerInputRef.current) {
+            bannerInputRef.current.value = "";
         }
     };
 
@@ -120,10 +158,16 @@ export default function CreateCommunityPage() {
             const request: CreateCommunityRequest = {
                 name: data.name,
                 description: data.description,
-                imageUrl: data.imageUrl,
+                bannerUrl: data.bannerUrl,
+                iconUrl: data.iconUrl,
+                isPrivate: data.isPrivate,
             };
 
+            console.log('Creating community with request:', request);
+
             const response = await CommunityController.createCommunity(request);
+
+            console.log('Community created successfully:', response);
 
             if (response) {
                 router.push(PATHS.DASHBOARD.ADMINISTRATION.COMMUNITY.ROOT);
@@ -135,9 +179,11 @@ export default function CreateCommunityPage() {
             }
         } catch (error) {
             console.error("Error creating community:", error);
+            const errorMessage = error instanceof Error 
+                ? error.message 
+                : "Unknown error occurred";
             alert(
-                dict?.admin.community.createForm?.errorCreating ||
-                    "Error creating community. Please try again.",
+                `Error creating community: ${errorMessage}\n\nPlease check the console for more details.`,
             );
         } finally {
             setSaving(false);
@@ -167,53 +213,106 @@ export default function CreateCommunityPage() {
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-6"
                     >
-                        {/* Image Upload */}
+                        {/* Icon Upload */}
                         <div className="flex justify-center">
                             <div className="relative">
                                 <input
-                                    ref={fileInputRef}
+                                    ref={iconInputRef}
                                     type="file"
                                     accept="image/*"
-                                    onChange={handleImageSelect}
+                                    onChange={handleIconSelect}
                                     className="hidden"
-                                    disabled={isUploadingImage || saving}
+                                    disabled={isUploadingIcon || saving}
                                 />
                                 <button
                                     type="button"
                                     onClick={() =>
-                                        fileInputRef.current?.click()
+                                        iconInputRef.current?.click()
                                     }
-                                    disabled={isUploadingImage || saving}
+                                    disabled={isUploadingIcon || saving}
                                     className="relative w-24 h-24 rounded-full border-2 border-dashed border-muted-foreground/50 hover:border-primary transition-colors flex items-center justify-center overflow-hidden bg-muted/30"
                                 >
-                                    {imageUrl ? (
+                                    {iconUrl ? (
                                         <img
-                                            src={imageUrl}
-                                            alt="Community avatar"
+                                            src={iconUrl}
+                                            alt="Community icon"
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
                                         <div className="text-center">
                                             <Camera className="w-8 h-8 mx-auto text-muted-foreground" />
                                             <span className="text-xs text-muted-foreground mt-1 block">
-                                                UPLOAD
+                                                ICON
                                             </span>
                                         </div>
                                     )}
                                 </button>
 
-                                {imageUrl && !isUploadingImage && (
+                                {iconUrl && !isUploadingIcon && (
                                     <button
                                         type="button"
-                                        onClick={handleRemoveImage}
+                                        onClick={handleRemoveIcon}
                                         className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center hover:bg-destructive/90 transition-colors"
                                     >
                                         <X className="w-4 h-4" />
                                     </button>
                                 )}
 
-                                {isUploadingImage && (
+                                {isUploadingIcon && (
                                     <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
+                                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Banner Upload */}
+                        <div className="w-full">
+                            <div className="relative">
+                                <input
+                                    ref={bannerInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleBannerSelect}
+                                    className="hidden"
+                                    disabled={isUploadingBanner || saving}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        bannerInputRef.current?.click()
+                                    }
+                                    disabled={isUploadingBanner || saving}
+                                    className="relative w-full h-32 rounded-lg border-2 border-dashed border-muted-foreground/50 hover:border-primary transition-colors flex items-center justify-center overflow-hidden bg-muted/30"
+                                >
+                                    {bannerUrl ? (
+                                        <img
+                                            src={bannerUrl}
+                                            alt="Community banner"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="text-center">
+                                            <Image className="w-8 h-8 mx-auto text-muted-foreground" />
+                                            <span className="text-xs text-muted-foreground mt-1 block">
+                                                BANNER (Optional)
+                                            </span>
+                                        </div>
+                                    )}
+                                </button>
+
+                                {bannerUrl && !isUploadingBanner && (
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveBanner}
+                                        className="absolute top-2 right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center hover:bg-destructive/90 transition-colors"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                )}
+
+                                {isUploadingBanner && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-lg">
                                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
                                     </div>
                                 )}
@@ -302,6 +401,35 @@ export default function CreateCommunityPage() {
                                             "Tell people what this community is about"}
                                     </FormDescription>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Privacy Toggle */}
+                        <FormField
+                            control={form.control}
+                            name="isPrivate"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center justify-between rounded-lg border p-4">
+                                    <div className="space-y-0.5">
+                                        <FormLabel className="text-base">
+                                            {dict?.admin.community.createForm
+                                                ?.privateLabel ||
+                                                "Private Community"}
+                                        </FormLabel>
+                                        <FormDescription>
+                                            {dict?.admin.community.createForm
+                                                ?.privateDescription ||
+                                                "Only invited members can see and join this community"}
+                                        </FormDescription>
+                                    </div>
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={saving}
+                                        />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />
