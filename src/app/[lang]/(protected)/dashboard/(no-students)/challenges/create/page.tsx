@@ -170,19 +170,48 @@ export default function CreateChallengePage() {
             experiencePoints: data.experiencePoints,
             difficulty: data.difficulty,
             tagIds,
-            guideIds: selectedGuides.map((guide) => guide.id),
             maxAttemptsBeforeGuides: data.maxAttemptsBeforeGuides,
         };
 
         try {
+            // First create the challenge
             const challenge =
                 await ChallengeController.createChallenge(request);
-            toast.success(
-                dict?.createChallenge.messages.created ||
-                    "Challenge created successfully!",
-            );
+
+            // Then add guides one by one
+            if (selectedGuides.length > 0) {
+                const guidePromises = selectedGuides.map((guide) =>
+                    ChallengeController.addGuideToChallenge(
+                        challenge.id,
+                        guide.id,
+                    ),
+                );
+
+                const results = await Promise.allSettled(guidePromises);
+                const failedGuides = results.filter(
+                    (r) => r.status === "rejected" || !r.value,
+                );
+
+                if (failedGuides.length > 0) {
+                    toast.warning(
+                        `Challenge created but ${failedGuides.length} guide(s) could not be added.`,
+                    );
+                } else {
+                    toast.success(
+                        dict?.createChallenge.messages.created ||
+                            "Challenge created successfully!",
+                    );
+                }
+            } else {
+                toast.success(
+                    dict?.createChallenge.messages.created ||
+                        "Challenge created successfully!",
+                );
+            }
+
             router.push(PATHS.DASHBOARD.CHALLENGES.VERSIONS.NEW(challenge.id));
         } catch (error) {
+            console.error("Error creating challenge:", error);
             toast.error(
                 dict?.createChallenge.messages.error ||
                     "Failed to create challenge. Please try again.",

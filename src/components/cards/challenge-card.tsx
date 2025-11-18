@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronRight, EllipsisVertical, Star } from "lucide-react";
+import "./challenge-card.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -54,6 +55,7 @@ export default function ChallengeCard({
     const [likesCount, setLikesCount] = useState(
         challenge.likesCount ?? challenge.stars.length,
     );
+    const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
         setIsLiked(challenge.userLiked ?? false);
@@ -106,13 +108,29 @@ export default function ChallengeCard({
         }
     };
 
+    const handleCardClick = (e: React.MouseEvent) => {
+        // Don't navigate if clicking on interactive elements
+        const target = e.target as HTMLElement;
+        if (
+            target.closest("button") ||
+            target.closest("a") ||
+            target.closest("[role='menuitem']")
+        ) {
+            return;
+        }
+        router.push(PATHS.DASHBOARD.CHALLENGES.VIEW(challenge.id));
+    };
+
     return (
         <Card
             key={challenge.id}
             className={cn(
-                "hover:shadow-lg transition-shadow flex flex-col py-4 gap-2 rounded-none",
+                "hover:shadow-lg transition-all cursor-pointer flex flex-col py-4 gap-2 rounded-none group",
                 className,
             )}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={handleCardClick}
             {...props}
         >
             {/* Badges at the top */}
@@ -134,7 +152,7 @@ export default function ChallengeCard({
 
             <CardContent className="px-4">
                 {/* Title in the middle */}
-                <CardTitle className="text-base font-bold">
+                <CardTitle className="text-base font-bold cursor-pointer hover:text-primary transition-colors">
                     {challenge.name}
                 </CardTitle>
 
@@ -151,7 +169,16 @@ export default function ChallengeCard({
                         <span className="text-xs">{likesCount}</span>
                     </Button>
                     <div className="flex items-center gap-1">
-                        <Button size={"icon"} variant={"ghost"} asChild>
+                        <Button
+                            size={"icon"}
+                            variant={"ghost"}
+                            className={cn(
+                                "transition-all duration-300",
+                                isHovered &&
+                                    "animate-[bounce-horizontal_1s_ease-in-out_infinite]",
+                            )}
+                            asChild
+                        >
                             <Link
                                 href={PATHS.DASHBOARD.CHALLENGES.VIEW(
                                     challenge.id,
