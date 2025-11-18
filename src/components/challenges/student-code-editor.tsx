@@ -171,13 +171,15 @@ export default function StudentCodeEditor({
 
   // Estado para controlar el diálogo de guías
   const [showGuideDialog, setShowGuideDialog] = useState(false);
+  const [hasShownGuideDialog, setHasShownGuideDialog] = useState(false);
 
-  // Mostrar el diálogo cuando se cumpla la condición
+  // Mostrar el diálogo solo una vez cuando se alcanza el umbral de intentos
   useEffect(() => {
-    if (shouldShowGuides && !showGuideDialog) {
+    if (shouldShowGuides && !hasShownGuideDialog) {
       setShowGuideDialog(true);
+      setHasShownGuideDialog(true);
     }
-  }, [shouldShowGuides, showGuideDialog]);
+  }, [shouldShowGuides, hasShownGuideDialog]);
 
   /**
    * Manejador de guardado manual
