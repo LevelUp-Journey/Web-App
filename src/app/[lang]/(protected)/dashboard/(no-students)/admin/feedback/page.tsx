@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { SuggestionController } from "@/services/internal/user-attention-service/suggestion.controller";
 
+export const dynamic = "force-dynamic";
+
 type Suggestion = {
   date: string;
   suggestion: string;
