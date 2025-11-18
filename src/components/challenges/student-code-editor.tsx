@@ -1,48 +1,48 @@
 "use client";
 
 import {
-    ArrowLeft,
-    CheckCircle,
-    Lock,
-    Play,
-    Save,
-    XCircle,
+  ArrowLeft,
+  CheckCircle,
+  Lock,
+  Play,
+  Save,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { SerializeResult } from "next-mdx-remote-client/csr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import MdxRenderer from "@/components/challenges/mdx-renderer";
 import MonacoEditor from "@/components/challenges/monaco/monaco-editor";
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useAutoSave } from "@/hooks/challenges/use-auto-save";
 import { useSubmitSolution } from "@/hooks/challenges/use-submit-solution";
@@ -59,27 +59,27 @@ import type { ProfileResponse } from "@/services/internal/profiles/profiles/cont
 import { NavUser } from "../dashboard/nav-user";
 
 interface StudentCodeEditorProps {
-    challenge: Challenge;
-    codeVersion: CodeVersion;
-    tests: VersionTest[];
-    serializedDescription: SerializeResult | null;
-    solution: SolutionResponse | null;
-    guides: GuideResponse[];
-    profile: ProfileResponse;
+  challenge: Challenge;
+  codeVersion: CodeVersion;
+  tests: VersionTest[];
+  serializedDescription: SerializeResult | null;
+  solution: SolutionResponse | null;
+  guides: GuideResponse[];
+  profile: ProfileResponse;
 }
 
 /**
  * Convierte el lenguaje de programación al formato de Monaco Editor
  */
 const getMonacoLanguage = (language: ProgrammingLanguage): string => {
-    const languageMap: Record<ProgrammingLanguage, string> = {
-        [ProgrammingLanguage.JAVASCRIPT]: "javascript",
-        [ProgrammingLanguage.PYTHON]: "python",
-        [ProgrammingLanguage.JAVA]: "java",
-        [ProgrammingLanguage.C_PLUS_PLUS]: "cpp",
-    };
+  const languageMap: Record<ProgrammingLanguage, string> = {
+    [ProgrammingLanguage.JAVASCRIPT]: "javascript",
+    [ProgrammingLanguage.PYTHON]: "python",
+    [ProgrammingLanguage.JAVA]: "java",
+    [ProgrammingLanguage.C_PLUS_PLUS]: "cpp",
+  };
 
-    return languageMap[language] || "javascript";
+  return languageMap[language] || "javascript";
 };
 
 /**
@@ -87,580 +87,532 @@ const getMonacoLanguage = (language: ProgrammingLanguage): string => {
  * Permite editar, guardar automáticamente y ejecutar soluciones de código
  */
 export default function StudentCodeEditor({
-    challenge,
-    codeVersion,
-    tests,
-    serializedDescription,
-    solution,
-    guides,
-    profile,
+  challenge,
+  codeVersion,
+  tests,
+  serializedDescription,
+  solution,
+  guides,
+  profile,
 }: StudentCodeEditorProps) {
-    const router = useRouter();
-    const PATHS = useLocalizedPaths();
-    const dict = useDictionary();
-    // Estado de la UI
-    const [activeTab, setActiveTab] = useState<"description" | "tests">(
-        "description",
-    );
+  const router = useRouter();
+  const PATHS = useLocalizedPaths();
+  const dict = useDictionary();
+  // Estado de la UI
+  const [activeTab, setActiveTab] = useState<"description" | "tests">(
+    "description",
+  );
 
-    // Estado de intentos y guías
-    const [attemptCount, setAttemptCount] = useState(0);
-    const [selectedGuideId, setSelectedGuideId] = useState<string>("");
+  // Estado de intentos y guías
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [selectedGuideId, setSelectedGuideId] = useState<string>("");
 
-    // ID de la solución (inmutable)
-    const solutionId = solution?.id || null;
+  // ID de la solución (inmutable)
+  const solutionId = solution?.id || null;
 
-    // Hook de auto-guardado con debounce
-    const {
-        content: code,
-        updateContent: setCode,
-        saveStatus,
-        isManualSaving,
-        hasUnsavedChanges,
-        saveManually,
-    } = useAutoSave({
-        initialContent: solution?.code || codeVersion.initialCode,
-        onSave: async (codeToSave) => {
-            if (!solutionId) {
-                throw new Error("No solution ID available");
+  // Hook de auto-guardado con debounce
+  const {
+    content: code,
+    updateContent: setCode,
+    saveStatus,
+    isManualSaving,
+    hasUnsavedChanges,
+    saveManually,
+  } = useAutoSave({
+    initialContent: solution?.code || codeVersion.initialCode,
+    onSave: async (codeToSave) => {
+      if (!solutionId) {
+        throw new Error("No solution ID available");
+      }
+
+      await SolutionsController.updateSolution({
+        solutionId,
+        code: codeToSave,
+      });
+    },
+    delay: CONSTS.SOLUTION_UPDATE_DELAY,
+    enabled: !!solutionId,
+  });
+
+  // Hook de envío de solución
+  const { submit, isSubmitting, submitResult } = useSubmitSolution({
+    onSubmit: async () => {
+      if (!solutionId) {
+        throw new Error("No solution ID available");
+      }
+
+      const result = await SolutionsController.submitSolution(solutionId);
+
+      if (!result) {
+        throw new Error("Failed to submit solution");
+      }
+
+      return result;
+    },
+    onSuccess: (result) => {
+      setActiveTab("tests");
+      toast.success(result.message);
+    },
+    onError: (error) => {
+      console.error("Error submitting solution:", error);
+      toast.error(
+        dict?.challenges?.editor?.failedToSubmitSolution ||
+          "Failed to submit solution",
+      );
+    },
+  });
+
+  // Verificar si se deben mostrar las guías después de un envío fallido
+  const maxAttempts = Math.max(
+    2,
+    Math.min(5, challenge.maxAttemptsBeforeGuides ?? 3),
+  );
+  const shouldShowGuides = attemptCount >= maxAttempts && guides.length > 0;
+
+  // Estado para controlar el diálogo de guías
+  const [showGuideDialog, setShowGuideDialog] = useState(false);
+
+  // Mostrar el diálogo cuando se cumpla la condición
+  useEffect(() => {
+    if (shouldShowGuides && !showGuideDialog) {
+      setShowGuideDialog(true);
+    }
+  }, [shouldShowGuides, showGuideDialog]);
+
+  /**
+   * Manejador de guardado manual
+   */
+  const handleManualSave = async () => {
+    try {
+      await saveManually();
+      toast.success(
+        dict?.challenges?.editor?.codeSavedSuccessfully ||
+          "Code saved successfully!",
+      );
+    } catch (error) {
+      console.error("Error saving code:", error);
+      toast.error(dict?.errors?.saving?.code || "Failed to save code");
+    }
+  };
+
+  /**
+   * Manejador de envío de solución
+   */
+  const handleSubmit = async () => {
+    try {
+      await submit();
+      // Incrementar contador de intentos después del envío
+      setAttemptCount((prev) => prev + 1);
+    } catch {
+      // El error ya se maneja en el hook
+    }
+  };
+
+  /**
+   * Manejador para seleccionar una guía
+   */
+  const handleGuideSelect = (guideId: string) => {
+    setSelectedGuideId(guideId);
+    // Redirigir a la página de la guía
+    router.push(PATHS.DASHBOARD.GUIDES.VIEW(guideId));
+  };
+
+  /**
+   * Obtiene el texto del botón de guardado según el estado
+   */
+  const getSaveButtonText = (): string => {
+    if (isManualSaving) return dict?.challenges?.editor?.saving || "Saving...";
+    if (saveStatus === "saved")
+      return dict?.challenges?.editor?.saved || "Saved";
+    if (saveStatus === "error")
+      return dict?.challenges?.editor?.error || "Error";
+    return dict?.common?.save || "Save";
+  };
+
+  /**
+   * Obtiene la variante del botón de guardado según el estado
+   */
+  const getSaveButtonVariant = (): "outline" | "default" | "secondary" => {
+    if (saveStatus === "saved") return "secondary";
+    if (saveStatus === "error") return "outline";
+    return "outline";
+  };
+
+  // Estados de deshabilitado de los botones
+  const isSaveDisabled = isManualSaving || !hasUnsavedChanges || !solutionId;
+  const isSubmitDisabled =
+    isSubmitting || isManualSaving || saveStatus === "saving" || !solutionId;
+
+  return (
+    <section className="h-screen flex flex-col">
+      {/* Header */}
+      <header className="shrink-0 p-4 border-b flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <Link
+            href={PATHS.DASHBOARD.ROOT}
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            aria-label={
+              dict?.challenges?.editor?.backToDashboard || "Back to dashboard"
             }
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
 
-            await SolutionsController.updateSolution({
-                solutionId,
-                code: codeToSave,
-            });
-        },
-        delay: CONSTS.SOLUTION_UPDATE_DELAY,
-        enabled: !!solutionId,
-    });
+          <div>
+            <h1 className="text-2xl font-bold">{challenge.name}</h1>
+            <p className="text-sm">{challenge.experiencePoints} XP</p>
+          </div>
+        </div>
 
-    // Hook de envío de solución
-    const { submit, isSubmitting, submitResult } = useSubmitSolution({
-        onSubmit: async () => {
-            if (!solutionId) {
-                throw new Error("No solution ID available");
-            }
+        <div className="flex items-center gap-2">
+          {/* Indicador de auto-guardado */}
+          {saveStatus === "saving" && (
+            <span className="text-sm animate-pulse">
+              {dict?.challenges?.editor?.autoSaving || "Auto-saving..."}
+            </span>
+          )}
 
-            const result = await SolutionsController.submitSolution(solutionId);
-
-            if (!result) {
-                throw new Error("Failed to submit solution");
-            }
-
-            return result;
-        },
-        onSuccess: (result) => {
-            setActiveTab("tests");
-            toast.success(result.message);
-        },
-        onError: (error) => {
-            console.error("Error submitting solution:", error);
-            toast.error(
-                dict?.challenges?.editor?.failedToSubmitSolution ||
-                    "Failed to submit solution",
-            );
-        },
-    });
-
-    // Verificar si se deben mostrar las guías después de un envío fallido
-    const maxAttempts = Math.max(
-        2,
-        Math.min(5, challenge.maxAttemptsBeforeGuides ?? 3),
-    );
-    const shouldShowGuides = attemptCount >= maxAttempts && guides.length > 0;
-
-    /**
-     * Manejador de guardado manual
-     */
-    const handleManualSave = async () => {
-        try {
-            await saveManually();
-            toast.success(
-                dict?.challenges?.editor?.codeSavedSuccessfully ||
-                    "Code saved successfully!",
-            );
-        } catch (error) {
-            console.error("Error saving code:", error);
-            toast.error(dict?.errors?.saving?.code || "Failed to save code");
-        }
-    };
-
-    /**
-     * Manejador de envío de solución
-     */
-    const handleSubmit = async () => {
-        try {
-            await submit();
-            // Incrementar contador de intentos después del envío
-            setAttemptCount((prev) => prev + 1);
-        } catch {
-            // El error ya se maneja en el hook
-        }
-    };
-
-    /**
-     * Manejador para seleccionar una guía
-     */
-    const handleGuideSelect = (guideId: string) => {
-        setSelectedGuideId(guideId);
-        // Redirigir a la página de la guía
-        router.push(PATHS.DASHBOARD.GUIDES.VIEW(guideId));
-    };
-
-    /**
-     * Obtiene el texto del botón de guardado según el estado
-     */
-    const getSaveButtonText = (): string => {
-        if (isManualSaving)
-            return dict?.challenges?.editor?.saving || "Saving...";
-        if (saveStatus === "saved")
-            return dict?.challenges?.editor?.saved || "Saved";
-        if (saveStatus === "error")
-            return dict?.challenges?.editor?.error || "Error";
-        return dict?.common?.save || "Save";
-    };
-
-    /**
-     * Obtiene la variante del botón de guardado según el estado
-     */
-    const getSaveButtonVariant = (): "outline" | "default" | "secondary" => {
-        if (saveStatus === "saved") return "secondary";
-        if (saveStatus === "error") return "outline";
-        return "outline";
-    };
-
-    // Estados de deshabilitado de los botones
-    const isSaveDisabled = isManualSaving || !hasUnsavedChanges || !solutionId;
-    const isSubmitDisabled =
-        isSubmitting ||
-        isManualSaving ||
-        saveStatus === "saving" ||
-        !solutionId;
-
-    return (
-        <section className="h-screen flex flex-col">
-            {/* Header */}
-            <header className="shrink-0 p-4 border-b flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                    <Link
-                        href={PATHS.DASHBOARD.ROOT}
-                        className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                        aria-label={
-                            dict?.challenges?.editor?.backToDashboard ||
-                            "Back to dashboard"
-                        }
+          {/* Selector de guías con tooltip - solo mostrar si hay guías disponibles */}
+          {guides.length > 0 && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={selectedGuideId}
+                      onValueChange={handleGuideSelect}
+                      disabled={!shouldShowGuides}
                     >
-                        <ArrowLeft className="h-5 w-5" />
-                    </Link>
+                      <SelectTrigger
+                        className="w-48"
+                        disabled={!shouldShowGuides}
+                      >
+                        <SelectValue placeholder="Select a guide..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {guides.map((guide) => (
+                          <SelectItem key={guide.id} value={guide.id}>
+                            {guide.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    {dict?.challenges?.editor?.keepTrying ||
+                      "Keep trying on your own! You've got this."}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
 
-                    <div>
-                        <h1 className="text-2xl font-bold">{challenge.name}</h1>
-                        <p className="text-sm">
-                            {challenge.experiencePoints} XP
+          {/* Botón de guardado manual */}
+          <Button
+            onClick={handleManualSave}
+            disabled={isSaveDisabled}
+            variant={getSaveButtonVariant()}
+            aria-label={
+              dict?.challenges?.editor?.saveCodeManually || "Save code manually"
+            }
+          >
+            <Save className="h-4 w-4" />
+            {getSaveButtonText()}
+          </Button>
+
+          {/* Botón de ejecución */}
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitDisabled}
+            variant="default"
+            aria-label={
+              dict?.challenges?.editor?.runCodeAndSubmit ||
+              "Run code and submit solution"
+            }
+            className="bg-green-800 hover:bg-green-700 dark:bg-green-400 dark:text-secondary dark:hover:bg-green-500"
+          >
+            <Play className="h-4 w-4" />
+            {isSubmitting
+              ? dict?.challenges?.editor?.executing || "Executing..."
+              : dict?.challenges?.editor?.runCode || "Run Code"}
+          </Button>
+          <NavUser profile={profile} />
+        </div>
+      </header>
+
+      {/* Modal de guías - se muestra automáticamente después de maxAttempts */}
+      {guides.length > 0 && (
+        <Dialog open={showGuideDialog} onOpenChange={setShowGuideDialog}>
+          <DialogContent className="max-h-[80vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle>
+                {dict?.challenges?.editor?.needHelp || "Having trouble?"}
+              </DialogTitle>
+              <DialogDescription>
+                {dict?.challenges?.editor?.checkGuides ||
+                  "If you're stuck, these guides can help you understand the solution."}
+              </DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="max-h-64">
+              <div className="space-y-4 pr-4">
+                {guides.map((guide) => (
+                  <div
+                    key={guide.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium truncate">{guide.title}</h4>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {guide.description}
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleGuideSelect(guide.id)}
+                      className="ml-3 shrink-0"
+                    >
+                      {dict?.challenges?.editor?.viewGuide || "View Guide"}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Resizable panels */}
+      <ResizablePanelGroup direction="horizontal" className="h-full">
+        {/* Left Panel - Monaco Editor */}
+        <ResizablePanel defaultSize={70} minSize={50} maxSize={80}>
+          <div className="h-full flex flex-col">
+            <div className="flex-1 overflow-hidden p-4 bg-muted dark:bg-transparent">
+              <MonacoEditor
+                language={getMonacoLanguage(
+                  codeVersion.language as ProgrammingLanguage,
+                )}
+                value={code}
+                onChange={(value) => setCode(value || "")}
+              />
+            </div>
+          </div>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        {/* Right Panel - Tabs for Description and Tests */}
+        <ResizablePanel defaultSize={30} minSize={20}>
+          <div className="h-full flex flex-col">
+            <Tabs
+              value={activeTab}
+              onValueChange={(value) =>
+                setActiveTab(value as "description" | "tests")
+              }
+              className="h-full flex flex-col"
+            >
+              <TabsList className="m-4">
+                <TabsTrigger value="description">
+                  {dict?.challenges?.editor?.descriptionTab || "Description"}
+                </TabsTrigger>
+                <TabsTrigger value="tests">
+                  {dict?.challenges?.editor?.testCasesTab?.replace(
+                    "{count}",
+                    tests.length.toString(),
+                  ) || `Test Cases (${tests.length})`}
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Description Tab */}
+              <TabsContent
+                value="description"
+                className="flex-1 overflow-y-auto p-4 m-0"
+              >
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">
+                      {dict?.challenges?.editor?.challengeDescription ||
+                        "Challenge Description"}
+                    </h3>
+                    <div className="p-4 rounded-md prose prose-sm dark:prose-invert max-w-none">
+                      {serializedDescription ? (
+                        <MdxRenderer serializedSource={serializedDescription} />
+                      ) : (
+                        <p className="text-muted-foreground">
+                          {dict?.challenges?.editor?.noDescriptionAvailable ||
+                            "No description available."}
                         </p>
+                      )}
                     </div>
+                  </div>
                 </div>
+              </TabsContent>
 
-                <div className="flex items-center gap-2">
-                    {/* Indicador de auto-guardado */}
-                    {saveStatus === "saving" && (
-                        <span className="text-sm animate-pulse">
-                            {dict?.challenges?.editor?.autoSaving ||
-                                "Auto-saving..."}
-                        </span>
-                    )}
+              {/* Tests Tab */}
+              <TabsContent
+                value="tests"
+                className="flex-1 overflow-y-auto p-4 m-0"
+              >
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">
+                    {dict?.challenges?.editor?.testCases || "Test Cases"}
+                  </h3>
 
-                    {/* Selector de guías con tooltip - solo mostrar si hay guías disponibles */}
-                    {guides.length > 0 && (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <div className="flex items-center gap-2">
-                                        <Select
-                                            value={selectedGuideId}
-                                            onValueChange={handleGuideSelect}
-                                            disabled={!shouldShowGuides}
-                                        >
-                                            <SelectTrigger
-                                                className="w-48"
-                                                disabled={!shouldShowGuides}
-                                            >
-                                                <SelectValue placeholder="Select a guide..." />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {guides.map((guide) => (
-                                                    <SelectItem
-                                                        key={guide.id}
-                                                        value={guide.id}
-                                                    >
-                                                        {guide.title}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>
-                                        {dict?.challenges?.editor?.keepTrying ||
-                                            "Keep trying on your own! You've got this."}
-                                    </p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    )}
-
-                    {/* Botón de guardado manual */}
-                    <Button
-                        onClick={handleManualSave}
-                        disabled={isSaveDisabled}
-                        variant={getSaveButtonVariant()}
-                        aria-label={
-                            dict?.challenges?.editor?.saveCodeManually ||
-                            "Save code manually"
-                        }
+                  {/* Resultados de envío */}
+                  {submitResult && (
+                    <div
+                      className={`p-4 rounded-lg border ${
+                        submitResult.passedTests === submitResult.totalTests
+                          ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
+                          : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
+                      }`}
                     >
-                        <Save className="h-4 w-4" />
-                        {getSaveButtonText()}
-                    </Button>
+                      <div className="space-y-2">
+                        <p className="font-medium">
+                          {dict?.challenges?.editor?.submissionResults
+                            ?.replace(
+                              "{passed}",
+                              submitResult.passedTests.toString(),
+                            )
+                            .replace(
+                              "{total}",
+                              submitResult.totalTests.toString(),
+                            ) ||
+                            `Submission Results: ${submitResult.passedTests}/${submitResult.totalTests} tests passed`}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {dict?.challenges?.editor?.timeTaken?.replace(
+                            "{time}",
+                            submitResult.timeTaken.toString(),
+                          ) || `Time taken: ${submitResult.timeTaken}ms`}
+                        </p>
+                        {submitResult.passedTests ===
+                        submitResult.totalTests ? (
+                          <p className="text-green-600 dark:text-green-400 font-medium flex items-center gap-2">
+                            <CheckCircle className="h-5 w-5" />
+                            {dict?.challenges?.editor?.allTestsPassed ||
+                              "All tests passed! Congratulations!"}
+                          </p>
+                        ) : (
+                          <p className="text-red-600 dark:text-red-400 font-medium flex items-center gap-2">
+                            <XCircle className="h-5 w-5" />
+                            {dict?.challenges?.editor?.someTestsFailed ||
+                              "Some tests failed. Keep trying!"}
+                            {/* El modal se muestra automáticamente */}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
-                    {/* Botón de ejecución */}
-                    <Button
-                        onClick={handleSubmit}
-                        disabled={isSubmitDisabled}
-                        variant="default"
-                        aria-label={
-                            dict?.challenges?.editor?.runCodeAndSubmit ||
-                            "Run code and submit solution"
-                        }
-                        className="bg-green-800 hover:bg-green-700 dark:bg-green-400 dark:text-secondary dark:hover:bg-green-500"
-                    >
-                        <Play className="h-4 w-4" />
-                        {isSubmitting
-                            ? dict?.challenges?.editor?.executing ||
-                              "Executing..."
-                            : dict?.challenges?.editor?.runCode || "Run Code"}
-                    </Button>
-                    <NavUser profile={profile} />
-                </div>
-            </header>
+                  {/* Lista de tests */}
+                  {tests.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">
+                      {dict?.challenges?.editor?.noTestCasesAvailable ||
+                        "No test cases available."}
+                    </p>
+                  ) : (
+                    <div className="space-y-2">
+                      {tests.map((test, index) => {
+                        const isPassed = submitResult?.approvedTestIds.includes(
+                          test.id,
+                        );
 
-            {/* Modal de guías - se muestra automáticamente después de maxAttempts */}
-            {guides.length > 0 && (
-                <Dialog
-                    open={shouldShowGuides}
-                    onOpenChange={() => {}} // No permitir cerrar manualmente
-                >
-                    <DialogContent className="max-h-[80vh] overflow-hidden">
-                        <DialogHeader>
-                            <DialogTitle>
-                                {dict?.challenges?.editor?.needHelp ||
-                                    "Having trouble?"}
-                            </DialogTitle>
-                            <DialogDescription>
-                                {dict?.challenges?.editor?.checkGuides ||
-                                    "If you're stuck, these guides can help you understand the solution."}
-                            </DialogDescription>
-                        </DialogHeader>
-                        <ScrollArea className="max-h-64">
-                            <div className="space-y-4 pr-4">
-                                {guides.map((guide) => (
-                                    <div
-                                        key={guide.id}
-                                        className="flex items-center justify-between p-3 border rounded-lg"
-                                    >
-                                        <div className="flex-1 min-w-0">
-                                            <h4 className="font-medium truncate">
-                                                {guide.title}
-                                            </h4>
-                                            <p className="text-sm text-muted-foreground line-clamp-2">
-                                                {guide.description}
-                                            </p>
-                                        </div>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                handleGuideSelect(guide.id)
-                                            }
-                                            className="ml-3 shrink-0"
-                                        >
-                                            {dict?.challenges?.editor
-                                                ?.viewGuide || "View Guide"}
-                                        </Button>
-                                    </div>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                    </DialogContent>
-                </Dialog>
-            )}
+                        const itemClass = submitResult
+                          ? isPassed
+                            ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
+                            : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
+                          : "";
 
-            {/* Resizable panels */}
-            <ResizablePanelGroup direction="horizontal" className="h-full">
-                {/* Left Panel - Monaco Editor */}
-                <ResizablePanel defaultSize={70} minSize={50} maxSize={80}>
-                    <div className="h-full flex flex-col">
-                        <div className="flex-1 overflow-hidden p-4 bg-muted dark:bg-transparent">
-                            <MonacoEditor
-                                language={getMonacoLanguage(
-                                    codeVersion.language as ProgrammingLanguage,
+                        return (
+                          <Item
+                            key={test.id}
+                            variant="muted"
+                            size="sm"
+                            className={itemClass}
+                          >
+                            <ItemContent>
+                              <ItemTitle className="flex items-center gap-2">
+                                {submitResult &&
+                                  (isPassed ? (
+                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                  ) : (
+                                    <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                                  ))}
+                                {test.isSecret && (
+                                  <Lock className="h-4 w-4 text-muted-foreground" />
                                 )}
-                                value={code}
-                                onChange={(value) => setCode(value || "")}
-                            />
-                        </div>
-                    </div>
-                </ResizablePanel>
+                                <span>
+                                  {dict?.challenges?.editor?.testCase?.replace(
+                                    "{number}",
+                                    (index + 1).toString(),
+                                  ) || `Test Case ${index + 1}`}
+                                </span>
+                                {test.isSecret && (
+                                  <span className="text-xs text-muted-foreground">
+                                    {dict?.challenges?.editor?.secret ||
+                                      "(Secret)"}
+                                  </span>
+                                )}
+                              </ItemTitle>
 
-                <ResizableHandle withHandle />
+                              {test.isSecret ? (
+                                <div className="text-sm text-muted-foreground mt-2">
+                                  {dict?.challenges?.editor
+                                    ?.secretTestDescription ||
+                                    "This is a secret test used to validate your solution. Input and expected output are hidden."}
+                                </div>
+                              ) : (
+                                <div className="mt-2 space-y-2">
+                                  {/* Input */}
+                                  <div>
+                                    <p className="text-sm font-medium mb-1">
+                                      {dict?.challenges?.editor?.input ||
+                                        "Input:"}
+                                    </p>
+                                    <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
+                                      {test.input}
+                                    </pre>
+                                  </div>
 
-                {/* Right Panel - Tabs for Description and Tests */}
-                <ResizablePanel defaultSize={30} minSize={20}>
-                    <div className="h-full flex flex-col">
-                        <Tabs
-                            value={activeTab}
-                            onValueChange={(value) =>
-                                setActiveTab(value as "description" | "tests")
-                            }
-                            className="h-full flex flex-col"
-                        >
-                            <TabsList className="m-4">
-                                <TabsTrigger value="description">
-                                    {dict?.challenges?.editor?.descriptionTab ||
-                                        "Description"}
-                                </TabsTrigger>
-                                <TabsTrigger value="tests">
-                                    {dict?.challenges?.editor?.testCasesTab?.replace(
-                                        "{count}",
-                                        tests.length.toString(),
-                                    ) || `Test Cases (${tests.length})`}
-                                </TabsTrigger>
-                            </TabsList>
-
-                            {/* Description Tab */}
-                            <TabsContent
-                                value="description"
-                                className="flex-1 overflow-y-auto p-4 m-0"
-                            >
-                                <div className="space-y-4">
+                                  {/* Expected Output */}
+                                  {submitResult ? (
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-2">
-                                            {dict?.challenges?.editor
-                                                ?.challengeDescription ||
-                                                "Challenge Description"}
-                                        </h3>
-                                        <div className="p-4 rounded-md prose prose-sm dark:prose-invert max-w-none">
-                                            {serializedDescription ? (
-                                                <MdxRenderer
-                                                    serializedSource={
-                                                        serializedDescription
-                                                    }
-                                                />
-                                            ) : (
-                                                <p className="text-muted-foreground">
-                                                    {dict?.challenges?.editor
-                                                        ?.noDescriptionAvailable ||
-                                                        "No description available."}
-                                                </p>
-                                            )}
-                                        </div>
+                                      <p className="text-sm font-medium mb-1">
+                                        {dict?.challenges?.editor
+                                          ?.expectedOutput ||
+                                          "Expected Output:"}
+                                      </p>
+                                      <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
+                                        {test.expectedOutput}
+                                      </pre>
                                     </div>
+                                  ) : (
+                                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                                      <Lock className="h-3 w-3" />
+                                      <p>
+                                        {dict?.challenges?.editor
+                                          ?.expectedOutputHidden ||
+                                          "Expected output is hidden until you submit your solution"}
+                                      </p>
+                                    </div>
+                                  )}
                                 </div>
-                            </TabsContent>
-
-                            {/* Tests Tab */}
-                            <TabsContent
-                                value="tests"
-                                className="flex-1 overflow-y-auto p-4 m-0"
-                            >
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-semibold">
-                                        {dict?.challenges?.editor?.testCases ||
-                                            "Test Cases"}
-                                    </h3>
-
-                                    {/* Resultados de envío */}
-                                    {submitResult && (
-                                        <div
-                                            className={`p-4 rounded-lg border ${
-                                                submitResult.passedTests ===
-                                                submitResult.totalTests
-                                                    ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
-                                                    : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
-                                            }`}
-                                        >
-                                            <div className="space-y-2">
-                                                <p className="font-medium">
-                                                    {dict?.challenges?.editor?.submissionResults
-                                                        ?.replace(
-                                                            "{passed}",
-                                                            submitResult.passedTests.toString(),
-                                                        )
-                                                        .replace(
-                                                            "{total}",
-                                                            submitResult.totalTests.toString(),
-                                                        ) ||
-                                                        `Submission Results: ${submitResult.passedTests}/${submitResult.totalTests} tests passed`}
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {dict?.challenges?.editor?.timeTaken?.replace(
-                                                        "{time}",
-                                                        submitResult.timeTaken.toString(),
-                                                    ) ||
-                                                        `Time taken: ${submitResult.timeTaken}ms`}
-                                                </p>
-                                                {submitResult.passedTests ===
-                                                submitResult.totalTests ? (
-                                                    <p className="text-green-600 dark:text-green-400 font-medium flex items-center gap-2">
-                                                        <CheckCircle className="h-5 w-5" />
-                                                        {dict?.challenges
-                                                            ?.editor
-                                                            ?.allTestsPassed ||
-                                                            "All tests passed! Congratulations!"}
-                                                    </p>
-                                                ) : (
-                                                    <p className="text-red-600 dark:text-red-400 font-medium flex items-center gap-2">
-                                                        <XCircle className="h-5 w-5" />
-                                                        {dict?.challenges
-                                                            ?.editor
-                                                            ?.someTestsFailed ||
-                                                            "Some tests failed. Keep trying!"}
-                                                        {/* El modal se muestra automáticamente */}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Lista de tests */}
-                                    {tests.length === 0 ? (
-                                        <p className="text-muted-foreground text-sm">
-                                            {dict?.challenges?.editor
-                                                ?.noTestCasesAvailable ||
-                                                "No test cases available."}
-                                        </p>
-                                    ) : (
-                                        <div className="space-y-2">
-                                            {tests.map((test, index) => {
-                                                const isPassed =
-                                                    submitResult?.approvedTestIds.includes(
-                                                        test.id,
-                                                    );
-
-                                                const itemClass = submitResult
-                                                    ? isPassed
-                                                        ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
-                                                        : "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
-                                                    : "";
-
-                                                return (
-                                                    <Item
-                                                        key={test.id}
-                                                        variant="muted"
-                                                        size="sm"
-                                                        className={itemClass}
-                                                    >
-                                                        <ItemContent>
-                                                            <ItemTitle className="flex items-center gap-2">
-                                                                {submitResult &&
-                                                                    (isPassed ? (
-                                                                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                                                                    ) : (
-                                                                        <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                                                                    ))}
-                                                                {test.isSecret && (
-                                                                    <Lock className="h-4 w-4 text-muted-foreground" />
-                                                                )}
-                                                                <span>
-                                                                    {dict?.challenges?.editor?.testCase?.replace(
-                                                                        "{number}",
-                                                                        (
-                                                                            index +
-                                                                            1
-                                                                        ).toString(),
-                                                                    ) ||
-                                                                        `Test Case ${index + 1}`}
-                                                                </span>
-                                                                {test.isSecret && (
-                                                                    <span className="text-xs text-muted-foreground">
-                                                                        {dict
-                                                                            ?.challenges
-                                                                            ?.editor
-                                                                            ?.secret ||
-                                                                            "(Secret)"}
-                                                                    </span>
-                                                                )}
-                                                            </ItemTitle>
-
-                                                            {test.isSecret ? (
-                                                                <div className="text-sm text-muted-foreground mt-2">
-                                                                    {dict
-                                                                        ?.challenges
-                                                                        ?.editor
-                                                                        ?.secretTestDescription ||
-                                                                        "This is a secret test used to validate your solution. Input and expected output are hidden."}
-                                                                </div>
-                                                            ) : (
-                                                                <div className="mt-2 space-y-2">
-                                                                    {/* Input */}
-                                                                    <div>
-                                                                        <p className="text-sm font-medium mb-1">
-                                                                            {dict
-                                                                                ?.challenges
-                                                                                ?.editor
-                                                                                ?.input ||
-                                                                                "Input:"}
-                                                                        </p>
-                                                                        <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
-                                                                            {
-                                                                                test.input
-                                                                            }
-                                                                        </pre>
-                                                                    </div>
-
-                                                                    {/* Expected Output */}
-                                                                    {submitResult ? (
-                                                                        <div>
-                                                                            <p className="text-sm font-medium mb-1">
-                                                                                {dict
-                                                                                    ?.challenges
-                                                                                    ?.editor
-                                                                                    ?.expectedOutput ||
-                                                                                    "Expected Output:"}
-                                                                            </p>
-                                                                            <pre className="bg-muted p-2 rounded text-xs overflow-x-auto font-mono">
-                                                                                {
-                                                                                    test.expectedOutput
-                                                                                }
-                                                                            </pre>
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                                                                            <Lock className="h-3 w-3" />
-                                                                            <p>
-                                                                                {dict
-                                                                                    ?.challenges
-                                                                                    ?.editor
-                                                                                    ?.expectedOutputHidden ||
-                                                                                    "Expected output is hidden until you submit your solution"}
-                                                                            </p>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </ItemContent>
-                                                    </Item>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-                            </TabsContent>
-                        </Tabs>
+                              )}
+                            </ItemContent>
+                          </Item>
+                        );
+                      })}
                     </div>
-                </ResizablePanel>
-            </ResizablePanelGroup>
-        </section>
-    );
+                  )}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </section>
+  );
 }
