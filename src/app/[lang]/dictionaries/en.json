@@ -552,7 +552,12 @@
         "rankingSystem": {
             "overview": {
                 "title": "Ranking System",
-                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
+                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster.",
+                "intro": {
+                    "howItWorks": "How do ranks work?",
+                    "simple": "Complete challenges, earn points, rank up. Simple.",
+                    "explanation": "Each challenge has maximum points based on difficulty. Your solving time determines what percentage of those points you receive (20% to 100%). All tests must pass to earn points, if any fails you get 0."
+                }
             },
             "byScore": {
                 "ranges": {
@@ -574,6 +579,28 @@
                     "medium": "MEDIUM → 10 pts",
                     "hard": "HARD → 20 pts",
                     "expert": "EXPERT → 40 pts"
+                },
+                "timeBasedScoring": {
+                    "title": "Time-Based Scoring System",
+                    "description": "Each difficulty has specific time ranges. They are not global.",
+                    "groups": {
+                        "easy": {
+                            "title": "EASY",
+                            "rules": ["≤ 20 min → 100%", "≤ 30 min → 80%", "≤ 40 min → 60%", "> 40 min → 20%"]
+                        },
+                        "medium": {
+                            "title": "MEDIUM",
+                            "rules": ["≤ 40 min → 100%", "≤ 60 min → 80%", "≤ 80 min → 60%", "> 80 min → 20%"]
+                        },
+                        "hard": {
+                            "title": "HARD",
+                            "rules": ["≤ 90 min → 100%", "≤ 120 min → 80%", "≤ 150 min → 60%", "> 150 min → 20%"]
+                        },
+                        "expert": {
+                            "title": "EXPERT",
+                            "rules": ["≤ 180 min → 100%", "≤ 240 min → 80%", "≤ 300 min → 60%", "> 300 min → 20%"]
+                        }
+                    }
                 },
                 "sections": {
                     "difficultyCeiling": {
@@ -624,47 +651,6 @@
             }
         }
     },
-    "challengesPage": {
-        "header": {
-            "title": "Program with purpose",
-            "description": "Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up."
-        },
-        "filters": {
-            "difficulty": "Difficulty",
-            "language": "Language",
-            "popularity": "Popularity",
-            "recentness": "Recentness",
-            "difficultyOptions": {
-                "easy": "Easy",
-                "medium": "Medium",
-                "hard": "Hard",
-                "expert": "Expert"
-            },
-            "languageOptions": {
-                "cpp": "C++",
-                "python": "Python",
-                "javascript": "JavaScript"
-            },
-            "popularityOptions": {
-                "mostPopular": "Most Popular",
-                "trending": "Trending",
-                "leastPopular": "Least Popular"
-            },
-            "recentnessOptions": {
-                "newest": "Newest",
-                "oldest": "Oldest",
-                "recentlyUpdated": "Recently Updated"
-            }
-        },
-        "section": {
-            "title": "Coding Challenges",
-            "results": {
-                "singular": "result",
-                "plural": "results"
-            }
-        }
-    },
-
     "challengesPage": {
         "header": {
             "title": "Start coding with purpose",

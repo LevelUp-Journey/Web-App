@@ -552,7 +552,12 @@
         "rankingSystem": {
             "overview": {
                 "title": "Sistema de Clasificación",
-                "description": "El sistema de clasificación en LevelUp Journey transforma el progreso de programación en una experiencia de juego competitivo, donde cada desafío, solución y logro contribuye al crecimiento de un jugador a través de siete niveles de dominio, y a través de la participación consistente, la resolución de problemas y la excelencia, ascienden hacia el nivel élite de Gran Maestro."
+                "description": "El sistema de clasificación en LevelUp Journey transforma el progreso de programación en una experiencia de juego competitivo, donde cada desafío, solución y logro contribuye al crecimiento de un jugador a través de siete niveles de dominio, y a través de la participación consistente, la resolución de problemas y la excelencia, ascienden hacia el nivel élite de Gran Maestro.",
+                "intro": {
+                    "howItWorks": "¿Cómo funcionan los rangos?",
+                    "simple": "Completas desafíos, ganas puntos, subes de rango. Simple.",
+                    "explanation": "Cada desafío tiene puntos máximos según su dificultad. Tu tiempo de resolución determina qué porcentaje de esos puntos recibes (20% a 100%). Todos los tests deben pasar para ganar puntos, si alguno falla obtienes 0."
+                }
             },
             "byScore": {
                 "ranges": {
@@ -568,12 +573,27 @@
             "rules": {
                 "title": "Resumen de Reglas de Puntuación",
                 "description": "Guía rápida de cómo LevelUp Journey traduce la dificultad, corrección y tiempo en puntos de clasificación.",
-                "maximumScoresIntro": "Puntaje máximo:",
-                "difficultyLevels": {
-                    "easy": "FÁCIL → 5 pts",
-                    "medium": "MEDIO → 10 pts",
-                    "hard": "DIFÍCIL → 20 pts",
-                    "expert": "EXPERTO → 40 pts"
+                "timeBasedScoring": {
+                    "title": "Sistema de Puntuación por Tiempo",
+                    "description": "Cada dificultad tiene rangos de tiempo específicos. No son globales.",
+                    "groups": {
+                        "easy": {
+                            "title": "EASY",
+                            "rules": ["≤ 20 min → 100%", "≤ 30 min → 80%", "≤ 40 min → 60%", "> 40 min → 20%"]
+                        },
+                        "medium": {
+                            "title": "MEDIUM",
+                            "rules": ["≤ 40 min → 100%", "≤ 60 min → 80%", "≤ 80 min → 60%", "> 80 min → 20%"]
+                        },
+                        "hard": {
+                            "title": "HARD",
+                            "rules": ["≤ 90 min → 100%", "≤ 120 min → 80%", "≤ 150 min → 60%", "> 150 min → 20%"]
+                        },
+                        "expert": {
+                            "title": "EXPERT",
+                            "rules": ["≤ 180 min → 100%", "≤ 240 min → 80%", "≤ 300 min → 60%", "> 300 min → 20%"]
+                        }
+                    }
                 },
                 "sections": {
                     "difficultyCeiling": {
