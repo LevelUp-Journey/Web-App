@@ -150,14 +150,14 @@ export default function ChallengeCard({
                 </div>
             </CardHeader>
 
-            <CardContent className="px-4 flex flex-col">
+            <CardContent className="px-4 flex flex-col grow">
                 {/* Title in the middle */}
                 <CardTitle className="text-base font-bold cursor-pointer hover:text-primary transition-colors">
                     {challenge.name}
                 </CardTitle>
 
                 {/* Stars at the bottom */}
-                <div className="flex items-center justify-between grow">
+                <div className="flex items-center justify-between">
                     <Button size={"sm"} variant={"ghost"} onClick={handleLike}>
                         <Star
                             className={cn(
@@ -173,9 +173,7 @@ export default function ChallengeCard({
                             size={"icon"}
                             variant={"ghost"}
                             className={cn(
-                                "transition-all duration-300",
-                                isHovered &&
-                                    "animate-[bounce-horizontal_1s_ease-in-out_infinite]",
+                                "transition-all duration-300 animate-[bounce-horizontal_1s_ease-in-out_infinite]",
                             )}
                             asChild
                         >

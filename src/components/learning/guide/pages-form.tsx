@@ -218,10 +218,6 @@ export function PagesForm({
                 (a, b) => a.orderNumber - b.orderNumber,
             );
 
-            console.log(
-                `🔄 Pages updated: ${prevPages.length} → ${uniquePages.length} (added ${newPages.length})`,
-            );
-
             // Verificar que no hay duplicados
             const ids = uniquePages.map((p) => p.id);
             const uniqueIds = new Set(ids);
@@ -251,7 +247,6 @@ export function PagesForm({
             (a, b) => a.orderNumber - b.orderNumber,
         );
 
-        console.log(`🔄 Pages replaced: ${uniquePages.length} pages`);
         setPages(uniquePages);
     }, []);
 
@@ -373,8 +368,6 @@ export function PagesForm({
                 orderNumber: nextOrderNumber,
             });
 
-            console.log("📥 Created page response:", response);
-
             // El backend puede devolver GuideResponse o PageResponse directamente
             if ("pages" in response && Array.isArray(response.pages)) {
                 // Es un GuideResponse con array COMPLETO de pages
@@ -411,10 +404,6 @@ export function PagesForm({
                             : pageResponse.orderNumber,
                 };
 
-                console.log(
-                    "✅ PageResponse: Adding single page. ID:",
-                    newPageData.id,
-                );
                 updatePagesSafely([newPageData]);
                 setSelectedPageId(newPageData.id);
             } else {
