@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, EllipsisVertical, Heart, ImageIcon, AlertTriangle } from "lucide-react";
+import {
+    Calendar,
+    EllipsisVertical,
+    Heart,
+    ImageIcon,
+    AlertTriangle,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -94,7 +100,8 @@ export default function GuideCard({
             await GuideController.deleteGuide({ id: guide.id });
 
             toast.success(
-                dict?.challenges?.cards?.deleteGuideSuccess || "Guide deleted successfully"
+                dict?.challenges?.cards?.deleteGuideSuccess ||
+                    "Guide deleted successfully",
             );
 
             if (onDelete) {
@@ -104,7 +111,8 @@ export default function GuideCard({
             }
         } catch (error) {
             console.error("Failed to delete guide:", error);
-            const errorMessage = dict?.challenges?.cards?.deleteGuideError ||
+            const errorMessage =
+                dict?.challenges?.cards?.deleteGuideError ||
                 "Failed to delete guide. Please try again.";
             toast.error(errorMessage);
         } finally {
@@ -191,8 +199,10 @@ export default function GuideCard({
                                     className="text-destructive focus:text-destructive"
                                 >
                                     {isDeleting
-                                        ? dict?.challenges?.cards?.deleting || "Deleting..."
-                                        : dict?.challenges?.cards?.deleteGuide || "Delete Guide"}
+                                        ? dict?.challenges?.cards?.deleting ||
+                                          "Deleting..."
+                                        : dict?.challenges?.cards
+                                              ?.deleteGuide || "Delete Guide"}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -235,12 +245,16 @@ export default function GuideCard({
             </CardContent>
 
             {/* Delete Confirmation Dialog */}
-            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialog
+                open={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle className="flex items-center gap-2">
                             <AlertTriangle className="h-5 w-5 text-destructive" />
-                            {dict?.challenges?.cards?.deleteGuideTitle || "Delete Guide"}
+                            {dict?.challenges?.cards?.deleteGuideTitle ||
+                                "Delete Guide"}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                             {dict?.challenges?.cards?.deleteGuideConfirm ||
@@ -257,8 +271,10 @@ export default function GuideCard({
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             {isDeleting
-                                ? dict?.challenges?.cards?.deleting || "Deleting..."
-                                : dict?.challenges?.cards?.deleteGuide || "Delete"}
+                                ? dict?.challenges?.cards?.deleting ||
+                                  "Deleting..."
+                                : dict?.challenges?.cards?.deleteGuide ||
+                                  "Delete"}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
