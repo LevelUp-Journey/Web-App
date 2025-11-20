@@ -562,6 +562,7 @@
             "rules": {
                 "title": "Scoring Rules Overview",
                 "description": "Quick guide to how LevelUp Journey translates difficulty, correctness, and time into leaderboard points.",
+                "maximumScoresIntro": "Maximum Score:",
                 "difficultyLevels": {
                     "easy": "EASY → 5 pts",
                     "medium": "MEDIUM → 10 pts",
@@ -607,15 +608,6 @@
                         "items": [
                             "Start when you create the challenge solution. End on the final submission.",
                             "Coding, debugging, and retries all count. Internally we store seconds, but show minutes in the UI."
-                        ]
-                    },
-                    "summaryHierarchy": {
-                        "title": "Summary Hierarchy",
-                        "summary": "Two-step mental checklist: be correct, then be timely. Everything else flows from there.",
-                        "items": [
-                            "Pass all tests + stay inside time → max score.",
-                            "Pass all tests + miss time → reduced score.",
-                            "Fail any test → zero score regardless of time."
                         ]
                     }
                 }

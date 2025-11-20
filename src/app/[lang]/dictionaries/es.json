@@ -563,6 +563,7 @@
             "rules": {
                 "title": "Resumen de Reglas de Puntuación",
                 "description": "Guía rápida de cómo LevelUp Journey traduce la dificultad, corrección y tiempo en puntos de clasificación.",
+                "maximumScoresIntro": "Puntaje máximo:",
                 "difficultyLevels": {
                     "easy": "FÁCIL → 5 pts",
                     "medium": "MEDIO → 10 pts",
@@ -608,15 +609,6 @@
                         "items": [
                             "Comienza cuando creas la solución del desafío. Termina en el envío final.",
                             "La codificación, depuración y reintentos cuentan todos. Internamente almacenamos segundos, pero mostramos minutos en la interfaz."
-                        ]
-                    },
-                    "summaryHierarchy": {
-                        "title": "Jerarquía de Resumen",
-                        "summary": "Lista de verificación mental de dos pasos: sé correcto, luego sé oportuno. Todo lo demás fluye desde allí.",
-                        "items": [
-                            "Pasar todas las pruebas + mantenerse dentro del tiempo → puntuación máxima.",
-                            "Pasar todas las pruebas + perder tiempo → puntuación reducida.",
-                            "Fallar cualquier prueba → cero puntuación independientemente del tiempo."
                         ]
                     }
                 }
