@@ -71,12 +71,10 @@ export async function createChallengeAction(
     request: CreateChallengeRequest,
 ): Promise<RequestSuccess<ChallengeResponse> | RequestFailure> {
     try {
-        console.log("Request DE CREATION ACTION", request);
         const response = await API_GATEWAY_HTTP.post<ChallengeResponse>(
             "/challenges",
             request,
         );
-        console.log("RESPONSE DE CREATION ACTION", response);
 
         return {
             data: response.data,
@@ -155,8 +153,6 @@ export async function deleteChallengeAction(
         const response = await API_GATEWAY_HTTP.delete(
             `/challenges/${challengeId}`,
         );
-
-        console.log("DELETE CHALLENGE RESPONSE", response);
 
         return {
             data: true,

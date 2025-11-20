@@ -75,8 +75,6 @@ export class ChallengeController {
                 );
             }
 
-            console.log(response);
-
             throw new ChallengeError(
                 "Failed to create challenge",
                 response.status,
@@ -233,16 +231,10 @@ export class ChallengeController {
         challengeId: string,
         guideId: string,
     ): Promise<boolean> {
-        console.log(
-            `[ChallengeController] Adding guide ${guideId} to challenge ${challengeId}`,
-        );
         try {
             const response = await addGuideToChallenge(challengeId, guideId);
 
             if (response.status === 200 || response.status === 201) {
-                console.log(
-                    `[ChallengeController] Successfully added guide ${guideId} to challenge ${challengeId}`,
-                );
                 return true;
             }
 
@@ -265,9 +257,6 @@ export class ChallengeController {
         challengeId: string,
         guideId: string,
     ): Promise<boolean> {
-        console.log(
-            `[ChallengeController] Removing guide ${guideId} from challenge ${challengeId}`,
-        );
         try {
             const response = await removeGuideFromChallenge(
                 challengeId,
@@ -275,9 +264,6 @@ export class ChallengeController {
             );
 
             if (response.status === 200 || response.status === 204) {
-                console.log(
-                    `[ChallengeController] Successfully removed guide ${guideId} from challenge ${challengeId}`,
-                );
                 return true;
             }
 
@@ -333,8 +319,6 @@ export class ChallengeController {
     public static async unlikeChallenge(challengeId: string): Promise<boolean> {
         try {
             const response = await unlikeChallengeAction(challengeId);
-
-            console.log("RESPONSE", response);
 
             if (response.status === 204) {
                 return response.data as boolean;

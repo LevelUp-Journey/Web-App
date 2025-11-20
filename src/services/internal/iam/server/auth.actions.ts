@@ -30,7 +30,6 @@ export async function signInAction(
             "/authentication/sign-in",
             request,
         );
-        console.log("IN RESPONSE", response);
 
         return {
             status: response.status,
