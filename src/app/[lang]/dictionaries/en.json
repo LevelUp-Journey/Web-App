@@ -545,8 +545,8 @@
         },
         "rankingSystem": {
             "overview": {
-                "title": "Overview",
-                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels. Each user begins as a Bronze Coder with a base score of 1000 points, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
+                "title": "Ranking System",
+                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
             },
             "byScore": {
                 "ranges": {
@@ -562,6 +562,7 @@
             "rules": {
                 "title": "Scoring Rules Overview",
                 "description": "Quick guide to how LevelUp Journey translates difficulty, correctness, and time into leaderboard points.",
+                "maximumScoresIntro": "Maximum Score:",
                 "difficultyLevels": {
                     "easy": "EASY → 5 pts",
                     "medium": "MEDIUM → 10 pts",
@@ -608,15 +609,6 @@
                             "Start when you create the challenge solution. End on the final submission.",
                             "Coding, debugging, and retries all count. Internally we store seconds, but show minutes in the UI."
                         ]
-                    },
-                    "summaryHierarchy": {
-                        "title": "Summary Hierarchy",
-                        "summary": "Two-step mental checklist: be correct, then be timely. Everything else flows from there.",
-                        "items": [
-                            "Pass all tests + stay inside time → max score.",
-                            "Pass all tests + miss time → reduced score.",
-                            "Fail any test → zero score regardless of time."
-                        ]
                     }
                 }
             },
@@ -628,7 +620,7 @@
     },
     "challengesPage": {
         "header": {
-            "title": "Start coding with purpose",
+            "title": "Program with purpose",
             "description": "Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up."
         },
         "filters": {
