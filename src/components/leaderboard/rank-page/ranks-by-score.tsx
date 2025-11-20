@@ -68,12 +68,12 @@ export function RanksByScore({
                         key={r.key}
                         className="flex flex-col items-center text-center"
                     >
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 p-1 rounded-md flex items-center justify-center">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 p-2 rounded-md flex items-center justify-center">
                             <Image
                                 src={r.file}
                                 alt={`${dict.leaderboard.ranks[r.key as keyof typeof dict.leaderboard.ranks].name} trophy`}
-                                width={96}
-                                height={96}
+                                width={128}
+                                height={128}
                                 className="max-w-full max-h-full"
                                 unoptimized
                             />
