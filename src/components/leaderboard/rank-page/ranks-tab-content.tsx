@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Spinner } from "@/components/ui/spinner";
-import { GeneralRules } from "./general-rules";
-import { RankingOverview } from "./ranking-overview";
+import { RankingIntro } from "./ranking-intro";
 import { RanksByScore } from "./ranks-by-score";
+import { ScoringSystemInfo } from "./scoring-system-info";
 
 export function RanksTabContent({ dict }: { dict: Dictionary }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -29,9 +29,9 @@ export function RanksTabContent({ dict }: { dict: Dictionary }) {
 
     return (
         <div className="space-y-8">
-            <RankingOverview dict={dict} />
+            <RankingIntro dict={dict} />
             <RanksByScore dict={dict} />
-            <GeneralRules dict={dict} />
+            <ScoringSystemInfo dict={dict} />
         </div>
     );
 }
