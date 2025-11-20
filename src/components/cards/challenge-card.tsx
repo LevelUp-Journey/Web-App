@@ -150,14 +150,14 @@ export default function ChallengeCard({
                 </div>
             </CardHeader>
 
-            <CardContent className="px-4">
+            <CardContent className="px-4 flex flex-col">
                 {/* Title in the middle */}
                 <CardTitle className="text-base font-bold cursor-pointer hover:text-primary transition-colors">
                     {challenge.name}
                 </CardTitle>
 
                 {/* Stars at the bottom */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between grow">
                     <Button size={"sm"} variant={"ghost"} onClick={handleLike}>
                         <Star
                             className={cn(
