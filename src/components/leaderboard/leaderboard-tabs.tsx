@@ -62,7 +62,10 @@ export function LeaderboardTabs({ dict }: LeaderboardTabsProps) {
 
             <TabsContent value="leaderboard" className="mt-6">
                 {shouldRender("leaderboard") && (
-                    <LeaderboardContent dict={dict} />
+                    <>
+                        <h1 className="text-2xl font-bold mb-4">Leaderboard</h1>
+                        <LeaderboardContent dict={dict} />
+                    </>
                 )}
             </TabsContent>
 
