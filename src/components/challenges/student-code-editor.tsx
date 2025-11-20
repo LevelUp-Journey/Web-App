@@ -152,6 +152,9 @@ export default function StudentCodeEditor({
     onSuccess: (result) => {
       setActiveTab("tests");
       toast.success(result.message);
+      if (result.passedTests === result.totalTests) {
+        setShowCongratsDialog(true);
+      }
     },
     onError: (error) => {
       console.error("Error submitting solution:", error);
@@ -172,6 +175,9 @@ export default function StudentCodeEditor({
   // Estado para controlar el diálogo de guías
   const [showGuideDialog, setShowGuideDialog] = useState(false);
   const [hasShownGuideDialog, setHasShownGuideDialog] = useState(false);
+
+  // Estado para controlar el diálogo de felicitaciones
+  const [showCongratsDialog, setShowCongratsDialog] = useState(false);
 
   // Mostrar el diálogo solo una vez cuando se alcanza el umbral de intentos
   // pero no si el usuario ya pasó todos los tests
@@ -379,6 +385,24 @@ export default function StudentCodeEditor({
                 ))}
               </div>
             </ScrollArea>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Modal de felicitaciones - se muestra cuando todas las pruebas pasan */}
+      {submitResult && submitResult.passedTests === submitResult.totalTests && (
+        <Dialog open={showCongratsDialog} onOpenChange={setShowCongratsDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {dict?.challenges?.editor?.congratulationsTitle ||
+                  "Congratulations!"}
+              </DialogTitle>
+              <DialogDescription>
+                {dict?.challenges?.editor?.congratulationsMessage ||
+                  "You have successfully completed all tests! Great job!"}
+              </DialogDescription>
+            </DialogHeader>
           </DialogContent>
         </Dialog>
       )}
