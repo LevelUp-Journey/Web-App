@@ -545,7 +545,7 @@
         },
         "rankingSystem": {
             "overview": {
-                "title": "Overview",
+                "title": "Ranking System",
                 "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
             },
             "byScore": {

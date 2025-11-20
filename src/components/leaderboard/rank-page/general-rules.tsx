@@ -89,7 +89,7 @@ export function GeneralRules({
             >
                 {dict.leaderboard.rankingSystem.rules.title}
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground mb-6">
                 {dict.leaderboard.rankingSystem.rules.description}
             </p>
 
@@ -109,8 +109,8 @@ export function GeneralRules({
                 ))}
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-                {SCORING_RULES.map((rule) => {
+            <ol className="space-y-6">
+                {SCORING_RULES.map((rule, index) => {
                     const sectionKey =
                         rule.key as keyof typeof dict.leaderboard.rankingSystem.rules.sections;
                     const section =
@@ -118,25 +118,32 @@ export function GeneralRules({
                             sectionKey
                         ];
                     return (
-                        <article
-                            key={rule.key}
-                            className="rounded-lg border border-border bg-card/40 p-4 shadow-sm"
-                        >
-                            <h4 className="text-base font-semibold mb-2">
-                                {section.title}
+                        <li key={rule.key} className="space-y-2">
+                            <h4 className="text-lg font-semibold">
+                                {index + 1}. {section.title}
                             </h4>
-                            <p className="text-sm text-muted-foreground mb-3">
+                            <p className="text-sm text-muted-foreground">
                                 {section.summary}
                             </p>
                             <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground/90">
-                                {section.items.map((item, index) => (
-                                    <li key={index}>{item}</li>
+                                {section.items.map((item, itemIndex) => (
+                                    <li key={itemIndex}>{item}</li>
                                 ))}
                             </ul>
-                        </article>
+                        </li>
                     );
                 })}
-            </div>
+                <li className="space-y-2">
+                    <h4 className="text-lg font-semibold">
+                        {SCORING_RULES.length + 1}. {dict.leaderboard.rankingSystem.penalization.title}
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground/90">
+                        <li>
+                            {dict.leaderboard.rankingSystem.penalization.description}
+                        </li>
+                    </ul>
+                </li>
+            </ol>
         </section>
     );
 }

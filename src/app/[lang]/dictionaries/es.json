@@ -546,7 +546,7 @@
         },
         "rankingSystem": {
             "overview": {
-                "title": "Resumen",
+                "title": "Sistema de Clasificación",
                 "description": "El sistema de clasificación en LevelUp Journey transforma el progreso de programación en una experiencia de juego competitivo, donde cada desafío, solución y logro contribuye al crecimiento de un jugador a través de siete niveles de dominio, y a través de la participación consistente, la resolución de problemas y la excelencia, ascienden hacia el nivel élite de Gran Maestro."
             },
             "byScore": {

@@ -12,43 +12,43 @@ const RANKS: RankItem[] = [
     {
         key: "bronze",
         name: "Bronze",
-        file: "/ranks/rank-bronze.svg",
+        file: "/ranks-trophies/trophy-bronze.webp",
         range: "0 – 499",
     },
     {
         key: "silver",
         name: "Silver",
-        file: "/ranks/rank-silver.svg",
+        file: "/ranks-trophies/trophy-silver.webp",
         range: "500 – 899",
     },
     {
         key: "gold",
         name: "Gold",
-        file: "/ranks/rank-gold.svg",
+        file: "/ranks-trophies/trophy-gold.webp",
         range: "900 – 1149",
     },
     {
         key: "platinum",
         name: "Platinum",
-        file: "/ranks/rank-platinum.svg",
+        file: "/ranks-trophies/trophy-platinum.webp",
         range: "1150 – 1299",
     },
     {
         key: "diamond",
         name: "Diamond",
-        file: "/ranks/rank-diamond.svg",
+        file: "/ranks-trophies/trophy-diamond.webp",
         range: "1300 – 1399",
     },
     {
         key: "master",
         name: "Master",
-        file: "/ranks/rank-master.svg",
+        file: "/ranks-trophies/trophy-master.webp",
         range: "1400 – 1499",
     },
     {
         key: "grandmaster",
         name: "Grandmaster",
-        file: "/ranks/rank-grandmaster.svg",
+        file: "/ranks-trophies/trophy-grandmaster.webp",
         range: "1500 +",
     },
 ];
@@ -71,14 +71,14 @@ export function RanksByScore({
                         <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 p-1 rounded-md flex items-center justify-center">
                             <Image
                                 src={r.file}
-                                alt={`${r.name} rank`}
+                                alt={`${dict.leaderboard.ranks[r.key as keyof typeof dict.leaderboard.ranks].name} trophy`}
                                 width={96}
                                 height={96}
                                 className="max-w-full max-h-full"
                                 unoptimized
                             />
                         </div>
-                        <div className="mt-2 text-sm font-medium">{r.name}</div>
+                        <div className="mt-2 text-sm font-medium">{dict.leaderboard.ranks[r.key as keyof typeof dict.leaderboard.ranks].name}</div>
                         <div className="text-xs text-muted-foreground mt-1">
                             {
                                 dict.leaderboard.rankingSystem.byScore.ranges[
