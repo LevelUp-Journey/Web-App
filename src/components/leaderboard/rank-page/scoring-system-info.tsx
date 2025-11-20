@@ -1,6 +1,7 @@
 import { Clock } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { CHALLENGE_DIFFICULTY_MAX_XP } from "@/lib/consts";
+import { CHALLENGE_DIFFICULTY_MAX_XP, ChallengeDifficulty } from "@/lib/consts";
+import ChallengeDifficultyBadge from "@/components/cards/challenge-difficulty-badge";
 
 export function ScoringSystemInfo({
     className = "",
@@ -58,12 +59,7 @@ export function ScoringSystemInfo({
                 {/* EASY */}
                 <div className="border rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold text-foreground">
-                            {timeBasedScoring.groups.easy.title}
-                        </h4>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#CDFFC4] text-[#0F6B00]">
-                            {timeBasedScoring.groups.easy.title}
-                        </span>
+                        <ChallengeDifficultyBadge difficulty={ChallengeDifficulty.EASY} />
                     </div>
                     <div className="text-xs text-muted-foreground mb-2">Max: {maxByKey.easy} pts</div>
                     <div className="text-sm space-y-1">
@@ -76,12 +72,7 @@ export function ScoringSystemInfo({
                 {/* MEDIUM */}
                 <div className="border rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold text-foreground">
-                            {timeBasedScoring.groups.medium.title}
-                        </h4>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#FFFCB1] text-[#B17300]">
-                            {timeBasedScoring.groups.medium.title}
-                        </span>
+                        <ChallengeDifficultyBadge difficulty={ChallengeDifficulty.MEDIUM} />
                     </div>
                     <div className="text-xs text-muted-foreground mb-2">Max: {maxByKey.medium} pts</div>
                     <div className="text-sm space-y-1">
@@ -94,12 +85,7 @@ export function ScoringSystemInfo({
                 {/* HARD */}
                 <div className="border rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold text-foreground">
-                            {timeBasedScoring.groups.hard.title}
-                        </h4>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#FFC78E] text-[#944B00]">
-                            {timeBasedScoring.groups.hard.title}
-                        </span>
+                        <ChallengeDifficultyBadge difficulty={ChallengeDifficulty.HARD} />
                     </div>
                     <div className="text-xs text-muted-foreground mb-2">Max: {maxByKey.hard} pts</div>
                     <div className="text-sm space-y-1">
@@ -112,12 +98,7 @@ export function ScoringSystemInfo({
                 {/* EXPERT */}
                 <div className="border rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold text-foreground">
-                            {timeBasedScoring.groups.expert.title}
-                        </h4>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#FFC9C9] text-[#940000]">
-                            {timeBasedScoring.groups.expert.title}
-                        </span>
+                        <ChallengeDifficultyBadge difficulty={ChallengeDifficulty.EXPERT} />
                     </div>
                     <div className="text-xs text-muted-foreground mb-2">Max: {maxByKey.expert} pts</div>
                     <div className="text-sm space-y-1">
