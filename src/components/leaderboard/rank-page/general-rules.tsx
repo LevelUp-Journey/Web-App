@@ -58,17 +58,6 @@ const SCORING_RULES = [
             "Coding, debugging, and retries all count. Internally we store seconds, but show minutes in the UI.",
         ],
     },
-    {
-        key: "summaryHierarchy",
-        title: "Summary Hierarchy",
-        summary:
-            "Two-step mental checklist: be correct, then be timely. Everything else flows from there.",
-        items: [
-            "Pass all tests + stay inside time → max score.",
-            "Pass all tests + miss time → reduced score.",
-            "Fail any test → zero score regardless of time.",
-        ],
-    },
 ];
 
 export function GeneralRules({
@@ -83,17 +72,17 @@ export function GeneralRules({
             className={`w-full ${className}`}
             aria-labelledby="general-rules-heading"
         >
-            <h3
-                id="general-rules-heading"
-                className="text-xl font-semibold mb-4"
-            >
+            <h2 id="general-rules-heading" className="text-2xl font-bold mb-6">
                 {dict.leaderboard.rankingSystem.rules.title}
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
                 {dict.leaderboard.rankingSystem.rules.description}
             </p>
 
             <div className="mb-6 flex flex-wrap gap-2 text-xs font-medium text-muted-foreground">
+                <p className="w-full text-sm text-muted-foreground mb-2">
+                    {dict.leaderboard.rankingSystem.rules.maximumScoresIntro}
+                </p>
                 {DIFFICULTY_LEVELS.map((level) => (
                     <span
                         key={level.key}
@@ -109,8 +98,8 @@ export function GeneralRules({
                 ))}
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-                {SCORING_RULES.map((rule) => {
+            <ol className="space-y-8">
+                {SCORING_RULES.map((rule, index) => {
                     const sectionKey =
                         rule.key as keyof typeof dict.leaderboard.rankingSystem.rules.sections;
                     const section =
@@ -118,25 +107,22 @@ export function GeneralRules({
                             sectionKey
                         ];
                     return (
-                        <article
-                            key={rule.key}
-                            className="rounded-lg border border-border bg-card/40 p-4 shadow-sm"
-                        >
-                            <h4 className="text-base font-semibold mb-2">
-                                {section.title}
+                        <li key={rule.key} className="space-y-3">
+                            <h4 className="text-xl font-bold">
+                                {index + 1}. {section.title}
                             </h4>
-                            <p className="text-sm text-muted-foreground mb-3">
+                            <p className="text-sm text-muted-foreground ml-6">
                                 {section.summary}
                             </p>
-                            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground/90">
-                                {section.items.map((item, index) => (
-                                    <li key={index}>{item}</li>
+                            <ul className="list-disc pl-11 space-y-2 text-sm text-muted-foreground/90">
+                                {section.items.map((item, itemIndex) => (
+                                    <li key={itemIndex}>{item}</li>
                                 ))}
                             </ul>
-                        </article>
+                        </li>
                     );
                 })}
-            </div>
+            </ol>
         </section>
     );
 }

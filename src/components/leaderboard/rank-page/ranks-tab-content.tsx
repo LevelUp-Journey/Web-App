@@ -4,10 +4,8 @@ import { useEffect, useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Spinner } from "@/components/ui/spinner";
 import { GeneralRules } from "./general-rules";
-import { Penalization } from "./penalization";
 import { RankingOverview } from "./ranking-overview";
 import { RanksByScore } from "./ranks-by-score";
-import { RanksList } from "./ranks-list";
 
 export function RanksTabContent({ dict }: { dict: Dictionary }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -31,11 +29,9 @@ export function RanksTabContent({ dict }: { dict: Dictionary }) {
 
     return (
         <div className="space-y-8">
-            <RanksList dict={dict} />
             <RankingOverview dict={dict} />
             <RanksByScore dict={dict} />
             <GeneralRules dict={dict} />
-            <Penalization dict={dict} />
         </div>
     );
 }
