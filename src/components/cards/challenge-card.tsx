@@ -173,9 +173,7 @@ export default function ChallengeCard({
                             size={"icon"}
                             variant={"ghost"}
                             className={cn(
-                                "transition-all duration-300",
-                                isHovered &&
-                                    "animate-[bounce-horizontal_1s_ease-in-out_infinite]",
+                                "transition-all duration-300 animate-[bounce-horizontal_1s_ease-in-out_infinite]",
                             )}
                             asChild
                         >
