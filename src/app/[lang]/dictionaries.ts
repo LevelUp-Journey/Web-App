@@ -7,12 +7,12 @@ const dictionaries = {
 
 export type Locale = keyof typeof dictionaries;
 
-export const getDictionary = async (locale: Locale) => {
+export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
     // Validate locale to prevent injection
     if (!dictionaries[locale]) {
-        return dictionaries.en();
+        return dictionaries.en() as unknown as Promise<Dictionary>;
     }
-    return dictionaries[locale]();
+    return dictionaries[locale]() as unknown as Promise<Dictionary>;
 };
 
 export const locales = Object.keys(dictionaries) as Locale[];
@@ -131,6 +131,7 @@ export interface Dictionary {
             rules: {
                 title: string;
                 description: string;
+                maximumScoresIntro: string;
                 difficultyLevels: {
                     easy: string;
                     medium: string;
@@ -173,6 +174,127 @@ export interface Dictionary {
             penalization: {
                 title: string;
                 description: string;
+            };
+        };
+    };
+    admin: {
+        layout: {
+            general: string;
+            challenges: string;
+            guides: string;
+            community: string;
+            feedback: string;
+        };
+        dashboard: {
+            title: string;
+            loading: string;
+            loadingDescription: string;
+            error: string;
+            errorDescription: string;
+            retry: string;
+            challenges: string;
+            noChallenges: string;
+            guides: string;
+            noGuides: string;
+        };
+        community: {
+            title: string;
+            subtitle: string;
+            create: string;
+            loading: string;
+            loadingDescription: string;
+            error: string;
+            noCommunities: string;
+            noCommunitiesDescription: string;
+            retry: string;
+            permissionsError: string;
+            createForm: {
+                title: string;
+                subtitle: string;
+                nameLabel: string;
+                namePlaceholder: string;
+                descriptionLabel: string;
+                descriptionPlaceholder: string;
+                descriptionHelper: string;
+                termsText: string;
+                submitButton: string;
+                cancelConfirm: string;
+                errorCreating: string;
+                validation: {
+                    nameRequired: string;
+                    nameMax: string;
+                    descriptionMin: string;
+                    descriptionMax: string;
+                };
+            };
+        };
+        challenges: {
+            title: string;
+            createNew: string;
+            create: string;
+            noChallenges: string;
+            noChallengesDescription: string;
+            error: string;
+            errorDescription: string;
+        };
+        guides: {
+            title: string;
+            subtitle: string;
+            create: string;
+            loading: string;
+            loadingDescription: string;
+            accessDenied: string;
+            accessDeniedDescription: string;
+            permissionsError: string;
+            noGuides: string;
+            noGuidesDescription: string;
+            error: string;
+            errorDescription: string;
+            retry: string;
+            showing: string;
+            to: string;
+            of: string;
+            perPage: string;
+            createGuide: {
+                title: string;
+                subtitle: string;
+                validation: {
+                    titleRequired: string;
+                    descriptionMin: string;
+                    descriptionMax: string;
+                    topicsRequired: string;
+                };
+                errorCreating: string;
+                cancelConfirm: string;
+            };
+            editGuide: {
+                subtitle: string;
+                publish: string;
+                publishing: string;
+                backToGuides: string;
+                tabs: {
+                    pages: string;
+                    challenges: string;
+                    info: string;
+                };
+                basicInfo: {
+                    title: string;
+                    subtitle: string;
+                    update: string;
+                    updating: string;
+                    updateSuccess: string;
+                    updateError: string;
+                    cancelConfirm: string;
+                    publishError: string;
+                };
+                validation: {
+                    titleRequired: string;
+                    descriptionMin: string;
+                    descriptionMax: string;
+                    topicsRequired: string;
+                };
+                notFound: string;
+                loading: string;
             };
         };
     };

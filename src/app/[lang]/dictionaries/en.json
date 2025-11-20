@@ -1,326 +1,497 @@
 {
-  "navigation": {
-    "home": "Home",
-    "dashboard": "Dashboard",
-    "challenges": "Challenges",
-    "profile": "Profile",
-    "settings": "Settings",
-    "logout": "Logout",
-    "login": "Login",
-    "signup": "Sign Up",
-    "leaderboard": "Leaderboard",
-    "guides": "Guides",
-    "help": "Help",
-    "adminDashboard": "Admin Dashboard",
-    "language": "Language"
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "Error",
-    "success": "Success",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "update": "Update",
-    "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
-    "actions": "Actions",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "submit": "Submit",
-    "close": "Close",
-    "confirm": "Confirm",
-    "yes": "Yes",
-    "no": "No"
-  },
-  "help": {
-    "title": "Help",
-    "suggestionsTitle": "Suggestions and Comments",
-    "description": "Send your suggestions, doubts, questions, feedback or any comment anonymously. Your opinion helps us improve the platform.",
-    "label": "Suggestion",
-    "placeholder": "Write your suggestion here...",
-    "submitButton": "Send Suggestion",
-    "successToast": "Suggestion sent! Thanks for your feedback.",
-    "validation": {
-      "required": "The suggestion is required."
-    }
-  },
-  "feedback": {
-    "title": "User Feedback",
-    "description": "View and manage user suggestions and feedback.",
-    "noSuggestions": "No suggestions yet.",
-    "table": {
-      "date": "Date",
-      "suggestion": "Suggestion"
-    }
-  },
-  "communityCard": {
-    "followers": "Followers"
-  },
-  "communityFeed": {
-    "back": "Back to communities",
-    "loading": "Loading community...",
-    "loadingTitle": "Loading community",
-    "loadingDescription": "Hang tight while we fetch the latest activity.",
-    "failedToLoad": "We couldn't load this community.",
-    "failedToLoadDescription": "Please try again later.",
-    "retry": "Retry",
-    "heroLabel": "Community",
-    "ownerLabel": "Community owner",
-    "createdAtLabel": "Created on",
-    "followersLabel": "Followers",
-    "postsTitle": "Community feed",
-    "postsSubtitle": "Latest posts from this community",
-    "refreshing": "Refreshing",
-    "emptyPosts": "No posts yet",
-    "emptyPostsDescription": "Be the first to share something with this community.",
-    "commentsTitle": "Comments",
-    "emptyComments": "No comments yet",
-    "unknownUser": "Unknown user",
-    "composerTitle": "Share an update",
-    "composerDescription": "Messages appear in the community feed for everyone to see.",
-    "composerPlaceholder": "Message #{community}",
-    "composerButton": "Send message",
-    "composerError": "We couldn't share your message. Please try again."
-  },
-  "auth": {
-    "login": {
-      "title": "Login to Your Account",
-      "email": "Email",
-      "password": "Password",
-      "rememberMe": "Remember me",
-      "forgotPassword": "Forgot password?",
-      "submit": "Sign In",
-      "noAccount": "Don't have an account?",
-      "signUp": "Sign up here"
+    "navigation": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "challenges": "Challenges",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "login": "Login",
+        "signup": "Sign Up",
+        "leaderboard": "Leaderboard",
+        "guides": "Guides",
+        "help": "Help",
+        "adminDashboard": "Admin Dashboard",
+        "language": "Language"
     },
-    "signup": {
-      "title": "Create an Account",
-      "name": "Full Name",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "submit": "Sign Up",
-      "haveAccount": "Already have an account?",
-      "login": "Login here"
-    },
-    "errors": {
-      "invalidCredentials": "Invalid email or password",
-      "emailExists": "Email already exists",
-      "passwordMismatch": "Passwords do not match",
-      "required": "This field is required",
-      "invalidEmail": "Invalid email address"
-    },
-    "signIn": {
-      "title": "Sign in to Level Up Journey",
-      "emailPlaceholder": "Email",
-      "passwordPlaceholder": "Password",
-      "submitButton": "Sign In",
-      "orSeparator": "Or",
-      "continueWithGoogle": "Continue with Google",
-      "continueWithGithub": "Continue with Github",
-      "noAccount": "Don't have an account?",
-      "signUpLink": "Sign up",
-      "error": "Something went wrong"
-    },
-    "signUp": {
-      "step1": {
-        "title": "Sign Up",
-        "emailPlaceholder": "Email",
-        "passwordPlaceholder": "Password",
-        "confirmPasswordPlaceholder": "Confirm Password",
-        "nextButton": "Next",
-        "haveAccount": "If you already have an account,",
-        "signInLink": "Sign in",
-        "passwordMismatch": "Passwords do not match",
-        "continueWithEmail": "Continue with Email",
-        "orSeparator": "Or",
-        "continueWithGoogle": "Continue with Google",
-        "continueWithGithub": "Continue with Github"
-      },
-      "step2": {
-        "title": "Tell Us About Yourself",
-        "subtitle": "Enter your first and last name to continue",
-        "firstNameLabel": "First Name",
-        "firstNamePlaceholder": "Enter your first name",
-        "lastNameLabel": "Last Name",
-        "lastNamePlaceholder": "Enter your last name",
-        "continueButton": "Continue",
-        "savingButton": "Saving...",
-        "backButton": "Back",
-        "error": "Something went wrong. Please try again.",
-        "validation": {
-          "nameEmpty": "Name cannot be empty",
-          "nameTooLong": "Name cannot exceed 20 characters",
-          "nameInvalid": "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters"
-        }
-      },
-      "step3": {
-        "title": "Complete Your Profile",
-        "subtitle": "Add a photo to get started",
-        "usernameLabel": "Username",
-        "usernamePlaceholder": "Enter your username",
-        "usernameHelp": "This is how you'll appear to others. You can change this anytime.",
-        "startAdventureButton": "Start Your Adventure",
-        "creatingProfileButton": "Creating Profile...",
-        "backButton": "Back",
-        "loadingProfile": "Loading your profile...",
-        "profileLoadFailed": "Failed to load your profile",
-        "goBackButton": "Go Back",
-        "profileLoadError": "Failed to load your profile. Please try again.",
-        "profileNotLoaded": "Profile not loaded. Please try again.",
-        "profileUpdateSuccess": "Profile updated successfully!",
-        "profileUpdateError": "Failed to update profile. Please try again.",
-        "invalidStep": "Invalid step",
-        "validation": {
-          "usernameEmpty": "Username cannot be empty",
-          "usernameTooLong": "Username cannot exceed 30 characters",
-          "usernameInvalid": "Username must contain only alphanumeric characters (letters and numbers), no spaces, maximum 30 characters"
-        }
-      }
-    }
-  },
-  "dashboard": {
-    "welcome": "Welcome back",
-    "stats": {
-      "challenges": "Challenges Completed",
-      "experience": "Total Experience",
-      "rank": "Current Rank",
-      "streak": "Day Streak"
-    },
-    "recentActivity": "Recent Activity",
-    "popularChallenges": "Popular Challenges"
-  },
-  "challenges": {
-    "title": "Challenges",
-    "description": "Browse and complete coding challenges",
-    "create": "Create Challenge",
-    "edit": "Edit Challenge",
-    "delete": "Delete Challenge",
-    "publish": "Publish",
-    "unpublish": "Unpublish",
-    "loading": "Loading challenges...",
-    "errorFetching": "Error fetching challenges",
-    "errorDescription": "The challenge service is temporarily unavailable. Please try again.",
-    "retry": "Retry",
-    "details": {
-      "title": "Challenge Details",
-      "description": "Description",
-      "difficulty": "Difficulty",
-      "experiencePoints": "Experience Points",
-      "language": "Programming Language",
-      "tags": "Tags",
-      "status": "Status",
-      "createdAt": "Created At",
-      "updatedAt": "Updated At"
-    },
-    "status": {
-      "draft": "Draft",
-      "published": "Published",
-      "archived": "Archived"
-    },
-    "codeVersions": {
-      "title": "Code Versions",
-      "create": "Add Code Version",
-      "edit": "Edit Version",
-      "delete": "Delete Version",
-      "playVersion": "Play",
-      "language": "Language",
-      "functionName": "Function Name",
-      "testCases": "Test Cases",
-      "noCodeVersions": "No code versions yet. Click \"Add Code Version\" to create one.",
-      "editInitialCode": "Edit Initial Code",
-      "modifyInitialCode": "Modify the initial code for this code version.",
-      "codeVersionSummary": "Code Version Summary",
-      "viewCodeVersionDetails": "View the code version details.",
-      "manageTests": "Manage Tests",
-      "updating": "Updating...",
-      "saveChanges": "Save Changes",
-      "editCodeVersion": "Edit Code Version",
-      "initialCodeUpdated": "Initial code updated successfully",
-      "testsCount": "Tests ({count})",
-      "testCase": "Test Case {id}",
-      "input": "Input:",
-      "view": "View",
-      "noTestsYet": "No tests yet.",
-      "addTest": "Add Test",
-      "initialCode": "Initial Code",
-      "updateCodeVersionDescription": "Update the language and initial code for this code version.",
-      "updateCodeVersion": "Update Code Version",
-      "addCodeVersion": "Add Code Version",
-      "addCodeVersionDescription": "Select a programming language and write the initial code for this challenge.",
-      "creating": "Creating...",
-      "selectLanguage": "Select Language",
-      "currentlySelected": "Currently selected",
-      "clickToSelect": "Click to select this programming language",
-      "selectLanguageFirst": "Select a language first",
-      "chooseLanguageDescription": "Choose a programming language from the left panel to start editing code.",
-      "codeVersionsTitle": "Code Versions",
-      "codeVersionsDescription": "View and manage code versions for this challenge.",
-      "availableCodeVersions": "Available Code Versions",
-      "noCodeVersionsAvailable": "No code versions available.",
-      "noCodeVersionSelected": "No code version selected.",
-      "selectVersion": "Select Code Version",
-      "selectVersionPlaceholder": "Choose a programming language",
-      "createForm": {
-        "title": "Choose Programming Language for Code Version",
-        "description": "Select the programming language in which students will implement their solution for this challenge. You can add multiple code versions in different languages.",
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "update": "Update",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "actions": "Actions",
         "back": "Back",
-        "createTitle": "Create Code Version - {language}",
-        "functionNameLabel": "Function Name",
-        "functionNamePlaceholder": "Enter function name",
-        "functionNameDescription": "The name of the function to implement (automatically detected from code).",
-        "createButton": "Create Code Version",
-        "codeTemplateTitle": "Code Template",
-        "codeTemplateDescription": "Modify the code template as needed."
-      }
+        "next": "Next",
+        "previous": "Previous",
+        "submit": "Submit",
+        "close": "Close",
+        "confirm": "Confirm",
+        "yes": "Yes",
+        "no": "No"
     },
-    "difficulty": {
-      "easy": "Easy",
-      "medium": "Medium",
-      "hard": "Hard",
-      "expert": "Expert"
+    "help": {
+        "title": "Help",
+        "suggestionsTitle": "Suggestions and Comments",
+        "description": "Send your suggestions, doubts, questions, feedback or any comment anonymously. Your opinion helps us improve the platform.",
+        "label": "Suggestion",
+        "placeholder": "Write your suggestion here...",
+        "submitButton": "Send Suggestion",
+        "successToast": "Suggestion sent! Thanks for your feedback.",
+        "validation": {
+            "required": "The suggestion is required."
+        }
     },
-    "courseDifficulty": {
-      "beginner": "Beginner",
-      "intermediate": "Intermediate",
-      "advanced": "Advanced",
-      "expert": "Expert"
+    "feedback": {
+        "title": "User Feedback",
+        "description": "View and manage user suggestions and feedback.",
+        "noSuggestions": "No suggestions yet.",
+        "table": {
+            "date": "Date",
+            "suggestion": "Suggestion"
+        }
     },
-    "languages": {
-      "java": "Java",
-      "python": "Python",
-      "cpp": "C++",
-      "javascript": "JavaScript"
+    "communityCard": {
+        "followers": "Followers"
     },
-    "cards": {
-      "edit": "Edit",
-      "delete": "Delete",
-      "view": "View",
-      "status": "Status",
-      "published": "Published",
-      "draft": "Draft",
-      "viewCourse": "View Course",
-      "viewGuide": "View Guide",
-      "editGuide": "Edit Guide",
-      "deleteGuide": "Delete Guide",
-      "deleteGuideTitle": "Delete Guide",
-      "deleteGuideConfirm": "Are you sure you want to delete this guide? This action cannot be undone.",
-      "deleteGuideError": "Failed to delete guide. Please try again.",
-      "deleteGuideSuccess": "Guide deleted successfully",
-      "deleting": "Deleting...",
-      "cancel": "Cancel",
-      "editCourse": "Edit Course",
-      "deleteCourse": "Delete Course",
-      "createdOn": "Created on",
-      "like": "like",
-      "likes": "likes",
-      "editChallenge": "Edit Challenge",
-      "deleteChallenge": "Delete Challenge"
+    "communityFeed": {
+        "back": "Back to communities",
+        "loading": "Loading community...",
+        "loadingTitle": "Loading community",
+        "loadingDescription": "Hang tight while we fetch the latest activity.",
+        "failedToLoad": "We couldn't load this community.",
+        "failedToLoadDescription": "Please try again later.",
+        "retry": "Retry",
+        "heroLabel": "Community",
+        "ownerLabel": "Community owner",
+        "createdAtLabel": "Created on",
+        "followersLabel": "Followers",
+        "postsTitle": "Community feed",
+        "postsSubtitle": "Latest posts from this community",
+        "refreshing": "Refreshing",
+        "emptyPosts": "No posts yet",
+        "emptyPostsDescription": "Be the first to share something with this community.",
+        "commentsTitle": "Comments",
+        "emptyComments": "No comments yet",
+        "unknownUser": "Unknown user",
+        "composerTitle": "Share an update",
+        "composerDescription": "Messages appear in the community feed for everyone to see.",
+        "composerPlaceholder": "Message #{community}",
+        "composerButton": "Send message",
+        "composerError": "We couldn't share your message. Please try again."
+    },
+    "auth": {
+        "login": {
+            "title": "Login to Your Account",
+            "email": "Email",
+            "password": "Password",
+            "rememberMe": "Remember me",
+            "forgotPassword": "Forgot password?",
+            "submit": "Sign In",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up here"
+        },
+        "signup": {
+            "title": "Create an Account",
+            "name": "Full Name",
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "submit": "Sign Up",
+            "haveAccount": "Already have an account?",
+            "login": "Login here"
+        },
+        "errors": {
+            "invalidCredentials": "Invalid email or password",
+            "emailExists": "Email already exists",
+            "passwordMismatch": "Passwords do not match",
+            "required": "This field is required",
+            "invalidEmail": "Invalid email address"
+        },
+        "signIn": {
+            "title": "Sign in to Level Up Journey",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "submitButton": "Sign In",
+            "orSeparator": "Or",
+            "continueWithGoogle": "Continue with Google",
+            "continueWithGithub": "Continue with Github",
+            "noAccount": "Don't have an account?",
+            "signUpLink": "Sign up",
+            "error": "Something went wrong"
+        },
+        "signUp": {
+            "step1": {
+                "title": "Sign Up",
+                "emailPlaceholder": "Email",
+                "passwordPlaceholder": "Password",
+                "confirmPasswordPlaceholder": "Confirm Password",
+                "nextButton": "Next",
+                "haveAccount": "If you already have an account,",
+                "signInLink": "Sign in",
+                "passwordMismatch": "Passwords do not match",
+                "continueWithEmail": "Continue with Email",
+                "orSeparator": "Or",
+                "continueWithGoogle": "Continue with Google",
+                "continueWithGithub": "Continue with Github"
+            },
+            "step2": {
+                "title": "Tell Us About Yourself",
+                "subtitle": "Enter your first and last name to continue",
+                "firstNameLabel": "First Name",
+                "firstNamePlaceholder": "Enter your first name",
+                "lastNameLabel": "Last Name",
+                "lastNamePlaceholder": "Enter your last name",
+                "continueButton": "Continue",
+                "savingButton": "Saving...",
+                "backButton": "Back",
+                "error": "Something went wrong. Please try again.",
+                "validation": {
+                    "nameEmpty": "Name cannot be empty",
+                    "nameTooLong": "Name cannot exceed 20 characters",
+                    "nameInvalid": "Name must contain only letters, accents, spaces, and hyphens, with maximum 20 characters"
+                }
+            },
+            "step3": {
+                "title": "Complete Your Profile",
+                "subtitle": "Add a photo to get started",
+                "usernameLabel": "Username",
+                "usernamePlaceholder": "Enter your username",
+                "usernameHelp": "This is how you'll appear to others. You can change this anytime.",
+                "startAdventureButton": "Start Your Adventure",
+                "creatingProfileButton": "Creating Profile...",
+                "backButton": "Back",
+                "loadingProfile": "Loading your profile...",
+                "profileLoadFailed": "Failed to load your profile",
+                "goBackButton": "Go Back",
+                "profileLoadError": "Failed to load your profile. Please try again.",
+                "profileNotLoaded": "Profile not loaded. Please try again.",
+                "profileUpdateSuccess": "Profile updated successfully!",
+                "profileUpdateError": "Failed to update profile. Please try again.",
+                "invalidStep": "Invalid step",
+                "validation": {
+                    "usernameEmpty": "Username cannot be empty",
+                    "usernameTooLong": "Username cannot exceed 30 characters",
+                    "usernameInvalid": "Username must contain only alphanumeric characters (letters and numbers), no spaces, maximum 30 characters"
+                }
+            }
+        }
+    },
+    "dashboard": {
+        "welcome": "Welcome back",
+        "stats": {
+            "challenges": "Challenges Completed",
+            "experience": "Total Experience",
+            "rank": "Current Rank",
+            "streak": "Day Streak"
+        },
+        "recentActivity": "Recent Activity",
+        "popularChallenges": "Popular Challenges"
+    },
+    "challenges": {
+        "title": "Challenges",
+        "description": "Browse and complete coding challenges",
+        "create": "Create Challenge",
+        "edit": "Edit Challenge",
+        "delete": "Delete Challenge",
+        "publish": "Publish",
+        "unpublish": "Unpublish",
+        "loading": "Loading challenges...",
+        "errorFetching": "Error fetching challenges",
+        "errorDescription": "The challenge service is temporarily unavailable. Please try again.",
+        "retry": "Retry",
+        "details": {
+            "title": "Challenge Details",
+            "description": "Description",
+            "difficulty": "Difficulty",
+            "experiencePoints": "Experience Points",
+            "language": "Programming Language",
+            "tags": "Tags",
+            "status": "Status",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At"
+        },
+        "status": {
+            "draft": "Draft",
+            "published": "Published",
+            "archived": "Archived"
+        },
+        "codeVersions": {
+            "title": "Code Versions",
+            "create": "Add Code Version",
+            "edit": "Edit Version",
+            "delete": "Delete Version",
+            "playVersion": "Play",
+            "language": "Language",
+            "functionName": "Function Name",
+            "testCases": "Test Cases",
+            "noCodeVersions": "No code versions yet. Click \"Add Code Version\" to create one.",
+            "editInitialCode": "Edit Initial Code",
+            "modifyInitialCode": "Modify the initial code for this code version.",
+            "codeVersionSummary": "Code Version Summary",
+            "viewCodeVersionDetails": "View the code version details.",
+            "manageTests": "Manage Tests",
+            "updating": "Updating...",
+            "saveChanges": "Save Changes",
+            "editCodeVersion": "Edit Code Version",
+            "initialCodeUpdated": "Initial code updated successfully",
+            "testsCount": "Tests ({count})",
+            "testCase": "Test Case {id}",
+            "input": "Input:",
+            "view": "View",
+            "noTestsYet": "No tests yet.",
+            "addTest": "Add Test",
+            "initialCode": "Initial Code",
+            "updateCodeVersionDescription": "Update the language and initial code for this code version.",
+            "updateCodeVersion": "Update Code Version",
+            "addCodeVersion": "Add Code Version",
+            "addCodeVersionDescription": "Select a programming language and write the initial code for this challenge.",
+            "creating": "Creating...",
+            "selectLanguage": "Select Language",
+            "currentlySelected": "Currently selected",
+            "clickToSelect": "Click to select this programming language",
+            "selectLanguageFirst": "Select a language first",
+            "chooseLanguageDescription": "Choose a programming language from the left panel to start editing code.",
+            "codeVersionsTitle": "Code Versions",
+            "codeVersionsDescription": "View and manage code versions for this challenge.",
+            "availableCodeVersions": "Available Code Versions",
+            "noCodeVersionsAvailable": "No code versions available.",
+            "noCodeVersionSelected": "No code version selected.",
+            "selectVersion": "Select Code Version",
+            "selectVersionPlaceholder": "Choose a programming language",
+            "createForm": {
+                "title": "Choose Programming Language for Code Version",
+                "description": "Select the programming language in which students will implement their solution for this challenge. You can add multiple code versions in different languages.",
+                "back": "Back",
+                "createTitle": "Create Code Version - {language}",
+                "functionNameLabel": "Function Name",
+                "functionNamePlaceholder": "Enter function name",
+                "functionNameDescription": "The name of the function to implement (automatically detected from code).",
+                "createButton": "Create Code Version",
+                "codeTemplateTitle": "Code Template",
+                "codeTemplateDescription": "Modify the code template as needed."
+            }
+        },
+        "difficulty": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard",
+            "expert": "Expert"
+        },
+        "courseDifficulty": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "advanced": "Advanced",
+            "expert": "Expert"
+        },
+        "languages": {
+            "java": "Java",
+            "python": "Python",
+            "cpp": "C++",
+            "javascript": "JavaScript"
+        },
+        "cards": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "view": "View",
+            "status": "Status",
+            "published": "Published",
+            "draft": "Draft",
+            "viewCourse": "View Course",
+            "viewGuide": "View Guide",
+            "editGuide": "Edit Guide",
+            "deleteGuide": "Delete Guide",
+            "deleteGuideTitle": "Delete Guide",
+            "deleteGuideConfirm": "Are you sure you want to delete this guide? This action cannot be undone.",
+            "deleteGuideError": "Failed to delete guide. Please try again.",
+            "deleteGuideSuccess": "Guide deleted successfully",
+            "deleting": "Deleting...",
+            "cancel": "Cancel",
+            "editCourse": "Edit Course",
+            "deleteCourse": "Delete Course",
+            "createdOn": "Created on",
+            "like": "like",
+            "likes": "likes",
+            "editChallenge": "Edit Challenge",
+            "deleteChallenge": "Delete Challenge"
+        },
+        "buttons": {
+            "delete": "Delete",
+            "deleting": "Deleting...",
+            "publish": "Publish",
+            "publishing": "Publishing...",
+            "publishChallenge": "Publish Challenge",
+            "cancel": "Cancel",
+            "retry": "Retry"
+        },
+        "alerts": {
+            "deleteChallenge": {
+                "title": "Delete Challenge",
+                "description": "Are you sure you want to delete this challenge? This action cannot be undone."
+            },
+            "deleteGuide": {
+                "title": "Delete Guide",
+                "description": "Are you sure you want to delete this guide? This action cannot be undone."
+            },
+            "deleteCourse": {
+                "title": "Delete Course",
+                "description": "Are you sure you want to delete this course? This action cannot be undone."
+            },
+            "deleteCodeVersion": {
+                "title": "Delete Code Version",
+                "description": "Are you sure you want to delete this code version? This action cannot be undone."
+            }
+        },
+        "editor": {
+            "title": "Code Editor",
+            "description": "Challenge Description",
+            "yourSolution": "Your Solution",
+            "testCases": "Test Cases",
+            "runCode": "Run Code",
+            "submit": "Submit Solution",
+            "running": "Running...",
+            "hint": "Hint",
+            "actualOutput": "Your Output",
+            "passed": "Passed",
+            "failed": "Failed",
+            "autoSaving": "Auto-saving...",
+            "saveCodeManually": "Save code manually",
+            "executing": "Executing...",
+            "saved": "Saved",
+            "error": "Error",
+            "saving": "Saving...",
+            "codeSavedSuccessfully": "Code saved successfully!",
+            "failedToSubmitSolution": "Failed to submit solution",
+            "descriptionTab": "Description",
+            "testCasesTab": "Test Cases ({count})",
+            "challengeDescription": "Challenge Description",
+            "noDescriptionAvailable": "No description available.",
+            "submissionResults": "Submission Results: {passed}/{total} tests passed",
+            "timeTaken": "Time taken: {time}ms",
+            "allTestsPassed": "All tests passed! Congratulations!",
+            "someTestsFailed": "Some tests failed. Keep trying!",
+            "congratulationsTitle": "Congratulations!",
+            "congratulationsMessage": "You have successfully completed all tests! Great job!",
+            "noTestCasesAvailable": "No test cases available.",
+            "testCase": "Test Case {number}",
+            "secret": "(Secret)",
+            "secretTestDescription": "This is a secret test used to validate your solution. Input and expected output are hidden.",
+            "input": "Input:",
+            "expectedOutput": "Expected Output:",
+            "expectedOutputHidden": "Expected output is hidden until you submit your solution",
+            "backToDashboard": "Back to dashboard",
+            "runCodeAndSubmit": "Run code and submit solution"
+        },
+        "messages": {
+            "challengeDeleted": "Challenge deleted successfully",
+            "codeVersionDeleted": "Code version deleted successfully",
+            "codeVersionAdded": "Code version added successfully",
+            "guideDeleted": "Guide deleted successfully",
+            "courseDeleted": "Course deleted successfully",
+            "challengePublished": "Challenge published successfully!",
+            "loadingChallenges": "Loading challenges...",
+            "errorFetchingChallenges": "Error fetching challenges",
+            "challengesUnavailable": "The challenge service is temporarily unavailable. Please try again.",
+            "created": "Challenge created successfully",
+            "updated": "Challenge updated successfully",
+            "deleted": "Challenge deleted successfully",
+            "published": "Challenge published successfully",
+            "unpublished": "Challenge unpublished successfully",
+            "submitSuccess": "Solution submitted successfully!",
+            "submitError": "Error submitting solution",
+            "noDescription": "No description provided.",
+            "errorRenderingDescription": "Error rendering description: {error}",
+            "codeVersionUpdated": "Code version updated successfully",
+            "tests": {
+                "title": "Version Tests",
+                "description": "Manage test cases for this code version",
+                "finish": "Finish",
+                "backToVersion": "Back to Version",
+                "testCasesCount": "Test Cases ({count})",
+                "noTestsYet": "No tests yet",
+                "clickAddTest": "Click \"Add Test\" to create your first test case",
+                "testCase": "Test Case {id}",
+                "input": "Input:",
+                "delete": "Delete",
+                "addTest": "Add Test",
+                "createNewTest": "Create New Test",
+                "editTestCase": "Edit Test Case {id}",
+                "selectTestToEdit": "Select a test to edit",
+                "basicTest": "Basic Test",
+                "customValidation": "Custom Validation",
+                "inputLabel": "Input",
+                "inputPlaceholder": "Enter test input...",
+                "expectedOutput": "Expected Output",
+                "expectedOutputPlaceholder": "Enter expected output...",
+                "failureMessage": "Failure Message (Optional)",
+                "failureMessagePlaceholder": "Custom failure message...",
+                "secretTest": "Secret Test",
+                "secretTestDescription": "Secret tests are not visible to students and are used for additional validation.",
+                "saving": "Saving...",
+                "createBasicTest": "Create Basic Test",
+                "updateBasicTest": "Update Basic Test",
+                "createCustomTest": "Create Custom Test",
+                "updateCustomTest": "Update Custom Test",
+                "noTestSelected": "No test selected",
+                "selectTestOrCreate": "Select a test from the left panel or create a new one",
+                "basicTestCreated": "Basic test created successfully",
+                "basicTestUpdated": "Basic test updated successfully",
+                "customTestCreated": "Custom test created successfully",
+                "customTestUpdated": "Custom test updated successfully",
+                "testDeleted": "Test deleted successfully",
+                "confirmDeleteTest": "Are you sure you want to delete this test?"
+            },
+            "edit": {
+                "title": "Edit Challenge",
+                "description": "Update the challenge details and description.",
+                "addCodeVersion": "Add Code Version",
+                "viewSummary": "View Summary",
+                "basicInformation": "Basic Information",
+                "availableLanguages": "Available Languages",
+                "guides": "Guides",
+                "challengeTitle": "Challenge Title",
+                "enterChallengeTitle": "Enter challenge title",
+                "tagsCommaSeparated": "Tags (comma separated)",
+                "tagsPlaceholder": "e.g., JavaScript, React, Node.js",
+                "difficultyLevel": "Difficulty Level",
+                "selectDifficulty": "Select difficulty",
+                "experiencePoints": "Experience Points",
+                "experiencePointsDescription": "{difficulty} challenges can award up to {maxXP} XP. Move the slider to adjust the reward.",
+                "xp": "XP",
+                "maxXP": "Max {maxXP} XP",
+                "saving": "Saving...",
+                "saveChanges": "Save Changes",
+                "searchGuides": "Search Guides",
+                "searchGuidesPlaceholder": "Search guides by title...",
+                "searchGuidesDescription": "Type to search for guides. Results will appear below.",
+                "searching": "Searching...",
+                "searchResults": "Search Results",
+                "add": "+",
+                "selectedGuides": "Selected Guides",
+                "removeGuide": "Remove guide",
+                "guideAdded": "Guide added to challenge successfully!",
+                "guideAddFailed": "Failed to add guide to challenge.",
+                "guideAlreadySelected": "Guide already selected.",
+                "guideRemoved": "Guide removed from challenge successfully!",
+                "guideRemoveFailed": "Failed to remove guide from challenge.",
+                "challengeUpdated": "Challenge updated successfully!"
+            },
+            "summary": {
+                "status": "Status:",
+                "xp": "XP:",
+                "overview": "Overview",
+                "starting": "Starting...",
+                "startChallenge": "Start Challenge"
+            }
+        }
+    },
     "leaderboard": {
         "ranking": "Ranking",
         "myRank": "My Rank",
@@ -490,765 +661,457 @@
             }
         }
     },
-    "buttons": {
-      "delete": "Delete",
-      "deleting": "Deleting...",
-      "publish": "Publish",
-      "publishing": "Publishing...",
-      "publishChallenge": "Publish Challenge",
-      "cancel": "Cancel",
-      "retry": "Retry"
-    },
-    "alerts": {
-      "deleteChallenge": {
-        "title": "Delete Challenge",
-        "description": "Are you sure you want to delete this challenge? This action cannot be undone."
-      },
-      "deleteGuide": {
-        "title": "Delete Guide",
-        "description": "Are you sure you want to delete this guide? This action cannot be undone."
-      },
-      "deleteCourse": {
-        "title": "Delete Course",
-        "description": "Are you sure you want to delete this course? This action cannot be undone."
-      },
-      "deleteCodeVersion": {
-        "title": "Delete Code Version",
-        "description": "Are you sure you want to delete this code version? This action cannot be undone."
-      }
-    },
-    "editor": {
-      "title": "Code Editor",
-      "description": "Challenge Description",
-      "yourSolution": "Your Solution",
-      "testCases": "Test Cases",
-      "runCode": "Run Code",
-      "submit": "Submit Solution",
-      "running": "Running...",
-      "hint": "Hint",
-      "actualOutput": "Your Output",
-      "passed": "Passed",
-      "failed": "Failed",
-      "autoSaving": "Auto-saving...",
-      "saveCodeManually": "Save code manually",
-      "executing": "Executing...",
-      "saved": "Saved",
-      "error": "Error",
-      "saving": "Saving...",
-      "codeSavedSuccessfully": "Code saved successfully!",
-      "failedToSubmitSolution": "Failed to submit solution",
-      "descriptionTab": "Description",
-      "testCasesTab": "Test Cases ({count})",
-      "challengeDescription": "Challenge Description",
-      "noDescriptionAvailable": "No description available.",
-      "submissionResults": "Submission Results: {passed}/{total} tests passed",
-      "timeTaken": "Time taken: {time}ms",
-      "allTestsPassed": "All tests passed! Congratulations!",
-      "someTestsFailed": "Some tests failed. Keep trying!",
-      "congratulationsTitle": "Congratulations!",
-      "congratulationsMessage": "You have successfully completed all tests! Great job!",
-      "noTestCasesAvailable": "No test cases available.",
-      "testCase": "Test Case {number}",
-      "secret": "(Secret)",
-      "secretTestDescription": "This is a secret test used to validate your solution. Input and expected output are hidden.",
-      "input": "Input:",
-      "expectedOutput": "Expected Output:",
-      "expectedOutputHidden": "Expected output is hidden until you submit your solution",
-      "backToDashboard": "Back to dashboard",
-      "runCodeAndSubmit": "Run code and submit solution",
-      "congratulationsTitle": "Congratulations!",
-      "congratulationsMessage": "You have successfully completed all tests! Great job!"
-    },
-    "messages": {
-      "challengeDeleted": "Challenge deleted successfully",
-      "codeVersionDeleted": "Code version deleted successfully",
-      "codeVersionAdded": "Code version added successfully",
-      "guideDeleted": "Guide deleted successfully",
-      "courseDeleted": "Course deleted successfully",
-      "challengePublished": "Challenge published successfully!",
-      "loadingChallenges": "Loading challenges...",
-      "errorFetchingChallenges": "Error fetching challenges",
-      "challengesUnavailable": "The challenge service is temporarily unavailable. Please try again.",
-      "created": "Challenge created successfully",
-      "updated": "Challenge updated successfully",
-      "deleted": "Challenge deleted successfully",
-      "published": "Challenge published successfully",
-      "unpublished": "Challenge unpublished successfully",
-      "submitSuccess": "Solution submitted successfully!",
-      "submitError": "Error submitting solution",
-      "noDescription": "No description provided.",
-      "errorRenderingDescription": "Error rendering description: {error}",
-      "codeVersionUpdated": "Code version updated successfully",
-      "tests": {
-        "title": "Version Tests",
-        "description": "Manage test cases for this code version",
-        "finish": "Finish",
-        "backToVersion": "Back to Version",
-        "testCasesCount": "Test Cases ({count})",
-        "noTestsYet": "No tests yet",
-        "clickAddTest": "Click \"Add Test\" to create your first test case",
-        "testCase": "Test Case {id}",
-        "input": "Input:",
-        "delete": "Delete",
-        "addTest": "Add Test",
-        "createNewTest": "Create New Test",
-        "editTestCase": "Edit Test Case {id}",
-        "selectTestToEdit": "Select a test to edit",
-        "basicTest": "Basic Test",
-        "customValidation": "Custom Validation",
-        "inputLabel": "Input",
-        "inputPlaceholder": "Enter test input...",
-        "expectedOutput": "Expected Output",
-        "expectedOutputPlaceholder": "Enter expected output...",
-        "failureMessage": "Failure Message (Optional)",
-        "failureMessagePlaceholder": "Custom failure message...",
-        "secretTest": "Secret Test",
-        "secretTestDescription": "Secret tests are not visible to students and are used for additional validation.",
-        "saving": "Saving...",
-        "createBasicTest": "Create Basic Test",
-        "updateBasicTest": "Update Basic Test",
-        "createCustomTest": "Create Custom Test",
-        "updateCustomTest": "Update Custom Test",
-        "noTestSelected": "No test selected",
-        "selectTestOrCreate": "Select a test from the left panel or create a new one",
-        "basicTestCreated": "Basic test created successfully",
-        "basicTestUpdated": "Basic test updated successfully",
-        "customTestCreated": "Custom test created successfully",
-        "customTestUpdated": "Custom test updated successfully",
-        "testDeleted": "Test deleted successfully",
-        "confirmDeleteTest": "Are you sure you want to delete this test?"
-      },
-      "edit": {
-        "title": "Edit Challenge",
-        "description": "Update the challenge details and description.",
-        "addCodeVersion": "Add Code Version",
-        "viewSummary": "View Summary",
-        "basicInformation": "Basic Information",
-        "availableLanguages": "Available Languages",
-        "guides": "Guides",
-        "challengeTitle": "Challenge Title",
-        "enterChallengeTitle": "Enter challenge title",
-        "tagsCommaSeparated": "Tags (comma separated)",
-        "tagsPlaceholder": "e.g., JavaScript, React, Node.js",
-        "difficultyLevel": "Difficulty Level",
-        "selectDifficulty": "Select difficulty",
-        "experiencePoints": "Experience Points",
-        "experiencePointsDescription": "{difficulty} challenges can award up to {maxXP} XP. Move the slider to adjust the reward.",
-        "xp": "XP",
-        "maxXP": "Max {maxXP} XP",
-        "saving": "Saving...",
-        "saveChanges": "Save Changes",
-        "searchGuides": "Search Guides",
-        "searchGuidesPlaceholder": "Search guides by title...",
-        "searchGuidesDescription": "Type to search for guides. Results will appear below.",
-        "searching": "Searching...",
-        "searchResults": "Search Results",
-        "add": "+",
-        "selectedGuides": "Selected Guides",
-        "removeGuide": "Remove guide",
-        "guideAdded": "Guide added to challenge successfully!",
-        "guideAddFailed": "Failed to add guide to challenge.",
-        "guideAlreadySelected": "Guide already selected.",
-        "guideRemoved": "Guide removed from challenge successfully!",
-        "guideRemoveFailed": "Failed to remove guide from challenge.",
-        "challengeUpdated": "Challenge updated successfully!"
-      },
-      "summary": {
-        "status": "Status:",
-        "xp": "XP:",
-        "overview": "Overview",
-        "starting": "Starting...",
-        "startChallenge": "Start Challenge"
-      }
-    }
-  },
-  "leaderboard": {
-    "ranking": "Ranking",
-    "myRank": "My Rank",
-    "information": "Information",
-    "table": {
-      "position": "Position",
-      "rank": "Rank",
-      "username": "Username",
-      "points": "Points"
-    },
-    "loading": {
-      "leaderboard": "Loading leaderboard...",
-      "rank": "Loading rank..."
-    },
-    "empty": {
-      "noUsers": "No users found for this rank",
-      "noRankInfo": "No rank information available",
-      "loadError": "Could not load your rank data. Please try again."
-    },
-    "ui": {
-      "retry": "Retry",
-      "rankingSystem": "Ranking System",
-      "myCurrentRank": "My Current Rank"
-    },
-    "ranks": {
-      "bronze": {
-        "name": "Bronze",
-        "description": "The Bronze rank marks the beginning of your coding journey. As a dedicated learner, you're building foundational skills and tackling your first challenges with enthusiasm."
-      },
-      "silver": {
-        "name": "Silver",
-        "description": "Silver-ranked coders demonstrate growing proficiency. You've mastered basic concepts and are now solving more complex problems with increasing confidence and efficiency."
-      },
-      "gold": {
-        "name": "Gold",
-        "description": "Gold rank signifies advanced coding abilities. You consistently deliver solid solutions, understand algorithmic principles, and are ready for more challenging technical puzzles."
-      },
-      "platinum": {
-        "name": "Platinum",
-        "description": "Platinum coders excel in problem-solving and code quality. Your solutions are not only correct but optimized, showing deep understanding of data structures and algorithms."
-      },
-      "diamond": {
-        "name": "Diamond",
-        "description": "An elite problem-solver. Diamond-ranked coders consistently deliver high-quality solutions and deep algorithmic knowledge."
-      },
-      "master": {
-        "name": "Master",
-        "description": "A true architect of logic and precision. The Master Coder has conquered every challenge with elegance and consistency, demonstrating not just technical skill but creative problem-solving and deep understanding of algorithms."
-      },
-      "grandmaster": {
-        "name": "Grandmaster",
-        "description": "A rare virtuoso — Grandmaster developers lead innovations, solve the hardest problems and inspire the community with creative, reliable solutions."
-      }
-    },
-    "rankingSystem": {
-      "overview": {
-        "title": "Overview",
-        "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels. Each user begins as a Bronze Coder with a base score of 1000 points, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
-      },
-      "byScore": {
-        "ranges": {
-          "bronze": "0 – 499",
-          "silver": "500 – 899",
-          "gold": "900 – 1149",
-          "platinum": "1150 – 1299",
-          "diamond": "1300 – 1399",
-          "master": "1400 – 1499",
-          "grandmaster": "1500 +"
-        }
-      },
-      "rules": {
-        "title": "Scoring Rules Overview",
-        "description": "Quick guide to how LevelUp Journey translates difficulty, correctness, and time into leaderboard points.",
-        "difficultyLevels": {
-          "easy": "EASY → 5 pts",
-          "medium": "MEDIUM → 10 pts",
-          "hard": "HARD → 20 pts",
-          "expert": "EXPERT → 40 pts"
+
+    "challengesPage": {
+        "header": {
+            "title": "Start coding with purpose",
+            "description": "Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up."
         },
-        "sections": {
-          "difficultyCeiling": {
-            "title": "Difficulty Sets the Ceiling",
-            "summary": "Every challenge ships with a fixed max score. Difficulty only raises that ceiling — your time determines what you take home.",
-            "items": [
-              "Higher tiers unlock bigger point pools, but also expect longer focus sessions.",
-              "Once you know the cap, you can pace your effort to keep the best time window."
-            ]
-          },
-          "correctnessFirst": {
-            "title": "Correctness First",
-            "summary": "Scoring is binary on accuracy. Only fully green test suites move on to time-based math.",
-            "items": [
-              "All tests pass → your time tier decides the percentage.",
-              "Any failure → 0 points. No partial credit, but the attempt stays on your history."
-            ]
-          },
-          "timePercentage": {
-            "title": "Time Controls The Percentage",
-            "summary": "Once correctness is locked, the clock slots you into a payout tier relative to the challenge ceiling.",
-            "items": [
-              "Within grace → 100%. Slight delay → 80%. Moderate → 60%. Slow → 40%. Very late → 20%.",
-              "Harder challenges stretch grace periods so advanced problems stay fair."
-            ]
-          },
-          "minimumScore": {
-            "title": "Minimum Guaranteed Score",
-            "summary": "Passing all tests never feels wasted time. Even the slowest clean solution gives back 20% of the challenge cap.",
-            "items": [
-              "Examples: Easy ≥ 1 pt, Medium ≥ 2 pts, Hard ≥ 4 pts, Expert ≥ 8 pts.",
-              "Think of it as effort insurance — correctness always counts."
-            ]
-          },
-          "timeTracking": {
-            "title": "How We Track Time",
-            "summary": "The timer covers the full build-measure-learn loop, not just the final run button.",
-            "items": [
-              "Start when you create the challenge solution. End on the final submission.",
-              "Coding, debugging, and retries all count. Internally we store seconds, but show minutes in the UI."
-            ]
-          },
-          "summaryHierarchy": {
-            "title": "Summary Hierarchy",
-            "summary": "Two-step mental checklist: be correct, then be timely. Everything else flows from there.",
-            "items": [
-              "Pass all tests + stay inside time → max score.",
-              "Pass all tests + miss time → reduced score.",
-              "Fail any test → zero score regardless of time."
-            ]
-          }
+        "filters": {
+            "difficulty": "Difficulty",
+            "language": "Language",
+            "popularity": "Popularity",
+            "recentness": "Recentness",
+            "difficultyOptions": {
+                "easy": "Easy",
+                "medium": "Medium",
+                "hard": "Hard",
+                "expert": "Expert"
+            },
+            "languageOptions": {
+                "cpp": "C++",
+                "python": "Python",
+                "javascript": "JavaScript"
+            },
+            "popularityOptions": {
+                "mostPopular": "Most Popular",
+                "trending": "Trending",
+                "leastPopular": "Least Popular"
+            },
+            "recentnessOptions": {
+                "newest": "Newest",
+                "oldest": "Oldest",
+                "recentlyUpdated": "Recently Updated"
+            }
+        },
+        "section": {
+            "title": "Coding Challenges",
+            "results": {
+                "singular": "result",
+                "plural": "results"
+            }
         }
-      },
-      "penalization": {
-        "title": "Penalization",
-        "description": "If the student reaches the maximum number of allowed attempts without success, the system may apply a penalty of 25 points to the student's current score."
-      }
-    }
-  },
-  "challengesPage": {
-    "header": {
-      "title": "Start coding with purpose",
-      "description": "Level Up Journey is the learning platform for UPC students beginning their career path. Tackle real C++ challenges designed by your professors — each crafted to guide you from fundamentals to fluency. Learn by solving, level up."
-    },
-    "filters": {
-      "difficulty": "Difficulty",
-      "language": "Language",
-      "popularity": "Popularity",
-      "recentness": "Recentness",
-      "difficultyOptions": {
-        "easy": "Easy",
-        "medium": "Medium",
-        "hard": "Hard",
-        "expert": "Expert"
-      },
-      "languageOptions": {
-        "cpp": "C++",
-        "python": "Python",
-        "javascript": "JavaScript"
-      },
-      "popularityOptions": {
-        "mostPopular": "Most Popular",
-        "trending": "Trending",
-        "leastPopular": "Least Popular"
-      },
-      "recentnessOptions": {
-        "newest": "Newest",
-        "oldest": "Oldest",
-        "recentlyUpdated": "Recently Updated"
-      }
-    },
-    "section": {
-      "title": "Coding Challenges",
-      "results": {
-        "singular": "result",
-        "plural": "results"
-      }
-    }
-  },
-  "guides": {
-    "title": "Learning Guides",
-    "description": "Explore our collection of comprehensive guides to level up your skills",
-    "notFound": "Guide not found",
-    "authorNotAvailable": "Author profile not available",
-    "viewer": {
-      "backToOverview": "Back to Overview",
-      "previousPage": "Previous Page",
-      "nextPage": "Next Page",
-      "pageIndicator": "Page {current} of {total}",
-      "readGuide": "Read Guide",
-      "minRead": "{time} min read",
-      "pageSingular": "page",
-      "pagePlural": "pages",
-      "likes": "{count} likes",
-      "topics": "Topics",
-      "status": {
-        "published": "Published",
-        "draft": "Draft"
-      }
-    },
-    "guidePageCount": "This guide has {count} {unit}"
-  },
-  "createChallenge": {
-    "title": "Create New Challenge",
-    "subtitle": "Fill in the details below to create a new challenge for students.",
-    "form": {
-      "title": "Challenge Title",
-      "titlePlaceholder": "Enter challenge title",
-      "tags": "Tags (comma separated)",
-      "tagsPlaceholder": "e.g., JavaScript, React, Node.js",
-      "difficulty": "Difficulty Level",
-      "difficultyPlaceholder": "Select difficulty",
-      "experiencePoints": "Experience Points",
-      "experiencePointsDescription": "{difficulty} challenges can award up to {maxXP} XP. Use the slider to set the reward.",
-      "xp": "XP",
-      "maxXP": "Max {maxXP} XP",
-      "createButton": "Create Challenge",
-      "creatingButton": "Creating..."
-    },
-    "difficulties": {
-      "easy": "Easy",
-      "medium": "Medium",
-      "hard": "Hard",
-      "expert": "Expert"
-    },
-    "messages": {
-      "created": "Challenge created successfully!",
-      "error": "Failed to create challenge. Please try again."
-    },
-    "validation": {
-      "titleMin": "Challenge title must be at least 5 characters.",
-      "titleMax": "Challenge title must be at most 32 characters.",
-      "xpMin": "Experience points must be at least 0.",
-      "xpMax": "Experience points must be at most {maxXP}."
-    }
-  },
-  "navigationIndicator": {
-    "home": "Home",
-    "dashboard": "Dashboard",
-    "profile": "Profile",
-    "challenges": "Challenges",
-    "create": "Create",
-    "versions": "Versions",
-    "tests": "Tests",
-    "community": "Community",
-    "post": "Post",
-    "leaderboard": "Leaderboard",
-    "settings": "Settings",
-    "help": "Help",
-    "admin": "Administration",
-    "guides": "Guides",
-    "edit": "Edit",
-    "auth": "Auth",
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "legal": "Legal",
-    "privacyPolicy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "detail": "Detail"
-  },
-  "announcements": {
-    "upc": "UPC Announcement"
-  },
-  "admin": {
-    "layout": {
-      "general": "General",
-      "challenges": "Challenges",
-      "guides": "Guides",
-      "community": "Community",
-      "feedback": "Feedback"
-    },
-    "dashboard": {
-      "title": "Admin Dashboard — Recent Activity",
-      "loading": "Loading admin dashboard",
-      "loadingDescription": "Fetching the latest challenges and guides.",
-      "error": "Error loading dashboard",
-      "errorDescription": "Could not load admin dashboard data. Please try again.",
-      "retry": "Retry",
-      "challenges": "Challenges",
-      "noChallenges": "No challenges found.",
-      "guides": "Guides",
-      "noGuides": "No guides found."
-    },
-    "community": {
-      "title": "Community Management",
-      "subtitle": "Manage and oversee all communities in the platform",
-      "create": "Create Community",
-      "loading": "Loading communities",
-      "loadingDescription": "Preparing your community management tools.",
-      "error": "Unable to load communities",
-      "noCommunities": "No communities yet",
-      "noCommunitiesDescription": "Create your first community to get started.",
-      "retry": "Retry",
-      "permissionsError": "Unable to verify permissions",
-      "createForm": {
-        "title": "Customize Your Community",
-        "subtitle": "Give your new community a personality with a name and an icon. You can always change it later.",
-        "nameLabel": "Community Name",
-        "namePlaceholder": "Enter community name",
-        "descriptionLabel": "Community Description",
-        "descriptionPlaceholder": "Describe your community",
-        "descriptionHelper": "Tell people what this community is about",
-        "termsText": "By creating a community, you agree to the Community Guidelines.",
-        "submitButton": "Create",
-        "cancelConfirm": "Are you sure you want to cancel? All progress will be lost.",
-        "errorCreating": "Error creating community. Please try again.",
-        "validation": {
-          "nameRequired": "Community name is required",
-          "nameMax": "Community name must not exceed 50 characters",
-          "descriptionMin": "Description must be at least 10 characters",
-          "descriptionMax": "Description must not exceed 150 characters"
-        }
-      }
-    },
-    "challenges": {
-      "title": "My Challenges",
-      "createNew": "Create New Challenge",
-      "create": "Create Challenge",
-      "noChallenges": "No challenges yet",
-      "noChallengesDescription": "Start by creating your first challenge for the community.",
-      "error": "Unable to load challenges",
-      "errorDescription": "Something went wrong while fetching your challenges. Please try again."
     },
     "guides": {
-      "title": "Guides",
-      "subtitle": "Manage and create learning guides",
-      "create": "Create Guide",
-      "loading": "Loading guides",
-      "loadingDescription": "Fetching the latest learning guides for you.",
-      "accessDenied": "Access denied",
-      "accessDeniedDescription": "You need teacher or admin permissions to manage guides.",
-      "permissionsError": "Unable to verify permissions",
-      "noGuides": "No guides yet",
-      "noGuidesDescription": "Create your first guide to start helping students.",
-      "error": "Unable to load guides",
-      "errorDescription": "We couldn't load the guides. Please try again.",
-      "retry": "Retry",
-      "showing": "Showing",
-      "to": "to",
-      "of": "of",
-      "perPage": "Per page:",
-      "createGuide": {
-        "title": "Create New Guide",
-        "subtitle": "Fill in the details below to create a new learning guide.",
+        "title": "Learning Guides",
+        "description": "Explore our collection of comprehensive guides to level up your skills",
+        "notFound": "Guide not found",
+        "authorNotAvailable": "Author profile not available",
+        "viewer": {
+            "backToOverview": "Back to Overview",
+            "previousPage": "Previous Page",
+            "nextPage": "Next Page",
+            "pageIndicator": "Page {current} of {total}",
+            "readGuide": "Read Guide",
+            "minRead": "{time} min read",
+            "pageSingular": "page",
+            "pagePlural": "pages",
+            "likes": "{count} likes",
+            "topics": "Topics",
+            "status": {
+                "published": "Published",
+                "draft": "Draft"
+            }
+        },
+        "guidePageCount": "This guide has {count} {unit}"
+    },
+    "createChallenge": {
+        "title": "Create New Challenge",
+        "subtitle": "Fill in the details below to create a new challenge for students.",
+        "form": {
+            "title": "Challenge Title",
+            "titlePlaceholder": "Enter challenge title",
+            "tags": "Tags (comma separated)",
+            "tagsPlaceholder": "e.g., JavaScript, React, Node.js",
+            "difficulty": "Difficulty Level",
+            "difficultyPlaceholder": "Select difficulty",
+            "experiencePoints": "Experience Points",
+            "experiencePointsDescription": "{difficulty} challenges can award up to {maxXP} XP. Use the slider to set the reward.",
+            "xp": "XP",
+            "maxXP": "Max {maxXP} XP",
+            "createButton": "Create Challenge",
+            "creatingButton": "Creating..."
+        },
+        "difficulties": {
+            "easy": "Easy",
+            "medium": "Medium",
+            "hard": "Hard",
+            "expert": "Expert"
+        },
+        "messages": {
+            "created": "Challenge created successfully!",
+            "error": "Failed to create challenge. Please try again."
+        },
         "validation": {
-          "titleRequired": "Title is required",
-          "descriptionMin": "Description must be at least 10 characters",
-          "descriptionMax": "Description must not exceed 1000 characters",
-          "topicsRequired": "At least one topic is required"
+            "titleMin": "Challenge title must be at least 5 characters.",
+            "titleMax": "Challenge title must be at most 32 characters.",
+            "xpMin": "Experience points must be at least 0.",
+            "xpMax": "Experience points must be at most {maxXP}."
+        }
+    },
+    "navigationIndicator": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "challenges": "Challenges",
+        "create": "Create",
+        "versions": "Versions",
+        "tests": "Tests",
+        "community": "Community",
+        "post": "Post",
+        "leaderboard": "Leaderboard",
+        "settings": "Settings",
+        "help": "Help",
+        "admin": "Administration",
+        "guides": "Guides",
+        "edit": "Edit",
+        "auth": "Auth",
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "legal": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "detail": "Detail"
+    },
+    "announcements": {
+        "upc": "UPC Announcement"
+    },
+    "admin": {
+        "layout": {
+            "general": "General",
+            "challenges": "Challenges",
+            "guides": "Guides",
+            "community": "Community",
+            "feedback": "Feedback"
         },
-        "errorCreating": "Error creating guide. Please try again.",
-        "cancelConfirm": "Are you sure you want to cancel? All progress will be lost."
-      },
-      "editGuide": {
-        "subtitle": "Edit the guide details and content.",
-        "publish": "Publish",
-        "publishing": "Publishing...",
-        "backToGuides": "Back to Guides",
-        "tabs": {
-          "pages": "Pages",
-          "challenges": "Challenges",
-          "info": "Basic Information"
+        "dashboard": {
+            "title": "Admin Dashboard — Recent Activity",
+            "loading": "Loading admin dashboard",
+            "loadingDescription": "Fetching the latest challenges and guides.",
+            "error": "Error loading dashboard",
+            "errorDescription": "Could not load admin dashboard data. Please try again.",
+            "retry": "Retry",
+            "challenges": "Challenges",
+            "noChallenges": "No challenges found.",
+            "guides": "Guides",
+            "noGuides": "No guides found."
         },
-        "basicInfo": {
-          "title": "Basic Information",
-          "subtitle": "Update the guide's title, description, and topics.",
-          "update": "Update Guide",
-          "updating": "Updating...",
-          "updateSuccess": "Guide updated successfully!",
-          "updateError": "Error updating guide. Please try again.",
-          "cancelConfirm": "Are you sure you want to cancel? Any unsaved changes will be lost.",
-          "publishError": "Error publishing guide. Please try again."
+        "community": {
+            "title": "Community Management",
+            "subtitle": "Manage and oversee all communities in the platform",
+            "create": "Create Community",
+            "loading": "Loading communities",
+            "loadingDescription": "Preparing your community management tools.",
+            "error": "Unable to load communities",
+            "noCommunities": "No communities yet",
+            "noCommunitiesDescription": "Create your first community to get started.",
+            "retry": "Retry",
+            "permissionsError": "Unable to verify permissions",
+            "createForm": {
+                "title": "Customize Your Community",
+                "subtitle": "Give your new community a personality with a name and an icon. You can always change it later.",
+                "nameLabel": "Community Name",
+                "namePlaceholder": "Enter community name",
+                "descriptionLabel": "Community Description",
+                "descriptionPlaceholder": "Describe your community",
+                "descriptionHelper": "Tell people what this community is about",
+                "termsText": "By creating a community, you agree to the Community Guidelines.",
+                "submitButton": "Create",
+                "cancelConfirm": "Are you sure you want to cancel? All progress will be lost.",
+                "errorCreating": "Error creating community. Please try again.",
+                "validation": {
+                    "nameRequired": "Community name is required",
+                    "nameMax": "Community name must not exceed 50 characters",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 150 characters"
+                }
+            }
+        },
+        "challenges": {
+            "title": "My Challenges",
+            "createNew": "Create New Challenge",
+            "create": "Create Challenge",
+            "noChallenges": "No challenges yet",
+            "noChallengesDescription": "Start by creating your first challenge for the community.",
+            "error": "Unable to load challenges",
+            "errorDescription": "Something went wrong while fetching your challenges. Please try again."
+        },
+        "guides": {
+            "title": "Guides",
+            "subtitle": "Manage and create learning guides",
+            "create": "Create Guide",
+            "loading": "Loading guides",
+            "loadingDescription": "Fetching the latest learning guides for you.",
+            "accessDenied": "Access denied",
+            "accessDeniedDescription": "You need teacher or admin permissions to manage guides.",
+            "permissionsError": "Unable to verify permissions",
+            "noGuides": "No guides yet",
+            "noGuidesDescription": "Create your first guide to start helping students.",
+            "error": "Unable to load guides",
+            "errorDescription": "We couldn't load the guides. Please try again.",
+            "retry": "Retry",
+            "showing": "Showing",
+            "to": "to",
+            "of": "of",
+            "perPage": "Per page:",
+            "createGuide": {
+                "title": "Create New Guide",
+                "subtitle": "Fill in the details below to create a new learning guide.",
+                "validation": {
+                    "titleRequired": "Title is required",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 1000 characters",
+                    "topicsRequired": "At least one topic is required"
+                },
+                "errorCreating": "Error creating guide. Please try again.",
+                "cancelConfirm": "Are you sure you want to cancel? All progress will be lost."
+            },
+            "editGuide": {
+                "subtitle": "Edit the guide details and content.",
+                "publish": "Publish",
+                "publishing": "Publishing...",
+                "backToGuides": "Back to Guides",
+                "tabs": {
+                    "pages": "Pages",
+                    "challenges": "Challenges",
+                    "info": "Basic Information"
+                },
+                "basicInfo": {
+                    "title": "Basic Information",
+                    "subtitle": "Update the guide's title, description, and topics.",
+                    "update": "Update Guide",
+                    "updating": "Updating...",
+                    "updateSuccess": "Guide updated successfully!",
+                    "updateError": "Error updating guide. Please try again.",
+                    "cancelConfirm": "Are you sure you want to cancel? Any unsaved changes will be lost.",
+                    "publishError": "Error publishing guide. Please try again."
+                },
+                "validation": {
+                    "titleRequired": "Title is required",
+                    "descriptionMin": "Description must be at least 10 characters",
+                    "descriptionMax": "Description must not exceed 1000 characters",
+                    "topicsRequired": "At least one topic is required"
+                },
+                "notFound": "Guide not found. Please try again.",
+                "loading": "Loading guide..."
+            }
+        }
+    },
+    "profile": {
+        "title": "Profile",
+        "account": {
+            "title": "Account Settings"
+        },
+        "edit": "Edit Profile",
+        "stats": "Statistics",
+        "achievements": "Achievements",
+        "settings": "Settings",
+        "information": {
+            "name": "Name",
+            "email": "Email",
+            "bio": "Bio",
+            "location": "Location",
+            "website": "Website",
+            "joinedDate": "Joined"
+        },
+        "messages": {
+            "updated": "Profile updated successfully",
+            "updateError": "Error updating profile"
+        }
+    },
+    "errors": {
+        "notFound": "Page not found",
+        "serverError": "Server error",
+        "unauthorized": "Unauthorized access",
+        "forbidden": "Access forbidden",
+        "badRequest": "Bad request",
+        "generic": "Something went wrong",
+        "loading": {
+            "guide": "Error loading guide. Please try again.",
+            "guides": "We couldn't load the guides. Please try again.",
+            "challenges": "Error fetching challenges",
+            "challenge": "Error loading challenge",
+            "profile": "Failed to load profile",
+            "profileData": "Error loading profile data",
+            "codeVersion": "Error loading code version",
+            "tests": "Failed to load tests",
+            "competitiveProfile": "Failed to load competitive profile"
+        },
+        "creating": {
+            "guide": "Error creating guide. Please try again.",
+            "challenge": "Failed to create challenge. Please try again.",
+            "codeVersion": "Failed to create code version. Please try again.",
+            "post": "Failed to create post",
+            "profile": "Error creating profile"
+        },
+        "updating": {
+            "guide": "Error updating guide. Please try again.",
+            "challenge": "Failed to update challenge. Please try again.",
+            "codeVersion": "Failed to update code version",
+            "initialCode": "Failed to update initial code",
+            "profile": "Failed to update profile. Please try again.",
+            "profileService": "Error: Could not update profile. Profile service may be unavailable."
+        },
+        "deleting": {
+            "challenge": "Failed to delete challenge",
+            "codeVersion": "Failed to delete code version",
+            "test": "Failed to delete test"
+        },
+        "saving": {
+            "code": "Failed to save code",
+            "basicTest": "Failed to save basic test",
+            "customTest": "Failed to save custom test",
+            "names": "Something went wrong. Please try again."
+        },
+        "uploading": {
+            "image": "Failed to upload image. Please try again."
+        },
+        "permissions": {
+            "deleteChallenge": "You don't have permission to delete this challenge.",
+            "accessDenied": "Access Denied",
+            "unauthorized": "Unauthorized Access"
         },
         "validation": {
-          "titleRequired": "Title is required",
-          "descriptionMin": "Description must be at least 10 characters",
-          "descriptionMax": "Description must not exceed 1000 characters",
-          "topicsRequired": "At least one topic is required"
+            "fillAllFields": "Please fill in all fields",
+            "passwordMismatch": "Passwords do not match",
+            "profileNotLoaded": "Profile not loaded. Please try again.",
+            "fileRejected": "File rejected",
+            "invalidStep": "Invalid step"
         },
-        "notFound": "Guide not found. Please try again.",
-        "loading": "Loading guide..."
-      }
+        "publishing": {
+            "guide": "Error publishing guide. Please try again."
+        },
+        "starting": {
+            "challenge": "Failed to start challenge"
+        },
+        "serializing": {
+            "description": "Error serializing challenge description"
+        },
+        "dashboard": {
+            "loading": "Error loading dashboard",
+            "loadingDescription": "Could not load admin dashboard data. Please try again."
+        },
+        "guide": {
+            "notFound": "Guide not found. Please try again.",
+            "authorNotAvailable": "Author not available"
+        },
+        "pageNotFound": "The page number {pageNumber} does not exist in this guide. This guide has {totalPages} page{pagesPlural}.",
+        "tryAgain": "Please try again."
+    },
+    "landing": {
+        "header": {
+            "signIn": "Sign In",
+            "register": "Register"
+        },
+        "hero": {
+            "badge": "Your tech future starts here",
+            "title": "Learn to code",
+            "titleHighlight": "by doing",
+            "description": "Real challenges. Practical projects. No boring theory. Learn programming like professionals do.",
+            "cta": "Start for free"
+        },
+        "stats": {
+            "languages": "Languages",
+            "challenges": "Challenges",
+            "students": "Students",
+            "community": "Community"
+        },
+        "features": {
+            "title": "Why choose us?",
+            "subtitle": "Everything you need to launch your tech career",
+            "learnFast": {
+                "title": "Learn fast",
+                "description": "Short, practical challenges. Instant feedback. No wasted time."
+            },
+            "practicalFocus": {
+                "title": "Practical focus",
+                "description": "Real projects from day one. Learn what companies actually use."
+            },
+            "activeCommunity": {
+                "title": "Active community",
+                "description": "Share code, solve questions, and learn with other students."
+            },
+            "gamification": {
+                "title": "Gamification",
+                "description": "Earn points, unlock achievements, and compete in global rankings."
+            },
+            "learningPaths": {
+                "title": "Learning paths",
+                "description": "Follow a structured path from beginner to advanced."
+            },
+            "integratedEditor": {
+                "title": "Integrated editor",
+                "description": "Write, test, and run code directly in your browser."
+            }
+        },
+        "cta": {
+            "title": "Ready for your first challenge?",
+            "description": "Thousands of students are already learning. Join for free and start building your tech future.",
+            "createAccount": "Create free account",
+            "exploreContent": "Explore content"
+        },
+        "footer": {
+            "copyright": "© 2025 Level Up Journey",
+            "tagline": "Shaping the next generation of developers"
+        }
+    },
+    "dashboardPage": {
+        "upNext": {
+            "title": "Up Next",
+            "card": {
+                "title": "Plan your learning journey",
+                "description": "Explore guided learning paths and curated courses designed for UPC students.",
+                "button": "Explore Guides"
+            }
+        },
+        "featuredChallenges": "Featured Challenges",
+        "streak": {
+            "title": "Streak",
+            "comingSoon": "Coming Soon",
+            "description": "Track your coding consistency"
+        },
+        "progress": {
+            "title": "Progress",
+            "comingSoon": "Coming Soon",
+            "description": "Unlock badges and rewards for your progress"
+        },
+        "achievements": {
+            "title": "Achievements",
+            "comingSoon": "Coming Soon",
+            "description": "Unlock badges and rewards for your progress"
+        }
+    },
+    "sidebar": {
+        "groups": {
+            "home": "Home",
+            "administrative": "Administrative",
+            "community": "Community"
+        }
+    },
+    "legal": {
+        "privacyPolicy": {
+            "title": "Privacy Policy",
+            "content": "This is the privacy policy page."
+        },
+        "terms": {
+            "title": "Terms of Service",
+            "content": "This is the terms of service page."
+        }
+    },
+    "unauthorized": {
+        "title": "Unauthorized Access",
+        "description": "You have attempted to access a page that you are not authorized to view. If you believe this is an error, please contact support.",
+        "goBackDashboard": "Go back to Dashboard",
+        "homeButton": "Home"
     }
-  },
-  "profile": {
-    "title": "Profile",
-    "account": {
-      "title": "Account Settings"
-    },
-    "edit": "Edit Profile",
-    "stats": "Statistics",
-    "achievements": "Achievements",
-    "settings": "Settings",
-    "information": {
-      "name": "Name",
-      "email": "Email",
-      "bio": "Bio",
-      "location": "Location",
-      "website": "Website",
-      "joinedDate": "Joined"
-    },
-    "messages": {
-      "updated": "Profile updated successfully",
-      "updateError": "Error updating profile"
-    }
-  },
-  "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "unauthorized": "Unauthorized access",
-    "forbidden": "Access forbidden",
-    "badRequest": "Bad request",
-    "generic": "Something went wrong",
-    "loading": {
-      "guide": "Error loading guide. Please try again.",
-      "guides": "We couldn't load the guides. Please try again.",
-      "challenges": "Error fetching challenges",
-      "challenge": "Error loading challenge",
-      "profile": "Failed to load profile",
-      "profileData": "Error loading profile data",
-      "codeVersion": "Error loading code version",
-      "tests": "Failed to load tests",
-      "competitiveProfile": "Failed to load competitive profile"
-    },
-    "creating": {
-      "guide": "Error creating guide. Please try again.",
-      "challenge": "Failed to create challenge. Please try again.",
-      "codeVersion": "Failed to create code version. Please try again.",
-      "post": "Failed to create post",
-      "profile": "Error creating profile"
-    },
-    "updating": {
-      "guide": "Error updating guide. Please try again.",
-      "challenge": "Failed to update challenge. Please try again.",
-      "codeVersion": "Failed to update code version",
-      "initialCode": "Failed to update initial code",
-      "profile": "Failed to update profile. Please try again.",
-      "profileService": "Error: Could not update profile. Profile service may be unavailable."
-    },
-    "deleting": {
-      "challenge": "Failed to delete challenge",
-      "codeVersion": "Failed to delete code version",
-      "test": "Failed to delete test"
-    },
-    "saving": {
-      "code": "Failed to save code",
-      "basicTest": "Failed to save basic test",
-      "customTest": "Failed to save custom test",
-      "names": "Something went wrong. Please try again."
-    },
-    "uploading": {
-      "image": "Failed to upload image. Please try again."
-    },
-    "permissions": {
-      "deleteChallenge": "You don't have permission to delete this challenge.",
-      "accessDenied": "Access Denied",
-      "unauthorized": "Unauthorized Access"
-    },
-    "validation": {
-      "fillAllFields": "Please fill in all fields",
-      "passwordMismatch": "Passwords do not match",
-      "profileNotLoaded": "Profile not loaded. Please try again.",
-      "fileRejected": "File rejected",
-      "invalidStep": "Invalid step"
-    },
-    "publishing": {
-      "guide": "Error publishing guide. Please try again."
-    },
-    "starting": {
-      "challenge": "Failed to start challenge"
-    },
-    "serializing": {
-      "description": "Error serializing challenge description"
-    },
-    "dashboard": {
-      "loading": "Error loading dashboard",
-      "loadingDescription": "Could not load admin dashboard data. Please try again."
-    },
-    "guide": {
-      "notFound": "Guide not found. Please try again.",
-      "authorNotAvailable": "Author not available"
-    },
-    "pageNotFound": "The page number {pageNumber} does not exist in this guide. This guide has {totalPages} page{pagesPlural}.",
-    "tryAgain": "Please try again."
-  },
-  "landing": {
-    "header": {
-      "signIn": "Sign In",
-      "register": "Register"
-    },
-    "hero": {
-      "badge": "Your tech future starts here",
-      "title": "Learn to code",
-      "titleHighlight": "by doing",
-      "description": "Real challenges. Practical projects. No boring theory. Learn programming like professionals do.",
-      "cta": "Start for free"
-    },
-    "stats": {
-      "languages": "Languages",
-      "challenges": "Challenges",
-      "students": "Students",
-      "community": "Community"
-    },
-    "features": {
-      "title": "Why choose us?",
-      "subtitle": "Everything you need to launch your tech career",
-      "learnFast": {
-        "title": "Learn fast",
-        "description": "Short, practical challenges. Instant feedback. No wasted time."
-      },
-      "practicalFocus": {
-        "title": "Practical focus",
-        "description": "Real projects from day one. Learn what companies actually use."
-      },
-      "activeCommunity": {
-        "title": "Active community",
-        "description": "Share code, solve questions, and learn with other students."
-      },
-      "gamification": {
-        "title": "Gamification",
-        "description": "Earn points, unlock achievements, and compete in global rankings."
-      },
-      "learningPaths": {
-        "title": "Learning paths",
-        "description": "Follow a structured path from beginner to advanced."
-      },
-      "integratedEditor": {
-        "title": "Integrated editor",
-        "description": "Write, test, and run code directly in your browser."
-      }
-    },
-    "cta": {
-      "title": "Ready for your first challenge?",
-      "description": "Thousands of students are already learning. Join for free and start building your tech future.",
-      "createAccount": "Create free account",
-      "exploreContent": "Explore content"
-    },
-    "footer": {
-      "copyright": "© 2025 Level Up Journey",
-      "tagline": "Shaping the next generation of developers"
-    }
-  },
-  "dashboardPage": {
-    "upNext": {
-      "title": "Up Next",
-      "card": {
-        "title": "Plan your learning journey",
-        "description": "Explore guided learning paths and curated courses designed for UPC students.",
-        "button": "Explore Guides"
-      }
-    },
-    "featuredChallenges": "Featured Challenges",
-    "streak": {
-      "title": "Streak",
-      "comingSoon": "Coming Soon",
-      "description": "Track your coding consistency"
-    },
-    "progress": {
-      "title": "Progress",
-      "comingSoon": "Coming Soon",
-      "description": "Unlock badges and rewards for your progress"
-    },
-    "achievements": {
-      "title": "Achievements",
-      "comingSoon": "Coming Soon",
-      "description": "Unlock badges and rewards for your progress"
-    }
-  },
-  "sidebar": {
-    "groups": {
-      "home": "Home",
-      "administrative": "Administrative",
-      "community": "Community"
-    }
-  },
-  "legal": {
-    "privacyPolicy": {
-      "title": "Privacy Policy",
-      "content": "This is the privacy policy page."
-    },
-    "terms": {
-      "title": "Terms of Service",
-      "content": "This is the terms of service page."
-    }
-  },
-  "unauthorized": {
-    "title": "Unauthorized Access",
-    "description": "You have attempted to access a page that you are not authorized to view. If you believe this is an error, please contact support.",
-    "goBackDashboard": "Go back to Dashboard",
-    "homeButton": "Home"
-  }
 }
