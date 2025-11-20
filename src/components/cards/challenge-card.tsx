@@ -150,7 +150,7 @@ export default function ChallengeCard({
                 </div>
             </CardHeader>
 
-            <CardContent className="px-4 flex flex-col grow">
+            <CardContent className="px-4 flex flex-col grow justify-between">
                 {/* Title in the middle */}
                 <CardTitle className="text-base font-bold cursor-pointer hover:text-primary transition-colors">
                     {challenge.name}
