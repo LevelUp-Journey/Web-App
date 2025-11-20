@@ -552,7 +552,12 @@
         "rankingSystem": {
             "overview": {
                 "title": "Ranking System",
-                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster."
+                "description": "The ranking system in LevelUp Journey transforms coding progress into a competitive game experience, where every challenge, solution, and achievement contributes to a player's growth across seven mastery levels, and through consistent participation, problem-solving, and excellence, they climb toward the elite tier of Grandmaster.",
+                "intro": {
+                    "howItWorks": "How do ranks work?",
+                    "simple": "Complete challenges, earn points, rank up. Simple.",
+                    "explanation": "Each challenge has maximum points based on difficulty. Your solving time determines what percentage of those points you receive (20% to 100%). All tests must pass to earn points, if any fails you get 0."
+                }
             },
             "byScore": {
                 "ranges": {

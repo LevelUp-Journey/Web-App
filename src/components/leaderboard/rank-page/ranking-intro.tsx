@@ -15,10 +15,12 @@ export function RankingIntro({
 
             <div className="p-4 bg-muted/50 rounded-lg space-y-2 text-sm">
                 <p className="leading-relaxed">
-                    <strong>¿Cómo funcionan los rangos?</strong> Completas desafíos, ganas puntos, subes de rango. Simple.
+                    {/* @ts-ignore - intro will be available after i18n update */}
+                    <strong>{dict.leaderboard.rankingSystem.overview.intro?.howItWorks || "¿Cómo funcionan los rangos?"}</strong> {dict.leaderboard.rankingSystem.overview.intro?.simple || "Completas desafíos, ganas puntos, subes de rango. Simple."}
                 </p>
                 <p className="leading-relaxed">
-                    Cada desafío tiene puntos máximos según su dificultad. Tu tiempo de resolución determina qué porcentaje de esos puntos recibes (20% a 100%). Todos los tests deben pasar para ganar puntos, si alguno falla obtienes 0.
+                    {/* @ts-ignore - intro will be available after i18n update */}
+                    {dict.leaderboard.rankingSystem.overview.intro?.explanation || "Cada desafío tiene puntos máximos según su dificultad. Tu tiempo de resolución determina qué porcentaje de esos puntos recibes (20% a 100%). Todos los tests deben pasar para ganar puntos, si alguno falla obtienes 0."}
                 </p>
             </div>
         </section>

@@ -552,7 +552,12 @@
         "rankingSystem": {
             "overview": {
                 "title": "Sistema de Clasificación",
-                "description": "El sistema de clasificación en LevelUp Journey transforma el progreso de programación en una experiencia de juego competitivo, donde cada desafío, solución y logro contribuye al crecimiento de un jugador a través de siete niveles de dominio, y a través de la participación consistente, la resolución de problemas y la excelencia, ascienden hacia el nivel élite de Gran Maestro."
+                "description": "El sistema de clasificación en LevelUp Journey transforma el progreso de programación en una experiencia de juego competitivo, donde cada desafío, solución y logro contribuye al crecimiento de un jugador a través de siete niveles de dominio, y a través de la participación consistente, la resolución de problemas y la excelencia, ascienden hacia el nivel élite de Gran Maestro.",
+                "intro": {
+                    "howItWorks": "¿Cómo funcionan los rangos?",
+                    "simple": "Completas desafíos, ganas puntos, subes de rango. Simple.",
+                    "explanation": "Cada desafío tiene puntos máximos según su dificultad. Tu tiempo de resolución determina qué porcentaje de esos puntos recibes (20% a 100%). Todos los tests deben pasar para ganar puntos, si alguno falla obtienes 0."
+                }
             },
             "byScore": {
                 "ranges": {
