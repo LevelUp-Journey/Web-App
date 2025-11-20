@@ -12,12 +12,12 @@ export function RankingOverview({
             className={`w-full ${className}`}
             aria-labelledby="ranking-overview-heading"
         >
-            <h2
+            <h1
                 id="ranking-overview-heading"
-                className="text-2xl font-semibold mb-4"
+                className="text-3xl font-bold mb-6"
             >
                 {dict.leaderboard.rankingSystem.overview.title}
-            </h2>
+            </h1>
 
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 {dict.leaderboard.rankingSystem.overview.description}
