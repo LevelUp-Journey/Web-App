@@ -72,10 +72,7 @@ export function GeneralRules({
             className={`w-full ${className}`}
             aria-labelledby="general-rules-heading"
         >
-            <h2
-                id="general-rules-heading"
-                className="text-2xl font-bold mb-6"
-            >
+            <h2 id="general-rules-heading" className="text-2xl font-bold mb-6">
                 {dict.leaderboard.rankingSystem.rules.title}
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
@@ -125,16 +122,6 @@ export function GeneralRules({
                         </li>
                     );
                 })}
-                <li className="space-y-3">
-                    <h4 className="text-xl font-bold">
-                        {SCORING_RULES.length + 1}. {dict.leaderboard.rankingSystem.penalization.title}
-                    </h4>
-                    <ul className="list-disc pl-11 space-y-2 text-sm text-muted-foreground/90">
-                        <li>
-                            {dict.leaderboard.rankingSystem.penalization.description}
-                        </li>
-                    </ul>
-                </li>
             </ol>
         </section>
     );
