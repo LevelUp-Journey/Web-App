@@ -291,17 +291,12 @@ export default function ChallengeEditing({
         }
         debounceRef.current = setTimeout(async () => {
             if (searchTerm.trim()) {
-                console.log(
-                    `[ChallengeEditing] Searching guides with term: ${searchTerm}`,
-                );
                 setIsSearching(true);
                 try {
                     const results = await GuideController.searchGuides({
                         title: searchTerm,
                     });
-                    console.log(
-                        `[ChallengeEditing] Found ${results?.length || 0} guides`,
-                    );
+
                     setGuides(results || []);
                 } catch (error) {
                     console.error(
@@ -325,9 +320,6 @@ export default function ChallengeEditing({
     }, [searchTerm]);
 
     const handleSelectGuide = async (guide: GuideResponse) => {
-        console.log(
-            `[ChallengeEditing] Selecting guide: ${guide.id} - ${guide.title}`,
-        );
         if (selectedGuideIds.includes(guide.id)) {
             toast.info(
                 dict?.challenges?.messages?.edit?.guideAlreadySelected ||
@@ -355,7 +347,6 @@ export default function ChallengeEditing({
     };
 
     const handleRemoveGuide = async (guideId: string) => {
-        console.log(`[ChallengeEditing] Removing guide: ${guideId}`);
         const success = await ChallengeController.removeGuideFromChallenge(
             challengeId,
             guideId,

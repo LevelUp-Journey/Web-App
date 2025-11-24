@@ -12,8 +12,10 @@ import { SuggestionController } from "@/services/internal/user-attention-service
 export const dynamic = "force-dynamic";
 
 type Suggestion = {
-    date: string;
-    suggestion: string;
+    comment: string;
+    createdAt: string;
+    id: string;
+    isResolved: boolean;
 };
 
 export default async function FeedbackPage({
@@ -26,6 +28,8 @@ export default async function FeedbackPage({
 
     const suggestions: Suggestion[] =
         await SuggestionController.getAllSuggestions();
+
+    console.log(suggestions);
 
     return (
         <div className="space-y-6">
@@ -53,8 +57,14 @@ export default async function FeedbackPage({
                     <TableBody>
                         {suggestions.map((item, index) => (
                             <TableRow key={index}>
-                                <TableCell>{item.date}</TableCell>
-                                <TableCell>{item.suggestion}</TableCell>
+                                <TableCell>
+                                    {new Date(
+                                        item.createdAt,
+                                    ).toLocaleDateString(
+                                        lang === "es" ? "es-ES" : "en-US",
+                                    )}
+                                </TableCell>
+                                <TableCell>{item.comment}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

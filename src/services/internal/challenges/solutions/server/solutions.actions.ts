@@ -27,8 +27,6 @@ export async function updateSolutionAction({
         code,
     });
 
-    console.log("UPDATE ACTION RESPONSE", response);
-
     return response.data;
 }
 
@@ -63,8 +61,6 @@ export async function submitSolutionAction(solutionId: string) {
     const response = await API_GATEWAY_HTTP.put<SubmitSolutionResponse>(
         `/solutions/${solutionId}/submissions`,
     );
-
-    console.log("SUBMIT ACTION RESPONSE", response);
 
     return response.data;
 }
