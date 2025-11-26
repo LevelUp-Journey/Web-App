@@ -1,62 +1,69 @@
-import type { Reaction } from "../entities/reaction.entity";
+import type { Reaction, ReactionCount, CreateReactionRequest } from "../entities/reaction.entity";
 import {
-    type CreateReactionRequest,
     createReactionAction,
     deleteReactionAction,
-    getReactionsByPostIdAction,
+    getReactionCountsAction,
+    getUserReactionAction,
 } from "../server/reaction.actions";
 
 export class ReactionController {
     static async createReaction(
+        postId: string,
         request: CreateReactionRequest,
     ): Promise<Reaction | null> {
-        const response = await createReactionAction(request);
+        const response = await createReactionAction(postId, request);
 
-        // 201 = Created successfully
         if (response.status === 201) {
             return response.data as Reaction;
         }
 
-        // 409 = User already has a reaction (conflict)
-        if (response.status === 409) {
-            console.warn("User already has a reaction on this post");
-            return null;
-        }
-
-        // Other errors
         const errorMessage =
             typeof response.data === "string" ? response.data : "Unknown error";
         throw new Error(`Failed to create reaction: ${errorMessage}`);
     }
 
-    static async getReactionsByPostId(postId: string): Promise<Reaction[]> {
-        const response = await getReactionsByPostIdAction(postId);
+    static async deleteReaction(postId: string): Promise<boolean> {
+        const response = await deleteReactionAction(postId);
 
-        // getReactionsByPostIdAction will return empty list with status 200 for 400 responses
-        if (response.status !== 200) {
-            throw new Error(`Failed to fetch reactions: ${response.data}`);
-        }
-
-        return response.data as Reaction[];
-    }
-
-    static async deleteReaction(
-        userId: string,
-        postId: string,
-    ): Promise<boolean> {
-        const response = await deleteReactionAction(userId, postId);
-
-        // 204 = Deleted successfully
-        if (response.status === 204 || response.status === 200) {
+        if (response.status === 204) {
             return true;
         }
 
-        // 404 = No reaction found
         if (response.status === 404) {
-            console.warn("No reaction found for this user on this post");
+            console.warn("No reaction found for this post");
             return false;
         }
 
-        throw new Error(`Failed to delete reaction: ${response.data}`);
+        const errorMessage =
+            typeof response.data === "string" ? response.data : "Unknown error";
+        throw new Error(`Failed to delete reaction: ${errorMessage}`);
+    }
+
+    static async getReactionCounts(postId: string): Promise<ReactionCount> {
+        const response = await getReactionCountsAction(postId);
+
+        if (response.status === 200) {
+            return response.data as ReactionCount;
+        }
+
+        const errorMessage =
+            typeof response.data === "string" ? response.data : "Unknown error";
+        throw new Error(`Failed to get reaction counts: ${errorMessage}`);
+    }
+
+    static async getUserReaction(postId: string): Promise<Reaction | null> {
+        const response = await getUserReactionAction(postId);
+
+        if (response.status === 200) {
+            return response.data as Reaction;
+        }
+
+        if (response.status === 404) {
+            return null; // User hasn't reacted to this post
+        }
+
+        const errorMessage =
+            typeof response.data === "string" ? response.data : "Unknown error";
+        throw new Error(`Failed to get user reaction: ${errorMessage}`);
     }
 }

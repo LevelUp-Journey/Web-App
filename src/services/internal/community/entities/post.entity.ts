@@ -1,29 +1,24 @@
-export interface Comment {
-    id: string;
-    authorId: string;
-    authorProfileId: string;
-    content: string;
-    imageUrl?: string | null;
-    createdAt: string;
-}
-
-export interface PostReactions {
-    reactionCounts: {
-        [key: string]: number; // e.g., { "LIKE": 5 }
-    };
-    userReaction: string | null; // e.g., "LIKE" or null
-}
-
 export interface Post {
-    id: string;
+    postId: string;
     communityId: string;
     authorId: string;
-    authorProfileId: string;
-    authorName: string; // username from backend
-    authorProfileUrl: string; // profile URL from backend
     content: string;
-    imageUrl?: string | null;
+    images: string[];
+    type: "message" | "announcement";
     createdAt: string;
-    comments: Comment[];
-    reactions: PostReactions;
+    updatedAt: string;
+}
+
+export interface CreatePostRequest {
+    content: string;
+    images?: string[];
+    type: "message" | "announcement";
+}
+
+export interface PostsListResponse {
+    posts: Post[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
 }

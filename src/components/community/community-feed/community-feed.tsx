@@ -49,6 +49,8 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         hasMore,
         loadingMore,
     } = useCommunityData(communityId);
+
+    console.log('CommunityFeed posts:', posts, 'loading:', loading, 'error:', error);
     const PATHS = useLocalizedPaths();
 
     const _followerLabel =
@@ -174,7 +176,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                         )}
                     </div>
 
-                    {posts.length === 0 ? (
+                    {(posts || []).length === 0 ? (
                         <Card>
                             <CardContent className="p-8 text-center space-y-2">
                                 <p className="font-semibold">
@@ -190,16 +192,11 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                         </Card>
                     ) : (
                         <div className="space-y-6">
-                            {posts.map((post) => (
+                            {(posts || []).map((post) => (
                                 <PostCard
-                                    key={post.id}
+                                    key={post.postId}
                                     post={post}
                                     dict={dict}
-                                    isAdmin={canModerate}
-                                    currentUserId={currentUserId}
-                                    onPostDeleted={() =>
-                                        reload({ silent: true })
-                                    }
                                     formatDate={formatDate}
                                 />
                             ))}

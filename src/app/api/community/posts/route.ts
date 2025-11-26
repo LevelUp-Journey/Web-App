@@ -1,23 +1,35 @@
 import { NextResponse } from "next/server";
 import { PostController } from "@/services/internal/community/controller/post.controller";
-import type { CreatePostRequest } from "@/services/internal/community/server/post.actions";
+import type { CreatePostRequest } from "@/services/internal/community/entities/post.entity";
 
 export async function POST(request: Request) {
     try {
         const body = (await request.json()) as CreatePostRequest;
 
         // Validate required fields
-        if (!body.content || !body.communityId) {
+        if (!body.content) {
             return NextResponse.json(
                 {
-                    error: "Missing required fields: content, communityId",
+                    error: "Missing required field: content",
                 },
                 { status: 400 },
             );
         }
 
-        // Create the post (authorId and authorProfileId will be resolved from JWT in backend)
-        const post = await PostController.createPost(body);
+        // Extract communityId from body (it should be there for backward compatibility)
+        const { communityId, ...postData } = body as any;
+
+        if (!communityId) {
+            return NextResponse.json(
+                {
+                    error: "Missing required field: communityId",
+                },
+                { status: 400 },
+            );
+        }
+
+        // Create the post
+        const post = await PostController.createPost(communityId, postData);
 
         return NextResponse.json(post, { status: 201 });
     } catch (error) {

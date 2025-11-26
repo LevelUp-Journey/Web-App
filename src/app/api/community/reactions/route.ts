@@ -26,9 +26,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const success = await ReactionController.createReaction({
-            postId,
-            userId,
+        const success = await ReactionController.createReaction(postId, {
             reactionType,
         });
 
@@ -73,7 +71,7 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        const success = await ReactionController.deleteReaction(userId, postId);
+        const success = await ReactionController.deleteReaction(postId);
 
         if (!success) {
             return NextResponse.json(

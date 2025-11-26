@@ -20,8 +20,10 @@ export function useCommunityFeed() {
             try {
                 setLoading(true);
 
-                // Get all posts (now includes author data from backend)
-                const allPosts = await PostController.getAllPosts();
+                // TODO: The new API doesn't have an endpoint to get all posts
+                // This functionality needs to be reimplemented or removed
+                // const allPosts = await PostController.getAllPosts();
+                const allPosts: any[] = []; // Empty array for now
 
                 // Get all communities for mapping
                 const allCommunities =

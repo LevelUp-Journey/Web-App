@@ -22,6 +22,8 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { PostController } from "@/services/internal/community/controller/post.controller";
+import type { CreatePostRequest } from "@/services/internal/community/entities/post.entity";
 
 interface PostComposerProps {
     community: {
@@ -111,31 +113,12 @@ export function PostComposer({
                 .join("\n")
                 .trim();
 
-            const response = await fetch("/api/community/posts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    communityId: community.id,
-                    content,
-                }),
-            });
+            const request: CreatePostRequest = {
+                content,
+                type: "message",
+            };
 
-            if (!response.ok) {
-                let errorMessage =
-                    dict?.communityFeed?.composerError ||
-                    "We couldn't share your message. Please try again.";
-                try {
-                    const data = (await response.json()) as { error?: string };
-                    if (data?.error) {
-                        errorMessage = data.error;
-                    }
-                } catch {
-                    // ignore JSON parsing errors
-                }
-                throw new Error(errorMessage);
-            }
+            await PostController.createPost(community.id, request);
 
             setMessage("");
             requestAnimationFrame(() => {

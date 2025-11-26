@@ -3,22 +3,31 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ReactionController } from "@/services/internal/community/controller/reaction.controller";
-import type { Reaction } from "@/services/internal/community/entities/reaction.entity";
+import type { Reaction, ReactionCount } from "@/services/internal/community/entities/reaction.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export function useReactions(postId: string) {
-    const [reactions, setReactions] = useState<Reaction[]>([]);
+    const [reactionCounts, setReactionCounts] = useState<ReactionCount | null>(null);
     const [userReaction, setUserReaction] = useState<Reaction | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-    const loadReactions = async () => {
+    const loadReactionCounts = async () => {
         try {
-            const reactionsData =
-                await ReactionController.getReactionsByPostId(postId);
-            setReactions(reactionsData);
+            const counts = await ReactionController.getReactionCounts(postId);
+            setReactionCounts(counts);
         } catch (error) {
-            console.error("Failed to load reactions:", error);
+            console.error("Failed to load reaction counts:", error);
+        }
+    };
+
+    const loadUserReaction = async () => {
+        try {
+            const reaction = await ReactionController.getUserReaction(postId);
+            setUserReaction(reaction);
+        } catch (error) {
+            console.error("Failed to load user reaction:", error);
+            setUserReaction(null);
         }
     };
 
@@ -33,21 +42,10 @@ export function useReactions(postId: string) {
     };
 
     useEffect(() => {
-        loadReactions();
+        loadReactionCounts();
+        loadUserReaction();
         loadCurrentUser();
-    }, [loadCurrentUser, loadReactions]);
-
-    useEffect(() => {
-        if (currentUserId && reactions.length >= 0) {
-            // Allow checking even with empty reactions array
-            const userReaction = reactions.find(
-                (r) => r.userId === currentUserId,
-            );
-            setUserReaction(userReaction || null);
-        } else if (!currentUserId) {
-            setUserReaction(null); // Clear user reaction if no current user
-        }
-    }, [currentUserId, reactions]);
+    }, []);
 
     const toggleReaction = async () => {
         if (!currentUserId) {
@@ -65,21 +63,19 @@ export function useReactions(postId: string) {
         try {
             if (userReaction) {
                 // Remove reaction
-                await ReactionController.deleteReaction(currentUserId, postId);
-                setReactions((prev) =>
-                    prev.filter((r) => r.id !== userReaction.id),
-                );
+                await ReactionController.deleteReaction(postId);
                 setUserReaction(null);
+                // Reload counts after deletion
+                await loadReactionCounts();
             } else {
                 // Add reaction
-                const newReaction = await ReactionController.createReaction({
-                    postId,
-                    userId: currentUserId,
-                    reactionType: "LIKE",
+                const newReaction = await ReactionController.createReaction(postId, {
+                    reactionType: "like",
                 });
                 if (newReaction) {
-                    setReactions((prev) => [...prev, newReaction]);
                     setUserReaction(newReaction);
+                    // Reload counts after creation
+                    await loadReactionCounts();
                 }
             }
         } catch (error) {
@@ -91,10 +87,10 @@ export function useReactions(postId: string) {
     };
 
     return {
-        reactions,
+        reactionCounts,
         userReaction,
         isLoading,
         toggleReaction,
-        reactionCount: reactions.length,
+        reactionCount: reactionCounts?.totalCount ?? 0,
     };
 }

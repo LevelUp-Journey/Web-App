@@ -4,13 +4,13 @@ import { CommunityController } from "@/services/internal/community/controller/co
 import { PostController } from "@/services/internal/community/controller/post.controller";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
-import type { Post } from "@/services/internal/community/entities/post.entity";
+import type { Post, PostsListResponse } from "@/services/internal/community/entities/post.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 import { UserController } from "@/services/internal/users/controller/user.controller";
 import type { UserResponse } from "@/services/internal/users/controller/user.response";
 
-// PostWithDetails is now just an alias since posts come with author info from backend
-interface PostWithDetails extends Post {}
+// Posts now come with basic info, author data loaded separately
+type PostWithDetails = Post;
 
 export function useCommunityData(communityId: string) {
     const [community, setCommunity] = useState<Community | null>(null);
@@ -42,27 +42,39 @@ export function useCommunityData(communityId: string) {
                 setError(null);
 
                 // Fetch community and posts (first page) in parallel
-                const [userId, userRoles, communityData, postsData] =
-                    await Promise.all([
-                        AuthController.getUserId(),
-                        AuthController.getUserRoles(),
-                        CommunityController.getCommunityById(communityId),
-                        PostController.getPostsByCommunityId(
-                            communityId,
-                            0,
-                            PAGE_SIZE,
-                        ),
-                    ]);
+                const [userId, userRoles, communityData] = await Promise.all([
+                    AuthController.getUserId(),
+                    AuthController.getUserRoles(),
+                    CommunityController.getCommunityById(communityId),
+                ]);
+
+                // Fetch posts separately to handle errors gracefully
+                let postsData: PostsListResponse;
+                try {
+                    postsData = await PostController.getPostsByCommunityId(
+                        communityId,
+                        0,
+                        PAGE_SIZE,
+                    );
+                } catch (postsError) {
+                    console.error("Failed to load posts:", postsError);
+                    postsData = {
+                        posts: [],
+                        total: 0,
+                        page: 0,
+                        limit: PAGE_SIZE,
+                        totalPages: 0,
+                    };
+                }
 
                 setCurrentUserId(userId);
                 setCurrentPage(0);
-                setHasMore(postsData.hasNext); // Use hasNext from backend
+                setHasMore(postsData.page < postsData.totalPages - 1); // Check if there are more pages
 
                 // Check subscription status
                 const userSubscription =
                     await SubscriptionController.getUserSubscriptionForCommunity(
                         communityId,
-                        userId,
                     );
                 setIsFollowing(!!userSubscription);
                 setFollowId(userSubscription?.id ?? null);
@@ -113,18 +125,19 @@ export function useCommunityData(communityId: string) {
 
             const postsData = await PostController.getPostsByCommunityId(
                 communityId,
-                nextPage,
+                nextPage * PAGE_SIZE, // offset = page * limit
                 PAGE_SIZE,
             );
 
-            // Use hasNext from backend instead of inferring
-            setHasMore(postsData.hasNext);
+            // Check if there are more pages
+            setHasMore(postsData.page < postsData.totalPages - 1);
             setCurrentPage(nextPage);
 
             // Posts come with author data, just append them
             setPosts((prevPosts) => [...prevPosts, ...postsData.posts]);
         } catch (err) {
             console.error("Error loading more posts:", err);
+            // Don't show error to user for load more failures, just stop loading
         } finally {
             setLoadingMore(false);
         }
@@ -138,7 +151,7 @@ export function useCommunityData(communityId: string) {
 
     return {
         community,
-        posts,
+        posts: posts || [],
         ownerProfile,
         currentUserId,
         canCreatePost,

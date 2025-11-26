@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSubscriptionContext } from "@/contexts/subscription-context";
 import { SubscriptionController } from "@/services/internal/community/controller/subscription.controller";
-import type { SubscriptionResponse } from "@/services/internal/community/server/subscription.actions";
+import type { Subscription } from "@/services/internal/community/entities/subscription.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 const MAX_SUBSCRIPTIONS = 20; // Limit sidebar subscriptions for performance
 
 export function useUserSubscriptions() {
     const { subscriptionKey } = useSubscriptionContext();
-    const [subscriptions, setSubscriptions] = useState<SubscriptionResponse[]>(
+    const [subscriptions, setSubscriptions] = useState<Subscription[]>(
         [],
     );
     const [loading, setLoading] = useState(true);
@@ -20,16 +20,21 @@ export function useUserSubscriptions() {
             setLoading(true);
             setError(null);
 
-            const userId = await AuthController.getUserId();
-            const paginatedResponse =
-                await SubscriptionController.getSubscriptionsByUser(
-                    userId,
-                    0,
-                    MAX_SUBSCRIPTIONS, // Limit for sidebar performance
-                );
+            // TODO: The new API doesn't have an endpoint to get all user subscriptions
+            // This functionality needs to be reimplemented or removed
+            // const userId = await AuthController.getUserId();
+            // const paginatedResponse =
+            //     await SubscriptionController.getSubscriptionsByUser(
+            //         userId,
+            //         0,
+            //         MAX_SUBSCRIPTIONS, // Limit for sidebar performance
+            //     );
 
-            // API now returns community name and image directly
-            setSubscriptions(paginatedResponse.content);
+            // // API now returns community name and image directly
+            // setSubscriptions(paginatedResponse.content);
+
+            // Temporary: set empty array
+            setSubscriptions([]);
         } catch (err) {
             console.error("Error loading subscriptions:", err);
             setError("Failed to load subscriptions");
