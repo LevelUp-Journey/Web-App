@@ -21,25 +21,16 @@ export class PostController {
             throw new Error(`Failed to fetch posts: ${response.data}`);
         }
 
-        // Map the API response (PaginatedPostsResponse) to PostsListResponse
-        const apiData = response.data as unknown as PaginatedPostsResponse;
-        const posts: Post[] = (apiData.content || []).map(postResponse => ({
-            postId: postResponse.id,
-            communityId: postResponse.communityId,
-            authorId: postResponse.authorId,
-            content: postResponse.content,
-            images: postResponse.imageUrl ? [postResponse.imageUrl] : [],
-            type: "message" as const, // Default type, could be enhanced later
-            createdAt: postResponse.createdAt,
-            updatedAt: postResponse.createdAt, // Use createdAt as fallback
-        }));
+        // Handle API response - it returns an array of posts directly
+        const apiData = response.data as unknown as Post[];
+        const posts: Post[] = Array.isArray(apiData) ? apiData : [];
 
         return {
             posts,
-            total: apiData.totalElements || 0,
-            page: apiData.page || 0,
-            limit: apiData.size || limit,
-            totalPages: apiData.totalPages || 0,
+            total: posts.length,
+            page: 0, // API doesn't seem to support pagination yet
+            limit,
+            totalPages: 1, // API doesn't seem to support pagination yet
         };
     }
 
