@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDictionary } from "@/hooks/use-dictionary";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
+import { useCommunityFollowerCount } from "@/hooks/use-community-follower-count";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Community } from "@/services/internal/community/entities/community.entity";
@@ -17,7 +18,11 @@ export default function CommunityCard({ community }: CommunityCardProps) {
     const [bannerColor, setBannerColor] = useState<string>("#6b7280");
     const PATHS = useLocalizedPaths();
     const dict = useDictionary();
-    const followerCount = community.followerCount ?? 0;
+
+    // Use real follower count from API with cache
+    const { count: apiFollowerCount, loading: loadingCount } = useCommunityFollowerCount(community.id);
+    const followerCount = apiFollowerCount;
+
     const avatarSrc = community.iconUrl ?? community.imageUrl ?? undefined;
     const bannerSrc = community.bannerUrl ?? undefined;
     const followerLabel =
@@ -25,8 +30,8 @@ export default function CommunityCard({ community }: CommunityCardProps) {
         dict?.admin?.community?.followers ||
         "Followers";
     const formattedFollowerCount = useMemo(
-        () => new Intl.NumberFormat().format(followerCount),
-        [followerCount],
+        () => loadingCount ? "..." : new Intl.NumberFormat().format(followerCount),
+        [followerCount, loadingCount],
     );
 
     const extractDominantColor = useCallback((imageUrl: string) => {
