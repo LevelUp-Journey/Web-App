@@ -97,7 +97,7 @@ export default function CommunityCard({ community }: CommunityCardProps) {
         <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
             {/* Banner Section - No padding, fills entire width */}
             <div
-                className="h-32 w-full relative overflow-hidden"
+                className="h-32 w-full relative overflow-visible"
                 style={{ backgroundColor: bannerColor }}
             >
                 {bannerSrc && (
@@ -105,16 +105,19 @@ export default function CommunityCard({ community }: CommunityCardProps) {
                         src={bannerSrc}
                         alt={`${community.name} banner`}
                         fill
-                        sizes="100vw"
-                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 600px"
+                        className="object-cover z-0"
                     />
                 )}
                 {bannerSrc && (
-                    <div className="absolute inset-0 bg-black/20" aria-hidden />
+                    <div
+                        className="absolute inset-0 bg-black/20 z-0"
+                        aria-hidden
+                    />
                 )}
                 {/* Avatar positioned at the bottom of banner */}
-                <div className="absolute -bottom-8 left-4">
-                    <Avatar className="w-16 h-16 border-4 border-card rounded-lg">
+                <div className="absolute -bottom-8 left-4 z-20">
+                    <Avatar className="w-16 h-16 border-4 border-card rounded-lg shadow-md">
                         <AvatarImage src={avatarSrc} alt={community.name} />
                         <AvatarFallback className="text-xl font-bold">
                             {community.name.charAt(0).toUpperCase()}

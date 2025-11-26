@@ -94,7 +94,7 @@ export default function EditCommunityPage() {
             ),
         iconUrl: z.string().optional(),
         bannerUrl: z.string().optional(),
-        isPrivate: z.boolean().default(false),
+        isPrivate: z.boolean(),
     });
 
     type FormData = z.infer<typeof formSchema>;
