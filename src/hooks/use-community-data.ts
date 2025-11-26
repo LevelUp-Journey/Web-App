@@ -6,8 +6,8 @@ import { SubscriptionController } from "@/services/internal/community/controller
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
-import type { ProfileResponse } from "@/services/internal/profiles/profiles/controller/profile.response";
+import { UserController } from "@/services/internal/users/controller/user.controller";
+import type { UserResponse } from "@/services/internal/users/controller/user.response";
 
 // PostWithDetails is now just an alias since posts come with author info from backend
 interface PostWithDetails extends Post {}
@@ -15,9 +15,7 @@ interface PostWithDetails extends Post {}
 export function useCommunityData(communityId: string) {
     const [community, setCommunity] = useState<Community | null>(null);
     const [posts, setPosts] = useState<PostWithDetails[]>([]);
-    const [ownerProfile, setOwnerProfile] = useState<ProfileResponse | null>(
-        null,
-    );
+    const [ownerProfile, setOwnerProfile] = useState<UserResponse | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string>("");
     const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
     const [canModerate, setCanModerate] = useState<boolean>(false);
@@ -84,7 +82,7 @@ export function useCommunityData(communityId: string) {
                 setCommunity(communityData);
 
                 // Fetch owner profile
-                const profile = await ProfileController.getProfileByUserId(
+                const profile = await UserController.getUserById(
                     communityData.ownerId,
                 );
                 setOwnerProfile(profile ?? null);

@@ -7,6 +7,7 @@ import {
     getCommunitiesAction,
     getCommunitiesByCreatorAction,
     getCommunityByIdAction,
+    getMyCommunitiesAction,
     type UpdateCommunityRequest,
     updateCommunityAction,
 } from "../server/community.actions";
@@ -18,7 +19,7 @@ export class CommunityController {
     ): Promise<Community> {
         const response = await createCommunityAction(request);
 
-        if (response.status !== 201) {
+        if (response.status !== 201 && response.status !== 200) {
             throw new Error(`Failed to create community: ${response.data}`);
         }
 
@@ -75,6 +76,18 @@ export class CommunityController {
             throw new Error(
                 `Failed to fetch communities by creator: ${response.data}`,
             );
+        }
+
+        return CommunityAssembler.toEntitiesFromResponse(
+            response.data as CommunityResponse[],
+        );
+    }
+
+    static async getMyCommunities(): Promise<Community[]> {
+        const response = await getMyCommunitiesAction();
+
+        if (response.status !== 200) {
+            throw new Error(`Failed to fetch communities: ${response.data}`);
         }
 
         return CommunityAssembler.toEntitiesFromResponse(

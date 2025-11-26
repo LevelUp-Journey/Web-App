@@ -64,10 +64,7 @@ export default function CommunityPage() {
             setLoading(true);
             setError(null);
             try {
-                // Get the user ID to fetch their communities
-                const userId = await AuthController.getUserId();
-                const response =
-                    await CommunityController.getCommunitiesByCreator(userId);
+                const response = await CommunityController.getMyCommunities();
 
                 if (response) {
                     setCommunities(response);

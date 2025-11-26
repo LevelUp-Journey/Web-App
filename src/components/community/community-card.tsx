@@ -18,6 +18,8 @@ export default function CommunityCard({ community }: CommunityCardProps) {
     const PATHS = useLocalizedPaths();
     const dict = useDictionary();
     const followerCount = community.followerCount ?? 0;
+    const avatarSrc = community.iconUrl ?? community.imageUrl ?? undefined;
+    const bannerSrc = community.bannerUrl ?? undefined;
     const followerLabel =
         dict?.communityCard?.followers ||
         dict?.admin?.community?.followers ||
@@ -86,25 +88,34 @@ export default function CommunityCard({ community }: CommunityCardProps) {
     }, []);
 
     useEffect(() => {
-        if (community.imageUrl) {
-            extractDominantColor(community.imageUrl);
+        if (avatarSrc) {
+            extractDominantColor(avatarSrc);
         }
-    }, [community.imageUrl, extractDominantColor]);
+    }, [avatarSrc, extractDominantColor]);
 
     return (
         <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
             {/* Banner Section - No padding, fills entire width */}
             <div
-                className="h-32 w-full relative"
+                className="h-32 w-full relative overflow-hidden"
                 style={{ backgroundColor: bannerColor }}
             >
+                {bannerSrc && (
+                    <NextImage
+                        src={bannerSrc}
+                        alt={`${community.name} banner`}
+                        fill
+                        sizes="100vw"
+                        className="object-cover"
+                    />
+                )}
+                {bannerSrc && (
+                    <div className="absolute inset-0 bg-black/20" aria-hidden />
+                )}
                 {/* Avatar positioned at the bottom of banner */}
                 <div className="absolute -bottom-8 left-4">
                     <Avatar className="w-16 h-16 border-4 border-card rounded-lg">
-                        <AvatarImage
-                            src={community.imageUrl ?? undefined}
-                            alt={community.name}
-                        />
+                        <AvatarImage src={avatarSrc} alt={community.name} />
                         <AvatarFallback className="text-xl font-bold">
                             {community.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
