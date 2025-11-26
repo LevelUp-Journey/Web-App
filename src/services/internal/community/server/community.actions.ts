@@ -9,23 +9,26 @@ import {
 export interface CreateCommunityRequest {
     name: string;
     description: string;
-    imageUrl?: string;
+    iconUrl?: string | null;
+    bannerUrl?: string | null;
+    isPrivate: boolean;
 }
 
-export interface UpdateCommunityRequest {
-    name: string;
-    description: string;
-    imageUrl?: string;
-}
+export type UpdateCommunityRequest = CreateCommunityRequest;
 
 export interface CommunityResponse {
+    communityId?: string;
     id: string;
     ownerId: string;
-    ownerProfileId: string;
+    ownerProfileId?: string;
     name: string;
     description: string;
-    imageUrl?: string;
+    iconUrl?: string | null;
+    bannerUrl?: string | null;
+    imageUrl?: string | null;
+    isPrivate: boolean;
     createdAt: string;
+    updatedAt?: string;
     followerCount?: number;
 }
 
@@ -145,6 +148,34 @@ export async function getCommunitiesByCreatorAction(
     try {
         const response = await API_GATEWAY_HTTP.get(
             `/communities/creator/${creatorUserId}`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function getMyCommunitiesAction(): Promise<
+    RequestSuccess<CommunityResponse[]> | RequestFailure
+> {
+    try {
+        const response = await API_GATEWAY_HTTP.get(
+            "/communities/my-communities",
         );
 
         return {

@@ -3,7 +3,7 @@ import { UserRole } from "@/lib/consts";
 import { CommunityController } from "@/services/internal/community/controller/community.controller";
 import type { Community } from "@/services/internal/community/entities/community.entity";
 import { AuthController } from "@/services/internal/iam/controller/auth.controller";
-import { ProfileController } from "@/services/internal/profiles/profiles/controller/profile.controller";
+import { UserController } from "@/services/internal/users/controller/user.controller";
 
 export function useCreatePostData() {
     const [communities, setCommunities] = useState<Community[]>([]);
@@ -42,15 +42,14 @@ export function useCreatePostData() {
                 await Promise.all(
                     allCommunities.map(async (community) => {
                         try {
-                            const profile =
-                                await ProfileController.getProfileById(
-                                    community.ownerProfileId,
-                                );
+                            const profile = await UserController.getUserById(
+                                community.ownerId,
+                            );
                             usernameMap[community.ownerId] =
                                 profile?.username ?? "Unknown User";
                         } catch (error) {
                             console.error(
-                                `Error loading profile for ${community.ownerProfileId}:`,
+                                `Error loading profile for ${community.ownerId}:`,
                                 error,
                             );
                             usernameMap[community.ownerId] = "Unknown User";

@@ -17,6 +17,9 @@ interface CommunityHeaderProps {
         name: string;
         description: string;
         imageUrl?: string | null;
+        iconUrl?: string | null;
+        bannerUrl?: string | null;
+        isPrivate?: boolean;
         followerCount: number;
         createdAt: string | Date;
     };
@@ -60,6 +63,7 @@ export function CommunityHeader({
         "Followers";
 
     const followerDisplay = new Intl.NumberFormat().format(localFollowerCount);
+    const avatarSrc = community.iconUrl ?? community.imageUrl ?? null;
 
     const handleToggleFollow = async () => {
         if (loading) return;
@@ -106,9 +110,9 @@ export function CommunityHeader({
                 <div className="flex flex-col md:flex-row gap-6">
                     {/* Community Image */}
                     <div className="relative h-24 w-24 shrink-0 rounded-full overflow-hidden bg-transparent">
-                        {community.imageUrl ? (
+                        {avatarSrc ? (
                             <Image
-                                src={community.imageUrl}
+                                src={avatarSrc}
                                 alt={community.name}
                                 fill
                                 sizes="96px"
@@ -125,10 +129,18 @@ export function CommunityHeader({
                     <div className="flex-1 space-y-3">
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 space-y-1">
-                                <Badge variant="secondary" className="mb-2">
-                                    {dict?.communityFeed?.heroLabel ||
-                                        "Community"}
-                                </Badge>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Badge variant="secondary">
+                                        {dict?.communityFeed?.heroLabel ||
+                                            "Community"}
+                                    </Badge>
+                                    {community.isPrivate && (
+                                        <Badge variant="outline">
+                                            {dict?.communityFeed?.privateLabel ||
+                                                "Private"}
+                                        </Badge>
+                                    )}
+                                </div>
                                 <h1 className="text-2xl md:text-3xl font-bold">
                                     {community.name}
                                 </h1>

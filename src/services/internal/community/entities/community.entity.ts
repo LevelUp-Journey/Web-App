@@ -1,10 +1,14 @@
 export interface Community {
     id: string;
     ownerId: string;
-    ownerProfileId: string;
+    ownerProfileId?: string;
     name: string;
     description: string;
-    imageUrl?: string;
+    iconUrl?: string | null;
+    bannerUrl?: string | null;
+    imageUrl?: string | null;
+    isPrivate: boolean;
     createdAt: Date;
+    updatedAt?: Date;
     followerCount: number;
 }
