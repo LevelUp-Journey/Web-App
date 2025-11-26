@@ -151,8 +151,8 @@ export function PostComposer({
         ) || `Message #${community.name}`;
 
     return (
-        <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background px-4 py-3">
-            <div className="space-y-2">
+        <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background pl-4 pr-16 md:pr-20 py-3">
+            <div className="space-y-2 max-w-4xl mx-auto">
                 {/* Markdown Toolbar */}
                 <TooltipProvider>
                     <div className="flex items-center gap-1 px-1">
