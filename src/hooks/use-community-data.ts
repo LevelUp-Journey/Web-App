@@ -21,7 +21,7 @@ export function useCommunityData(communityId: string) {
     const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
     const [canModerate, setCanModerate] = useState<boolean>(false);
     const [isFollowing, setIsFollowing] = useState<boolean>(false);
-    const [followId, setFollowId] = useState<string | null>(null);
+    const [followerCount, setFollowerCount] = useState<number>(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [reloading, setReloading] = useState(false);
@@ -72,13 +72,20 @@ export function useCommunityData(communityId: string) {
                 setCurrentPage(0);
                 setHasMore(postsData.page < postsData.totalPages - 1); // Check if there are more pages
 
-                // Check subscription status
-                const userSubscription =
-                    await SubscriptionController.getUserSubscriptionForCommunity(
+                // Check subscription status and load follower count in parallel
+                const [userSubscription, subscriptionCount] = await Promise.all([
+                    SubscriptionController.getUserSubscriptionForCommunity(
+                        userId,
                         communityId,
-                    );
+                    ),
+                    SubscriptionController.getSubscriptionCount(communityId).catch(() => ({
+                        community_id: communityId,
+                        count: 0,
+                    })),
+                ]);
+
                 setIsFollowing(!!userSubscription);
-                setFollowId(userSubscription?.id ?? null);
+                setFollowerCount(subscriptionCount.count);
 
                 // Check if user can create posts (only TEACHER and ADMIN)
                 const hasCreatePermission =
@@ -184,7 +191,7 @@ export function useCommunityData(communityId: string) {
         canCreatePost,
         canModerate,
         isFollowing,
-        followId,
+        followerCount,
         loading,
         error,
         reloading,

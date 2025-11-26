@@ -31,7 +31,7 @@ interface CommunityHeaderProps {
     } | null;
     dict: Dictionary;
     isFollowing: boolean;
-    followId: string | null;
+    followerCount: number;
     onFollowUpdated: () => void;
     getDisplayName: (profile: any) => string;
     getInitials: (profile: any, fallback: string) => string;
@@ -43,7 +43,7 @@ export function CommunityHeader({
     ownerProfile,
     dict,
     isFollowing,
-    followId,
+    followerCount,
     onFollowUpdated,
     getDisplayName,
     getInitials,
@@ -52,10 +52,7 @@ export function CommunityHeader({
     const { refreshSubscriptions } = useSubscriptionContext();
     const [loading, setLoading] = useState(false);
     const [localIsFollowing, setLocalIsFollowing] = useState(isFollowing);
-    const [localFollowId, setLocalFollowId] = useState(followId);
-    const [localFollowerCount, setLocalFollowerCount] = useState(
-        community.followerCount,
-    );
+    const [localFollowerCount, setLocalFollowerCount] = useState(followerCount);
 
     const followerLabel =
         dict?.communityFeed?.followersLabel ||
@@ -70,15 +67,14 @@ export function CommunityHeader({
 
         setLoading(true);
         try {
-            if (localIsFollowing && localFollowId) {
-                // Unsubscribe
+            if (localIsFollowing) {
+                // Unsubscribe - use community.id instead of followId
                 const success =
                     await SubscriptionController.deleteSubscription(
-                        localFollowId,
+                        community.id,
                     );
                 if (success) {
                     setLocalIsFollowing(false);
-                    setLocalFollowId(null);
                     setLocalFollowerCount((prev) => Math.max(0, prev - 1));
                     onFollowUpdated();
                     refreshSubscriptions(); // Update sidebar
@@ -91,7 +87,6 @@ export function CommunityHeader({
                     );
                 if (subscription) {
                     setLocalIsFollowing(true);
-                    setLocalFollowId(subscription.id);
                     setLocalFollowerCount((prev) => prev + 1);
                     onFollowUpdated();
                     refreshSubscriptions(); // Update sidebar

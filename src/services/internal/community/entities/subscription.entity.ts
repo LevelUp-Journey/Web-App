@@ -10,6 +10,7 @@ export interface CreateSubscriptionRequest {
 }
 
 export interface SubscriptionCount {
+    community_id: string;
     count: number;
 }
 

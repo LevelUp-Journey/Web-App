@@ -10,13 +10,18 @@ import type {
     SubscriptionCount,
     SubscriptionListResponse,
 } from "../entities/subscription.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export async function createSubscriptionAction(
     communityId: string,
 ): Promise<RequestSuccess<Subscription> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.post(
-            `/communities/${communityId}/subscriptions`,
+            `/subscriptions`,
+            {
+                community_id: communityId,
+                role: "member", // Default role for self-subscription
+            },
         );
 
         return {
@@ -43,8 +48,17 @@ export async function deleteSubscriptionAction(
     communityId: string,
 ): Promise<RequestSuccess<void> | RequestFailure> {
     try {
+        // Get user_id from JWT token
+        const userId = await AuthController.getUserId();
+
         const response = await API_GATEWAY_HTTP.delete(
-            `/communities/${communityId}/subscriptions`,
+            `/subscriptions`,
+            {
+                data: {
+                    user_id: userId,
+                    community_id: communityId,
+                },
+            },
         );
 
         return {
@@ -105,7 +119,7 @@ export async function getSubscriptionCountAction(
 ): Promise<RequestSuccess<SubscriptionCount> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.get(
-            `/communities/${communityId}/subscriptions/count`,
+            `/subscriptions/communities/${communityId}/count`,
         );
 
         return {
@@ -129,11 +143,12 @@ export async function getSubscriptionCountAction(
 }
 
 export async function getUserSubscriptionForCommunityAction(
+    userId: string,
     communityId: string,
 ): Promise<RequestSuccess<Subscription> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.get(
-            `/communities/${communityId}/subscriptions/me`,
+            `/subscriptions/users/${userId}/communities/${communityId}`,
         );
 
         return {

@@ -3,9 +3,9 @@ import {
     HelpCircle,
     LayoutDashboard,
     Library,
-    Settings,
     ShieldUser,
     Trophy,
+    Users,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -59,6 +59,11 @@ export default async function AppSidebar({
             title: dict.navigation.leaderboard,
             url: PATHS.DASHBOARD.LEADERBOARD,
             icon: Trophy,
+        },
+        {
+            title: dict.navigation.community,
+            url: PATHS.DASHBOARD.COMMUNITY.ROOT,
+            icon: Users,
         },
     ];
 

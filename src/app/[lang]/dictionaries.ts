@@ -30,6 +30,7 @@ export interface Dictionary {
         login: string;
         signup: string;
         leaderboard: string;
+        community: string;
         guides: string;
         help: string;
         adminDashboard: string;

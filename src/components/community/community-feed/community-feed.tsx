@@ -41,7 +41,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         canCreatePost,
         canModerate,
         isFollowing,
-        followId,
+        followerCount,
         loading,
         error,
         reloading,
@@ -149,7 +149,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                     ownerProfile={ownerProfile}
                     dict={dict}
                     isFollowing={isFollowing}
-                    followId={followId}
+                    followerCount={followerCount}
                     onFollowUpdated={() => reload({ silent: true })}
                     getDisplayName={getDisplayName}
                     getInitials={getInitials}
