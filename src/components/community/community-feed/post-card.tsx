@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,33 +9,16 @@ import {
     CardHeader,
 } from "@/components/ui/card";
 import type { Post } from "@/services/internal/community/entities/post.entity";
-import { UserController } from "@/services/internal/users/controller/user.controller";
 import type { UserResponse } from "@/services/internal/users/controller/user.response";
 
 interface PostCardProps {
     post: Post;
     dict: Dictionary;
     formatDate: (date: string | Date) => string;
+    author?: UserResponse | null;
 }
 
-export function PostCard({ post, dict, formatDate }: PostCardProps) {
-    const [author, setAuthor] = useState<UserResponse | null>(null);
-    const [loadingAuthor, setLoadingAuthor] = useState(true);
-
-    useEffect(() => {
-        const loadAuthor = async () => {
-            try {
-                const authorData = await UserController.getUserById(post.authorId);
-                setAuthor(authorData);
-            } catch (error) {
-                console.error("Failed to load author:", error);
-            } finally {
-                setLoadingAuthor(false);
-            }
-        };
-
-        loadAuthor();
-    }, [post.authorId]);
+export function PostCard({ post, dict, formatDate, author }: PostCardProps) {
 
     return (
         <Card className="border-muted">

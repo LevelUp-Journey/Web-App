@@ -35,6 +35,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
     const {
         community,
         posts,
+        users,
         ownerProfile,
         currentUserId,
         canCreatePost,
@@ -196,6 +197,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                 <PostCard
                                     key={post.postId}
                                     post={post}
+                                    author={users.get(post.authorId)}
                                     dict={dict}
                                     formatDate={formatDate}
                                 />

@@ -15,6 +15,7 @@ type PostWithDetails = Post;
 export function useCommunityData(communityId: string) {
     const [community, setCommunity] = useState<Community | null>(null);
     const [posts, setPosts] = useState<PostWithDetails[]>([]);
+    const [users, setUsers] = useState<Map<string, UserResponse>>(new Map());
     const [ownerProfile, setOwnerProfile] = useState<UserResponse | null>(null);
     const [currentUserId, setCurrentUserId] = useState<string>("");
     const [canCreatePost, setCanCreatePost] = useState<boolean>(false);
@@ -102,6 +103,31 @@ export function useCommunityData(communityId: string) {
                 // Posts now come with author data from backend (authorName, authorProfileUrl)
                 // No need to fetch profiles separately! 🎉
                 setPosts(postsData.posts);
+
+                // Load all unique authors in parallel for better performance
+                const uniqueAuthorIds = [...new Set(postsData.posts.map(post => post.authorId))];
+                if (uniqueAuthorIds.length > 0) {
+                    try {
+                        const userPromises = uniqueAuthorIds.map(authorId =>
+                            UserController.getUserById(authorId).catch(err => {
+                                console.warn(`Failed to load user ${authorId}:`, err);
+                                return null;
+                            })
+                        );
+                        const usersData = await Promise.all(userPromises);
+                        const usersMap = new Map<string, UserResponse>();
+                        uniqueAuthorIds.forEach((authorId, index) => {
+                            const user = usersData[index];
+                            if (user) {
+                                usersMap.set(authorId, user);
+                            }
+                        });
+                        setUsers(usersMap);
+                    } catch (usersError) {
+                        console.error("Error loading users:", usersError);
+                        // Continue without users data
+                    }
+                }
             } catch (err) {
                 console.error("Error loading community:", err);
                 setError("Failed to load community data");
@@ -152,6 +178,7 @@ export function useCommunityData(communityId: string) {
     return {
         community,
         posts: posts || [],
+        users,
         ownerProfile,
         currentUserId,
         canCreatePost,

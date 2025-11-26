@@ -1,4 +1,5 @@
 import type { Post, CreatePostRequest, PostsListResponse } from "../entities/post.entity";
+import type { PaginatedPostsResponse } from "./post.response";
 import {
     createPostAction,
     getPostsByCommunityIdAction,
@@ -20,7 +21,26 @@ export class PostController {
             throw new Error(`Failed to fetch posts: ${response.data}`);
         }
 
-        return response.data as PostsListResponse;
+        // Map the API response (PaginatedPostsResponse) to PostsListResponse
+        const apiData = response.data as unknown as PaginatedPostsResponse;
+        const posts: Post[] = (apiData.content || []).map(postResponse => ({
+            postId: postResponse.id,
+            communityId: postResponse.communityId,
+            authorId: postResponse.authorId,
+            content: postResponse.content,
+            images: postResponse.imageUrl ? [postResponse.imageUrl] : [],
+            type: "message" as const, // Default type, could be enhanced later
+            createdAt: postResponse.createdAt,
+            updatedAt: postResponse.createdAt, // Use createdAt as fallback
+        }));
+
+        return {
+            posts,
+            total: apiData.totalElements || 0,
+            page: apiData.page || 0,
+            limit: apiData.size || limit,
+            totalPages: apiData.totalPages || 0,
+        };
     }
 
     static async createPost(
