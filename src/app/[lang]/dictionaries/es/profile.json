@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "title": "Perfil",
+    "account": {
+      "title": "Configuración de Cuenta"
+    },
+    "edit": "Editar perfil",
+    "stats": "Estadísticas",
+    "achievements": "Logros",
+    "settings": "Configuración",
+    "information": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "bio": "Biografía",
+      "location": "Ubicación",
+      "website": "Sitio web",
+      "joinedDate": "Se unió"
+    },
+    "messages": {
+      "updated": "Perfil actualizado exitosamente",
+      "updateError": "Error al actualizar el perfil"
+    }
+  }
+}

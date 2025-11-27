@@ -1,0 +1,8 @@
+{
+  "unauthorized": {
+    "title": "Acceso no autorizado",
+    "description": "Has intentado acceder a una página que no tienes autorización para ver. Si crees que esto es un error, por favor contacta al soporte.",
+    "goBackDashboard": "Volver al panel",
+    "homeButton": "Inicio"
+  }
+}

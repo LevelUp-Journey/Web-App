@@ -1,0 +1,59 @@
+{
+  "landing": {
+    "header": {
+      "signIn": "Sign In",
+      "register": "Register"
+    },
+    "hero": {
+      "badge": "Your tech future starts here",
+      "title": "Learn to code",
+      "titleHighlight": "by doing",
+      "description": "Real challenges. Practical projects. No boring theory. Learn programming like professionals do.",
+      "cta": "Start for free"
+    },
+    "stats": {
+      "languages": "Languages",
+      "challenges": "Challenges",
+      "students": "Students",
+      "community": "Community"
+    },
+    "features": {
+      "title": "Why choose us?",
+      "subtitle": "Everything you need to launch your tech career",
+      "learnFast": {
+        "title": "Learn fast",
+        "description": "Short, practical challenges. Instant feedback. No wasted time."
+      },
+      "practicalFocus": {
+        "title": "Practical focus",
+        "description": "Real projects from day one. Learn what companies actually use."
+      },
+      "activeCommunity": {
+        "title": "Active community",
+        "description": "Share code, solve questions, and learn with other students."
+      },
+      "gamification": {
+        "title": "Gamification",
+        "description": "Earn points, unlock achievements, and compete in global rankings."
+      },
+      "learningPaths": {
+        "title": "Learning paths",
+        "description": "Follow a structured path from beginner to advanced."
+      },
+      "integratedEditor": {
+        "title": "Integrated editor",
+        "description": "Write, test, and run code directly in your browser."
+      }
+    },
+    "cta": {
+      "title": "Ready for your first challenge?",
+      "description": "Thousands of students are already learning. Join for free and start building your tech future.",
+      "createAccount": "Create free account",
+      "exploreContent": "Explore content"
+    },
+    "footer": {
+      "copyright": "© 2025 Level Up Journey",
+      "tagline": "Shaping the next generation of developers"
+    }
+  }
+}

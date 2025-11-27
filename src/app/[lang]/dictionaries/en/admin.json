@@ -1,0 +1,123 @@
+{
+  "admin": {
+    "layout": {
+      "general": "General",
+      "challenges": "Challenges",
+      "guides": "Guides",
+      "community": "Community",
+      "feedback": "Feedback"
+    },
+    "dashboard": {
+      "title": "Admin Dashboard — Recent Activity",
+      "loading": "Loading admin dashboard",
+      "loadingDescription": "Fetching the latest challenges and guides.",
+      "error": "Error loading dashboard",
+      "errorDescription": "Could not load admin dashboard data. Please try again.",
+      "retry": "Retry",
+      "challenges": "Challenges",
+      "noChallenges": "No challenges found.",
+      "guides": "Guides",
+      "noGuides": "No guides found."
+    },
+    "community": {
+      "title": "Community Management",
+      "subtitle": "Manage and oversee all communities in the platform",
+      "create": "Create Community",
+      "loading": "Loading communities",
+      "loadingDescription": "Preparing your community management tools.",
+      "error": "Unable to load communities",
+      "noCommunities": "No communities yet",
+      "noCommunitiesDescription": "Create your first community to get started.",
+      "retry": "Retry",
+      "permissionsError": "Unable to verify permissions",
+      "createForm": {
+        "title": "Customize Your Community",
+        "subtitle": "Give your new community a personality with a name and an icon. You can always change it later.",
+        "nameLabel": "Community Name",
+        "namePlaceholder": "Enter community name",
+        "descriptionLabel": "Community Description",
+        "descriptionPlaceholder": "Describe your community",
+        "descriptionHelper": "Tell people what this community is about",
+        "termsText": "By creating a community, you agree to the Community Guidelines.",
+        "submitButton": "Create",
+        "cancelConfirm": "Are you sure you want to cancel? All progress will be lost.",
+        "errorCreating": "Error creating community. Please try again.",
+        "validation": {
+          "nameRequired": "Community name is required",
+          "nameMax": "Community name must not exceed 50 characters",
+          "descriptionMin": "Description must be at least 10 characters",
+          "descriptionMax": "Description must not exceed 150 characters"
+        }
+      }
+    },
+    "challenges": {
+      "title": "My Challenges",
+      "createNew": "Create New Challenge",
+      "create": "Create Challenge",
+      "noChallenges": "No challenges yet",
+      "noChallengesDescription": "Start by creating your first challenge for the community.",
+      "error": "Unable to load challenges",
+      "errorDescription": "Something went wrong while fetching your challenges. Please try again."
+    },
+    "guides": {
+      "title": "Guides",
+      "subtitle": "Manage and create learning guides",
+      "create": "Create Guide",
+      "loading": "Loading guides",
+      "loadingDescription": "Fetching the latest learning guides for you.",
+      "accessDenied": "Access denied",
+      "accessDeniedDescription": "You need teacher or admin permissions to manage guides.",
+      "permissionsError": "Unable to verify permissions",
+      "noGuides": "No guides yet",
+      "noGuidesDescription": "Create your first guide to start helping students.",
+      "error": "Unable to load guides",
+      "errorDescription": "We couldn't load the guides. Please try again.",
+      "retry": "Retry",
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "perPage": "Per page:",
+      "createGuide": {
+        "title": "Create New Guide",
+        "subtitle": "Fill in the details below to create a new learning guide.",
+        "validation": {
+          "titleRequired": "Title is required",
+          "descriptionMin": "Description must be at least 10 characters",
+          "descriptionMax": "Description must not exceed 1000 characters",
+          "topicsRequired": "At least one topic is required"
+        },
+        "errorCreating": "Error creating guide. Please try again.",
+        "cancelConfirm": "Are you sure you want to cancel? All progress will be lost."
+      },
+      "editGuide": {
+        "subtitle": "Edit the guide details and content.",
+        "publish": "Publish",
+        "publishing": "Publishing...",
+        "backToGuides": "Back to Guides",
+        "tabs": {
+          "pages": "Pages",
+          "challenges": "Challenges",
+          "info": "Basic Information"
+        },
+        "basicInfo": {
+          "title": "Basic Information",
+          "subtitle": "Update the guide's title, description, and topics.",
+          "update": "Update Guide",
+          "updating": "Updating...",
+          "updateSuccess": "Guide updated successfully!",
+          "updateError": "Error updating guide. Please try again.",
+          "cancelConfirm": "Are you sure you want to cancel? Any unsaved changes will be lost.",
+          "publishError": "Error publishing guide. Please try again."
+        },
+        "validation": {
+          "titleRequired": "Title is required",
+          "descriptionMin": "Description must be at least 10 characters",
+          "descriptionMax": "Description must not exceed 1000 characters",
+          "topicsRequired": "At least one topic is required"
+        },
+        "notFound": "Guide not found. Please try again.",
+        "loading": "Loading guide..."
+      }
+    }
+  }
+}

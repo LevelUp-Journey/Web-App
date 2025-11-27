@@ -1,0 +1,123 @@
+{
+  "admin": {
+    "layout": {
+      "general": "General",
+      "challenges": "Desafíos",
+      "guides": "Guías",
+      "community": "Comunidad",
+      "feedback": "Feedback"
+    },
+    "dashboard": {
+      "title": "Panel de Administración — Actividad Reciente",
+      "loading": "Cargando panel de administración",
+      "loadingDescription": "Obteniendo los últimos desafíos y guías.",
+      "error": "Error al cargar el panel",
+      "errorDescription": "No se pudo cargar los datos del panel de administración. Por favor, inténtalo de nuevo.",
+      "retry": "Reintentar",
+      "challenges": "Desafíos",
+      "noChallenges": "No se encontraron desafíos.",
+      "guides": "Guías",
+      "noGuides": "No se encontraron guías."
+    },
+    "community": {
+      "title": "Gestión de Comunidad",
+      "subtitle": "Gestiona y supervisa todas las comunidades de la plataforma",
+      "create": "Crear Comunidad",
+      "loading": "Cargando comunidades",
+      "loadingDescription": "Preparando tus herramientas de gestión de comunidad.",
+      "error": "No se pudieron cargar las comunidades",
+      "noCommunities": "Aún no hay comunidades",
+      "noCommunitiesDescription": "Crea tu primera comunidad para comenzar.",
+      "retry": "Reintentar",
+      "permissionsError": "No se pudieron verificar los permisos",
+      "createForm": {
+        "title": "Personaliza Tu Comunidad",
+        "subtitle": "Dale personalidad a tu nueva comunidad con un nombre y un ícono. Siempre puedes cambiarlo después.",
+        "nameLabel": "Nombre de la Comunidad",
+        "namePlaceholder": "Ingresa el nombre de la comunidad",
+        "descriptionLabel": "Descripción de la Comunidad",
+        "descriptionPlaceholder": "Describe tu comunidad",
+        "descriptionHelper": "Cuéntale a la gente de qué trata esta comunidad",
+        "termsText": "Al crear una comunidad, aceptas las Directrices de la Comunidad.",
+        "submitButton": "Crear",
+        "cancelConfirm": "¿Estás seguro de que quieres cancelar? Se perderá todo el progreso.",
+        "errorCreating": "Error al crear la comunidad. Por favor, inténtalo de nuevo.",
+        "validation": {
+          "nameRequired": "El nombre de la comunidad es obligatorio",
+          "nameMax": "El nombre de la comunidad no debe exceder los 50 caracteres",
+          "descriptionMin": "La descripción debe tener al menos 10 caracteres",
+          "descriptionMax": "La descripción no debe exceder los 150 caracteres"
+        }
+      }
+    },
+    "challenges": {
+      "title": "Mis Desafíos",
+      "createNew": "Crear Nuevo Desafío",
+      "create": "Crear Desafío",
+      "noChallenges": "Aún no hay desafíos",
+      "noChallengesDescription": "Comienza creando tu primer desafío para la comunidad.",
+      "error": "No se pudieron cargar los desafíos",
+      "errorDescription": "Algo salió mal al obtener tus desafíos. Por favor, inténtalo de nuevo."
+    },
+    "guides": {
+      "title": "Guías",
+      "subtitle": "Gestionar y crear guías de aprendizaje",
+      "create": "Crear Guía",
+      "loading": "Cargando guías",
+      "loadingDescription": "Obteniendo las últimas guías de aprendizaje para ti.",
+      "accessDenied": "Acceso denegado",
+      "accessDeniedDescription": "Necesitas permisos de profesor o administrador para gestionar guías.",
+      "permissionsError": "No se pudieron verificar los permisos",
+      "noGuides": "Aún no hay guías",
+      "noGuidesDescription": "Crea tu primera guía para comenzar a ayudar a los estudiantes.",
+      "error": "No se pudieron cargar las guías",
+      "errorDescription": "No se pudieron cargar las guías. Por favor, inténtalo de nuevo.",
+      "retry": "Reintentar",
+      "showing": "Mostrando",
+      "to": "a",
+      "of": "de",
+      "perPage": "Por página:",
+      "createGuide": {
+        "title": "Crear Nueva Guía",
+        "subtitle": "Completa los detalles a continuación para crear una nueva guía de aprendizaje.",
+        "validation": {
+          "titleRequired": "El título es obligatorio",
+          "descriptionMin": "La descripción debe tener al menos 10 caracteres",
+          "descriptionMax": "La descripción no debe exceder los 1000 caracteres",
+          "topicsRequired": "Se requiere al menos un tema"
+        },
+        "errorCreating": "Error al crear la guía. Por favor, inténtalo de nuevo.",
+        "cancelConfirm": "¿Estás seguro de que quieres cancelar? Se perderá todo el progreso."
+      },
+      "editGuide": {
+        "subtitle": "Edita los detalles y contenido de la guía.",
+        "publish": "Publicar",
+        "publishing": "Publicando...",
+        "backToGuides": "Volver a Guías",
+        "tabs": {
+          "pages": "Páginas",
+          "challenges": "Desafíos",
+          "info": "Información Básica"
+        },
+        "basicInfo": {
+          "title": "Información Básica",
+          "subtitle": "Actualiza el título, descripción y temas de la guía.",
+          "update": "Actualizar Guía",
+          "updating": "Actualizando...",
+          "updateSuccess": "¡Guía actualizada exitosamente!",
+          "updateError": "Error al actualizar la guía. Por favor, inténtalo de nuevo.",
+          "cancelConfirm": "¿Estás seguro de que quieres cancelar? Se perderán todos los cambios no guardados.",
+          "publishError": "Error al publicar la guía. Por favor, inténtalo de nuevo."
+        },
+        "validation": {
+          "titleRequired": "El título es obligatorio",
+          "descriptionMin": "La descripción debe tener al menos 10 caracteres",
+          "descriptionMax": "La descripción no debe exceder los 1000 caracteres",
+          "topicsRequired": "Se requiere al menos un tema"
+        },
+        "notFound": "Guía no encontrada. Por favor, inténtalo de nuevo.",
+        "loading": "Cargando guía..."
+      }
+    }
+  }
+}

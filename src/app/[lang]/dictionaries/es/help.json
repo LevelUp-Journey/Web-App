@@ -1,0 +1,23 @@
+{
+  "help": {
+    "title": "Ayuda",
+    "suggestionsTitle": "Sugerencias y Comentarios",
+    "description": "Envía tus sugerencias, dudas, preguntas, comentarios o cualquier comentario de forma totalmente anónima. Tu opinión nos ayuda a mejorar la plataforma.",
+    "label": "Sugerencia",
+    "placeholder": "Escribe tu sugerencia aquí...",
+    "submitButton": "Enviar Sugerencia",
+    "successToast": "¡Sugerencia enviada! Gracias por tu feedback.",
+    "validation": {
+      "required": "La sugerencia es requerida."
+    }
+  },
+  "feedback": {
+    "title": "Comentarios de Usuarios",
+    "description": "Ver y gestionar sugerencias y comentarios de usuarios.",
+    "noSuggestions": "No hay sugerencias aún.",
+    "table": {
+      "date": "Fecha",
+      "suggestion": "Sugerencia"
+    }
+  }
+}
