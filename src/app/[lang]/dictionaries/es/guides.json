@@ -1,0 +1,25 @@
+{
+  "guides": {
+    "title": "Guías de Aprendizaje",
+    "description": "Explora nuestra colección de guías completas para mejorar tus habilidades",
+    "notFound": "Guía no encontrada",
+    "authorNotAvailable": "Perfil del autor no disponible",
+    "viewer": {
+      "backToOverview": "Volver a la vista general",
+      "previousPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "pageIndicator": "Página {current} de {total}",
+      "readGuide": "Leer guía",
+      "minRead": "{time} min de lectura",
+      "pageSingular": "página",
+      "pagePlural": "páginas",
+      "likes": "{count} me gusta",
+      "topics": "Temas",
+      "status": {
+        "published": "Publicado",
+        "draft": "Borrador"
+      }
+    },
+    "guidePageCount": "Esta guía tiene {count} {unit}"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "challenges": "Desafíos",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "leaderboard": "Clasificación",
+    "community": "Comunidad",
+    "guides": "Guías",
+    "help": "Ayuda",
+    "adminDashboard": "Panel de administración",
+    "analytics": "Analíticas",
+    "language": "Idioma"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "actions": "Acciones",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No"
+  },
+  "navigationIndicator": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "profile": "Perfil",
+    "challenges": "Desafíos",
+    "create": "Crear",
+    "versions": "Versiones",
+    "tests": "Pruebas",
+    "community": "Comunidad",
+    "post": "Publicación",
+    "leaderboard": "Clasificación",
+    "settings": "Configuración",
+    "help": "Ayuda",
+    "admin": "Administración",
+    "guides": "Guías",
+    "edit": "Editar",
+    "auth": "Autenticación",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "legal": "Legal",
+    "privacyPolicy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "detail": "Detalle"
+  },
+  "announcements": {
+    "upc": "Anuncio UPC"
+  },
+  "errors": {
+    "notFound": "Página no encontrada",
+    "serverError": "Error del servidor",
+    "unauthorized": "Acceso no autorizado",
+    "forbidden": "Acceso prohibido",
+    "badRequest": "Solicitud incorrecta",
+    "generic": "Algo salió mal",
+    "loading": {
+      "guide": "Error al cargar la guía. Por favor, inténtalo de nuevo.",
+      "guides": "No pudimos cargar las guías. Por favor, inténtalo de nuevo.",
+      "challenges": "Error al obtener desafíos",
+      "challenge": "Error al cargar el desafío",
+      "profile": "Error al cargar el perfil",
+      "profileData": "Error al cargar los datos del perfil",
+      "codeVersion": "Error al cargar la versión del código",
+      "tests": "Error al cargar las pruebas",
+      "competitiveProfile": "Error al cargar el perfil competitivo"
+    },
+    "creating": {
+      "guide": "Error al crear la guía. Por favor, inténtalo de nuevo.",
+      "challenge": "Error al crear el desafío. Por favor, inténtalo de nuevo.",
+      "codeVersion": "Error al crear la versión del código. Por favor, inténtalo de nuevo.",
+      "post": "Error al crear la publicación",
+      "profile": "Error al crear el perfil"
+    },
+    "updating": {
+      "guide": "Error al actualizar la guía. Por favor, inténtalo de nuevo.",
+      "challenge": "Error al actualizar el desafío. Por favor, inténtalo de nuevo.",
+      "codeVersion": "Error al actualizar la versión del código",
+      "initialCode": "Error al actualizar el código inicial",
+      "profile": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+      "profileService": "Error: No se pudo actualizar el perfil. El servicio de perfiles puede estar no disponible."
+    },
+    "deleting": {
+      "challenge": "Error al eliminar el desafío",
+      "codeVersion": "Error al eliminar la versión del código",
+      "test": "Error al eliminar la prueba"
+    },
+    "saving": {
+      "code": "Error al guardar el código",
+      "basicTest": "Error al guardar la prueba básica",
+      "customTest": "Error al guardar la prueba personalizada",
+      "names": "Algo salió mal. Por favor, inténtalo de nuevo."
+    },
+    "uploading": {
+      "image": "Error al subir la imagen. Por favor, inténtalo de nuevo."
+    },
+    "permissions": {
+      "deleteChallenge": "No tienes permisos para eliminar este desafío.",
+      "accessDenied": "Acceso denegado",
+      "unauthorized": "Acceso no autorizado"
+    },
+    "validation": {
+      "fillAllFields": "Por favor, completa todos los campos",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "profileNotLoaded": "Perfil no cargado. Por favor, inténtalo de nuevo.",
+      "fileRejected": "Archivo rechazado",
+      "invalidStep": "Paso inválido"
+    },
+    "publishing": {
+      "guide": "Error al publicar la guía. Por favor, inténtalo de nuevo."
+    },
+    "starting": {
+      "challenge": "Error al iniciar el desafío"
+    },
+    "serializing": {
+      "description": "Error al serializar la descripción del desafío"
+    },
+    "dashboard": {
+      "loading": "Error al cargar el panel",
+      "loadingDescription": "No se pudieron cargar los datos del panel de administración. Por favor, inténtalo de nuevo."
+    },
+    "guide": {
+      "notFound": "Guía no encontrada. Por favor, inténtalo de nuevo.",
+      "authorNotAvailable": "Autor no disponible"
+    },
+    "pageNotFound": "El número de página {pageNumber} no existe en esta guía. Esta guía tiene {totalPages} página{pagesPlural}.",
+    "tryAgain": "Por favor, inténtalo de nuevo."
+  },
+  "sidebar": {
+    "groups": {
+      "home": "Inicio",
+      "administrative": "Administrativo",
+      "community": "Comunidad"
+    }
+  }
+}

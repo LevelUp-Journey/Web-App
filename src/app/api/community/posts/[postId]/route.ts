@@ -15,10 +15,11 @@ export async function DELETE(
             );
         }
 
-        // Delete the post
-        await PostController.deletePost(postId);
-
-        return new NextResponse(null, { status: 204 });
+        // Delete functionality is not supported in the current API
+        return NextResponse.json(
+            { error: "Post deletion is not supported" },
+            { status: 405 },
+        );
     } catch (error) {
         console.error("Error deleting post:", error);
         return NextResponse.json(

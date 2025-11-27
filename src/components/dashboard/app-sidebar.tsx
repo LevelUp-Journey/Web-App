@@ -1,11 +1,12 @@
 import {
+    BarChart3,
     Code2,
     HelpCircle,
     LayoutDashboard,
     Library,
-    Settings,
     ShieldUser,
     Trophy,
+    Users,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -60,6 +61,11 @@ export default async function AppSidebar({
             url: PATHS.DASHBOARD.LEADERBOARD,
             icon: Trophy,
         },
+        {
+            title: dict.navigation.community,
+            url: PATHS.DASHBOARD.COMMUNITY.ROOT,
+            icon: Users,
+        },
     ];
 
     const administrativeItems = [
@@ -67,6 +73,11 @@ export default async function AppSidebar({
             title: dict.navigation.adminDashboard,
             url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
             icon: ShieldUser,
+        },
+        {
+            title: dict.navigation.analytics,
+            url: PATHS.DASHBOARD.ADMINISTRATION.ANALYTICS.ROOT,
+            icon: BarChart3,
         },
     ];
 

@@ -1,0 +1,23 @@
+{
+  "help": {
+    "title": "Help",
+    "suggestionsTitle": "Suggestions and Comments",
+    "description": "Send your suggestions, doubts, questions, feedback or any comment anonymously. Your opinion helps us improve the platform.",
+    "label": "Suggestion",
+    "placeholder": "Write your suggestion here...",
+    "submitButton": "Send Suggestion",
+    "successToast": "Suggestion sent! Thanks for your feedback.",
+    "validation": {
+      "required": "The suggestion is required."
+    }
+  },
+  "feedback": {
+    "title": "User Feedback",
+    "description": "View and manage user suggestions and feedback.",
+    "noSuggestions": "No suggestions yet.",
+    "table": {
+      "date": "Date",
+      "suggestion": "Suggestion"
+    }
+  }
+}

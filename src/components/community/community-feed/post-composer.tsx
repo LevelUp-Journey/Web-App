@@ -22,6 +22,8 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { PostController } from "@/services/internal/community/controller/post.controller";
+import type { CreatePostRequest } from "@/services/internal/community/entities/post.entity";
 
 interface PostComposerProps {
     community: {
@@ -111,31 +113,11 @@ export function PostComposer({
                 .join("\n")
                 .trim();
 
-            const response = await fetch("/api/community/posts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    communityId: community.id,
-                    content,
-                }),
-            });
+            const request: CreatePostRequest = {
+                content,
+            };
 
-            if (!response.ok) {
-                let errorMessage =
-                    dict?.communityFeed?.composerError ||
-                    "We couldn't share your message. Please try again.";
-                try {
-                    const data = (await response.json()) as { error?: string };
-                    if (data?.error) {
-                        errorMessage = data.error;
-                    }
-                } catch {
-                    // ignore JSON parsing errors
-                }
-                throw new Error(errorMessage);
-            }
+            await PostController.createPost(community.id, request);
 
             setMessage("");
             requestAnimationFrame(() => {
@@ -168,8 +150,8 @@ export function PostComposer({
         ) || `Message #${community.name}`;
 
     return (
-        <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background px-4 py-3">
-            <div className="space-y-2">
+        <div className="fixed bottom-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] z-40 border-t bg-background pl-4 pr-16 md:pr-20 py-3">
+            <div className="space-y-2 max-w-4xl mx-auto">
                 {/* Markdown Toolbar */}
                 <TooltipProvider>
                     <div className="flex items-center gap-1 px-1">

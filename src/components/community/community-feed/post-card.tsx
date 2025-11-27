@@ -1,251 +1,302 @@
 "use client";
 
-import { Heart, Trash2 } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
-import type { Dictionary } from "@/app/[lang]/dictionaries";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+    Angry,
+    Frown,
+    Heart,
+    Laugh,
+    Sparkles,
+    ThumbsUp,
+} from "lucide-react";
+import Image from "next/image";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
 } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { PostController } from "@/services/internal/community/controller/post.controller";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useReactions } from "@/hooks/use-reactions";
+import {
+    REACTION_TYPES,
+    type ReactionType,
+} from "@/services/internal/community/entities/reaction.entity";
+import type { Post } from "@/services/internal/community/entities/post.entity";
+import type { UserResponse } from "@/services/internal/users/controller/user.response";
 import { MarkdownContent } from "./markdown-content";
-
-interface Post {
-    id: string;
-    content: string;
-    imageUrl?: string | null;
-    createdAt: string;
-    authorName: string; // username from backend
-    authorProfileUrl: string; // profile URL from backend
-    reactions: {
-        reactionCounts: {
-            [key: string]: number;
-        };
-        userReaction: string | null;
-    };
-}
 
 interface PostCardProps {
     post: Post;
     dict: Dictionary;
-    isAdmin?: boolean;
-    currentUserId?: string;
-    onPostDeleted?: () => void;
     formatDate: (date: string | Date) => string;
+    author?: UserResponse | null;
+    currentUserId?: string;
 }
 
 export function PostCard({
     post,
     dict,
-    isAdmin = false,
-    currentUserId = "",
-    onPostDeleted,
     formatDate,
+    author,
+    currentUserId,
 }: PostCardProps) {
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [isLiking, setIsLiking] = useState(false);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const canReact = Boolean(currentUserId);
 
-    // Use local state for reactions to avoid reloading the entire page
-    const [hasUserLiked, setHasUserLiked] = useState(
-        post.reactions?.userReaction === "LIKE",
-    );
-    const [likeCount, setLikeCount] = useState(
-        post.reactions?.reactionCounts?.LIKE || 0,
-    );
-
-    const handleDelete = async () => {
-        try {
-            setIsDeleting(true);
-            await PostController.deletePost(post.id);
-            setShowDeleteDialog(false);
-            onPostDeleted?.();
-        } catch (error) {
-            console.error("Error deleting post:", error);
-        } finally {
-            setIsDeleting(false);
-        }
+    const initialCounts = {
+        postId: post.postId,
+        counts: post.reactions?.reactionCounts ?? {},
+        totalCount: Object.values(post.reactions?.reactionCounts ?? {}).reduce(
+            (acc, value) => acc + (value ?? 0),
+            0,
+        ),
     };
 
-    const handleToggleLike = async () => {
-        if (isLiking || !currentUserId) return;
+    const {
+        reactionCounts,
+        userReaction,
+        isLoading,
+        react,
+        reactionCount,
+    } = useReactions(post.postId, {
+        initialCounts,
+        initialUserReaction: post.reactions?.userReaction,
+    });
 
-        try {
-            setIsLiking(true);
-
-            // Optimistic update
-            const wasLiked = hasUserLiked;
-            const previousCount = likeCount;
-
-            if (hasUserLiked) {
-                // Optimistically update UI
-                setHasUserLiked(false);
-                setLikeCount((prev) => Math.max(0, prev - 1));
-
-                // Unlike: DELETE /api/community/reactions with postId
-                const response = await fetch("/api/community/reactions", {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        postId: post.id,
-                    }),
-                });
-
-                if (!response.ok && response.status !== 404) {
-                    // Revert on error
-                    setHasUserLiked(wasLiked);
-                    setLikeCount(previousCount);
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || "Failed to unlike");
-                }
-            } else {
-                // Optimistically update UI
-                setHasUserLiked(true);
-                setLikeCount((prev) => prev + 1);
-
-                // Like: POST /api/community/reactions
-                const response = await fetch("/api/community/reactions", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        postId: post.id,
-                        reactionType: "LIKE",
-                    }),
-                });
-
-                if (!response.ok && response.status !== 409) {
-                    // Revert on error
-                    setHasUserLiked(wasLiked);
-                    setLikeCount(previousCount);
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || "Failed to like");
-                }
-            }
-        } catch (error) {
-            console.error("Error toggling like:", error);
-        } finally {
-            setIsLiking(false);
+    const reactionOptions: Record<
+        ReactionType,
+        {
+            label: string;
+            icon: typeof ThumbsUp;
+            color: string;
         }
+    > = {
+        like: {
+            label: "Me gusta",
+            icon: ThumbsUp,
+            color: "#2563eb",
+        },
+        love: {
+            label: "Me encanta",
+            icon: Heart,
+            color: "#ef4444",
+        },
+        haha: {
+            label: "Me divierte",
+            icon: Laugh,
+            color: "#fbbf24",
+        },
+        wow: {
+            label: "Me asombra",
+            icon: Sparkles,
+            color: "#a855f7",
+        },
+        sad: {
+            label: "Me entristece",
+            icon: Frown,
+            color: "#3b82f6",
+        },
+        angry: {
+            label: "Me enoja",
+            icon: Angry,
+            color: "#f97316",
+        },
     };
+
+    const activeReaction = userReaction ? reactionOptions[userReaction] : null;
 
     return (
-        <>
-            <AlertDialog
-                open={showDeleteDialog}
-                onOpenChange={setShowDeleteDialog}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            {dict?.communityFeed?.confirmDelete ||
-                                "Delete Post"}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {dict?.communityFeed?.confirmDeleteDescription ||
-                                "Are you sure you want to delete this post? This action cannot be undone."}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel disabled={isDeleting}>
-                            {dict?.communityFeed?.cancel || "Cancel"}
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={handleDelete}
-                            disabled={isDeleting}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                            {isDeleting
-                                ? dict?.communityFeed?.deleting || "Deleting..."
-                                : dict?.communityFeed?.delete || "Delete"}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <Card className="border-muted">
-                <CardHeader className="gap-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <Avatar className="rounded-lg">
-                                <AvatarImage
-                                    src={post.authorProfileUrl}
-                                    alt={post.authorName}
-                                />
-                                <AvatarFallback>
-                                    {post.authorName.slice(0, 2).toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <CardDescription className="text-xs">
-                                    {post.authorName} ·{" "}
-                                    {formatDate(post.createdAt)}
-                                </CardDescription>
-                            </div>
+        <Card className="border-muted">
+            <CardHeader className="gap-4">
+                <div className="flex items-center gap-3">
+                    <Avatar className="rounded-lg">
+                        <AvatarImage
+                            src={author?.profileUrl ?? post.authorProfileUrl ?? undefined}
+                            alt={author?.username || post.authorName || "User"}
+                        />
+                        <AvatarFallback>
+                            {author?.username?.slice(0, 2).toUpperCase() ||
+                                post.authorName?.slice(0, 2).toUpperCase() ||
+                                "??"}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                        <div className="flex items-center gap-2 text-sm">
+                            <span className="font-medium">
+                                {author?.username || post.authorName || "Unknown User"}
+                            </span>
+                            <span className="text-muted-foreground">·</span>
+                            <span className="text-muted-foreground">
+                                {formatDate(post.createdAt)}
+                            </span>
                         </div>
-                        {isAdmin && (
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setShowDeleteDialog(true)}
-                                disabled={isDeleting}
-                                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <MarkdownContent content={post.content} />
+
+                {post.images && post.images.length > 0 && (
+                    <div className="space-y-2">
+                        {post.images.map((image, index) => (
+                            <div
+                                key={index}
+                                className="relative rounded-lg overflow-hidden border min-h-[200px] w-full"
                             >
-                                {isDeleting ? (
-                                    <Spinner className="size-4" />
-                                ) : (
-                                    <Trash2 className="size-4" />
-                                )}
-                            </Button>
+                                <Image
+                                    src={image}
+                                    alt={`Post image ${index + 1}`}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 600px"
+                                    className="object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant={activeReaction ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => void react("like")}
+                            disabled={isLoading || !canReact}
+                            className="gap-2"
+                        >
+                            {(() => {
+                                const Icon =
+                                    activeReaction?.icon ?? reactionOptions.like.icon;
+                                const color =
+                                    activeReaction?.color ?? reactionOptions.like.color;
+                                return (
+                                    <Icon
+                                        className={cn(
+                                            "size-4",
+                                            activeReaction ? "transition-transform" : "",
+                                        )}
+                                        style={{ color }}
+                                    />
+                                );
+                            })()}
+                            <span className="text-xs font-medium">
+                                {activeReaction?.label ||
+                                    dict?.communityFeed?.react ||
+                                    "Reaccionar"}
+                            </span>
+                            <Badge variant="secondary" className="text-[11px] px-2">
+                                {reactionCount}
+                            </Badge>
+                        </Button>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-9 w-9"
+                                    disabled={isLoading || !canReact}
+                                    aria-label="Elegir reacción"
+                                >
+                                    <Sparkles className="size-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-56">
+                                <DropdownMenuLabel>
+                                    {dict?.communityFeed?.react || "Elige tu reacción"}
+                                </DropdownMenuLabel>
+                                <div className="grid grid-cols-3 gap-2 p-2">
+                                    {REACTION_TYPES.map((type) => {
+                                        const option = reactionOptions[type];
+                                        const Icon = option.icon;
+                                        const isActive = userReaction === type;
+                                        const count = reactionCounts?.counts?.[type] ?? 0;
+
+                                        return (
+                                            <DropdownMenuItem
+                                                key={type}
+                                                className="flex flex-col items-center gap-1 px-2 py-2"
+                                                onClick={() => void react(type)}
+                                            >
+                                                <div
+                                                    className={cn(
+                                                        "flex size-10 items-center justify-center rounded-full border",
+                                                        isActive
+                                                            ? "border-primary bg-primary/10"
+                                                            : "border-border bg-muted/60",
+                                                    )}
+                                                    style={{ color: option.color }}
+                                                >
+                                                    <Icon className="size-5" />
+                                                </div>
+                                                <span className="text-[11px] text-center leading-tight">
+                                                    {option.label}
+                                                </span>
+                                                {count > 0 && (
+                                                    <span className="text-[10px] text-muted-foreground">
+                                                        {count}
+                                                    </span>
+                                                )}
+                                            </DropdownMenuItem>
+                                        );
+                                    })}
+                                </div>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={() => void react(userReaction ?? "like")}
+                                >
+                                    {userReaction
+                                        ? dict?.communityFeed?.removeReaction ||
+                                          "Quitar reacción"
+                                        : dict?.communityFeed?.react || "Reaccionar"}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                        {REACTION_TYPES.filter(
+                            (type) => (reactionCounts?.counts?.[type] ?? 0) > 0,
+                        ).map((type) => {
+                            const option = reactionOptions[type];
+                            const Icon = option.icon;
+                            const count = reactionCounts?.counts?.[type] ?? 0;
+                            return (
+                                <Badge
+                                    key={type}
+                                    variant="secondary"
+                                    className="flex items-center gap-1 text-[11px]"
+                                >
+                                    <Icon className="size-4" style={{ color: option.color }} />
+                                    {count}
+                                </Badge>
+                            );
+                        })}
+
+                        {reactionCount === 0 && (
+                            <span className="text-xs text-muted-foreground">
+                                Sé el primero en reaccionar
+                            </span>
+                        )}
+                        {!canReact && (
+                            <span className="text-xs text-muted-foreground">
+                                Inicia sesión para reaccionar
+                            </span>
                         )}
                     </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <MarkdownContent content={post.content} />
-
-                    {post.imageUrl && (
-                        <div className="relative rounded-lg overflow-hidden border min-h-[200px] w-full">
-                            <Image
-                                src={post.imageUrl}
-                                alt="Post image"
-                                fill
-                                sizes="(max-width: 768px) 100vw, 600px"
-                                className="object-cover"
-                            />
-                        </div>
-                    )}
-
-                    {/* Reactions Section */}
-                    <div className="flex items-center gap-2 pt-2">
-                        <Button
-                            variant={hasUserLiked ? "default" : "outline"}
-                            size="sm"
-                            onClick={handleToggleLike}
-                            disabled={isLiking}
-                            className="gap-1.5"
-                        >
-                            <Heart
-                                className={`size-4 ${hasUserLiked ? "fill-current" : ""}`}
-                            />
-                            <span className="text-xs">{likeCount}</span>
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
-        </>
+                </div>
+            </CardContent>
+        </Card>
     );
 }

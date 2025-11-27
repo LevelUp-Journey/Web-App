@@ -29,9 +29,10 @@ export function useFollowingFeed() {
                     return;
                 }
 
-                // Get feed posts from backend (includes posts from followed users and communities)
-                // This endpoint returns posts with authorName (username) and authorProfileUrl
-                const feedPosts = await PostController.getFeedPosts(userId);
+                // TODO: The new API doesn't have a feed endpoint
+                // This functionality needs to be reimplemented or removed
+                // const feedPosts = await PostController.getFeedPosts(userId);
+                const feedPosts: any[] = []; // Empty array for now
 
                 if (feedPosts.length === 0) {
                     setPosts([]);

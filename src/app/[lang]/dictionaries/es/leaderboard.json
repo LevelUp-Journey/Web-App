@@ -1,0 +1,171 @@
+{
+  "leaderboard": {
+    "ranking": "Clasificación",
+    "myRank": "Mi rango",
+    "information": "Información",
+    "table": {
+      "position": "Posición",
+      "rank": "Rango",
+      "username": "Usuario",
+      "points": "Puntos"
+    },
+    "loading": {
+      "leaderboard": "Cargando clasificación...",
+      "rank": "Cargando rango..."
+    },
+    "empty": {
+      "noUsers": "No se encontraron usuarios para este rango",
+      "noRankInfo": "Información de rango no disponible",
+      "loadError": "No se pudo cargar la información de tu rango. Por favor, inténtalo de nuevo."
+    },
+    "ui": {
+      "retry": "Reintentar",
+      "rankingSystem": "Sistema de Clasificación",
+      "myCurrentRank": "Mi Rango Actual"
+    },
+    "ranks": {
+      "bronze": {
+        "name": "Bronce",
+        "description": "El rango Bronce marca el comienzo de tu viaje de programación. Como aprendiz dedicado, estás construyendo habilidades fundamentales y abordando tus primeros desafíos con entusiasmo."
+      },
+      "silver": {
+        "name": "Plata",
+        "description": "Los programadores de rango Plata demuestran una creciente competencia. Has dominado conceptos básicos y ahora estás resolviendo problemas más complejos con mayor confianza y eficiencia."
+      },
+      "gold": {
+        "name": "Oro",
+        "description": "El rango Oro significa habilidades avanzadas de programación. Consistently delivers solid solutions, understands algorithmic principles, and is ready for more challenging technical puzzles."
+      },
+      "platinum": {
+        "name": "Platino",
+        "description": "Los programadores de Platino sobresalen en la resolución de problemas y la calidad del código. Tus soluciones no solo son correctas sino optimizadas, mostrando una profunda comprensión de estructuras de datos y algoritmos."
+      },
+      "diamond": {
+        "name": "Diamante",
+        "description": "Un solucionador de problemas de élite. Los programadores de rango Diamante consistently deliver high-quality solutions and deep algorithmic knowledge."
+      },
+      "master": {
+        "name": "Maestro",
+        "description": "Un verdadero arquitecto de lógica y precisión. El Maestro Programador ha conquistado cada desafío con elegancia y consistencia, demostrando no solo habilidad técnica sino resolución creativa de problemas y profunda comprensión de algoritmos."
+      },
+      "grandmaster": {
+        "name": "Gran Maestro",
+        "description": "Un virtuoso raro — Los desarrolladores Gran Maestro lideran innovaciones, resuelven los problemas más difíciles e inspiran a la comunidad con soluciones creativas y confiables."
+      }
+    },
+    "rankingSystem": {
+      "overview": {
+        "title": "Sistema de Clasificación",
+        "description": "El sistema de clasificación en LevelUp Journey transforma el progreso de programación en una experiencia de juego competitivo, donde cada desafío, solución y logro contribuye al crecimiento de un jugador a través de siete niveles de dominio, y a través de la participación consistente, la resolución de problemas y la excelencia, ascienden hacia el nivel élite de Gran Maestro.",
+        "intro": {
+          "howItWorks": "¿Cómo funcionan los rangos?",
+          "simple": "Completas desafíos, ganas puntos, subes de rango. Simple.",
+          "explanation": "Cada desafío tiene puntos máximos según su dificultad. Tu tiempo de resolución determina qué porcentaje de esos puntos recibes (20% a 100%). Todos los tests deben pasar para ganar puntos, si alguno falla obtienes 0."
+        }
+      },
+      "byScore": {
+        "ranges": {
+          "bronze": "0 – 100",
+          "silver": "101 – 200",
+          "gold": "201 – 400",
+          "platinum": "401 – 600",
+          "diamond": "601 – 800",
+          "master": "801 – 1000",
+          "grandmaster": "1000 +"
+        }
+      },
+      "rules": {
+        "title": "Resumen de Reglas de Puntuación",
+        "description": "Guía rápida de cómo LevelUp Journey traduce la dificultad, corrección y tiempo en puntos de clasificación.",
+        "timeBasedScoring": {
+          "title": "Sistema de Puntuación por Tiempo",
+          "description": "Cada dificultad tiene rangos de tiempo específicos. No son globales.",
+          "groups": {
+            "easy": {
+              "title": "EASY",
+              "rules": [
+                "≤ 20 min → 100%",
+                "≤ 30 min → 80%",
+                "≤ 40 min → 60%",
+                "> 40 min → 20%"
+              ]
+            },
+            "medium": {
+              "title": "MEDIUM",
+              "rules": [
+                "≤ 40 min → 100%",
+                "≤ 60 min → 80%",
+                "≤ 80 min → 60%",
+                "> 80 min → 20%"
+              ]
+            },
+            "hard": {
+              "title": "HARD",
+              "rules": [
+                "≤ 90 min → 100%",
+                "≤ 120 min → 80%",
+                "≤ 150 min → 60%",
+                "> 150 min → 20%"
+              ]
+            },
+            "expert": {
+              "title": "EXPERT",
+              "rules": [
+                "≤ 180 min → 100%",
+                "≤ 240 min → 80%",
+                "≤ 300 min → 60%",
+                "> 300 min → 20%"
+              ]
+            }
+          }
+        },
+        "sections": {
+          "difficultyCeiling": {
+            "title": "La Dificultad Establece el Límite",
+            "summary": "Cada desafío viene con una puntuación máxima fija. La dificultad solo eleva ese límite — tu tiempo determina lo que te llevas a casa.",
+            "items": [
+              "Los niveles más altos desbloquean pools de puntos más grandes, pero también esperan sesiones de enfoque más largas.",
+              "Una vez que conoces el límite, puedes medir tu esfuerzo para mantener la mejor ventana de tiempo."
+            ]
+          },
+          "correctnessFirst": {
+            "title": "Primero la Corrección",
+            "summary": "La puntuación es binaria en precisión. Solo los suites de pruebas completamente verdes pasan a las matemáticas basadas en tiempo.",
+            "items": [
+              "Todas las pruebas pasan → tu tiempo decide el porcentaje.",
+              "Cualquier falla → 0 puntos. Sin crédito parcial, pero el intento permanece en tu historial."
+            ]
+          },
+          "timePercentage": {
+            "title": "El Tiempo Controla el Porcentaje",
+            "summary": "Una vez que la corrección está bloqueada, el reloj te ubica en un nivel de pago relativo al límite del desafío.",
+            "items": [
+              "Dentro del período de gracia → 100%. Ligero retraso → 80%. Moderado → 60%. Lento → 40%. Muy tarde → 20%.",
+              "Los desafíos más difíciles extienden los períodos de gracia para que los problemas avanzados sigan siendo justos."
+            ]
+          },
+          "minimumScore": {
+            "title": "Puntuación Mínima Garantizada",
+            "summary": "Pasar todas las pruebas nunca se siente como tiempo desperdiciado. Incluso la solución limpia más lenta devuelve el 20% del límite del desafío.",
+            "items": [
+              "Ejemplos: Fácil ≥ 1 pt, Medio ≥ 2 pts, Difícil ≥ 4 pts, Experto ≥ 8 pts.",
+              "Piensa en ello como seguro de esfuerzo — la corrección siempre cuenta."
+            ]
+          },
+          "timeTracking": {
+            "title": "Cómo Rastreamos el Tiempo",
+            "summary": "El temporizador cubre el ciclo completo de construcción-medición-aprendizaje, no solo el botón de ejecución final.",
+            "items": [
+              "Comienza cuando creas la solución del desafío. Termina en el envío final.",
+              "La codificación, depuración y reintentos cuentan todos. Internamente almacenamos segundos, pero mostramos minutos en la interfaz."
+            ]
+          }
+        }
+      },
+      "penalization": {
+        "title": "Penalización",
+        "description": "Si el estudiante alcanza el número máximo de intentos permitidos sin éxito, el sistema puede aplicar una penalización de 25 puntos a la puntuación actual del estudiante."
+      }
+    }
+  }
+}

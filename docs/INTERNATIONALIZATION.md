@@ -16,9 +16,13 @@ src/
 │   └── [lang]/              # Dynamic locale segment
 │       ├── layout.tsx       # Root layout with locale parameter
 │       ├── page.tsx         # Home page
-│       ├── dictionaries/    # Translation files
-│       │   ├── en.json
-│       │   └── es.json
+│       ├── dictionaries/    # Translation files split by locale and page
+│       │   ├── en/
+│       │   │   ├── common.json
+│       │   │   ├── auth.json
+│       │   │   └── ... (dashboard.json, challenges.json, index.ts, etc.)
+│       │   └── es/
+│       │       └── ... (same filenames as en)
 │       └── dictionaries.ts  # Dictionary loader
 ├── proxy.ts                 # Locale detection and redirection
 ├── hooks/
@@ -52,17 +56,17 @@ Currently supported locales:
 const locales = ["en", "es", "fr"]; // Add new locale
 ```
 
-2. Create dictionary file:
+2. Create a dictionary folder (copy an existing locale so all page files are present):
 ```bash
-touch src/app/[lang]/dictionaries/fr.json
+cp -r src/app/[lang]/dictionaries/en src/app/[lang]/dictionaries/fr
 ```
 
 3. Update dictionaries loader (`src/app/[lang]/dictionaries.ts`):
 ```typescript
 const dictionaries = {
-    en: () => import("./dictionaries/en.json").then((module) => module.default),
-    es: () => import("./dictionaries/es.json").then((module) => module.default),
-    fr: () => import("./dictionaries/fr.json").then((module) => module.default),
+    en: () => import("./dictionaries/en").then((module) => module.default),
+    es: () => import("./dictionaries/es").then((module) => module.default),
+    fr: () => import("./dictionaries/fr").then((module) => module.default),
 };
 ```
 
@@ -217,31 +221,37 @@ export default async function Page({
 
 ## Dictionary Structure
 
-Example dictionary file (`src/app/[lang]/dictionaries/en.json`):
+Dictionaries are organized per locale and per page/area to keep files small. Example for English:
+
+```
+src/app/[lang]/dictionaries/en/
+├── admin.json
+├── auth.json
+├── challenges.json
+├── common.json
+├── community.json
+├── dashboard.json
+├── guides.json
+├── help.json
+├── landing.json
+├── leaderboard.json
+├── legal.json
+├── profile.json
+├── unauthorized.json
+└── index.ts        # merges the per-page files
+```
+
+Sample shared file (`src/app/[lang]/dictionaries/en/common.json`):
 
 ```json
 {
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard"
+  },
   "common": {
-    "welcome": "Welcome",
     "loading": "Loading...",
     "error": "Something went wrong"
-  },
-  "auth": {
-    "signIn": {
-      "title": "Sign In",
-      "email": "Email",
-      "password": "Password",
-      "submit": "Sign In"
-    },
-    "signUp": {
-      "title": "Sign Up",
-      "submit": "Create Account"
-    }
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "profile": "Profile",
-    "settings": "Settings"
   }
 }
 ```

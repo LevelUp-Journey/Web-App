@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "title": "Profile",
+    "account": {
+      "title": "Account Settings"
+    },
+    "edit": "Edit Profile",
+    "stats": "Statistics",
+    "achievements": "Achievements",
+    "settings": "Settings",
+    "information": {
+      "name": "Name",
+      "email": "Email",
+      "bio": "Bio",
+      "location": "Location",
+      "website": "Website",
+      "joinedDate": "Joined"
+    },
+    "messages": {
+      "updated": "Profile updated successfully",
+      "updateError": "Error updating profile"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "guides": {
+    "title": "Learning Guides",
+    "description": "Explore our collection of comprehensive guides to level up your skills",
+    "notFound": "Guide not found",
+    "authorNotAvailable": "Author profile not available",
+    "viewer": {
+      "backToOverview": "Back to Overview",
+      "previousPage": "Previous Page",
+      "nextPage": "Next Page",
+      "pageIndicator": "Page {current} of {total}",
+      "readGuide": "Read Guide",
+      "minRead": "{time} min read",
+      "pageSingular": "page",
+      "pagePlural": "pages",
+      "likes": "{count} likes",
+      "topics": "Topics",
+      "status": {
+        "published": "Published",
+        "draft": "Draft"
+      }
+    },
+    "guidePageCount": "This guide has {count} {unit}"
+  }
+}

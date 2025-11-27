@@ -1,8 +1,8 @@
 import "server-only";
 
 const dictionaries = {
-    en: () => import("./dictionaries/en.json").then((module) => module.default),
-    es: () => import("./dictionaries/es.json").then((module) => module.default),
+    en: () => import("./dictionaries/en").then((module) => module.default),
+    es: () => import("./dictionaries/es").then((module) => module.default),
 };
 
 export type Locale = keyof typeof dictionaries;
@@ -30,9 +30,11 @@ export interface Dictionary {
         login: string;
         signup: string;
         leaderboard: string;
+        community: string;
         guides: string;
         help: string;
         adminDashboard: string;
+        analytics: string;
         language: string;
     };
     common: {
@@ -184,6 +186,7 @@ export interface Dictionary {
             guides: string;
             community: string;
             feedback: string;
+            analytics: string;
         };
         dashboard: {
             title: string;
@@ -196,6 +199,27 @@ export interface Dictionary {
             noChallenges: string;
             guides: string;
             noGuides: string;
+        };
+        analytics: {
+            title: string;
+            description: string;
+            overview: {
+                title: string;
+                totalUsers: string;
+                activeChallenges: string;
+                totalGuides: string;
+                totalSubmissions: string;
+            };
+            charts: {
+                userActivity: string;
+                challengeCompletion: string;
+                popularGuides: string;
+                performanceMetrics: string;
+            };
+            loading: string;
+            error: string;
+            errorDescription: string;
+            noData: string;
         };
         community: {
             title: string;

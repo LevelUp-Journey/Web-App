@@ -6,6 +6,18 @@ export interface Subscription {
 }
 
 export interface CreateSubscriptionRequest {
-    userId: string;
-    communityId: string;
+    // userId is obtained from JWT token, so not needed in request body
+}
+
+export interface SubscriptionCount {
+    community_id: string;
+    count: number;
+}
+
+export interface SubscriptionListResponse {
+    subscriptions: Subscription[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
 }

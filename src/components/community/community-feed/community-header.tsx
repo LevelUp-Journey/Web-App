@@ -17,6 +17,9 @@ interface CommunityHeaderProps {
         name: string;
         description: string;
         imageUrl?: string | null;
+        iconUrl?: string | null;
+        bannerUrl?: string | null;
+        isPrivate?: boolean;
         followerCount: number;
         createdAt: string | Date;
     };
@@ -28,7 +31,7 @@ interface CommunityHeaderProps {
     } | null;
     dict: Dictionary;
     isFollowing: boolean;
-    followId: string | null;
+    followerCount: number;
     onFollowUpdated: () => void;
     getDisplayName: (profile: any) => string;
     getInitials: (profile: any, fallback: string) => string;
@@ -40,7 +43,7 @@ export function CommunityHeader({
     ownerProfile,
     dict,
     isFollowing,
-    followId,
+    followerCount,
     onFollowUpdated,
     getDisplayName,
     getInitials,
@@ -49,10 +52,7 @@ export function CommunityHeader({
     const { refreshSubscriptions } = useSubscriptionContext();
     const [loading, setLoading] = useState(false);
     const [localIsFollowing, setLocalIsFollowing] = useState(isFollowing);
-    const [localFollowId, setLocalFollowId] = useState(followId);
-    const [localFollowerCount, setLocalFollowerCount] = useState(
-        community.followerCount,
-    );
+    const [localFollowerCount, setLocalFollowerCount] = useState(followerCount);
 
     const followerLabel =
         dict?.communityFeed?.followersLabel ||
@@ -60,21 +60,21 @@ export function CommunityHeader({
         "Followers";
 
     const followerDisplay = new Intl.NumberFormat().format(localFollowerCount);
+    const avatarSrc = community.iconUrl ?? community.imageUrl ?? null;
 
     const handleToggleFollow = async () => {
         if (loading) return;
 
         setLoading(true);
         try {
-            if (localIsFollowing && localFollowId) {
-                // Unsubscribe
+            if (localIsFollowing) {
+                // Unsubscribe - use community.id instead of followId
                 const success =
                     await SubscriptionController.deleteSubscription(
-                        localFollowId,
+                        community.id,
                     );
                 if (success) {
                     setLocalIsFollowing(false);
-                    setLocalFollowId(null);
                     setLocalFollowerCount((prev) => Math.max(0, prev - 1));
                     onFollowUpdated();
                     refreshSubscriptions(); // Update sidebar
@@ -87,7 +87,6 @@ export function CommunityHeader({
                     );
                 if (subscription) {
                     setLocalIsFollowing(true);
-                    setLocalFollowId(subscription.id);
                     setLocalFollowerCount((prev) => prev + 1);
                     onFollowUpdated();
                     refreshSubscriptions(); // Update sidebar
@@ -106,9 +105,9 @@ export function CommunityHeader({
                 <div className="flex flex-col md:flex-row gap-6">
                     {/* Community Image */}
                     <div className="relative h-24 w-24 shrink-0 rounded-full overflow-hidden bg-transparent">
-                        {community.imageUrl ? (
+                        {avatarSrc ? (
                             <Image
-                                src={community.imageUrl}
+                                src={avatarSrc}
                                 alt={community.name}
                                 fill
                                 sizes="96px"
@@ -125,10 +124,18 @@ export function CommunityHeader({
                     <div className="flex-1 space-y-3">
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 space-y-1">
-                                <Badge variant="secondary" className="mb-2">
-                                    {dict?.communityFeed?.heroLabel ||
-                                        "Community"}
-                                </Badge>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Badge variant="secondary">
+                                        {dict?.communityFeed?.heroLabel ||
+                                            "Community"}
+                                    </Badge>
+                                    {community.isPrivate && (
+                                        <Badge variant="outline">
+                                            {dict?.communityFeed?.privateLabel ||
+                                                "Private"}
+                                        </Badge>
+                                    )}
+                                </div>
                                 <h1 className="text-2xl md:text-3xl font-bold">
                                     {community.name}
                                 </h1>
