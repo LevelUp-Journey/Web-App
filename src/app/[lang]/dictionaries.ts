@@ -34,6 +34,7 @@ export interface Dictionary {
         guides: string;
         help: string;
         adminDashboard: string;
+        analytics: string;
         language: string;
     };
     common: {
@@ -185,6 +186,7 @@ export interface Dictionary {
             guides: string;
             community: string;
             feedback: string;
+            analytics: string;
         };
         dashboard: {
             title: string;
@@ -197,6 +199,27 @@ export interface Dictionary {
             noChallenges: string;
             guides: string;
             noGuides: string;
+        };
+        analytics: {
+            title: string;
+            description: string;
+            overview: {
+                title: string;
+                totalUsers: string;
+                activeChallenges: string;
+                totalGuides: string;
+                totalSubmissions: string;
+            };
+            charts: {
+                userActivity: string;
+                challengeCompletion: string;
+                popularGuides: string;
+                performanceMetrics: string;
+            };
+            loading: string;
+            error: string;
+            errorDescription: string;
+            noData: string;
         };
         community: {
             title: string;
