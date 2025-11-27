@@ -2,11 +2,11 @@
 
 import type { RequestFailure, RequestSuccess } from "@/services/axios.config";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
+import type { ReactionType } from "../entities/reaction.entity";
 
 export interface FeedItemReactions {
-    reactionCounts: {
-        LIKE?: number;
-    };
+    reactionCounts: Partial<Record<string, number>> &
+        Partial<Record<ReactionType | Uppercase<ReactionType>, number>>;
     userReaction: string | null;
 }
 

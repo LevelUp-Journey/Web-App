@@ -200,6 +200,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                                     author={users.get(post.authorId)}
                                     dict={dict}
                                     formatDate={formatDate}
+                                    currentUserId={currentUserId}
                                 />
                             ))}
 

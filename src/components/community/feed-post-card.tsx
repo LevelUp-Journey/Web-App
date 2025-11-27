@@ -1,9 +1,15 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import {
+    Angry,
+    Frown,
+    Heart,
+    Laugh,
+    Sparkles,
+    ThumbsUp,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +20,17 @@ import {
     CardDescription,
     CardHeader,
 } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useReactions } from "@/hooks/use-reactions";
+import { REACTION_TYPES, type ReactionType } from "@/services/internal/community/entities/reaction.entity";
+import { cn } from "@/lib/utils";
 import { useLocalizedPaths } from "@/hooks/use-localized-paths";
 import type { FeedItem } from "@/hooks/use-personalized-feed";
 import { MarkdownContent } from "./community-feed/markdown-content";
@@ -32,77 +48,70 @@ export function FeedPostCard({
     currentUserId = "",
     formatDate,
 }: FeedPostCardProps) {
-    const [isLiking, setIsLiking] = useState(false);
     const PATHS = useLocalizedPaths();
+    const canReact = Boolean(currentUserId);
 
-    // Use local state for reactions to avoid reloading the entire page
-    const [hasUserLiked, setHasUserLiked] = useState(
-        feedItem.reactions?.userReaction === "LIKE",
-    );
-    const [likeCount, setLikeCount] = useState(
-        feedItem.reactions?.reactionCounts?.LIKE || 0,
-    );
-
-    const handleToggleLike = async () => {
-        if (isLiking || !currentUserId) return;
-
-        try {
-            setIsLiking(true);
-
-            // Optimistic update
-            const wasLiked = hasUserLiked;
-            const previousCount = likeCount;
-
-            if (hasUserLiked) {
-                // Optimistically update UI
-                setHasUserLiked(false);
-                setLikeCount((prev) => Math.max(0, prev - 1));
-
-                // Unlike: DELETE /api/community/reactions with postId
-                const response = await fetch("/api/community/reactions", {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        postId: feedItem.id,
-                    }),
-                });
-
-                if (!response.ok && response.status !== 404) {
-                    // Revert on error
-                    setHasUserLiked(wasLiked);
-                    setLikeCount(previousCount);
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || "Failed to unlike");
-                }
-            } else {
-                // Optimistically update UI
-                setHasUserLiked(true);
-                setLikeCount((prev) => prev + 1);
-
-                // Like: POST /api/community/reactions
-                const response = await fetch("/api/community/reactions", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        postId: feedItem.id,
-                        reactionType: "LIKE",
-                    }),
-                });
-
-                if (!response.ok && response.status !== 409) {
-                    // Revert on error
-                    setHasUserLiked(wasLiked);
-                    setLikeCount(previousCount);
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || "Failed to like");
-                }
-            }
-        } catch (error) {
-            console.error("Error toggling like:", error);
-        } finally {
-            setIsLiking(false);
-        }
+    const initialCounts = {
+        postId: feedItem.id,
+        counts: feedItem.reactions?.reactionCounts ?? {},
+        totalCount: Object.values(feedItem.reactions?.reactionCounts ?? {}).reduce(
+            (acc, value) => acc + (value ?? 0),
+            0,
+        ),
     };
+
+    const {
+        reactionCounts,
+        userReaction,
+        isLoading,
+        react,
+        reactionCount,
+    } = useReactions(feedItem.id, {
+        initialCounts,
+        initialUserReaction: feedItem.reactions?.userReaction,
+    });
+
+    const reactionOptions: Record<
+        ReactionType,
+        {
+            label: string;
+            icon: typeof ThumbsUp;
+            color: string;
+        }
+    > = {
+        like: {
+            label: "Me gusta",
+            icon: ThumbsUp,
+            color: "#2563eb",
+        },
+        love: {
+            label: "Me encanta",
+            icon: Heart,
+            color: "#ef4444",
+        },
+        haha: {
+            label: "Me divierte",
+            icon: Laugh,
+            color: "#fbbf24",
+        },
+        wow: {
+            label: "Me asombra",
+            icon: Sparkles,
+            color: "#a855f7",
+        },
+        sad: {
+            label: "Me entristece",
+            icon: Frown,
+            color: "#3b82f6",
+        },
+        angry: {
+            label: "Me enoja",
+            icon: Angry,
+            color: "#f97316",
+        },
+    };
+
+    const activeReaction = userReaction ? reactionOptions[userReaction] : null;
 
     return (
         <Card className="border-muted">
@@ -169,19 +178,136 @@ export function FeedPostCard({
                 )}
 
                 {/* Reactions Section */}
-                <div className="flex items-center gap-2 pt-2">
-                    <Button
-                        variant={hasUserLiked ? "default" : "outline"}
-                        size="sm"
-                        onClick={handleToggleLike}
-                        disabled={isLiking}
-                        className="gap-1.5"
-                    >
-                        <Heart
-                            className={`size-4 ${hasUserLiked ? "fill-current" : ""}`}
-                        />
-                        <span className="text-xs">{likeCount}</span>
-                    </Button>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant={activeReaction ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => void react("like")}
+                            disabled={isLoading || !canReact}
+                            className="gap-2"
+                        >
+                            {(() => {
+                                const Icon =
+                                    activeReaction?.icon ?? reactionOptions.like.icon;
+                                const color =
+                                    activeReaction?.color ?? reactionOptions.like.color;
+                                return (
+                                    <Icon
+                                        className={cn(
+                                            "size-4",
+                                            activeReaction ? "transition-transform" : "",
+                                        )}
+                                        style={{ color }}
+                                    />
+                                );
+                            })()}
+                            <span className="text-xs font-medium">
+                                {activeReaction?.label ||
+                                    dict?.communityFeed?.react ||
+                                    "Reaccionar"}
+                            </span>
+                            <Badge variant="secondary" className="text-[11px] px-2">
+                                {reactionCount}
+                            </Badge>
+                        </Button>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-9 w-9"
+                                    disabled={isLoading || !canReact}
+                                    aria-label="Elegir reacción"
+                                >
+                                    <Sparkles className="size-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-56">
+                                <DropdownMenuLabel>
+                                    {dict?.communityFeed?.react || "Elige tu reacción"}
+                                </DropdownMenuLabel>
+                                <div className="grid grid-cols-3 gap-2 p-2">
+                                    {REACTION_TYPES.map((type) => {
+                                        const option = reactionOptions[type];
+                                        const Icon = option.icon;
+                                        const isActive = userReaction === type;
+                                        const count = reactionCounts?.counts?.[type] ?? 0;
+
+                                        return (
+                                            <DropdownMenuItem
+                                                key={type}
+                                                className="flex flex-col items-center gap-1 px-2 py-2"
+                                                onClick={() => void react(type)}
+                                            >
+                                                <div
+                                                    className={cn(
+                                                        "flex size-10 items-center justify-center rounded-full border",
+                                                        isActive
+                                                            ? "border-primary bg-primary/10"
+                                                            : "border-border bg-muted/60",
+                                                    )}
+                                                    style={{ color: option.color }}
+                                                >
+                                                    <Icon className="size-5" />
+                                                </div>
+                                                <span className="text-[11px] text-center leading-tight">
+                                                    {option.label}
+                                                </span>
+                                                {count > 0 && (
+                                                    <span className="text-[10px] text-muted-foreground">
+                                                        {count}
+                                                    </span>
+                                                )}
+                                            </DropdownMenuItem>
+                                        );
+                                    })}
+                                </div>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={() => void react(userReaction ?? "like")}
+                                >
+                                    {userReaction
+                                        ? dict?.communityFeed?.removeReaction ||
+                                          "Quitar reacción"
+                                        : dict?.communityFeed?.react || "Reaccionar"}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                        {REACTION_TYPES.filter(
+                            (type) => (reactionCounts?.counts?.[type] ?? 0) > 0,
+                        ).map((type) => {
+                            const option = reactionOptions[type];
+                            const Icon = option.icon;
+                            const count = reactionCounts?.counts?.[type] ?? 0;
+                            return (
+                                <Badge
+                                    key={type}
+                                    variant="secondary"
+                                    className="flex items-center gap-1 text-[11px]"
+                                >
+                                    <Icon className="size-4" style={{ color: option.color }} />
+                                    {count}
+                                </Badge>
+                            );
+                        })}
+
+                        {reactionCount === 0 && (
+                            <span className="text-xs text-muted-foreground">
+                                Sé el primero en reaccionar
+                            </span>
+                        )}
+                        {!canReact && (
+                            <span className="text-xs text-muted-foreground">
+                                Inicia sesión para reaccionar
+                            </span>
+                        )}
+                    </div>
                 </div>
             </CardContent>
         </Card>

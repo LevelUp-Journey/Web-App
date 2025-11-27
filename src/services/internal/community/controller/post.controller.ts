@@ -22,8 +22,29 @@ export class PostController {
         }
 
         // Handle API response - it returns an array of posts directly
-        const apiData = response.data as unknown as Post[];
-        const posts: Post[] = Array.isArray(apiData) ? apiData : [];
+        const apiData = response.data as unknown as Array<Record<string, unknown>>;
+        const posts: Post[] = Array.isArray(apiData)
+            ? apiData.map((item) => {
+                  const postId =
+                      (item.postId as string | undefined) ||
+                      (item.id as string | undefined) ||
+                      "";
+
+                  return {
+                      ...item,
+                      postId,
+                      communityId: (item.communityId as string) ?? "",
+                      authorId: (item.authorId as string) ?? "",
+                      content: (item.content as string) ?? "",
+                      images: (item.images as string[] | undefined) ?? [],
+                      createdAt: (item.createdAt as string) ?? "",
+                      updatedAt: (item.updatedAt as string) ?? "",
+                      reactions: (item.reactions ??
+                          item.reactionCounts ??
+                          item.reaction_count) as Post["reactions"],
+                  } as Post;
+              })
+            : [];
 
         return {
             posts,
