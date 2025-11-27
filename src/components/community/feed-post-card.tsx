@@ -54,7 +54,7 @@ export function FeedPostCard({
     const initialCounts = {
         postId: feedItem.id,
         counts: feedItem.reactions?.reactionCounts ?? {},
-        totalCount: Object.values(feedItem.reactions?.reactionCounts ?? {}).reduce(
+        totalCount: Object.values(feedItem.reactions?.reactionCounts ?? {}).reduce<number>(
             (acc, value) => acc + (value ?? 0),
             0,
         ),
