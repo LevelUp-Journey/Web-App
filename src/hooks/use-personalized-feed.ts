@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FeedItem } from "@/services/internal/community/server/feed.actions";
 import { FeedController } from "@/services/internal/community/controller/feed.controller";
-import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export type { FeedItem };
 export type FeedItemResponse = FeedItem;
@@ -31,26 +30,23 @@ export function usePersonalizedFeed(options: UsePersonalizedFeedOptions = {}) {
                     setReloading(true);
                 }
 
-                // Get current user ID
-                const userId = await AuthController.getUserId();
-                if (!userId) {
-                    throw new Error("User not authenticated");
-                }
-
-                // Fetch feed using the controller
+                // Fetch feed using the controller (API uses auth token to resolve user)
                 const data = await FeedController.getUserFeed(
-                    userId,
                     limit,
                     currentOffset,
                 );
 
+                const content = data.items ?? data.content ?? [];
+                const total =
+                    data.total ?? data.totalElements ?? content.length;
+
                 setFeedItems((prev) =>
-                    append ? [...prev, ...data.content] : data.content,
+                    append ? [...prev, ...content] : content,
                 );
                 setOffset(currentOffset);
                 setHasMore(
-                    data.content.length === limit &&
-                        data.totalElements > currentOffset + limit,
+                    content.length === limit &&
+                        total > currentOffset + content.length,
                 );
                 setError(null);
             } catch (err) {

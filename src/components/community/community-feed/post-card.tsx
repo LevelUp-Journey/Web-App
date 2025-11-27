@@ -34,6 +34,7 @@ import {
 } from "@/services/internal/community/entities/reaction.entity";
 import type { Post } from "@/services/internal/community/entities/post.entity";
 import type { UserResponse } from "@/services/internal/users/controller/user.response";
+import { MarkdownContent } from "./markdown-content";
 
 interface PostCardProps {
     post: Post;
@@ -143,9 +144,7 @@ export function PostCard({
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="prose prose-sm max-w-none dark:prose-invert">
-                    <div className="whitespace-pre-wrap">{post.content}</div>
-                </div>
+                <MarkdownContent content={post.content} />
 
                 {post.images && post.images.length > 0 && (
                     <div className="space-y-2">
