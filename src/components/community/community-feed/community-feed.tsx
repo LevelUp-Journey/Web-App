@@ -35,12 +35,13 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
     const {
         community,
         posts,
+        users,
         ownerProfile,
         currentUserId,
         canCreatePost,
         canModerate,
         isFollowing,
-        followId,
+        followerCount,
         loading,
         error,
         reloading,
@@ -49,6 +50,8 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
         hasMore,
         loadingMore,
     } = useCommunityData(communityId);
+
+    console.log('CommunityFeed posts:', posts, 'loading:', loading, 'error:', error);
     const PATHS = useLocalizedPaths();
 
     const _followerLabel =
@@ -146,7 +149,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                     ownerProfile={ownerProfile}
                     dict={dict}
                     isFollowing={isFollowing}
-                    followId={followId}
+                    followerCount={followerCount}
                     onFollowUpdated={() => reload({ silent: true })}
                     getDisplayName={getDisplayName}
                     getInitials={getInitials}
@@ -174,7 +177,7 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                         )}
                     </div>
 
-                    {posts.length === 0 ? (
+                    {(posts || []).length === 0 ? (
                         <Card>
                             <CardContent className="p-8 text-center space-y-2">
                                 <p className="font-semibold">
@@ -190,17 +193,14 @@ export function CommunityFeed({ communityId, dict }: CommunityFeedProps) {
                         </Card>
                     ) : (
                         <div className="space-y-6">
-                            {posts.map((post) => (
+                            {(posts || []).map((post) => (
                                 <PostCard
-                                    key={post.id}
+                                    key={post.postId}
                                     post={post}
+                                    author={users.get(post.authorId)}
                                     dict={dict}
-                                    isAdmin={canModerate}
-                                    currentUserId={currentUserId}
-                                    onPostDeleted={() =>
-                                        reload({ silent: true })
-                                    }
                                     formatDate={formatDate}
+                                    currentUserId={currentUserId}
                                 />
                             ))}
 

@@ -1,0 +1,12 @@
+{
+  "legal": {
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "content": "This is the privacy policy page."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "content": "This is the terms of service page."
+    }
+  }
+}

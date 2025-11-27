@@ -5,37 +5,24 @@ import {
     type RequestFailure,
     type RequestSuccess,
 } from "@/services/axios.config";
-
-export interface SubscriptionResponse {
-    id: string;
-    userId: string;
-    communityId: string;
-    communityName: string;
-    communityImageUrl?: string;
-    createdAt: string;
-}
-
-export interface PaginatedSubscriptionResponse {
-    content: SubscriptionResponse[];
-    page: number;
-    size: number;
-    totalElements: number;
-    totalPages: number;
-    first: boolean;
-    last: boolean;
-    hasNext: boolean;
-    hasPrevious: boolean;
-}
-
-export interface CreateSubscriptionRequest {
-    communityId: string;
-}
+import type {
+    Subscription,
+    SubscriptionCount,
+    SubscriptionListResponse,
+} from "../entities/subscription.entity";
+import { AuthController } from "@/services/internal/iam/controller/auth.controller";
 
 export async function createSubscriptionAction(
-    request: CreateSubscriptionRequest,
-): Promise<RequestSuccess<SubscriptionResponse> | RequestFailure> {
+    communityId: string,
+): Promise<RequestSuccess<Subscription> | RequestFailure> {
     try {
-        const response = await API_GATEWAY_HTTP.post("/subscriptions", request);
+        const response = await API_GATEWAY_HTTP.post(
+            `/subscriptions`,
+            {
+                community_id: communityId,
+                role: "member", // Default role for self-subscription
+            },
+        );
 
         return {
             data: response.data,
@@ -58,11 +45,20 @@ export async function createSubscriptionAction(
 }
 
 export async function deleteSubscriptionAction(
-    subscriptionId: string,
+    communityId: string,
 ): Promise<RequestSuccess<void> | RequestFailure> {
     try {
+        // Get user_id from JWT token
+        const userId = await AuthController.getUserId();
+
         const response = await API_GATEWAY_HTTP.delete(
-            `/subscriptions/${subscriptionId}`,
+            `/subscriptions`,
+            {
+                data: {
+                    user_id: userId,
+                    community_id: communityId,
+                },
+            },
         );
 
         return {
@@ -87,10 +83,15 @@ export async function deleteSubscriptionAction(
 
 export async function getSubscriptionsByCommunityAction(
     communityId: string,
-): Promise<RequestSuccess<SubscriptionResponse[]> | RequestFailure> {
+    page: number = 0,
+    limit: number = 20,
+): Promise<RequestSuccess<SubscriptionListResponse> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.get(
-            `/subscriptions/community/${communityId}`,
+            `/communities/${communityId}/subscriptions`,
+            {
+                params: { page, limit },
+            },
         );
 
         return {
@@ -113,17 +114,41 @@ export async function getSubscriptionsByCommunityAction(
     }
 }
 
-export async function getSubscriptionsByUserAction(
-    userId: string,
-    page: number = 0,
-    size: number = 20,
-): Promise<RequestSuccess<PaginatedSubscriptionResponse> | RequestFailure> {
+export async function getSubscriptionCountAction(
+    communityId: string,
+): Promise<RequestSuccess<SubscriptionCount> | RequestFailure> {
     try {
         const response = await API_GATEWAY_HTTP.get(
-            `/subscriptions/user/${userId}`,
-            {
-                params: { page, size },
-            },
+            `/subscriptions/communities/${communityId}/count`,
+        );
+
+        return {
+            data: response.data,
+            status: response.status,
+        };
+    } catch (error: unknown) {
+        const axiosError = error as {
+            response?: { data?: unknown; status?: number };
+            message?: string;
+        };
+        return {
+            data: String(
+                axiosError.response?.data ||
+                    axiosError.message ||
+                    "Unknown error",
+            ),
+            status: axiosError.response?.status || 500,
+        };
+    }
+}
+
+export async function getUserSubscriptionForCommunityAction(
+    userId: string,
+    communityId: string,
+): Promise<RequestSuccess<Subscription> | RequestFailure> {
+    try {
+        const response = await API_GATEWAY_HTTP.get(
+            `/subscriptions/users/${userId}/communities/${communityId}`,
         );
 
         return {

@@ -6,11 +6,11 @@ import { useLocale } from "./use-locale";
 
 const dictionaries = {
     en: () =>
-        import("../app/[lang]/dictionaries/en.json").then(
+        import("../app/[lang]/dictionaries/en").then(
             (module) => module.default,
         ),
     es: () =>
-        import("../app/[lang]/dictionaries/es.json").then(
+        import("../app/[lang]/dictionaries/es").then(
             (module) => module.default,
         ),
 };

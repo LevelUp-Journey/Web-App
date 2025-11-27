@@ -1,0 +1,154 @@
+{
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "challenges": "Challenges",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "signup": "Sign Up",
+    "leaderboard": "Leaderboard",
+    "community": "Community",
+    "guides": "Guides",
+    "help": "Help",
+    "adminDashboard": "Admin Dashboard",
+    "language": "Language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "actions": "Actions",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "navigationIndicator": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "challenges": "Challenges",
+    "create": "Create",
+    "versions": "Versions",
+    "tests": "Tests",
+    "community": "Community",
+    "post": "Post",
+    "leaderboard": "Leaderboard",
+    "settings": "Settings",
+    "help": "Help",
+    "admin": "Administration",
+    "guides": "Guides",
+    "edit": "Edit",
+    "auth": "Auth",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "detail": "Detail"
+  },
+  "announcements": {
+    "upc": "UPC Announcement"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "serverError": "Server error",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access forbidden",
+    "badRequest": "Bad request",
+    "generic": "Something went wrong",
+    "loading": {
+      "guide": "Error loading guide. Please try again.",
+      "guides": "We couldn't load the guides. Please try again.",
+      "challenges": "Error fetching challenges",
+      "challenge": "Error loading challenge",
+      "profile": "Failed to load profile",
+      "profileData": "Error loading profile data",
+      "codeVersion": "Error loading code version",
+      "tests": "Failed to load tests",
+      "competitiveProfile": "Failed to load competitive profile"
+    },
+    "creating": {
+      "guide": "Error creating guide. Please try again.",
+      "challenge": "Failed to create challenge. Please try again.",
+      "codeVersion": "Failed to create code version. Please try again.",
+      "post": "Failed to create post",
+      "profile": "Error creating profile"
+    },
+    "updating": {
+      "guide": "Error updating guide. Please try again.",
+      "challenge": "Failed to update challenge. Please try again.",
+      "codeVersion": "Failed to update code version",
+      "initialCode": "Failed to update initial code",
+      "profile": "Failed to update profile. Please try again.",
+      "profileService": "Error: Could not update profile. Profile service may be unavailable."
+    },
+    "deleting": {
+      "challenge": "Failed to delete challenge",
+      "codeVersion": "Failed to delete code version",
+      "test": "Failed to delete test"
+    },
+    "saving": {
+      "code": "Failed to save code",
+      "basicTest": "Failed to save basic test",
+      "customTest": "Failed to save custom test",
+      "names": "Something went wrong. Please try again."
+    },
+    "uploading": {
+      "image": "Failed to upload image. Please try again."
+    },
+    "permissions": {
+      "deleteChallenge": "You don't have permission to delete this challenge.",
+      "accessDenied": "Access Denied",
+      "unauthorized": "Unauthorized Access"
+    },
+    "validation": {
+      "fillAllFields": "Please fill in all fields",
+      "passwordMismatch": "Passwords do not match",
+      "profileNotLoaded": "Profile not loaded. Please try again.",
+      "fileRejected": "File rejected",
+      "invalidStep": "Invalid step"
+    },
+    "publishing": {
+      "guide": "Error publishing guide. Please try again."
+    },
+    "starting": {
+      "challenge": "Failed to start challenge"
+    },
+    "serializing": {
+      "description": "Error serializing challenge description"
+    },
+    "dashboard": {
+      "loading": "Error loading dashboard",
+      "loadingDescription": "Could not load admin dashboard data. Please try again."
+    },
+    "guide": {
+      "notFound": "Guide not found. Please try again.",
+      "authorNotAvailable": "Author not available"
+    },
+    "pageNotFound": "The page number {pageNumber} does not exist in this guide. This guide has {totalPages} page{pagesPlural}.",
+    "tryAgain": "Please try again."
+  },
+  "sidebar": {
+    "groups": {
+      "home": "Home",
+      "administrative": "Administrative",
+      "community": "Community"
+    }
+  }
+}

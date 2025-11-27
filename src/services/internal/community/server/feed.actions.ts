@@ -2,11 +2,11 @@
 
 import type { RequestFailure, RequestSuccess } from "@/services/axios.config";
 import { API_GATEWAY_HTTP } from "@/services/axios.config";
+import type { ReactionType } from "../entities/reaction.entity";
 
 export interface FeedItemReactions {
-    reactionCounts: {
-        LIKE?: number;
-    };
+    reactionCounts: Partial<Record<string, number>> &
+        Partial<Record<ReactionType | Uppercase<ReactionType>, number>>;
     userReaction: string | null;
 }
 
@@ -16,29 +16,59 @@ export interface FeedItem {
     communityName: string;
     communityImageUrl: string | null;
     authorId: string;
-    authorProfileId: string;
+    authorProfileId?: string;
     authorName: string;
     authorProfileUrl: string | null;
     content: string;
     imageUrl: string | null;
     createdAt: string;
+    updatedAt?: string;
     reactions: FeedItemReactions;
 }
 
+export interface FeedApiItem {
+    postId: string;
+    communityId: string;
+    authorId: string;
+    content: string;
+    messageType?: string;
+    createdAt: string;
+    updatedAt?: string;
+    imageUrl?: string | null;
+    communityName?: string;
+    communityImageUrl?: string | null;
+    authorName?: string;
+    authorProfileUrl?: string | null;
+    authorProfileId?: string;
+    reactions?: FeedItemReactions;
+    reactionCounts?: FeedItemReactions["reactionCounts"];
+    userReaction?: string | null;
+    [key: string]: unknown;
+}
+
+export interface FeedApiResponse {
+    items: FeedApiItem[];
+    total: number;
+    limit?: number;
+    offset?: number;
+}
+
 export interface FeedResponse {
-    content: FeedItem[];
-    page: number;
-    size: number;
-    totalElements: number;
+    items: FeedItem[];
+    total: number;
+    limit: number;
+    offset: number;
+    // Backwards compatibility with old contract
+    content?: FeedItem[];
+    totalElements?: number;
 }
 
 export async function getUserFeedAction(
-    userId: string,
     limit = 20,
     offset = 0,
-): Promise<RequestSuccess<FeedResponse> | RequestFailure> {
+): Promise<RequestSuccess<FeedApiResponse> | RequestFailure> {
     try {
-        const response = await API_GATEWAY_HTTP.get(`/feed/${userId}`, {
+        const response = await API_GATEWAY_HTTP.get(`/feed`, {
             params: { limit, offset },
         });
 

@@ -1,0 +1,8 @@
+{
+  "unauthorized": {
+    "title": "Unauthorized Access",
+    "description": "You have attempted to access a page that you are not authorized to view. If you believe this is an error, please contact support.",
+    "goBackDashboard": "Go back to Dashboard",
+    "homeButton": "Home"
+  }
+}

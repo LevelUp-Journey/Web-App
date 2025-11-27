@@ -28,10 +28,11 @@ export default function UserProfilePage() {
 
         try {
             setLoading(true);
-            const [profileData, userId, _userPosts] = await Promise.all([
+            const [profileData, userId] = await Promise.all([
                 ProfileController.getProfileById(profileId),
                 AuthController.getUserId(),
-                PostController.getPostsByUserId(profileId),
+                // TODO: The new API doesn't have an endpoint to get posts by user
+                // PostController.getPostsByUserId(profileId),
             ]);
 
             setProfile(profileData);

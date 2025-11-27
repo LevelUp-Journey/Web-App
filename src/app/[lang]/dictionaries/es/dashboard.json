@@ -1,0 +1,39 @@
+{
+  "dashboard": {
+    "welcome": "Bienvenido de nuevo",
+    "stats": {
+      "challenges": "Desafíos completados",
+      "experience": "Experiencia total",
+      "rank": "Rango actual",
+      "streak": "Días seguidos"
+    },
+    "recentActivity": "Actividad reciente",
+    "popularChallenges": "Desafíos populares"
+  },
+  "dashboardPage": {
+    "upNext": {
+      "title": "Siguiente",
+      "card": {
+        "title": "Planifica tu viaje de aprendizaje",
+        "description": "Explora rutas de aprendizaje guiadas y cursos seleccionados diseñados para estudiantes de UPC.",
+        "button": "Explorar guías"
+      }
+    },
+    "featuredChallenges": "Desafíos destacados",
+    "streak": {
+      "title": "Racha",
+      "comingSoon": "Próximamente",
+      "description": "Rastrea tu consistencia de codificación"
+    },
+    "progress": {
+      "title": "Progreso",
+      "comingSoon": "Próximamente",
+      "description": "Desbloquea insignias y recompensas por tu progreso"
+    },
+    "achievements": {
+      "title": "Logros",
+      "comingSoon": "Próximamente",
+      "description": "Desbloquea insignias y recompensas por tu progreso"
+    }
+  }
+}

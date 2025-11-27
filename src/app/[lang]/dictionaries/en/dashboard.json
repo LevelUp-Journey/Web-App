@@ -1,0 +1,39 @@
+{
+  "dashboard": {
+    "welcome": "Welcome back",
+    "stats": {
+      "challenges": "Challenges Completed",
+      "experience": "Total Experience",
+      "rank": "Current Rank",
+      "streak": "Day Streak"
+    },
+    "recentActivity": "Recent Activity",
+    "popularChallenges": "Popular Challenges"
+  },
+  "dashboardPage": {
+    "upNext": {
+      "title": "Up Next",
+      "card": {
+        "title": "Plan your learning journey",
+        "description": "Explore guided learning paths and curated courses designed for UPC students.",
+        "button": "Explore Guides"
+      }
+    },
+    "featuredChallenges": "Featured Challenges",
+    "streak": {
+      "title": "Streak",
+      "comingSoon": "Coming Soon",
+      "description": "Track your coding consistency"
+    },
+    "progress": {
+      "title": "Progress",
+      "comingSoon": "Coming Soon",
+      "description": "Unlock badges and rewards for your progress"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "comingSoon": "Coming Soon",
+      "description": "Unlock badges and rewards for your progress"
+    }
+  }
+}

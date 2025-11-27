@@ -1,100 +1,77 @@
-import type { Post } from "../entities/post.entity";
+import type { Post, CreatePostRequest, PostsListResponse } from "../entities/post.entity";
+import type { PaginatedPostsResponse } from "./post.response";
 import {
-    type CreatePostRequest,
     createPostAction,
-    deletePostAction,
-    getAllPostsAction,
-    getFeedPostsAction,
     getPostsByCommunityIdAction,
-    getPostsByUserIdAction,
 } from "../server/post.actions";
-import { PostAssembler } from "./post.assembler";
-import type { PaginatedPostsResponse, PostResponse } from "./post.response";
 
 export class PostController {
-    static async getAllPosts(): Promise<Post[]> {
-        const response = await getAllPostsAction();
-
-        if (response.status !== 200) {
-            throw new Error(`Failed to fetch posts: ${response.data}`);
-        }
-
-        return PostAssembler.toEntitiesFromResponse(
-            response.data as PostResponse[],
-        );
-    }
-
     static async getPostsByCommunityId(
         communityId: string,
-        page = 0,
-        size = 20,
-    ) {
+        offset = 0,
+        limit = 20,
+    ): Promise<PostsListResponse> {
         const response = await getPostsByCommunityIdAction(
             communityId,
-            page,
-            size,
+            offset,
+            limit,
         );
 
         if (response.status !== 200) {
             throw new Error(`Failed to fetch posts: ${response.data}`);
         }
 
-        const paginatedData = response.data as PaginatedPostsResponse;
+        // Handle API response - it returns an array of posts directly
+        const apiData = response.data as unknown as Array<Record<string, unknown>>;
+        const posts: Post[] = Array.isArray(apiData)
+            ? apiData.map((item) => {
+                  const postId =
+                      (item.postId as string | undefined) ||
+                      (item.id as string | undefined) ||
+                      "";
+
+                  return {
+                      ...item,
+                      postId,
+                      communityId: (item.communityId as string) ?? "",
+                      authorId: (item.authorId as string) ?? "",
+                      content: (item.content as string) ?? "",
+                      images: (item.images as string[] | undefined) ?? [],
+                      createdAt: (item.createdAt as string) ?? "",
+                      updatedAt: (item.updatedAt as string) ?? "",
+                      reactions: (item.reactions ??
+                          item.reactionCounts ??
+                          item.reaction_count) as Post["reactions"],
+                  } as Post;
+              })
+            : [];
 
         return {
-            posts: PostAssembler.toEntitiesFromResponse(paginatedData.content),
-            hasNext: paginatedData.hasNext,
-            totalElements: paginatedData.totalElements,
-            totalPages: paginatedData.totalPages,
-            currentPage: paginatedData.page,
+            posts,
+            total: posts.length,
+            page: 0, // API doesn't seem to support pagination yet
+            limit,
+            totalPages: 1, // API doesn't seem to support pagination yet
         };
     }
 
-    static async getPostsByUserId(userId: string): Promise<Post[]> {
-        const response = await getPostsByUserIdAction(userId);
+    static async createPost(
+        communityId: string,
+        request: CreatePostRequest,
+    ): Promise<Post> {
+        const response = await createPostAction(communityId, request);
 
-        if (response.status !== 200) {
-            throw new Error(`Failed to fetch posts by user: ${response.data}`);
+        if (response.status !== 201) {
+            let errorMessage = "Unknown error";
+            if (typeof response.data === "string") {
+                errorMessage = response.data;
+            } else if (response.data && typeof response.data === "object") {
+                errorMessage = JSON.stringify(response.data);
+            }
+            console.error("Failed to create post:", errorMessage, response);
+            throw new Error(`Failed to create post: ${errorMessage}`);
         }
 
-        return PostAssembler.toEntitiesFromResponse(
-            response.data as PostResponse[],
-        );
-    }
-
-    static async getFeedPosts(
-        userId: string,
-        limit = 20,
-        offset = 0,
-    ): Promise<Post[]> {
-        const response = await getFeedPostsAction(userId, limit, offset);
-
-        if (response.status !== 200) {
-            throw new Error(`Failed to fetch feed posts: ${response.data}`);
-        }
-
-        return PostAssembler.toEntitiesFromResponse(
-            response.data as PostResponse[],
-        );
-    }
-
-    static async createPost(request: CreatePostRequest): Promise<Post> {
-        const response = await createPostAction(request);
-
-        if (response.status !== 200 && response.status !== 201) {
-            throw new Error(`Failed to create post: ${response.data}`);
-        }
-
-        return PostAssembler.toEntityFromResponse(
-            response.data as PostResponse,
-        );
-    }
-
-    static async deletePost(postId: string): Promise<void> {
-        const response = await deletePostAction(postId);
-
-        if (response.status !== 200 && response.status !== 204) {
-            throw new Error(`Failed to delete post: ${response.data}`);
-        }
+        return response.data as Post;
     }
 }
