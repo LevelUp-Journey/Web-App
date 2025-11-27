@@ -58,6 +58,9 @@ export interface FeedResponse {
     total: number;
     limit: number;
     offset: number;
+    // Backwards compatibility with old contract
+    content?: FeedItem[];
+    totalElements?: number;
 }
 
 export async function getUserFeedAction(

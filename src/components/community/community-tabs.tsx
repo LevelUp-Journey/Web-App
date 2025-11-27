@@ -13,9 +13,9 @@ interface CommunityTabsProps {
 }
 
 export function CommunityTabs({ dict }: CommunityTabsProps) {
-    const [activeTab, setActiveTab] = useState<CommunityTabValue>("discover");
+    const [activeTab, setActiveTab] = useState<CommunityTabValue>("feed");
     const [mountedTabs, setMountedTabs] = useState<CommunityTabValue[]>([
-        "discover",
+        "feed",
     ]);
 
     const handleTabChange = useCallback((value: string) => {
@@ -47,18 +47,18 @@ export function CommunityTabs({ dict }: CommunityTabsProps) {
                 className="w-full"
             >
                 <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="feed">{tabLabels.feed}</TabsTrigger>
                     <TabsTrigger value="discover">
                         {tabLabels.discover}
                     </TabsTrigger>
-                    <TabsTrigger value="feed">{tabLabels.feed}</TabsTrigger>
                 </TabsList>
-
-                <TabsContent value="discover" className="mt-6">
-                    {shouldRender("discover") && <DiscoverTab />}
-                </TabsContent>
 
                 <TabsContent value="feed" className="mt-6">
                     {shouldRender("feed") && <FeedTab dict={dict} />}
+                </TabsContent>
+
+                <TabsContent value="discover" className="mt-6">
+                    {shouldRender("discover") && <DiscoverTab />}
                 </TabsContent>
             </Tabs>
 
