@@ -41,8 +41,13 @@ export class PostController {
         const response = await createPostAction(communityId, request);
 
         if (response.status !== 201) {
-            const errorMessage =
-                typeof response.data === "string" ? response.data : "Unknown error";
+            let errorMessage = "Unknown error";
+            if (typeof response.data === "string") {
+                errorMessage = response.data;
+            } else if (response.data && typeof response.data === "object") {
+                errorMessage = JSON.stringify(response.data);
+            }
+            console.error("Failed to create post:", errorMessage, response);
             throw new Error(`Failed to create post: ${errorMessage}`);
         }
 

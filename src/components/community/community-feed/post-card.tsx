@@ -43,11 +43,6 @@ export function PostCard({ post, dict, formatDate, author }: PostCardProps) {
                                 {formatDate(post.createdAt)}
                             </span>
                         </div>
-                        {post.type === "announcement" && (
-                            <div className="text-xs text-blue-600 font-medium mt-1">
-                                📢 Announcement
-                            </div>
-                        )}
                     </div>
                 </div>
             </CardHeader>

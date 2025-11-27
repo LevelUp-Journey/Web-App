@@ -3,8 +3,7 @@ export interface Post {
     communityId: string;
     authorId: string;
     content: string;
-    images: string[];
-    type: "message" | "announcement";
+    images?: string[];
     createdAt: string;
     updatedAt: string;
 }
@@ -12,7 +11,6 @@ export interface Post {
 export interface CreatePostRequest {
     content: string;
     images?: string[];
-    type: "message" | "announcement";
 }
 
 export interface PostsListResponse {

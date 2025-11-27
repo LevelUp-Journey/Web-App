@@ -115,7 +115,6 @@ export function PostComposer({
 
             const request: CreatePostRequest = {
                 content,
-                type: "message",
             };
 
             await PostController.createPost(community.id, request);
