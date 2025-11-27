@@ -5,7 +5,8 @@
       "challenges": "Desafíos",
       "guides": "Guías",
       "community": "Comunidad",
-      "feedback": "Feedback"
+      "feedback": "Feedback",
+      "analytics": "Analíticas"
     },
     "dashboard": {
       "title": "Panel de Administración — Actividad Reciente",
@@ -118,6 +119,27 @@
         "notFound": "Guía no encontrada. Por favor, inténtalo de nuevo.",
         "loading": "Cargando guía..."
       }
+    },
+    "analytics": {
+      "title": "Panel de Analíticas",
+      "description": "Ver métricas e información de la plataforma",
+      "overview": {
+        "title": "Resumen",
+        "totalUsers": "Total de Usuarios",
+        "activeChallenges": "Desafíos Activos",
+        "totalGuides": "Total de Guías",
+        "totalSubmissions": "Total de Envíos"
+      },
+      "charts": {
+        "userActivity": "Actividad de Usuarios",
+        "challengeCompletion": "Tasa de Completitud de Desafíos",
+        "popularGuides": "Guías Más Populares",
+        "performanceMetrics": "Métricas de Rendimiento"
+      },
+      "loading": "Cargando analíticas",
+      "error": "Error al cargar las analíticas",
+      "errorDescription": "No se pudieron cargar los datos de analíticas. Por favor, inténtalo de nuevo.",
+      "noData": "No hay datos disponibles"
     }
   }
 }

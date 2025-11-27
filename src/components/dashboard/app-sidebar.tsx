@@ -1,4 +1,5 @@
 import {
+    BarChart3,
     Code2,
     HelpCircle,
     LayoutDashboard,
@@ -72,6 +73,11 @@ export default async function AppSidebar({
             title: dict.navigation.adminDashboard,
             url: PATHS.DASHBOARD.ADMINISTRATION.ROOT,
             icon: ShieldUser,
+        },
+        {
+            title: dict.navigation.analytics,
+            url: PATHS.DASHBOARD.ADMINISTRATION.ANALYTICS.ROOT,
+            icon: BarChart3,
         },
     ];
 
